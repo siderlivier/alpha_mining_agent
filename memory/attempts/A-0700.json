@@ -1,0 +1,88 @@
+{
+ "round": 46,
+ "category": "momentum_flow_confirmation_correlation",
+ "hypothesis": "股價動能若缺乏外資資金流向的同步支撐，較可能是散戶追價或消息面炒作造成的短期異常；當mom_60與frgn_net_21在過去12個月的時序相關性偏高，代表這波動能持續有法人資金進出佐證，屬於基本面支撐型的動能，而非純情緒推動。散戶交易存在過度自信與處分效應等偏誤，容易忽略動能背後是否有資金結構性支撐，因而對『有法人確認的動能』反應不足。",
+ "prediction": "sub-train ICIR>0.45；validation decay<40%；多頭腿（相關性最高組）年化超額>0；月換手率<0.4；與F-017相關性<0.5。",
+ "formula": "cs_rank(ts_corr(mom_60, frgn_net_21, 12))",
+ "name_zh": "動能法人同步度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(mom_60, frgn_net_21, 12))",
+  "fhash": "f4ee0a4e551fc64e",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.45
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.07,
+   "decay_pct": 85.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.044,
+    "盤整"
+   ],
+   "2016": [
+    0.056,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    -0.02,
+    "盤整"
+   ],
+   "2019": [
+    0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": 0.018
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.38,
+   "半導體": 0.19,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.009,
+   "short_excess_ann": 0.007
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-013",
+   "rho": -0.22
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.07 < 0.3; validation 衰減 85% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR剛好壓線0.45，但validation暴跌至0.07、衰減85%。逐年IC正負交替(2013:-0.041, 2016:0.056)顯示12個月滾動相關係數(ts_corr)本身自由度不足、估計方差極大，sub-train達標很可能是巧合擬合，而非真實可持續訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "用短窗(12個月)滾動相關係數構造因子時，估計方差極大，容易在sub-train偶然擬合出高ICIR但無法outsample穩定；需要更長窗口或更穩健的共移動度量。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0700",
+ "ts": "2026-08-12T14:41:10"
+}

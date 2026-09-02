@@ -1,0 +1,83 @@
+{
+ "round": 21,
+ "category": "earnings_surprise_persistence",
+ "hypothesis": "台股法人季報後對EPS成長「二階加速度」的反應普遍不足（PEAD盈餘公告後漂移），多數投資人只比較單季年增率高低而非其變化速率，經3個月平滑後的加速度訊號能過濾單季雜訊、抓住持續性修正，需1-2季才完全反映。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4（平滑後應優於未平滑版本）；電子產業ICIR應為四產業最高。",
+ "formula": "cs_rank(ts_mean(delta(eps_yoy,3),3))",
+ "name_zh": "EPS加速動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(delta(eps_yoy,3),3))",
+  "fhash": "06b2bf6d70ec5da8",
+  "sub_train": {
+   "mean_ic": 0.0,
+   "icir": 0.01
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.32,
+   "decay_pct": -4131.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.015,
+    "多頭"
+   ],
+   "2014": [
+    -0.002,
+    "多頭"
+   ],
+   "2015": [
+    -0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.013,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": 0.16,
+   "生技": -0.07,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.009,
+   "short_excess_ann": 0.012
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.01，幾乎無訊號，儘管validation顯示0.32（小樣本雜訊，decay值-4131%無意義）。產業排序方向大致對（電子0.16最高），顯示PEAD/加速度機制的方向沒有全錯，但雙重平滑(delta 3個月後再ts_mean 3個月)疊加在季度更新的EPS資料上，很可能被非財報更新月份的重複計算稀釋掉了。",
+ "failure_type": "expression_bad",
+ "lesson": "對季度更新的基本面數據做月頻delta+ts_mean雙重平滑，容易因更新頻率與運算窗口不匹配而抹平訊號；應改用與財報週期對齊的變化量表達，而非連續月頻窗口函數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0326",
+ "ts": "2026-07-21T13:38:15"
+}

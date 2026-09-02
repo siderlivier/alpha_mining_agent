@@ -1,0 +1,88 @@
+{
+ "round": 2,
+ "category": "quality_composite_accruals_profitability",
+ "hypothesis": "低應計代表盈餘含金量高，ROE處於近12月相對高檔代表獲利效率正在改善；多數投資人只單看ROE而忽略應計品質，複合品質訊號因需交叉判讀兩個指標而存在系統性認知折價。",
+ "prediction": "sub-train ICIR>0.35；此複合因子多頭腿月均報酬應高於單用ROE趨勢因子(F-001)之多頭腿報酬。",
+ "formula": "cs_rank(mul(neg(accruals), ts_rank(roe,12)))",
+ "name_zh": "低應計高效率",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(neg(accruals), ts_rank(roe,12)))",
+  "fhash": "4f66b77d9af95470",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.3,
+   "decay_pct": 10.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.047,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.37,
+   "生技": 0.34,
+   "半導體": 0.27,
+   "金融": -0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.043,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.14
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.33 < 0.45"
+ },
+ "diagnosis": "候選自訂預測門檻ICIR>0.35，實際0.33已接近，但真實stage4門檻為0.45，這是門檻校準誤差而非機制問題；validation decay僅10%，方向與穩定性都不差，僅2013年出現顯著負IC(-0.047)拖累整體。",
+ "failure_type": "expression_bad",
+ "lesson": "候選預測門檻應對齊真實stage4通過線，而非套用自訂的0.3~0.35。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0040",
+ "ts": "2026-07-19T09:53:03"
+}

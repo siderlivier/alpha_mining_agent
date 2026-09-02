@@ -1,0 +1,94 @@
+{
+ "round": 17,
+ "category": "dividend_paying_capacity_financial",
+ "hypothesis": "金融股的股利分配能力(現金殖利率)若建立在扎實獲利能力(淨利率)基礎上，代表股利具持續性而非透支資本；金融業受主管機關對資本適足與股利發放高度監管，市場對「殖利率是否有淨利率撐腰」這種資本品質訊號重新評價速度慢，形成金融股特有低估機會。",
+ "prediction": "金融產業industry_icir>0.45且高於其他三產業；全樣本sub-train ICIR>0.35；與F-002相關係數<0.5(欄位為殖利率與淨利率而非淨值股價比與ROE)",
+ "formula": "cs_rank(mul(cs_rank(div_yield), cs_rank(net_margin)))",
+ "name_zh": "金融股利含金量",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(cs_rank(div_yield), cs_rank(net_margin)))",
+  "fhash": "4db7e4591ed3d745",
+  "sub_train": {
+   "mean_ic": 0.059,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.105,
+   "icir": 0.88,
+   "decay_pct": -107.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.039,
+    "盤整"
+   ],
+   "2013": [
+    0.042,
+    "多頭"
+   ],
+   "2014": [
+    0.035,
+    "多頭"
+   ],
+   "2015": [
+    0.087,
+    "盤整"
+   ],
+   "2016": [
+    0.079,
+    "多頭"
+   ],
+   "2017": [
+    0.063,
+    "多頭"
+   ],
+   "2018": [
+    0.081,
+    "盤整"
+   ],
+   "2019": [
+    0.129,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.071,
+   "down_months": 0.071
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.49,
+   "半導體": 0.38,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.02,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.12,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.73,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.73 > 0.5"
+ },
+ "diagnosis": "預測金融產業ICIR>0.45且為四產業最高，全樣本sub-train ICIR>0.35。實際統計表現其實相當強：sub-train ICIR 0.42、validation ICIR高達0.88(大幅轉強)，但金融產業ICIR僅0.21，是四產業中最低，電子(0.55)、生技(0.49)才是真正的標竿——「金融股股利含金量」的產業專屬敘事被推翻，效應其實是普遍性的股利品質因子。同時與F-002(金融品質價值)相關係數0.73，在stage2被淘汰。",
+ "failure_type": "duplicate",
+ "lesson": "殖利率×淨利率組合的統計表現雖佳，但(1)產業歸因完全押錯(金融最弱)，(2)與既有品質價值因子高度重疊；產業敘事類假設應先核對industry_icir排序是否真的支持故事，而非事後解釋。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0276",
+ "ts": "2026-07-21T12:47:40"
+}

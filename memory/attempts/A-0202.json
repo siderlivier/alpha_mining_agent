@@ -1,0 +1,87 @@
+{
+ "round": 12,
+ "category": "dividend_signaling",
+ "hypothesis": "現金殖利率的上升若源自管理層主動調升配息，依股利訊號理論代表管理層對未來獲利有信心；市場對配息政策變化的反應存在注意力遲滯，導致調升配息後的重新評價是緩慢發生的，此為與C-1(殖利率×現金流水準品質)不同的變化型訊號。",
+ "prediction": "sub-train ICIR > 0.45；與C-1相關係數應<0.6(構造不同：一為水準品質、一為變化訊號)；月換手應 < 0.4",
+ "formula": "cs_rank(delta(div_yield,6))",
+ "name_zh": "配息升級訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(div_yield,6))",
+  "fhash": "d4bebacfd56e8f8a",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.08
+  },
+  "validation": {
+   "mean_ic": 0.0,
+   "icir": 0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.011,
+    "盤整"
+   ],
+   "2013": [
+    -0.026,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    0.016,
+    "多頭"
+   ],
+   "2017": [
+    -0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.01,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.23,
+   "生技": 0.03,
+   "半導體": -0.15,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": -0.042,
+   "short_excess_ann": -0.036
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "完全無訊號——sub-train ICIR為負(-0.08),驗證期趨近於零(0.01),顯示殖利率6個月變化在台股中沒有可偵測的緩慢重估效應,「股利訊號理論+注意力遲滯」假說未獲支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "股利訊號理論在台股殖利率變化構造下未見證據,可能因台股配息政策多屬例行性盈餘分配而非管理層主動釋放信心訊號,與歐美市場脈絡不同;此構造短期不宜再嘗試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0202",
+ "ts": "2026-07-21T11:46:43"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 4,
+ "category": "cashflow_quality_growth_interaction",
+ "hypothesis": "現金流含金量高（ocf_ratio高）同時本業獲利成長（op_income_yoy高）的公司，成長是現金驅動的「真成長」而非應計堆積的假性獲利；市場對現金流品質與獲利成長的聯合訊息消化慢，在景氣緊縮、信用風險升溫的下跌月，這種品質差異應被更快定價。",
+ "prediction": "sub-train ICIR>0.45；且下跌月IC應顯著高於上漲月（現金流品質溢酬在市場緊縮期更受重視）",
+ "formula": "cs_rank(mul(ocf_ratio, op_income_yoy))",
+ "name_zh": "現金成長雙確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(ocf_ratio, op_income_yoy))",
+  "fhash": "5a2086f1e869c4a9",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.26,
+   "decay_pct": 218.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.017,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.034,
+    "盤整"
+   ],
+   "2016": [
+    0.031,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.011,
+    "盤整"
+   ],
+   "2019": [
+    -0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.011,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": 0.34,
+   "半導體": -0.07,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.012
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.23,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『下跌月IC應顯著高於上漲月』的防禦性溢酬被推翻——下跌月IC(-0.004)反而輸給上漲月(0.011)，且sub-train到validation直接由正轉負(0.22→-0.26，decay 218%)，屬於典型雜訊主導的不穩定交乘因子，與C-3、C-13、C-14同樣是mul()相乘原始帶符號值的表達問題。",
+ "failure_type": "expression_bad",
+ "lesson": "現金流品質×成長的假設本身可能還沒被真正測試到，因為交乘表達方式雜訊過大掩蓋了潛在訊號；若要重試應先分別rank兩腳位再組合，並直接針對『下跌月vs上漲月』做子樣本檢定而非依賴交乘後的整體ICIR。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0072",
+ "ts": "2026-07-19T17:21:03"
+}

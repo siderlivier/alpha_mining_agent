@@ -1,0 +1,83 @@
+{
+ "round": 1,
+ "category": "accruals_quality_reversal",
+ "hypothesis": "高應計項代表淨利中現金流佐證薄弱的比重高，多為透過會計選擇或估計墊高的盈餘；投資人受限於注意力，多聚焦稅後淨利而非拆解現金流量表，導致高應計股票被過度定價，待後續現金實現不如預期時發生反轉（Sloan 1996機制）。",
+ "prediction": "產業內rank IC為負，sub-train ICIR<-0.3；效應在生技（研發資本化、認列彈性大）最強，在金融（會計原則不同）最弱。",
+ "formula": "cs_rank(ts_mean(accruals,12))",
+ "name_zh": "高應計反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(accruals,12))",
+  "fhash": "4244db94aa774d10",
+  "sub_train": {
+   "mean_ic": -0.03,
+   "icir": -0.46
+  },
+  "validation": {
+   "mean_ic": -0.02,
+   "icir": -0.33,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    -0.023,
+    "多頭"
+   ],
+   "2015": [
+    -0.063,
+    "盤整"
+   ],
+   "2016": [
+    -0.033,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.017,
+    "盤整"
+   ],
+   "2019": [
+    -0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.028,
+   "down_months": -0.024
+  },
+  "industry_icir": {
+   "電子": -0.24,
+   "生技": -0.55,
+   "半導體": -0.42,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": -0.03,
+   "short_excess_ann": -0.011
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.07,
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.46 < 0.45; validation ICIR -0.33 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "機制方向與強度預測精準命中：sub-train ICIR -0.46優於預測門檻-0.3，生技產業最強(-0.55)、金融最弱且反向(+0.13)，與Sloan機制及預測完全吻合。但多頭腿(低應計股)超額報酬僅-0.03、空頭腿-0.011，兩腿皆非正報酬——台股放空受限下此因子統計上顯著卻不可交易，於stage4被拒，並非假設被證偽。",
+ "failure_type": "expression_bad",
+ "lesson": "見learnings_additions（規則A：neg方向因子多頭腿常不可交易）。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0025",
+ "ts": "2026-07-18T21:37:41"
+}

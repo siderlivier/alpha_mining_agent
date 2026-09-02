@@ -1,0 +1,83 @@
+{
+ "round": 27,
+ "category": "institutional_price_pressure",
+ "hypothesis": "台灣投信基金經理人面臨季度/年度績效評比壓力，傾向在評比期前追買已上漲的熱門股（window dressing、動能追逐），這種買盤主要由績效壓力驅動而非基本面研判，屬於典型的價格壓力而非資訊性買超；當投信買盤退潮後，此價格壓力部分會消退，導致近期投信大幅買超的股票後續報酬轉弱。",
+ "prediction": "sub-train ICIR>0.4；效應在季底月份（3/6/9/12月）應比其他月份更明顯；多頭腿（投信賣超/低買超組）超額報酬>0。",
+ "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+ "name_zh": "投信作帳反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+  "fhash": "18a151d16911b800",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.33,
+   "decay_pct": -78.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.021,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": 0.09,
+   "半導體": 0.14,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.032,
+   "short_excess_ann": -0.023
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4，實際僅0.18，stage1即被擋下，無法驗證「季底效應更強」與「多頭腿為正」的細部預測。驗證期icir反而更高(0.33, decay -78%)，暗示機制方向可能真實存在，但整體訊號因未針對季底月份加權/篩選而被非季底月份的雜訊稀釋。",
+ "failure_type": "expression_bad",
+ "lesson": "假設預期效應集中在特定日曆時點（季底），但ts_mean(trust_net_21,3)對所有月份一視同仁，等於用全樣本平均稀釋了最強子區間訊號；驗證日曆型假設需要能篩選/加權特定月份的機制。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0421",
+ "ts": "2026-07-28T19:08:22"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 27,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "電子/半導體產業具強烈庫存循環特性（去化-回補交替），當月營收年增率開始從自身近12個月低點回升，代表去化階段結束、拉貨回補循環啟動。供應鏈上游廠通常比下游更早見到訂單回溫，但市場與分析師習慣以近期趨勢外推，對循環底部的認知修正需要時間，形成訊號擴散延遲。",
+ "prediction": "sub-train ICIR>0.45；電子與半導體產業industry_icir應明顯高於金融與生技；多頭腿超額報酬>0。",
+ "formula": "cs_rank(sub(rev_yoy, ts_min(rev_yoy,12)))",
+ "name_zh": "庫存循環回升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_yoy, ts_min(rev_yoy,12)))",
+  "fhash": "27125562036f3c20",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.28,
+   "decay_pct": 256.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.034,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    -0.029,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": -0.16,
+   "半導體": 0.36,
+   "金融": -0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.041,
+   "short_excess_ann": 0.076
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.39,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測電子/半導體icir應高於金融/生技——此部分命中(電子0.32、半導體0.36 vs 生技-0.16、金融-0.21)，證實庫存循環機制確實存在於相關產業。但整體sub-train icir僅0.18且驗證期反轉為-0.28(decay 256%)，因為把產業特定訊號套用在全市場排名上，被生技/金融的反向貢獻嚴重稀釋、甚至造成訓練/驗證間劇烈翻轉。多頭腿超額實際為正(0.041)，只是全市場ICIR未達標。",
+ "failure_type": "expression_bad",
+ "lesson": "具產業特定機制的假設，若不做產業中性化或不限定測試範圍，全市場cs_rank會被機制不適用的產業稀釋甚至反轉整體訊號方向；應先於候選產業子集內測試，或用產業內排名而非全市場排名。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0419",
+ "ts": "2026-07-28T19:08:22"
+}

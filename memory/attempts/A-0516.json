@@ -1,0 +1,90 @@
+{
+ "round": 33,
+ "category": "biotech_cash_inflection",
+ "hypothesis": "生技股傳統上以燒錢換取研發里程碑，市場已習慣視其為淨現金流為負的常態；當生技公司營運現金流比率開始改善（即使營收仍在成長階段），代表商業化能力出現實質轉折而非財測想像，但市場估值仍錨定在燒錢股框架，對現金流轉折的重新評估存在延遲，機制與F-011(毛利率x營收)不同，捕捉的是真實商轉而非會計毛利率。",
+ "prediction": "生技 industry_icir > 0.5；與F-011相關性 |ρ| < 0.5；多頭腿年化超額 > 0。",
+ "formula": "mul(cs_rank(delta(ocf_ratio,6)), cs_rank(rev_yoy))",
+ "name_zh": "生技轉骨現金流",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(ocf_ratio,6)), cs_rank(rev_yoy))",
+  "fhash": "cc37eb462a99230e",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.34
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.46,
+   "decay_pct": -35.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.046,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.048,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.1,
+   "半導體": 0.2,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.043,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.45,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.53,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.53 > 0.5"
+ },
+ "diagnosis": "候選本身就預先聲明要避開與F-011相關度>0.5，結果剛好卡在邊界(ρ=0.53)，預測失準。ICIR也接近但未達門檻(sub-train 0.34 vs 預測0.45；validation 0.46已算不錯)。'現金流轉折不同於毛利率'的假說立意合理，但ocf_ratio改善與淨利率改善在生技商轉階段高度同步發生，導致兩者組合難以與F-011脫鉤。",
+ "failure_type": "expression_bad",
+ "lesson": "生技'商轉轉折'相關假說中，OCF比率與毛利率趨勢在同一轉折窗口高度共移，直接把ocf_ratio delta與rev_yoy配對容易撞上既有毛利率因子；應將OCF趨勢對毛利率趨勢做殘差化，分離出OCF特有的資訊再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0516",
+ "ts": "2026-07-30T00:08:12"
+}

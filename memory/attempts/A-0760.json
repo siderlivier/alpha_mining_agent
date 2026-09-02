@@ -1,0 +1,91 @@
+{
+ "round": 50,
+ "category": "retail_margin_capitulation_rebound",
+ "hypothesis": "融資餘額短期內大幅去化代表看錯行情的散戶已停損出場、籌碼壓力集中釋放完畢；市場常誤將融資大減讀為『弱勢延續』，但實際上賣壓真空後股價止穩機率高，屬於籌碼出清型的技術性反彈，而非資訊面利空。",
+ "prediction": "sub-train ICIR>0.45；3個月平滑後月換手率<0.4；此訊號在盤整/下跌月的IC應高於上漲月（籌碼出清效應在恐慌期更明顯）。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+ "name_zh": "融資去化反彈",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+  "fhash": "8dcb62747ea222cf",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.21,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.041,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.22,
+   "半導體": 0.11,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.001
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45; validation ICIR 0.21 < 0.3"
+ },
+ "diagnosis": "預測 ICIR>0.45 且下跌月效果應強於上漲月，實際 sub-train ICIR 0.39(僅略低於門檻)、validation 0.21，decay 47%接近門檻但8年符號全數為正、四產業ICIR皆為正(0.16~0.29)，方向穩健但強度不足；下跌月與上漲月IC(0.021 vs 0.025)幾乎相等，「恐慌期籌碼出清更明顯」的差異化敘事未獲支持，但「融資去化=反彈」基本方向仍成立。",
+ "failure_type": "expression_bad",
+ "lesson": "融資去化訊號方向正確且逐年穩定為正，但線性水準表達(neg+ts_mean)強度不足以達門檻，且訊號在上漲/下跌月無顯著差異，代表機制更像均值回歸而非恐慌期特有；可嘗試非線性轉換(僅取去化幅度前20%)或縮短平滑窗口放大訊噪比，而非用「下跌月更強」的敘事挑子樣本。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0760",
+ "ts": "2026-08-14T00:51:32"
+}

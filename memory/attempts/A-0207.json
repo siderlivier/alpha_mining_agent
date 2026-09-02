@@ -1,0 +1,91 @@
+{
+ "round": 13,
+ "category": "margin_deleveraging_reversal",
+ "hypothesis": "融資餘額快速去化（非緩降而是斜率急跌）代表散戶恐慌性斷頭/降槓桿已接近尾聲，籌碼壓力出清後的技術性賣壓消失；此為「壓力解除」機制，不同於已被推翻的軋空/借券摩擦假說(方向已知相反)，市場對「籌碼已洗清」這個訊息反應滯後，形成反彈溢價。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4（以ts_slope(.,6)平滑後應可控）；與已知反向的短期摩擦類因子方向相反。",
+ "formula": "cs_rank(neg(ts_slope(margin_d21,6)))",
+ "name_zh": "融資出清反彈",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_slope(margin_d21,6)))",
+  "fhash": "d0342bfe8b0fd686",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.06,
+   "decay_pct": 85.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.041,
+    "盤整"
+   ],
+   "2013": [
+    0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.044,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.041,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.0,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.1,
+   "生技": 0.04,
+   "半導體": 0.23,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.47,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": -0.08
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.38 < 0.45; validation ICIR 0.06 < 0.3; validation 衰減 85% > 50%（過擬合徵兆）; 月換手 0.47 > 0.4"
+ },
+ "diagnosis": "兩項預測皆落空：sub-train ICIR預測>0.45實際僅0.38；預測月換手<0.4（因ts_slope(6)平滑）實際0.47超標。逐年IC顯示訊號集中在2012-2014與2017，2015-2016與2018-2019近乎歸零，validation ICIR僅0.06、衰減85%，符合過擬合/結構性減弱。融資去化反彈的「籌碼出清」機制可能只在特定時期（融資規模大、波動大）成立，近年融資使用率下降、監理趨嚴後失效。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「恐慌性去槓桿出清後反彈」機制高度依賴特定時期的融資市場結構，本次train與validation均未達標且換手超標；此方向短期內不建議再嘗試同源欄位(margin_d21)的其他變換，除非先確認近年融資餘額規模/集中度是否已結構性改變。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0207",
+ "ts": "2026-07-21T11:59:28"
+}

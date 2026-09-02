@@ -1,0 +1,94 @@
+{
+ "round": 65,
+ "category": "volatility_term_structure_compression",
+ "hypothesis": "當月波動度(vol_21)相對半年波動度(vol_126)明顯收斂(比值偏低)，代表股價進入低噪音的盤整蓄積期；選擇權與統計套利者熟知波動率均值回歸與群聚特性，但一般股票投資人不會因波動收斂而調整部位大小，導致波動壓縮後的方向性突破初期存在系統性低估，此為波動率結構訊號而非單純低波動水準。",
+ "prediction": "sub-train ICIR > 0.4；與F-005(neg(vol_126)水準版)相關係數|ρ|<0.5，證明是相對收斂而非單純絕對低波動在起作用；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(neg(sdiv(vol_21,vol_126)))",
+ "name_zh": "波動壓縮蓄勢股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21,vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_culprit": {
+   "factor": "R-006",
+   "rho": 0.58,
+   "factor_name": "低波動（月）",
+   "factor_desc": "−21 日報酬標準差"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 R-006 |ρ|=0.58 > 0.5"
+ },
+ "diagnosis": "預測 ICIR>0.4，實際 0.36 未達標，validation 0.08、decay 78%(嚴重過擬合)、多頭腿+0.3% 近零。ρ=0.58 撞 R-006(低月波動)。neg(vol_21/vol_126) 由分子(近月低波動)主導，退化成短期低波動水準，並未產生獨立的波動期限結構訊號。",
+ "failure_type": "duplicate",
+ "lesson": "兩個同族量相除(vol_21/vol_126)會被橫斷面變異大的那個主導而退化成該項本身；想做波動期限結構收斂需對 vol_126 迴歸取殘差。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0994",
+ "ts": "2026-09-02T00:32:52"
+}

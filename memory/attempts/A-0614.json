@@ -1,0 +1,89 @@
+{
+ "round": 40,
+ "category": "operating_leverage_breakout",
+ "hypothesis": "相較淨利率易受業外項目干擾，營業利益率更乾淨反映本業經營槓桿；op_margin觸及24個月新高代表規模效應或成本控制正產生結構性轉折，但市場對「營運槓桿創高」關注度低於淨利/EPS創高，重新定價較慢。",
+ "prediction": "sub-train ICIR>0.45；與F-023相關係數|ρ|<0.5；多頭腿年化超額>0；月換手率<0.4。",
+ "formula": "cs_rank(sdiv(op_margin, ts_max(op_margin,24)))",
+ "name_zh": "營益率創新高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_margin, ts_max(op_margin,24)))",
+  "fhash": "674ae00cd7afd83e",
+  "sub_train": {
+   "mean_ic": 0.062,
+   "icir": 0.61
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.03,
+   "decay_pct": 105.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.112,
+    "多頭"
+   ],
+   "2015": [
+    0.065,
+    "盤整"
+   ],
+   "2016": [
+    0.023,
+    "多頭"
+   ],
+   "2017": [
+    0.062,
+    "多頭"
+   ],
+   "2018": [
+    -0.015,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.048,
+   "down_months": 0.028
+  },
+  "industry_icir": {
+   "電子": 0.51,
+   "生技": 0.06,
+   "半導體": 0.09,
+   "金融": 0.32
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.16,
+  "stage2_culprit": {
+   "factor": "F-023",
+   "rho": 0.62,
+   "factor_name": "利差創高金控股",
+   "factor_desc": "淨利率創近兩年新高的金融股，代表利差擴張才剛開始被市場注意到。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-023 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45——實際0.61，遠超預期，且電子industry_icir 0.51確實最強，方向判斷正確；但validation ICIR崩至-0.03、decay 105%，且與F-023（利差創高金控股）相關係數0.62觸發stage2淘汰。原本設計是想與F-023區隔（電子營運槓桿 vs 金融利差），但實測顯示『XX_margin相對自身24月高點』這個表達形式本身，不論套用在營益率或淨利率、不論鎖定哪個產業，都會收斂到高度相似的橫斷面排序——經濟機制的產業區隔在這個泛化的『margin/其24月高點』表達式下並未真正實現。",
+ "failure_type": "duplicate",
+ "lesson": "『XX_margin / ts_max(XX_margin,N)』這種『利潤率相對自身歷史高點』的表達式很容易與庫內既有的利潤率創高類因子（不分產業）高度相關，即使原始假設鎖定特定產業機制；下次要做產業專屬的利潤率轉折因子，應在公式層面顯式限定產業（乘上產業虛擬變數或僅在該產業子樣本內排序），而不能只靠『預期industry_icir會分化』來間接驗證區隔性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0614",
+ "ts": "2026-08-12T09:17:43"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 50,
+ "category": "biotech_commercialization_inflection",
+ "hypothesis": "生技股一旦取得藥證/健保給付或進入量產出貨階段，月營收增速會呈現非線性加速（而非單純年增率的緩步爬升），這種短期營收動能的加速度領先於財報全面反映商轉成功，但市場對『燒錢股』的既定印象使其重新評價速度偏慢。",
+ "prediction": "sub-train ICIR>0.45（生技產業限定門檻降為0.4亦可）；生技產業industry_icir應為四產業最高。",
+ "formula": "cs_rank(ts_slope(rev_mom,6))",
+ "name_zh": "生技商轉加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_mom,6))",
+  "fhash": "be561bad7ba0daf1",
+  "sub_train": {
+   "mean_ic": -0.006,
+   "icir": -0.11
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.31,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.012,
+    "盤整"
+   ],
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    -0.024,
+    "盤整"
+   ],
+   "2016": [
+    -0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": -0.022
+  },
+  "industry_icir": {
+   "電子": -0.14,
+   "生技": -0.05,
+   "半導體": 0.13,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.018,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.94,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技限定門檻0.4，實際sub-train ICIR -0.11接近零，生技industry_icir僅-0.05，遠低於預期；營收動能斜率的二階加速度在生技股未捕捉到「商轉拐點」訊息，可能因藥證核准/量產爬坡是稀疏離散事件而非連續趨勢，用連續斜率運算子本質上錯配了事件型訊息的資料生成過程，且turnover 0.62偏高顯示訊號本身雜訊大。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「事件驅動型」基本面轉折(藥證核准、量產爬坡)若用連續時間序列斜率(ts_slope)捕捉容易失敗，因真實事件是離散跳躍而非平滑趨勢；此類假設更適合用相對歷史的離散跳升偵測而非slope類運算子表達。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0765",
+ "ts": "2026-08-14T00:51:32"
+}

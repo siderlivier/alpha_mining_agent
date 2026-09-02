@@ -1,0 +1,83 @@
+{
+ "round": 41,
+ "category": "trend_r_squared_quality",
+ "hypothesis": "營收年增率三月均線的12個月線性擬合優度（ts_rsq），衡量的是成長軌跡的「平滑度／可預測性」而非斜率大小；平滑上升的營收軌跡代表需求結構性轉強（如穩定接單放量），而非單季爆發後又回落的雜訊型成長，市場對成長「品質」（一致性）的定價效率低於對成長「數量」（斜率、F-009已涵蓋）的定價效率。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-009(營收加速趨勢)相關性|ρ|<0.5，證明擬合優度與斜率是互補而非重複維度。",
+ "formula": "cs_rank(ts_rsq(rev_yoy_ma3,12))",
+ "name_zh": "營收趨勢線性度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rsq(rev_yoy_ma3,12))",
+  "fhash": "b1a074af77309716",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.07
+  },
+  "validation": {
+   "mean_ic": -0.007,
+   "icir": -0.13,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    -0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.008,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": -0.002
+  },
+  "industry_icir": {
+   "電子": -0.13,
+   "生技": 0.09,
+   "半導體": -0.12,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.012,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.23,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際-0.07（負值），逐年IC正負無明顯規律；驗證期也持續為負(-0.13)。與C-1（毛利率ts_rsq）、C-14（ROE ts_rsq）同樣採用『線性擬合優度』衡量趨勢一致性，三者皆在不同財務欄位（毛利率、營收年增率、ROE）上得到近乎零或負的sub-train IC，型態高度一致。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "ts_rsq（線性趨勢擬合優度）作為『趨勢品質/一致性』的衡量方式，在本地pipeline上對財務欄位（毛利率、營收年增率、ROE）系統性測不出訊號，三次獨立嘗試(C-1/C-13/C-14)全數在sub-train階段即失敗，強度足以視為通則。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0636",
+ "ts": "2026-08-12T09:31:55"
+}

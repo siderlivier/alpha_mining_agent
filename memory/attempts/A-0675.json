@@ -1,0 +1,85 @@
+{
+ "round": 44,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "若公司營收年增率長期處於自身兩年歷史高檔（ts_rank高），代表其成長是結構性、可持續的，而非單月雜訊；市場對『持續型成長』的重新評價需要多個季度才能完全反映，因此結構性高成長股仍有超額報酬空間，機制是成長延續而非單月驚喜的均值回歸。",
+ "prediction": "sub-train ICIR > 0.45；pos方向；此訊號IC應在多頭月與空頭月皆穩定為正，且與F-009（rev_yoy_ma3斜率）相關性 < 0.5。",
+ "formula": "cs_rank(ts_rank(rev_yoy, 24))",
+ "name_zh": "結構性營收強勢股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(rev_yoy, 24))",
+  "fhash": "a0ed93ed44c0396d",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.26,
+   "decay_pct": 50.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.047,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.28,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.061,
+   "short_excess_ann": 0.078
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-013",
+   "rho": 0.54,
+   "factor_name": "冷門成長股",
+   "factor_desc": "營收成長強但成交金額低，代表利多尚未被市場注意到。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-013 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "預測此訊號應與F-009(rev_yoy_ma3斜率)相關性<0.5，證明是獨立的『結構性持續高成長』訊號。實際上stage2揪出的高相關對象是F-013(冷門成長股，ρ0.54)而非F-009，顯示作者預判了錯誤的比較對象——ts_rank(rev_yoy,24)捕捉的『持續成長』與F-013的成長分量本質重疊，只是少了F-013的『低關注度』篩選器。",
+ "failure_type": "duplicate",
+ "lesson": "檢查相關性時只設定了一個『假想敵』(F-009)，但實際紅海邊界可能來自訊號的某個子分量(如rev_yoy本身)與別的組合因子(F-013)重疊；下次列出預期相關對象時應涵蓋『分量重疊』而非只挑同類公式的因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0675",
+ "ts": "2026-08-12T14:15:12"
+}

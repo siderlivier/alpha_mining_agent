@@ -1,0 +1,84 @@
+{
+ "round": 6,
+ "category": "quiet_breakout_anchoring",
+ "hypothesis": "股價接近52週高點但週轉率(散戶熱度)偏低，代表突破尚未被廣泛注意、可能是法人悄悄布局而散戶尚未追價的『安靜強勢股』，後續隨關注度提升仍有重估空間；相對地，高週轉率下的破高股票已被市場充分定價甚至過熱，追高風險較高。此構造刻意避開經驗庫指出的兩條紅海路徑(vol縮放、營收成長門檻)，改以週轉率作為關注度代理。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；且與F-005(neg vol_126)、既有52週高點類因子之截面相關度均<0.5(未使用vol縮放或營收確認)。",
+ "formula": "mul(cs_rank(px_hi252), neg(cs_rank(turn_21)))",
+ "name_zh": "安靜破高股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(px_hi252), neg(cs_rank(turn_21)))",
+  "fhash": "5dd2587d2393a8a2",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.07
+  },
+  "validation": {
+   "mean_ic": -0.028,
+   "icir": -0.31,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.03,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    -0.043,
+    "盤整"
+   ],
+   "2016": [
+    -0.014,
+    "多頭"
+   ],
+   "2017": [
+    -0.026,
+    "多頭"
+   ],
+   "2018": [
+    -0.006,
+    "盤整"
+   ],
+   "2019": [
+    -0.05,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.009,
+   "down_months": -0.026
+  },
+  "industry_icir": {
+   "電子": -0.18,
+   "生技": -0.07,
+   "半導體": 0.07,
+   "金融": -0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.015,
+   "short_excess_ann": -0.067
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR -0.07、validation更負至-0.31，方向與預測完全相反(預測正向突破訊號，實際負相關)；『安靜破高股』假說未獲支持，顯示低週轉率下的價格創高很可能代表缺乏認同度/流動性風險，而非法人悄悄布局，市場對此類股票反而給予折價而非後續重估。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "結合C-11的失敗模式，兩個以mul()交乘動能/價格位置與流動性rank的嘗試都在sub-train階段即無訊號或方向錯誤，顯示『安靜布局』敘事本身可能站不住腳（低週轉的破高更可能是流動性陷阱而非機構悄悄吸籌）。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0111",
+ "ts": "2026-07-19T17:47:43"
+}

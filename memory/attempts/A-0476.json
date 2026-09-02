@@ -1,0 +1,29 @@
+{
+ "round": 31,
+ "category": "foreign_flow_revenue_confirmation",
+ "hypothesis": "半導體供應鏈全球資訊分散、外資研究覆蓋是台廠訂單能見度的重要擴散管道；外資買超同時逢營收成長，代表外資已提前確認訂單能見度。此雙重確認機制應在半導體產業（相較電子全類別F-017）更集中，因半導體外資持股與國際客戶訂單連動更緊密、資訊優勢更明顯。",
+ "prediction": "半導體產業限定 industry_icir > 0.5；多頭腿年化超額報酬 > 0；需驗證是否顯著高於電子全類別F-017版本以釐清是否為半導體特有。",
+ "formula": "mul(cs_rank(frgn_net_21),cs_rank(rev_yoy))",
+ "name_zh": "外資訂單確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_net_21),cs_rank(rev_yoy))",
+  "fhash": "b2d71ee027ef4b82",
+  "verdict": "rejected_duplicate",
+  "reason": "與 F-017 代數等價"
+ },
+ "diagnosis": "候選在假設階段就已被判定與F-017代數等價，未進入實測。預測『半導體應比電子全類別更集中』完全未被檢驗，因為公式本身只是F-017的半導體子集寫法，屬於表達層面而非機制層面的重複。",
+ "failure_type": "duplicate",
+ "lesson": "在提交『產業限定版』候選前，應先確認公式相對全市場版是否只是加了產業篩選條件（代數等價），若是則應直接用F-017的產業分組結果做子集分析，而非重新提交一個新因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_duplicate",
+ "id": "A-0476",
+ "ts": "2026-07-29T23:46:18"
+}

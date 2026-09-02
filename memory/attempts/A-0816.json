@@ -1,0 +1,88 @@
+{
+ "round": 53,
+ "category": "cheap_momentum_continuation",
+ "hypothesis": "長期動能(一年，mom_240)延續且淨值便宜(bp高)的股票代表上漲尚未反映在估值上，機制為分析師與機構對『便宜股票開始上漲』存在確認偏誤與追蹤延遲，需要更長時間才願意調升評等與目標價，因此便宜+動能組合的報酬持續性優於純動能。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(top20%)年化超額報酬須顯著>0；與F-002相關係數應<0.5(F-002為bp×roe，本因子為bp×長期動能)。",
+ "formula": "cs_rank(mul(cs_rank(mom_240), cs_rank(bp)))",
+ "name_zh": "便宜動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp",
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(cs_rank(mom_240), cs_rank(bp)))",
+  "fhash": "61cd3d064b0e29b3",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.05,
+   "icir": 0.34,
+   "decay_pct": -6.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.05,
+    "多頭"
+   ],
+   "2014": [
+    -0.032,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.061,
+    "多頭"
+   ],
+   "2017": [
+    0.085,
+    "多頭"
+   ],
+   "2018": [
+    0.02,
+    "盤整"
+   ],
+   "2019": [
+    0.081,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.056,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.56,
+   "半導體": -0.07,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.049
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.43
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.32 < 0.45"
+ },
+ "diagnosis": "訓練/驗證高度穩定(ICIR 0.32→0.34，decay僅-6%)，方向與電子/生技產業集中度預測吻合，通過相關性檢查(與F-021 rho=0.43<0.5)，唯獨整體ICIR強度差臨門一腳未達0.45門檻。機制成立的判斷正確，只是強度預估過於樂觀。",
+ "failure_type": "expression_bad",
+ "lesson": "便宜×長期動能組合訊號穩定但強度不足，屬於「方向對、火力不夠」的近失敗案例，適合換一種強化表達重新測試，而非直接判定機制無效。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0816",
+ "ts": "2026-08-15T11:33:03"
+}

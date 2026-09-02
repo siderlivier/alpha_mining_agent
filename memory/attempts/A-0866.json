@@ -1,0 +1,83 @@
+{
+ "round": 57,
+ "category": "dividend_stability_premium",
+ "hypothesis": "現金殖利率長期波動度低的公司代表管理層對未來現金流有高度信心並願意做出具承諾成本的股利政策(Lintner黏性股利模型)。這類悶型高殖利率股缺乏成長故事、不受成長型基金青睞,市場長期低估其風險調整後報酬。",
+ "prediction": "sub-train ICIR>0.4;多頭腿(殖利率最穩定端)年化超額報酬>0;下跌月IC應高於上漲月IC(防禦性溢酬特徵)。",
+ "formula": "cs_rank(neg(ts_std(div_yield,24)))",
+ "name_zh": "殖利率穩定股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(div_yield,24)))",
+  "fhash": "9b921044fa3c41ed",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.1
+  },
+  "validation": {
+   "mean_ic": -0.004,
+   "icir": -0.07,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.0,
+    "多頭"
+   ],
+   "2014": [
+    0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.007,
+    "盤整"
+   ],
+   "2016": [
+    -0.024,
+    "多頭"
+   ],
+   "2017": [
+    -0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.005,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.21,
+   "生技": -0.39,
+   "半導體": -0.08,
+   "金融": 0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": -0.018
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.03,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4且下跌月IC應高於上漲月(防禦性溢酬)，但實際整體icir僅-0.10近雜訊，且下跌月IC(-0.012)反而比上漲月(-0.005)更負，與假設方向相反。逐年正負不一致，無穩定模式，殖利率波動度本身未能作為防禦性訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "殖利率穩定度不足以構成防禦性溢酬訊號；連同C-8同批的金融股股利訊號亦落空，兩次獨立測試顯示股利政策類指標在台股資訊含量薄弱。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0866",
+ "ts": "2026-08-19T00:11:01"
+}

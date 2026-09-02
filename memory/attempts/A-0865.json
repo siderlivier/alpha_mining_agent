@@ -1,0 +1,87 @@
+{
+ "round": 57,
+ "category": "retail_margin_leverage_contrarian",
+ "hypothesis": "融資餘額變化率代表散戶槓桿追價強度。行為財務學顯示散戶具外推式預期與過度自信偏誤,傾向股價已上漲後才大幅加碼融資,此時常已接近短期高點;融資降溫代表散戶追價動能消退,未來反而較少追高賣壓、報酬更佳。",
+ "prediction": "sub-train ICIR<-0.4;多頭腿(融資降溫端)年化超額報酬>0;經6月平滑後換手率<0.4通過stage4檢查。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,6)))",
+ "name_zh": "融資追高反指標",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,6)))",
+  "fhash": "644251112a5cce0b",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.18,
+   "decay_pct": 20.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.004,
+    "盤整"
+   ],
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.011,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.14,
+   "半導體": 0.0,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向正確：全樣本8年IC全為正，與『融資降溫→未來報酬佳』假設一致，validation衰減僅20%屬穩健，多頭腿0.028為正、可交易。但強度遠不足門檻(sub-train icir僅0.22 vs 預期>0.4/<-0.4)，屬方向對、力度不足。",
+ "failure_type": "expression_bad",
+ "lesson": "融資變化率降溫訊號方向確立但偏弱；下次可嘗試非線性化(如極端十分位差)或限定散戶集中度高的中小型股子樣本以放大訊號，而非全樣本線性排序。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0865",
+ "ts": "2026-08-19T00:11:01"
+}

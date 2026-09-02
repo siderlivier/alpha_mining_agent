@@ -1,0 +1,83 @@
+{
+ "round": 41,
+ "category": "trend_r_squared_quality",
+ "hypothesis": "ROE的12個月線性擬合優度，捕捉的是「資本報酬率改善的一致性」而非水準高低（F-001已涵蓋水準相對中位數）；持續、線性改善的ROE代表結構性的資本效率提升（如去化低效資產、產品組合優化），而非單季業外或一次性利益推升的鋸齒狀ROE，市場對這種「一致性」維度的資訊處理效率低於對「水準」維度。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-001/F-012相關性|ρ|<0.5，證明ts_rsq擬合優度與既有中位數偏離、應計淨化動能為不同維度。",
+ "formula": "cs_rank(ts_rsq(roe,12))",
+ "name_zh": "ROE趨勢線性度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rsq(roe,12))",
+  "fhash": "9ab79cfec1bed332",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.05
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.09,
+   "decay_pct": -106.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.012,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.002,
+    "多頭"
+   ],
+   "2017": [
+    -0.0,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.001,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.27,
+   "生技": -0.17,
+   "半導體": 0.22,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.33,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.05，接近零；驗證期0.09也僅小幅為正，逐年IC在±0.02間震盪無結構。這是本輪第三個使用ts_rsq衡量『趨勢一致性/擬合優度』的候選（C-1毛利率、C-13營收年增率、C-14 ROE），三者全數死於stage1、sub-train ICIR皆<0.2，形成一致且獨立的失敗模式，足以判定ts_rsq這個運算子/構造思路在財務時間序列上系統性抓不到訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『市場對趨勢一致性/擬合優度的定價效率低於對趨勢水準或斜率』這個大方向假設，在毛利率、營收、ROE三個不同欄位上都未獲支持，應將『ts_rsq類趨勢線性度』列入短期禁忌方向，除非未來有證據顯示是特定產業/特定窗口長度失效而非全面失效，才考慮重新開放。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0637",
+ "ts": "2026-08-12T09:31:55"
+}

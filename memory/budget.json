@@ -1,0 +1,17 @@
+{
+ "week_of": "2026-08-31",
+ "rounds_used": 4,
+ "total_rounds": 68,
+ "last_consolidate_round": 60,
+ "tokens_used": 504717,
+ "cost_usd": 3.238244,
+ "tokens_breakdown": {
+  "input": 14,
+  "output": 256879,
+  "cache_creation": 135567,
+  "cache_read": 112257
+ },
+ "llm_calls": 7,
+ "estimated_calls": 0,
+ "failed_calls": 0
+}

@@ -1,0 +1,92 @@
+{
+ "round": 45,
+ "category": "volatility_regime_overreaction",
+ "hypothesis": "短期波動(vol_21)相對半年波動(vol_126)顯著飆升，多反映短期恐慌拋售而非基本面風險上升；台股散戶占比高易從眾性恐慌，此類短期波動regime常在回歸常態後伴隨價格修復，形成均值回歸機會，機制不同於F-005/F-018的絕對波動水準。",
+ "prediction": "sub-train ICIR>0.4；多頭腿（近期恐慌波動最高端）年化超額報酬>0；下跌月IC應高於上漲月IC；與F-005相關性|ρ|<0.5。",
+ "formula": "cs_rank(neg(sdiv(vol_21,vol_126)))",
+ "name_zh": "恐慌波動修復",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21,vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_max_rho": {
+   "factor": "F-018",
+   "rho": 0.41
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 月換手 0.67 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR預測>0.4，實際0.36已偏低；核心預測『下跌月IC應高於上漲月IC』（恐慌超跌後修復應在下跌月更顯著）實際反轉（up 0.024 > down 0.009），機制方向與假說不符。同時驗證期decay 78%與月換手0.67皆超標，短窗波動比值本身雜訊大、換手高。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "vol_21/vol_126短窗比值型『恐慌修復』因子在條件IC上未顯示下跌月優勢，恐慌超跌後均值回歸的機制未獲支持；此外短窗比值本身換手率過高，不利實際交易，即使ICIR達標也可能因換手被拒。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0689",
+ "ts": "2026-08-12T14:25:46"
+}

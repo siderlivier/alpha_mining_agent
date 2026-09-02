@@ -1,0 +1,83 @@
+{
+ "round": 29,
+ "category": "institutional_divergence",
+ "hypothesis": "投信基金經理人有月/季相對排名壓力與作帳誘因，近期(3個月)大幅買超的個股很可能包含追漲、跟風、美化持股等非基本面驅動的買盤，這類買盤推升的股價在買力消退後容易反轉；此為短期資金流的擁擠交易效應而非長期資訊優勢。過去測試單月流量雜訊過大，改用3個月平滑可過濾雜訊同時保留反轉訊號並控制換手率。",
+ "prediction": "sub-train ICIR > 0.45；訊號3月平滑後月換手率 < 0.4；下跌月IC與上漲月IC方向一致（非regime依賴）。",
+ "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+ "name_zh": "投信追高反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+  "fhash": "18a151d16911b800",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.33,
+   "decay_pct": -78.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.021,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": 0.09,
+   "半導體": 0.14,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.032,
+   "short_excess_ann": -0.023
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測3個月平滑能把單月雜訊過濾掉並讓ICIR>0.45，結果sub-train ICIR僅0.18，未達門檻；雖然validation ICIR回升到0.33（decay為負），但兩期IC絕對值都很小(0.01~0.03)，且多空兩腿超額報酬同號為負，顯示訊號整體偏噪音而非穩定可交易的反轉效果。假說文本提到單月版本更早已測試失敗，這是同一機制第二次未達標。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信買超後的『追高反轉』機制，在1個月與3個月平滑兩種表達下都未能通過sub-train門檻，顯示投信買賣超本身可能不是可靠的擁擠交易代理，需要更強的證據（如搭配估值或籌碼集中度）才值得再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0445",
+ "ts": "2026-07-29T23:14:31"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 62,
+ "category": "volatility_term_structure_compression",
+ "hypothesis": "當近一季波動度(vol_63)高於近一月波動度(vol_21)，代表股價正從先前不確定期進入收斂盤整；波動度收斂反映資訊不確定性下降，但市場對「轉安靜」的股票關注度低，重新評價存在延遲，此為波動度結構(spread)而非水準，機制不同於F-005/F-018。",
+ "prediction": "sub-train ICIR>0.4；與F-005(neg(vol_126))截面相關|ρ|<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(sub(vol_63, vol_21))",
+ "name_zh": "波動收斂訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "vol_21",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(vol_63, vol_21))",
+  "fhash": "85e9228fcf4867a1",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": -0.014,
+   "icir": -0.21,
+   "decay_pct": 185.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.012,
+    "盤整"
+   ],
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.043,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.01,
+    "盤整"
+   ],
+   "2019": [
+    -0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.011,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.18,
+   "半導體": 0.11,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.003,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.98,
+  "turnover_m": 0.7,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4，實得0.25且validation翻負(icir -0.21，衰減185%)，sub-train與validation符號相反(2016-2019逐漸轉負)。波動度期限結構收斂(vol_63>vol_21)在不同時期方向不一致，非過擬合式衰減而是機制本身不穩定，全樣本年份間符號來回翻轉。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "波動度期限結構價差(vol_63 - vol_21)作為「收斂即將重估」的訊號在台股不穩定，長期樣本內符號會反轉，不宜視為可靠的機制型假設。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0946",
+ "ts": "2026-08-27T21:24:50"
+}

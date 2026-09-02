@@ -1,0 +1,90 @@
+{
+ "round": 11,
+ "category": "financial_dividend_capital_discipline",
+ "hypothesis": "金融股(銀行/壽險/證券)受資本適足率監管約束,能同時維持高ROE與高股息殖利率代表資本配置紀律良好——不需靠稀釋股本或犧牲獲利來維持股利。市場慣性用單一ROE或殖利率評價金融股,忽略了『兩者同時成立』才是資本紀律的真正訊號,此邏輯僅金融業因監管資本限制而成立。",
+ "prediction": "金融產業industry_icir>0.5(產業限定門檻);其餘產業ICIR可不顯著甚至接近零",
+ "formula": "if_else(greater(roe, ts_med(roe,12)), cs_rank(div_yield), 0)",
+ "name_zh": "金融股利紀律",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "if_else(greater(roe, ts_med(roe,12)), cs_rank(div_yield), 0)",
+  "fhash": "a0fd3de07930df74",
+  "sub_train": {
+   "mean_ic": 0.043,
+   "icir": 0.71
+  },
+  "validation": {
+   "mean_ic": 0.047,
+   "icir": 0.85,
+   "decay_pct": -19.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.035,
+    "多頭"
+   ],
+   "2015": [
+    0.049,
+    "盤整"
+   ],
+   "2016": [
+    0.045,
+    "多頭"
+   ],
+   "2017": [
+    0.05,
+    "多頭"
+   ],
+   "2018": [
+    0.035,
+    "盤整"
+   ],
+   "2019": [
+    0.059,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.042,
+   "down_months": 0.051
+  },
+  "industry_icir": {
+   "電子": 0.66,
+   "生技": 0.52,
+   "半導體": 0.23,
+   "金融": 0.37
+  },
+  "legs": {
+   "long_excess_ann": 0.058,
+   "short_excess_ann": 0.035
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.3,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.74,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.74 > 0.5"
+ },
+ "diagnosis": "預測『僅金融業』industry_icir>0.5、其餘產業可不顯著，實際完全相反：金融icir僅0.37，電子(0.66)、生技(0.52)反而最強。公式if_else(greater(roe,ts_med(roe,12)),cs_rank(div_yield),0)本身沒有任何產業篩選，測的其實是全市場『ROE改善+高殖利率』品質股利因子，無法驗證『金融監管資本紀律』這個產業限定假設。全市場強效果(sub-train ICIR 0.71/validation 0.85, decay -19%，底層邏輯確實有效)導致與庫內F-001(ROE趨勢改善)高相關(ρ=0.74)被判重複。",
+ "failure_type": "duplicate",
+ "lesson": "若假設宣稱『機制僅在特定產業成立』，公式必須真的用產業篩選/遮罩限定計算範圍，否則得到的只是全市場版本的既有因子重新命名；事後看industry_icir分佈不能替代事前的產業限定設計。本輪C-7、C-8兩個獨立案例都犯同樣錯誤。",
+ "lesson_confidence": "cross_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0180",
+ "ts": "2026-07-21T11:33:49"
+}

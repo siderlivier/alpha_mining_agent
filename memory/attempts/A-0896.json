@@ -1,0 +1,84 @@
+{
+ "round": 59,
+ "category": "leveraged_conviction_confirmation",
+ "hypothesis": "市場普遍將融資餘額增加視為投機雜訊而一概忽視；但當融資餘額上升同時伴隨本業營業利益真實成長時，代表這是有基本面依據的槓桿加碼而非純投機追價，此類「有憑有據」的槓桿買盤未被市場與純投機案例區分開來，形成低估。",
+ "prediction": "sub-train ICIR > 0.4；換手率(3期平滑後)<0.4；多頭腿年化超額>0，且顯著高於未經獲利篩選的單純margin_d21因子。",
+ "formula": "mul(cs_rank(ts_mean(margin_d21,3)),cs_rank(op_income_yoy))",
+ "name_zh": "槓桿真信心股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_mean(margin_d21,3)),cs_rank(op_income_yoy))",
+  "fhash": "442d59389c65f782",
+  "sub_train": {
+   "mean_ic": 0.006,
+   "icir": 0.06
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.21,
+   "decay_pct": -239.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.017,
+    "多頭"
+   ],
+   "2014": [
+    -0.03,
+    "多頭"
+   ],
+   "2015": [
+    0.038,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    -0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": 0.016
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": 0.13,
+   "半導體": -0.02,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.59,
+  "turnover_m": 0.36,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際僅0.06，與『有基本面依據的槓桿加碼』故事幾乎脫鉤；cond_ic下跌月(0.016)還略高於上漲月(0.006)，未見預期中槓桿信心應在多頭更有效的模式；覆蓋率0.59明顯偏低，可能稀釋了訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "以融資餘額(margin_d21)為核心的複合因子在本資料集下訊號系統性偏弱，見[[C-6]]同類結果；未來若仍想用融資資料，應先確認原始欄位覆蓋率與單變量IC再組合。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0896",
+ "ts": "2026-08-19T10:08:40"
+}

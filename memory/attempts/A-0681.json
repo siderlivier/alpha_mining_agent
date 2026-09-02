@@ -1,0 +1,87 @@
+{
+ "round": 44,
+ "category": "financial_cost_efficiency_underreaction",
+ "hypothesis": "金融股的營業利益率改善主要來自成本收入比下降（數位化、分行精簡等結構性降本），這類結構性成本改善不像淨利差那樣受升降息週期主導，更能反映管理層執行力；市場常將金融股獲利變化簡單歸因於升降息環境，低估源自內部效率提升的部分，導致這類個股重新評價滯後。",
+ "prediction": "金融產業限定：industry_icir > 0.5，decay < 30%；pos方向；此訊號應與F-023（利差創高）相關性 < 0.5，證明捕捉的是成本端而非利差端訊號。",
+ "formula": "cs_rank(delta(op_margin, 12))",
+ "name_zh": "金融降本增效股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(op_margin, 12))",
+  "fhash": "25079423223713be",
+  "sub_train": {
+   "mean_ic": 0.055,
+   "icir": 0.65
+  },
+  "validation": {
+   "mean_ic": -0.003,
+   "icir": -0.03,
+   "decay_pct": 105.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.035,
+    "多頭"
+   ],
+   "2014": [
+    0.06,
+    "多頭"
+   ],
+   "2015": [
+    0.079,
+    "盤整"
+   ],
+   "2016": [
+    0.031,
+    "多頭"
+   ],
+   "2017": [
+    0.064,
+    "多頭"
+   ],
+   "2018": [
+    -0.039,
+    "盤整"
+   ],
+   "2019": [
+    0.033,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.046
+  },
+  "industry_icir": {
+   "電子": 0.49,
+   "生技": 0.18,
+   "半導體": 0.2,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": 0.034,
+   "short_excess_ann": 0.094
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.45
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR -0.03 < 0.3; validation 衰減 105% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測金融產業限定industry_icir>0.5、decay<30%。實際金融產業industry_icir僅0.22，遠低於預測門檻，且全樣本validation ICIR驟降至-0.03(decay 105%，方向反轉)。『成本效率結構性改善』的機制在其鎖定的金融產業本身就未獲驗證，反而電子產業icir(0.49)最高，顯示op_margin的delta可能只是通用獲利動能訊號在特定年份(2018利率環境劇變)失真，而非金融業特有的降本敘事。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『金融股降本增效優於利差敘事』的假說未獲支持——目標產業本身ICIR最弱，且out-of-sample出現嚴重的方向反轉，說明op_margin delta對金融股高度受單一總體事件(如2018年升降息環境)驅動而非結構性降本能力；日後測產業限定假設時，應先確認該產業ICIR是否確實高於其他產業(內部一致性檢查)，而非只看全樣本表現就假設鎖定產業會更強。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0681",
+ "ts": "2026-08-12T14:15:12"
+}

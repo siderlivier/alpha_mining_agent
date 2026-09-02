@@ -1,0 +1,94 @@
+{
+ "round": 56,
+ "category": "overlooked_dividend_yield",
+ "hypothesis": "高股息股票若成交清淡，代表追求資本利得的成長型資金尚未關注，存股族與退休資金也尚未大量進場；此類被動收息需求傳導速度慢，提供緩慢但確定的估值修正空間。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額>0；與F-004、F-006、F-020相關係數皆需<0.5。",
+ "formula": "mul(cs_rank(div_yield), cs_rank(neg(amt_21)))",
+ "name_zh": "冷門高股息股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(div_yield), cs_rank(neg(amt_21)))",
+  "fhash": "fe781dcbfb0bebbb",
+  "sub_train": {
+   "mean_ic": 0.042,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.067,
+   "icir": 0.54,
+   "decay_pct": -31.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.043,
+    "盤整"
+   ],
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.032,
+    "多頭"
+   ],
+   "2015": [
+    0.051,
+    "盤整"
+   ],
+   "2016": [
+    0.061,
+    "多頭"
+   ],
+   "2017": [
+    0.026,
+    "多頭"
+   ],
+   "2018": [
+    0.083,
+    "盤整"
+   ],
+   "2019": [
+    0.051,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.056,
+   "down_months": 0.029
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.56,
+   "半導體": 0.2,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.009,
+   "short_excess_ann": 0.058
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.16,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.71,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.71 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.4達標（sub-train 0.42，validation 0.54），方向與強度符合預期；但仍與F-020相關係數達0.71而陣亡，是本輪第三個獨立候選（C-1、C-2、C-15）都以不同的『獲利/價值指標 × 低關注度代理』組合撞上F-020，證實該因子空間已高度飽和。",
+ "failure_type": "duplicate",
+ "lesson": "見全域規則：『低關注度代理 × 獲利/價值指標』為F-020的紅海方向，本次為第三例獨立驗證。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0863",
+ "ts": "2026-08-18T23:55:52"
+}

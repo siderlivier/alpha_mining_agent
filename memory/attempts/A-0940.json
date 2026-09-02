@@ -1,0 +1,89 @@
+{
+ "round": 62,
+ "category": "semiconductor_destocking_recovery",
+ "hypothesis": "半導體業存貨去化循環中，營收動能的邊際改善(delta(rev_mom,6))需要數月才能與雜訊區分；用12個月移動平均將此改善幅度平滑後，才能捕捉持續回溫而非單月拉貨雜訊，市場對緩慢、非戲劇性的復甦訊號反應遲緩。",
+ "prediction": "sub-train ICIR>0.4；訊號在復甦初期月份IC應顯著高於平穩期；formula月度換手率<0.4避免stage4被拒。",
+ "formula": "cs_rank(ts_mean(delta(rev_mom,6),12))",
+ "name_zh": "半導體回溫確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(delta(rev_mom,6),12))",
+  "fhash": "28c720371e85a6ae",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.029,
+   "icir": 0.43,
+   "decay_pct": -36.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.026,
+    "盤整"
+   ],
+   "2016": [
+    0.062,
+    "多頭"
+   ],
+   "2017": [
+    -0.002,
+    "多頭"
+   ],
+   "2018": [
+    0.037,
+    "盤整"
+   ],
+   "2019": [
+    0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.025
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.15,
+   "半導體": 0.42,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.03,
+   "short_excess_ann": 0.076
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.41,
+  "stage2_culprit": {
+   "factor": "F-009",
+   "rho": 0.63,
+   "factor_name": "營收加速趨勢",
+   "factor_desc": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-009 |ρ|=0.63 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實得0.32，已先天不足；stage2又與F-009(營收加速趨勢)ρ=0.63觸頂。用12個月MA平滑delta(rev_mom,6)想與F-009的3個月均線斜率做出區隔，但兩者本質都是「營收動能的平滑版」，平滑窗口長短不足以構成機制差異。",
+ "failure_type": "duplicate",
+ "lesson": "營收動能類因子只要是「對rev_mom/rev_yoy做平滑或差分」，無論窗口長度，都容易落入F-009的相關性範圍；要做出差異需改變資訊來源（如非營收面的驗證訊號），而非單純調整平滑參數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0940",
+ "ts": "2026-08-27T21:24:50"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 6,
+ "category": "cost_discipline_resilience",
+ "hypothesis": "市場過度聚焦於營收成長的表面數字，當營收成長趨緩但營業利益率仍逆勢改善，代表管理層透過成本紀律與費用控管維持獲利韌性；這種『逆風執行力』因缺乏營收成長的亮眼敘事而被市場低估，尤其在景氣下行期此防禦性訊號更具價值。此為全新探索類別，捕捉營收與利潤率變化方向的背離。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；且下跌月IC應顯著高於上漲月IC(驗證防禦性特徵)。",
+ "formula": "sub(cs_rank(ts_slope(op_margin,6)), cs_rank(rev_yoy))",
+ "name_zh": "逆風成本紀律",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(op_margin,6)), cs_rank(rev_yoy))",
+  "fhash": "602fad41dfac26cb",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.07
+  },
+  "validation": {
+   "mean_ic": -0.011,
+   "icir": -0.11,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.035,
+    "盤整"
+   ],
+   "2016": [
+    -0.031,
+    "多頭"
+   ],
+   "2017": [
+    -0.032,
+    "多頭"
+   ],
+   "2018": [
+    -0.019,
+    "盤整"
+   ],
+   "2019": [
+    -0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.005,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": 0.0,
+   "半導體": -0.05,
+   "金融": -0.04
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.46,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR -0.07方向即與預測相反，validation -0.11持續為負；更關鍵的是下跌月IC(-0.017)反而比上漲月(-0.005)更負，與『逆風執行力=防禦性訊號』的預測完全相反——這類公司在下跌月表現更差而非更具韌性。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『營收趨緩但營益率仍改善』的背離訊號未展現防禦性，反而在空頭期更弱，顯示市場定價可能已反映『增長見頂』隱憂而非低估執行力；加上此為本輪第4個失敗的營益率/毛利率衍生因子(連同C-2/C-8/C-12)，margin-trend大類目前證據持續指向不穩定，值得列入下輪迴避清單。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0112",
+ "ts": "2026-07-19T17:47:43"
+}

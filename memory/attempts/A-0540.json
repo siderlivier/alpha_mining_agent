@@ -1,0 +1,90 @@
+{
+ "round": 35,
+ "category": "revenue_overheating_reversal",
+ "hypothesis": "當月增率(rev_mom)遠高於年增率(rev_yoy)時，代表短期營收可能是急單、提前拉貨或庫存回補所致的異常拉高，容易被市場過度外推為長期趨勢；相反地當月增率相對年增率降溫，代表短期雜訊消退、市場過度悲觀解讀，更適合逢低介入。",
+ "prediction": "sub-train ICIR>0.45，尤其電子產業（急單效應明顯）industry_icir>0.5；下跌月與上漲月IC同向。",
+ "formula": "cs_rank(neg(sub(rev_mom,rev_yoy)))",
+ "name_zh": "營收降溫股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(rev_mom,rev_yoy)))",
+  "fhash": "a18f92a6b4136f9c",
+  "sub_train": {
+   "mean_ic": 0.04,
+   "icir": 0.58
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.34,
+   "decay_pct": 42.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.048,
+    "多頭"
+   ],
+   "2017": [
+    0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.69,
+   "生技": 0.42,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.065,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.45,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.52,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.58達標，電子產業ICIR 0.69完全符合「急單效應在電子最明顯」的預測，cond_ic同向。validation decay 42%未觸發過擬合門檻，但死於與F-011(生技轉骨訊號:營收成長x毛利率)相關性0.52——兩者公式形式不同，卻可能捕捉同一種「真實vs虛假成長」維度，重疊出乎預期。",
+ "failure_type": "duplicate",
+ "lesson": "純營收動能反轉類因子與成長x毛利率品質確認類因子可能捕捉同一底層維度，即使公式與敘事表面不同，設計階段仍需檢查與現有成長品質因子的邏輯重疊，而非只看公式差異。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0540",
+ "ts": "2026-07-30T00:34:10"
+}

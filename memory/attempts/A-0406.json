@@ -1,0 +1,91 @@
+{
+ "round": 26,
+ "category": "momentum_continuation",
+ "hypothesis": "一年價格動能反映法人與長線資金經過充分驗證後才緩慢調整部位的過程，在資訊擴散慢、法人持股集中度提升的台股個股中，過去一年價格趨勢仍具延續性，而非立即被完全反映。",
+ "prediction": "sub-train ICIR>0.40；需檢查是否有動能崩潰（下跌月IC是否劇烈轉負，若是則視為不可用）；多頭腿超額報酬>0；與C-2相關係數<0.5。",
+ "formula": "cs_rank(mom_240)",
+ "name_zh": "年線動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_240)",
+  "fhash": "30124ce2fa791c47",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.047,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.23,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.3
+  },
+  "verdict": "rejected_stage3",
+  "reason": "與同批 C-2 |ρ|=0.86，保留 ICIR 較高者"
+ },
+ "diagnosis": "純年線動能(mom_240) ICIR偏弱（0.20/0.09，decay 54%），且與同批C-2 (mom_240-mom_60) 高度相關(ρ=0.86)被判同批重複，保留ICIR較高的C-2。下跌月IC轉微負(-0.004)，隱含輕微動能崩潰跡象但未成主因。",
+ "failure_type": "duplicate",
+ "lesson": "原始動能與其殘差變體高度共線是預期中的事，未來同批次若要同時測兩個動能變體，應先預估其相關性，避免浪費一次stage2/3判定；此案再次確認動能類本身ICIR偏弱（見C-2彙整）。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage3",
+ "id": "A-0406",
+ "ts": "2026-07-28T18:54:36"
+}

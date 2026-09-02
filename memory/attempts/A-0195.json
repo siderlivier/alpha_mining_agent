@@ -1,0 +1,84 @@
+{
+ "round": 12,
+ "category": "inventory_speculation_divergence",
+ "hypothesis": "電子/半導體供應鏈存在長前置期的牛鞭效應存貨循環；當週轉率(turn_21)上升速度超過股價逼近前高的速度(px_hi252)，代表交易熱度是投機性追價而非基本面確認的價格發現，這種量價背離通常領先存貨修正而預示回檔，此機制因產業存貨週期特性只在電子供應鏈成立。",
+ "prediction": "sub-train ICIR > 0.45（neg方向）；electronics/semiconductor產業industry_icir絕對值應為四產業最大，金融/生技應接近0",
+ "formula": "cs_rank(sub(ts_slope(turn_21,6), ts_slope(px_hi252,6)))",
+ "name_zh": "電子追價背離",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ts_slope(turn_21,6), ts_slope(px_hi252,6)))",
+  "fhash": "dd29743073268aa0",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": -0.013,
+   "icir": -0.14,
+   "decay_pct": 584.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.051,
+    "多頭"
+   ],
+   "2015": [
+    -0.015,
+    "盤整"
+   ],
+   "2016": [
+    -0.005,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.02,
+   "半導體": 0.05,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.045,
+   "short_excess_ann": -0.038
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.03接近零。預測電子/半導體業ICIR絕對值應皆最大,實際僅電子(-0.15)部分吻合,半導體卻是正值(0.05)方向相反,顯示牛鞭效應假說在兩產業間不一致;多空兩腿超額報酬皆大幅為負,統計與可交易性雙重不足。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「量價背離領先存貨修正」需電子與半導體同向才能支持牛鞭效應機制;本次兩產業方向不一致,顯示turn_21與px_hi252斜率差可能只是雜訊而非結構性訊號,此構造不宜再嘗試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0195",
+ "ts": "2026-07-21T11:46:43"
+}

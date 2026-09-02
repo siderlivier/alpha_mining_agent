@@ -1,0 +1,94 @@
+{
+ "round": 54,
+ "category": "overlooked_profitability_liquidity",
+ "hypothesis": "外資持股比率低代表尚未進入外資研究覆蓋範圍；本業獲利率高但外資關注度低的公司，其基本面優勢尚未被最具資訊優勢的法人定價，電子供應鏈中小型股尤其明顯（外資集中押注龍頭）。",
+ "prediction": "電子產業industry_icir>0.4；與F-019/F-020相關係數|ρ|<0.5；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_rank(op_margin), cs_rank(neg(frgn_ratio)))",
+ "name_zh": "外資冷門獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(op_margin), cs_rank(neg(frgn_ratio)))",
+  "fhash": "7a94e51837c9cb82",
+  "sub_train": {
+   "mean_ic": 0.048,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.07,
+   "icir": 0.78,
+   "decay_pct": -103.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.058,
+    "盤整"
+   ],
+   "2013": [
+    0.06,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.065,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.081,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.059,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.5,
+   "半導體": 0.21,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.051,
+   "short_excess_ann": 0.043
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.67,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.67 > 0.5"
+ },
+ "diagnosis": "預測與F-019/F-020的ρ<0.5，實際與F-020 ρ=0.67，超標但沒有C-1那麼極端，顯示把『低關注度代理』從成交金額換成外資持股比率確實降低了一些重疊度，方向正確但幅度不夠。sub-train ICIR 0.38也未達0.45門檻。",
+ "failure_type": "duplicate",
+ "lesson": "『獲利率 x 低關注度代理』這個組合模式（不論低關注度用amt還是frgn_ratio）系統性地收斂到F-020附近，換代理變數只能小幅降低相關性，無法根本脫鉤。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0820",
+ "ts": "2026-08-18T21:21:48"
+}

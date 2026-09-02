@@ -1,0 +1,88 @@
+{
+ "round": 30,
+ "category": "revenue_noise_discount",
+ "hypothesis": "單月營收年增率與其3個月移動平均之間落差過大，代表當月數字可能受一次性因素干擾(出貨遞延、基期效應)，可信度較低；市場短期內容易對這類噪音數字反應過度或不足，落差越大代表營收趨勢越不穩定、越不可信，此類股票後續報酬應較差。",
+ "prediction": "以neg方向計算sub-train ICIR>0.45(即落差小的股票對應較高未來報酬)；此訊號與F-007(rev_mom標準差)相關係數需<0.5；多頭腿(落差小)年化超額報酬需為正。",
+ "formula": "cs_rank(abs(sub(rev_yoy, rev_yoy_ma3)))",
+ "name_zh": "營收數據不一致",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(abs(sub(rev_yoy, rev_yoy_ma3)))",
+  "fhash": "be5dd2777e191e7e",
+  "sub_train": {
+   "mean_ic": -0.02,
+   "icir": -0.32
+  },
+  "validation": {
+   "mean_ic": -0.043,
+   "icir": -0.64,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.012,
+    "多頭"
+   ],
+   "2014": [
+    -0.043,
+    "多頭"
+   ],
+   "2015": [
+    -0.026,
+    "盤整"
+   ],
+   "2016": [
+    -0.026,
+    "多頭"
+   ],
+   "2017": [
+    0.005,
+    "多頭"
+   ],
+   "2018": [
+    -0.049,
+    "盤整"
+   ],
+   "2019": [
+    -0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.028,
+   "down_months": -0.024
+  },
+  "industry_icir": {
+   "電子": -0.41,
+   "生技": -0.37,
+   "半導體": -0.13,
+   "金融": -0.16
+  },
+  "legs": {
+   "long_excess_ann": -0.009,
+   "short_excess_ann": 0.0
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.51,
+  "stage2_max_rho": {
+   "factor": "F-007",
+   "rho": -0.42
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.32 < 0.45; validation ICIR -0.64 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.51 > 0.4"
+ },
+ "diagnosis": "方向(neg)判斷正確且IC統計量很強(sub-train icir -0.32, validation -0.64)，遠超一般顯著性門檻，仍在stage4被拒：多空腿報酬皆≤0(long -0.009, short 0.0)且月換手率0.51過高不可交易。這是本輪IC最強卻仍失敗的案例，第三次印證「統計顯著≠可交易」。",
+ "failure_type": "expression_bad",
+ "lesson": "本因子IC很強但leg不可交易+換手率過高，是C-8/C-13/C-15的第三例同型態失效；建議對訊號做平滑化(如3個月rolling)以降低換手，並在判定通過前獨立檢查極端分位是否對應可交易報酬。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0473",
+ "ts": "2026-07-29T23:26:46"
+}

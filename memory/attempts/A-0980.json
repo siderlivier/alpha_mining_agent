@@ -1,0 +1,82 @@
+{
+ "round": 64,
+ "category": "semiconductor_cycle_trough_reversion",
+ "hypothesis": "半导体产业毛利率具强烈景气循环特性，当前毛利率越远低于自身两年高点，代表产业正处循环谷底；市场对高度周期性产业存在「近期趋势将持续」的外推偏误（recency bias），过度看空处于谷底的公司，低估了半导体毛利率均值回归的基本规律，导致谷底股票的反弹动能被低估，与F-025的延续性拐点叙事相反、属均值回归叙事。",
+ "prediction": "半导体产业子样本sub-train ICIR>0.4（产业限定）；与F-025截面相关性|ρ|<0.5；比值最高20%组（离高点最远）未来报酬显著高于最低20%组",
+ "formula": "cs_rank(sdiv(ts_max(gross_margin,24), gross_margin))",
+ "name_zh": "半导体谷底均值回归",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(ts_max(gross_margin,24), gross_margin))",
+  "fhash": "16af2d5db5221f2f",
+  "sub_train": {
+   "mean_ic": -0.044,
+   "icir": -0.82
+  },
+  "validation": {
+   "mean_ic": -0.006,
+   "icir": -0.1,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.041,
+    "多頭"
+   ],
+   "2014": [
+    -0.04,
+    "多頭"
+   ],
+   "2015": [
+    -0.047,
+    "盤整"
+   ],
+   "2016": [
+    -0.053,
+    "多頭"
+   ],
+   "2017": [
+    -0.039,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.034,
+   "down_months": -0.029
+  },
+  "industry_icir": {
+   "電子": -0.53,
+   "生技": -0.46,
+   "半導體": -0.21
+  },
+  "legs": {
+   "long_excess_ann": -0.064,
+   "short_excess_ann": -0.028
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.15,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測正向均值回歸，實際sub-train ICIR為-0.82，方向完全相反且2013-2019中6/7年一致為負，統計上是相當穩健的「反向」效應——半導體毛利率呈趨勢延續而非均值回歸。方向假說被證偽，但底層訊號本身強健(|ICIR|=0.82)。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "半導體毛利率呈趨勢延續而非均值回歸；此為方向判斷錯誤而非公式失效，強度足夠值得以反向假說（谷底延續/動能）重新提交，而非直接歸入禁忌方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0980",
+ "ts": "2026-08-27T21:49:57"
+}

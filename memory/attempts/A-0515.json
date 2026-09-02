@@ -1,0 +1,93 @@
+{
+ "round": 33,
+ "category": "informed_short_selling",
+ "hypothesis": "券資比偏高反映的不是軋空延續也不是回補反轉，而是有資訊優勢的空方交易者（產業內部人脈、財報前瞻資訊）選擇透過融券表達看空觀點；台股融券成本與限制較高，只有具較強確信度的空方才會建立部位，因此券資比高的股票代表被知情空頭鎖定，後續報酬應顯著較低。",
+ "prediction": "sub-train ICIR > 0.45（direction為對原始short_margin_ratio的neg，即高券資比對應低報酬）；空頭腿(高券資比組)未來報酬顯著低於多頭腿；此為對先前正向假說的直接反向驗證。",
+ "formula": "cs_rank(neg(short_margin_ratio))",
+ "name_zh": "知情空頭訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(short_margin_ratio))",
+  "fhash": "b61bbf279376b6a1",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.034,
+   "icir": 0.27,
+   "decay_pct": 31.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.023,
+    "盤整"
+   ],
+   "2013": [
+    0.056,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.049,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    0.07,
+    "盤整"
+   ],
+   "2019": [
+    -0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.048,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.52,
+   "生技": 0.41,
+   "半導體": 0.15,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.04,
+   "short_excess_ann": 0.057
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.35,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.59,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.59 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR(0.39)一開始就未達預測門檻(0.45)，validation又衰減31%至0.27。stage2相關度0.59與F-008(低調接近新高)中等偏高，短資比訊號很可能部分捕捉的是'尚未被動能族群追捧'這個F-008已用週轉率表達的特徵，而非純粹獨立的知情空頭資訊。",
+ "failure_type": "duplicate",
+ "lesson": "以short_margin_ratio水位代理知情空頭，容易與F-008這類'低調/未被追捧'因子重疊；若要凸顯獨立空頭資訊，應改用借券成本或券資比變化量而非水位本身。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0515",
+ "ts": "2026-07-30T00:08:12"
+}

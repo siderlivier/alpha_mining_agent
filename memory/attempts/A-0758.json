@@ -1,0 +1,83 @@
+{
+ "round": 49,
+ "category": "domestic_institutional_contrarian",
+ "hypothesis": "投信基金多以國內零售資金為主、績效評比週期短，傾向追逐當期熱門題材與已上漲股票以避免落後同業排名（順勢/羊群行為），屬於相對後知後覺的資金。因此投信近月大舉買超的股票往往是已經上漲一段後才被動買進，後續報酬容易均值回歸；此與外資的資訊優勢型買超不同，投信買超更偏向情緒與排名壓力驅動。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(投信買超最少)年化超額>0；上漲月IC應更負(驗證追高效應集中在多頭市場)；月換手率<0.4",
+ "formula": "cs_rank(neg(trust_net_21))",
+ "name_zh": "投信籌碼反指標",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(trust_net_21))",
+  "fhash": "5b1202e4dbb03ae6",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.32,
+   "decay_pct": -18.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.044,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.01,
+   "半導體": 0.29,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.27；且預測「上漲月IC應更負」（驗證投信追高效應集中在多頭市場）未成立：上漲月0.018與下跌月0.023方向接近，無明顯差異，說明投信買超反指標效應與大盤狀態無關，並非單純順勢羊群心理，較像是全期恆定但微弱的擁擠交易折價。多空腿超額報酬(long -0.008/short 0.009)均偏弱，尚不可交易。",
+ "failure_type": "expression_bad",
+ "lesson": "見C-3群組：投信籌碼反指標方向正確但強度不足，且原先設想的「多頭市場才追高」條件式機制未獲驗證，訊號本質更接近全期恆定的弱擁擠折價；若要放大應嘗試更長視窗平滑或結合成交量確認擁擠度，而非依賴市場狀態切分。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0758",
+ "ts": "2026-08-14T00:36:43"
+}

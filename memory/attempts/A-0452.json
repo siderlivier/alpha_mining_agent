@@ -1,0 +1,90 @@
+{
+ "round": 29,
+ "category": "cash_backed_earnings_quality",
+ "hypothesis": "生技與早期成長產業的財報常見「帳面獲利與現金流嚴重脫節」現象（如認列一次性授權金、股權收益等非現金項目），市場對「現金真的有進來」與「單純會計數字好看」兩者的區分反應不足。同時具備高現金流轉換率(ocf_ratio高)與低應計項(accruals低)的公司，獲利含金量真實可信，這種雙重確認品質訊號比單看應計項(F-006)更能篩出真正現金為王的公司，尤其在燒錢型產業中市場更容易被帳面數字迷惑而低估真正健康的公司。",
+ "prediction": "sub-train ICIR > 0.45；生技產業industry_icir應為四產業中最高或次高；與F-006相關係數 |ρ| < 0.5。",
+ "formula": "mul(cs_rank(ocf_ratio),cs_rank(neg(accruals)))",
+ "name_zh": "現金含金量品質",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio),cs_rank(neg(accruals)))",
+  "fhash": "af34da56440cee19",
+  "sub_train": {
+   "mean_ic": 0.02,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.03,
+   "icir": 0.57,
+   "decay_pct": -80.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.032,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.049,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.013,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.25,
+   "生技": 0.3,
+   "半導體": 0.24,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.17,
+  "stage2_culprit": {
+   "factor": "F-012",
+   "rho": 0.58,
+   "factor_name": "淨化ROE動能",
+   "factor_desc": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-012 |ρ|=0.58 > 0.5"
+ },
+ "diagnosis": "預測生技產業icir應最高或次高——命中：生技0.30確實為四產業最高。但整體因sub-train ICIR未達門檻前就先在stage2死於與F-012(淨化ROE動能，同樣是應計項+ROE概念)|ρ|=0.58，而非預測中提到的F-006。顯示『應計項×獲利品質』這個組合空間已被F-012佔據，即使換成ocf_ratio×accruals的具體形式也逃不開。",
+ "failure_type": "duplicate",
+ "lesson": "應計項(accruals)與獲利/ROE類指標的乘積構造，是本庫內已高度飽和的紅海（F-012已佔據），未來設計獲利品質因子應先對F-012做正交化篩選，而不只檢查F-006。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0452",
+ "ts": "2026-07-29T23:14:31"
+}

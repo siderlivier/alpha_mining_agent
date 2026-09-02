@@ -1,0 +1,89 @@
+{
+ "round": 65,
+ "category": "capital_efficiency_value_remix",
+ "hypothesis": "傳統淨值股價比(B/P)偏好資產重的公司，但輕資產、高資本效率的公司常因帳面淨值小而在B/P篩選器中顯得不夠便宜；用營收市值比相對淨值股價比的比值衡量的是用多少淨值創造多少營收的資本周轉效率，市場價值投資者鮮少校正此維度，導致資本效率高的便宜股被傳統價值框架系統性忽略。",
+ "prediction": "sub-train ICIR > 0.4；與R-001~R-025已知純B/P、S/P類因子相關係數|ρ|<0.5；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(sdiv(sp,bp))",
+ "name_zh": "資本效率價值股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(sp,bp))",
+  "fhash": "dbb58d1bde40c853",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.45
+  },
+  "validation": {
+   "mean_ic": 0.027,
+   "icir": 0.37,
+   "decay_pct": 19.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.007,
+    "多頭"
+   ],
+   "2014": [
+    0.04,
+    "多頭"
+   ],
+   "2015": [
+    0.041,
+    "盤整"
+   ],
+   "2016": [
+    0.055,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.046,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.35,
+   "生技": 0.41,
+   "半導體": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.038
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.06,
+  "stage2_culprit": {
+   "factor": "R-023",
+   "rho": -0.61,
+   "factor_name": "低負債比",
+   "factor_desc": "−負債 / 總資產"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 R-023 |ρ|=0.61 > 0.5"
+ },
+ "diagnosis": "預測 ICIR>0.4 命中(0.45)、多頭腿+3.1%>0。漏判相關性：ρ=-0.61，且對手是槓桿因子 R-023(低負債比)而非預期的 B/P、S/P 價值因子。sdiv(sp,bp)=營收/淨值，高值代表資產輕/高槓桿經營，數學上就是低負債因子的反向；『資本效率價值維度』其實分離出的是資產結構維度。",
+ "failure_type": "duplicate",
+ "lesson": "用兩個估值比相除(消掉價格)得到的是基本面結構比率(此處=營收/淨值≈資產週轉/槓桿)，不是新的估值維度，且容易與槓桿/負債因子高相關；要做資本效率價值需先對槓桿中性化。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0990",
+ "ts": "2026-09-02T00:32:52"
+}

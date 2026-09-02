@@ -1,0 +1,88 @@
+{
+ "round": 14,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "分析師與市場對財報的反應存在錨定效應：ROE斜率轉強代表獲利能力結構性提升，但若同時應計項偏高，代表獲利是會計操縱而非現金實質改善；扣除應計項干擾後的ROE動能才是市場尚未完全定價的真訊號。前次僅用sub-train ICIR 0.44因outer cs_rank造成嵌套過深且稀釋訊號，本次改用兩腿先各自rank再直接相減，避免深度違規與尺度問題。",
+ "prediction": "sub-train ICIR > 0.45（前次0.44為表達問題非機制錯誤）；ROE斜率腿與應計腿的cond_ic皆需為正；下跌月IC不弱於上漲月；與F-001相關係數雖可能偏高但因去除應計干擾後應可提供增量訊號",
+ "formula": "sub(cs_rank(ts_slope(roe,6)), cs_rank(accruals))",
+ "name_zh": "淨化ROE動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(roe,6)), cs_rank(accruals))",
+  "fhash": "f05db3d7604eb5b0",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.32,
+   "decay_pct": 29.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.029,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.032,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.33,
+   "半導體": 0.35,
+   "金融": 0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.051
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.3,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.49
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.44 < 0.45"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45期望改善表達能跨過門檻，實際仍為0.44——與前次outer-rank版本完全相同數字，說明改用『兩腿先rank再相減』對ICIR毫無影響，瓶頸不是表達方式而是accruals淨化帶來的增量訊號本身有限。cond_ic預測『下跌月不弱於上漲月』明顯錯誤：下跌月IC僅0.008遠低於上漲月0.032，訊號主要依賴多頭市場動能延續而非防禦性。產業穩健(電子0.38/半導體0.35/生技0.33)但金融產業完全失效(0.0)，validation decay僅29%，兩腿超額報酬皆為正(4.6%/5.1%)，整體是體質尚可但未達標的因子。",
+ "failure_type": "expression_bad",
+ "lesson": "兩種不同表達（outer-rank vs rank-then-subtract）收斂到同一ICIR，代表瓶頸是訊號強度而非算子選擇；下次應嘗試排除金融產業（ICIR=0的拖累項）或做產業中性化排名以墊高整體ICIR，而不是再換算式。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0219",
+ "ts": "2026-07-21T12:11:51"
+}

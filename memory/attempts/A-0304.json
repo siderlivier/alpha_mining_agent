@@ -1,0 +1,87 @@
+{
+ "round": 19,
+ "category": "accruals_stability_financial",
+ "hypothesis": "金融業受主管機關高度監理，備抵呆帳與資產減損提列若忽高忽低，代表管理層可能藉盈餘管理平滑數字；應計項波動度低的銀行/壽險股代表會計政策穩定、資產品質可信，此穩健性在金融業比其他產業更具訊息含量。",
+ "prediction": "金融產業sub-train ICIR>0.4且為四產業最高；與F-004相關係數<0.5。",
+ "formula": "cs_rank(neg(ts_std(accruals, 12)))",
+ "name_zh": "應計穩定金融股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(accruals, 12)))",
+  "fhash": "8b79ea0ac3daafc6",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": 0.042,
+   "icir": 0.69,
+   "decay_pct": -89.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.052,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.039
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.29,
+   "半導體": -0.04,
+   "金融": 0.41
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.02
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.13,
+  "stage2_max_rho": {
+   "factor": "F-010",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.37 < 0.45"
+ },
+ "diagnosis": "本輪表現最好的近距未通過案例：sub-train ICIR 0.37雖低於0.45門檻，但validation ICIR高達0.69(decay為負，樣本外顯著更強)，金融產業industry_icir 0.41確實是四產業最高，精準命中預測的產業排序；與F-010相關係數僅0.24非重複因子。唯一沒通過的純粹是sub-train單一門檻，機制與樣本外穩健性皆support這個假設。",
+ "failure_type": "expression_bad",
+ "lesson": "應計波動度穩定性在金融股的訊號機制得到強力驗證(產業排序精準命中+樣本外穩健)，僅因sub-train期強度略低於門檻被拒；這類「樣本外更強、產業排序精準命中」的案例應優先排入retry佇列微調視窗長度，而非視為假設失敗。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0304",
+ "ts": "2026-07-21T13:13:10"
+}

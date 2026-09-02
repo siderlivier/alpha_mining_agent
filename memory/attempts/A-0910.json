@@ -1,0 +1,90 @@
+{
+ "round": 60,
+ "category": "cash_backed_value_orphan/電子限定",
+ "hypothesis": "電子業資本支出循環明顯，現金流品質(ocf_ratio)高但帳面淨值便宜(bp高)的公司，因缺乏成長故事常被成長型基金篩選器排除，形成關注度錯置的價值機會；此邏輯僅在電子業成立，因其資本財屬性使現金流真實性特別關鍵。",
+ "prediction": "電子子樣本sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-019(sp×ocf_ratio電子限定)相關度|ρ|<0.5(改用bp應具區隔性)。",
+ "formula": "mul(cs_rank(ocf_ratio), cs_rank(bp))",
+ "name_zh": "電子現金價值股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio), cs_rank(bp))",
+  "fhash": "267a162390e85170",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.27,
+   "decay_pct": -6.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.01,
+    "盤整"
+   ],
+   "2016": [
+    0.044,
+    "多頭"
+   ],
+   "2017": [
+    0.039,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.036,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.47,
+   "半導體": 0.16,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.026
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.18,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.78,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.78 > 0.5"
+ },
+ "diagnosis": "預測與F-019相關度<0.5，實際|ρ|=0.78，判斷失準。ocf_ratio×bp與庫內F-019(sp×ocf_ratio，電子限定)本質重疊，bp與sp同屬「便宜度」代理，換用不同便宜度欄位不足以與同機制的既有因子區隔。",
+ "failure_type": "duplicate",
+ "lesson": "電子業「現金流品質×便宜度」的組合空間已被F-019佔據；bp/sp/ep等便宜度代理彼此高度相關，靠換便宜度欄位無法逃脫既有因子的相關性檢查。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0910",
+ "ts": "2026-08-20T08:30:15"
+}

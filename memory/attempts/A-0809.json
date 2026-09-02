@@ -1,0 +1,87 @@
+{
+ "round": 53,
+ "category": "financial_margin_slope_underreaction",
+ "hypothesis": "金融股淨利率(利差代理)呈現緩步上升趨勢，代表升息循環或資產配置調整帶來的利差擴張效果尚在發酵，因存放款重新定價具滯後性、傳導非一次到位，市場對這種緩步累積趨勢存在系統性低估。",
+ "prediction": "sub-train ICIR>0.45；金融產業industry_icir應為四產業最高；與F-023相關係數應<0.5(F-023用sdiv比率抓創高，此用12月斜率抓趨勢)。",
+ "formula": "cs_rank(ts_slope(net_margin, 12))",
+ "name_zh": "利差緩升金控",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(net_margin, 12))",
+  "fhash": "c21e517430083eaf",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.034,
+   "icir": 0.44,
+   "decay_pct": -118.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.002,
+    "盤整"
+   ],
+   "2013": [
+    0.002,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.059,
+    "盤整"
+   ],
+   "2016": [
+    0.016,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.063,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.3,
+   "半導體": 0.05,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.078
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.20未達標，且預測「金融業ICIR應最高」完全失準——實際金融業0.06為四產業最低，電子業反而最高(0.53)，推翻了「利差擴張反映在金融股淨利率斜率」的核心機制假設。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "產業別ICIR分佈是有效的機制驗證手段，但結論可能與敘事完全相反；針對特定產業機制設計的因子，若整體ICIR不達標且產業分佈與預測相反，應直接視為機制證偽而非再細究。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0809",
+ "ts": "2026-08-15T11:33:03"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 61,
+ "category": "revenue_trend_residual_surprise",
+ "hypothesis": "用ts_resi取出營收年增率相對其自身12月趨勢的殘差，代表扣除既有成長慣性後真正的「意外」成分；市場容易把符合趨勢的營收成長視為理所當然，只有超出趨勢預期的殘差才代表尚未定價的新資訊，此為全新的統計殘差驚奇類別。",
+ "prediction": "sub-train ICIR > 0.4；與紅海地圖中rev_yoy相關組合(F-011/F-013/F-018)截面相關 |ρ| < 0.5",
+ "formula": "cs_rank(ts_resi(rev_yoy,12))",
+ "name_zh": "營收意外超趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_resi(rev_yoy,12))",
+  "fhash": "56cac27035207405",
+  "sub_train": {
+   "mean_ic": 0.001,
+   "icir": 0.02
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.12,
+   "decay_pct": 699.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.021,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    -0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.005,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": -0.09,
+   "半導體": 0.03,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.023
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.59,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際僅0.02，validation更轉負(-0.12)。逐年IC在正負間跳動且無明顯規律，「扣除趨勢後的營收殘差驚奇」並未被市場錯價，統計上這個殘差本質上更接近雜訊而非有效的意外訊號，機制本身不成立。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用ts_resi扣除rev_yoy自身趨勢後取殘差當「意外」訊號沒有找到有效訊噪比，這類統計殘差驚奇的構造思路在營收年增率上暫不成立。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0935",
+ "ts": "2026-08-27T10:25:20"
+}

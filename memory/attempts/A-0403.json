@@ -1,0 +1,88 @@
+{
+ "round": 26,
+ "category": "amihud_illiquidity_premium",
+ "hypothesis": "月價格變動幅度相對成交金額的比值（類Amihud非流動性指標）衡量每單位交易金額造成的價格衝擊，衝擊越大代表流動性越差；投資人要求流動性風險溢酬補償無法快速出場的風險，台股散戶偏好高流動性熱門股，使非流動股系統性被低估。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿（高比值端）年化超額報酬須顯著>0（非僅空頭腿貢獻alpha）；與F-008、F-013相關係數<0.5。",
+ "formula": "cs_rank(sdiv(abs(mom_20), amt_21))",
+ "name_zh": "流動衝擊溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(abs(mom_20), amt_21))",
+  "fhash": "05f4b2421a41086b",
+  "sub_train": {
+   "mean_ic": -0.01,
+   "icir": -0.1
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.18,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.015,
+    "盤整"
+   ],
+   "2013": [
+    0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.005,
+    "多頭"
+   ],
+   "2015": [
+    -0.021,
+    "盤整"
+   ],
+   "2016": [
+    -0.023,
+    "多頭"
+   ],
+   "2017": [
+    -0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": -0.038
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.21,
+   "半導體": -0.08,
+   "金融": -0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.99,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測正向流動性風險溢酬（非流動股被低估），實際IC轉為顯著負值（sub-train -0.10, validation -0.18），尤其下跌月(-0.038)比上漲月(-0.002)更負，方向完全相反。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "台股非流動性衝擊比值（類Amihud）與未來報酬呈負相關，而非文獻中常見的正向流動性溢酬——可能因非流動小型股在下跌時被加倍拋售（出場擁擠風險）而非被要求風險補償；此方向若要再測應直接測neg方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0403",
+ "ts": "2026-07-28T18:54:35"
+}

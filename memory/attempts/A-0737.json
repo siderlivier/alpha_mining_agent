@@ -1,0 +1,87 @@
+{
+ "round": 48,
+ "category": "short_margin_deleveraging_stress",
+ "hypothesis": "券資比持續上升代表市場分歧度擴大、投機性放空與融資雙向槓桿增加，這是籌碼面與資訊不確定性轉弱的領先指標，而非過去假設的「軋空延續」正向動能；此為對經驗庫中券資比正向敘事的方向修正版，直接測試比率變化量的負向關係。",
+ "prediction": "sub-train ICIR>0.45（券資比上升端未來報酬顯著為負）；多頭腿(券資比下降端)年化超額>0。",
+ "formula": "cs_rank(neg(delta(short_margin_ratio,6)))",
+ "name_zh": "券資比降溫股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(short_margin_ratio,6)))",
+  "fhash": "ae2d4b954e8fc219",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.21,
+   "decay_pct": -20.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.007,
+    "盤整"
+   ],
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.03,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.01,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.09,
+   "半導體": -0.02,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": -0.053,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.43,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "此為對『券資比正向敘事』的方向修正版測試，但實測sub-train ICIR僅0.17，年度符號不穩定(2012、2015為負)，多頭腿為負(-0.053)。修正後的負向假說同樣未獲支持，證據強度中等（覆蓋率0.7尚可但整體訊號太弱難以下強結論）。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "券資比變化量(delta)這個表達方式，不論原始『軋空延續』敘事或本輪的反向『籌碼壓力』敘事，都測不出穩定訊號，判斷此變數本身在月頻率下可能雜訊過高，而非單純方向選錯。診斷資訊不足以完全排除是表達（如平滑窗口）問題，記錄為中等信心。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0737",
+ "ts": "2026-08-14T00:25:09"
+}

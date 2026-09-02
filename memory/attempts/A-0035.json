@@ -1,0 +1,88 @@
+{
+ "round": 1,
+ "category": "volatility_term_structure",
+ "hypothesis": "短期波動率相對長期波動率異常升高（波動率期限結構陡峭），通常反映法說會、財報公布前的不確定性溢酬；此類短期不確定性驅動的風險溢酬會隨事件落幕而回吐，造成波動率結構陡峭的股票短期跑輸。",
+ "prediction": "產業內rank IC為負，sub-train ICIR<-0.3；效應在財報/法說會事件密集的半導體最明顯，在金融最弱。",
+ "formula": "cs_rank(sdiv(vol_21, vol_126))",
+ "name_zh": "波動溢價回吐",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(vol_21, vol_126))",
+  "fhash": "049a250ece877053",
+  "sub_train": {
+   "mean_ic": -0.025,
+   "icir": -0.36
+  },
+  "validation": {
+   "mean_ic": -0.005,
+   "icir": -0.08,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    -0.039,
+    "多頭"
+   ],
+   "2014": [
+    -0.036,
+    "多頭"
+   ],
+   "2015": [
+    -0.032,
+    "盤整"
+   ],
+   "2016": [
+    -0.029,
+    "多頭"
+   ],
+   "2017": [
+    -0.023,
+    "多頭"
+   ],
+   "2018": [
+    -0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.024,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": -0.43,
+   "生技": -0.34,
+   "半導體": -0.22,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.023,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.71,
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.36 < 0.45; validation ICIR -0.08 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.71 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR -0.36符合預測方向與強度，但validation大幅衰退至-0.08，且產業預測錯誤(電子最強-0.43，非預測的半導體-0.22)，金融甚至轉正(0.07)。多頭腿超額-0.023為負不可交易，換手率0.71過高，屬強度、可交易性、成本三重失敗，與C-2/C-7模式相似。",
+ "failure_type": "expression_bad",
+ "lesson": "見規則A，補充案例：本案同時疊加高換手成本問題，neg方向短窗因子的不可交易性風險應更早篩查。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0035",
+ "ts": "2026-07-18T21:37:41"
+}

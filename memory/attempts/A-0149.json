@@ -1,0 +1,87 @@
+{
+ "round": 9,
+ "category": "short_squeeze_potential",
+ "hypothesis": "券資比過高代表放空部位相對擁擠；台股融券券源有限且存在除權息強制回補等制度性限制，高券資比股票面臨結構性回補壓力，一旦出現利多即容易引發非基本面的軋空式上漲，屬制度摩擦造成的可預測報酬。",
+ "prediction": "sub-train ICIR > 0.4；訊號在股價上漲月(mom_20>0)的IC應明顯強於下跌月；validation衰減 < 45%。",
+ "formula": "cs_rank(short_margin_ratio)",
+ "name_zh": "券資比軋空",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(short_margin_ratio)",
+  "fhash": "520f58e899a96f7b",
+  "sub_train": {
+   "mean_ic": -0.037,
+   "icir": -0.39
+  },
+  "validation": {
+   "mean_ic": -0.034,
+   "icir": -0.27,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.023,
+    "盤整"
+   ],
+   "2013": [
+    -0.056,
+    "多頭"
+   ],
+   "2014": [
+    -0.034,
+    "多頭"
+   ],
+   "2015": [
+    -0.014,
+    "盤整"
+   ],
+   "2016": [
+    -0.049,
+    "多頭"
+   ],
+   "2017": [
+    -0.045,
+    "多頭"
+   ],
+   "2018": [
+    -0.07,
+    "盤整"
+   ],
+   "2019": [
+    0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.048,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.52,
+   "生技": -0.41,
+   "半導體": -0.15,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.057,
+   "short_excess_ann": -0.039
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測方向完全反轉：券資比越高預期軋空正報酬，實際sub-train ICIR -0.39，上漲月更負(-0.048)而非更正，電子產業-0.52最負。制度性回補壓力敘事未獲支持，資料反而支持標準文獻中的「高放空水位=負面資訊」機制：高券資比股票系統性落後，且在多頭月表現更差，暗示這類股票本質上基本面較弱而非結構性摩擦造成軋空。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "台股的券資比在本輪測試下沒有表現出軋空溢價，反而是穩定的資訊性放空訊號；下次應直接提交反向假說（高券資比=負面訊號）並参考標準放空資訊優勢文獻設計，而非預設摩擦造成的擠壓上漲。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0149",
+ "ts": "2026-07-20T17:18:53"
+}

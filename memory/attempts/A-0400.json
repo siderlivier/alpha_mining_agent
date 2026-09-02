@@ -1,0 +1,92 @@
+{
+ "round": 26,
+ "category": "momentum_residual",
+ "hypothesis": "一年動能扣除一季動能後的殘差，代表法人透過長時間緩慢建倉累積的價格趨勢，而非近期消息面短期炒作；因法人調整部位具持續性且資訊擴散慢，此殘差動能應能延續，較不受短期反轉雜訊干擾。",
+ "prediction": "sub-train ICIR > 0.45；下跌月與上漲月IC同向；多頭腿年化超額報酬>0；需檢查是否有動能崩潰（急跌後IC反轉）現象。",
+ "formula": "cs_rank(sub(mom_240, mom_60))",
+ "name_zh": "長短動能殘差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.25
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45落空（實際0.36），validation進一步衰減至0.19（decay 47%，逼近過擬合門檻）。無反轉/動能崩潰跡象方向predicted對了（上漲月0.035、下跌月0.023同向），但訊號強度本身不足以支撐。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "長短動能殘差（240日-60日）在本pipeline上強度不足且不穩定；本輪連同C-8（純mom_240）、C-9（外資×動能）三個獨立動能變體全數失敗，方向性動能類假說在台股月頻設定下證據薄弱。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0400",
+ "ts": "2026-07-28T18:54:35"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 34,
+ "category": "foreign_ownership_crowding",
+ "hypothesis": "過去研究外資持股水準/趨勢作為『資訊優勢認證』系統性偏弱；本假設改採反向機制：外資持股比率在63日內急速攀升代表邊際買盤已大量進場、部位擁擠，後續增量買盤動能將枯竭，加上外資群體常有同步進出的『羊群效應』，急升後容易出現獲利了結賣壓，市場未充分定價此擁擠風險。",
+ "prediction": "sub-train ICIR>0.45（外資持股63日變化越低/降幅越大，未來報酬越高）；多頭腿(持股比率降幅或低升幅端)年化超額報酬>0；效果應在外資持股比率原本已偏高(全市場前1/3)子樣本中更顯著。",
+ "formula": "cs_rank(neg(frgn_ratio_d63))",
+ "name_zh": "外資持股擁擠",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(frgn_ratio_d63))",
+  "fhash": "8b4571e0e344e34c",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": -0.004,
+   "icir": -0.07,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.017,
+    "盤整"
+   ],
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    -0.013,
+    "盤整"
+   ],
+   "2016": [
+    -0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.004,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.03,
+   "半導體": 0.01,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.026,
+   "short_excess_ann": -0.003
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.33,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "完全反面案例：sub-train ICIR -0.01，幾乎為零，各產業、各年度、上漲/下跌月的IC均無明顯訊號，「外資持股63日急升後擁擠反轉」機制在台股資料中沒有得到任何支持，多頭腿超額報酬也是負的(-0.026)。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資持股比率短期變化本身（不論正向資訊優勢或本次反向擁擠反轉）在台股似乎都不是有效獨立訊號，兩種相反方向假設皆未成立，暗示問題可能出在frgn_ratio_d63這個指標本身訊噪比太低，而非方向假設錯誤。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0525",
+ "ts": "2026-07-30T00:21:47"
+}

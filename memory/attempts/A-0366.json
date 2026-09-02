@@ -1,0 +1,93 @@
+{
+ "round": 23,
+ "category": "financial_capital_stability",
+ "hypothesis": "金融股淨利率(非槓桿放大的核心獲利指標)長期波動度低，代表核心業務(利差管理、風險定價)穩健，不受景氣循環或一次性提存影響；相較F-010用ROE波動度(受槓桿倍數影響)，淨利率波動度更純粹反映經營穩定性，此類股票因缺乏成長故事被低估。",
+ "prediction": "金融產業industry_icir>0.45；與F-010相關係數需<0.5才視為有增量價值；多頭腿超額報酬>0。",
+ "formula": "cs_rank(neg(ts_std(net_margin,12)))",
+ "name_zh": "淨利率穩定度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(net_margin,12)))",
+  "fhash": "dac5611959b43ce0",
+  "sub_train": {
+   "mean_ic": 0.047,
+   "icir": 0.5
+  },
+  "validation": {
+   "mean_ic": 0.034,
+   "icir": 0.41,
+   "decay_pct": 18.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.127,
+    "盤整"
+   ],
+   "2013": [
+    0.0,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.069,
+    "盤整"
+   ],
+   "2016": [
+    0.06,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.025,
+    "盤整"
+   ],
+   "2019": [
+    0.044,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.042,
+   "down_months": 0.047
+  },
+  "industry_icir": {
+   "電子": 0.68,
+   "生技": 0.52,
+   "半導體": 0.16,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.016,
+   "short_excess_ann": 0.017
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-004",
+   "rho": 0.64,
+   "factor_name": "毛利穩定溢價",
+   "factor_desc": "毛利率長期波動度低的悶型績優股，缺乏故事性而長期被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-004 |ρ|=0.64 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.5、validation 0.41(decay 18%)整體表現不差，但金融業industry_icir僅0.01，完全不符合「金融業specific>0.45」的預測，效應反而集中在電子(0.68)、生技(0.52)。且與F-004(而非預測的F-010)相關係數0.64——換成淨利率波動度依然落入既有毛利穩定溢價的紅海。",
+ "failure_type": "duplicate",
+ "lesson": "獲利指標波動度(不論毛利率或淨利率)的『穩定度』構念已被F-004佔據，且金融業專屬敘事再次未獲industry_icir支持；此為紅海邊界與方法論教訓（另見learnings_additions）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0366",
+ "ts": "2026-07-21T14:03:28"
+}

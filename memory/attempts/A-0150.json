@@ -1,0 +1,87 @@
+{
+ "round": 9,
+ "category": "securities_lending_informed_shorting",
+ "hypothesis": "借券量佔成交量比重高反映具資訊優勢的機構（避險基金、法人自營）正建立放空部位；借券資訊揭露有落差、市場解讀需要時間，借券量異常偏高的股票在未來數月表現系統性落後。",
+ "prediction": "sub-train ICIR > 0.4（已embed neg，預期方向為正）；下跌月IC應高於上漲月；validation衰減 < 45%。",
+ "formula": "cs_rank(neg(lend_vol_21))",
+ "name_zh": "借券壓力放空",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(lend_vol_21))",
+  "fhash": "f7aa0585a9a7eeef",
+  "sub_train": {
+   "mean_ic": -0.028,
+   "icir": -0.32
+  },
+  "validation": {
+   "mean_ic": -0.045,
+   "icir": -0.48,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.049,
+    "盤整"
+   ],
+   "2013": [
+    -0.026,
+    "多頭"
+   ],
+   "2014": [
+    -0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.023,
+    "盤整"
+   ],
+   "2016": [
+    -0.027,
+    "多頭"
+   ],
+   "2017": [
+    -0.024,
+    "多頭"
+   ],
+   "2018": [
+    -0.056,
+    "盤整"
+   ],
+   "2019": [
+    -0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.044,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": -0.46,
+   "生技": -0.37,
+   "半導體": -0.21,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.028,
+   "short_excess_ann": -0.023
+  },
+  "coverage": 0.54,
+  "turnover_m": 0.42,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "同樣方向反轉：預測借券量高代表資訊優勢放空、未來走弱，但實際上（考慮neg轉換後）借券量越高、未來報酬反而越高，sub-train ICIR -0.32、validation更負-0.48。這暗示借券量可能更多反映一般交易熱度/多空策略混合需求（如ETF套利、可轉債避險），而非單純空方資訊優勢，也可能與C-6反映不同參與者結構（法人借券 vs 融資券）。coverage僅0.54偏低，樣本代表性也需留意。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "借券量高不等於空方資訊優勢，本輪資料顯示反而是正向訊號，可能是流動性/關注度代理而非放空意圖；下次若要抓「知情放空」，應嘗試搭配借券費率(借券利率飆升)而非單純借券量，費率飆升更能篩選出真正急迫、資訊驅動的放空需求。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0150",
+ "ts": "2026-07-20T17:18:53"
+}

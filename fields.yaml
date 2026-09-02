@@ -1,0 +1,45 @@
+# 基礎欄位白名單（規格書 5.4）
+# desc 會注入 Generate prompt——LLM 的假設品質取決於它對欄位經濟含義的理解，請維持精準。
+# M1 的 build_base.py 必須產出此處所有欄位；欄位缺值率超過 40% 者應在 build 時警告。
+
+price_volume:
+  mom_20:   {desc: "20 日價格動能（月報酬近似）", since: 2012}
+  mom_60:   {desc: "60 日價格動能（一季）", since: 2012}
+  mom_120:  {desc: "120 日價格動能（半年）", since: 2012}
+  mom_240:  {desc: "240 日價格動能（一年，含長期反轉資訊）", since: 2012}
+  vol_21:   {desc: "21 日報酬波動率（月）", since: 2012}
+  vol_63:   {desc: "63 日報酬波動率（季）", since: 2012}
+  vol_126:  {desc: "126 日報酬波動率（半年）", since: 2012}
+  amt_21:   {desc: "21 日平均成交金額（流動性/關注度代理）", since: 2012}
+  turn_21:  {desc: "21 日平均週轉率（散戶熱度代理）", since: 2012}
+  px_hi252: {desc: "現價 / 52 週最高價（距新高距離，動能與錨定效應）", since: 2012}
+
+quality:
+  roe:          {desc: "ROE 稅後（季頻，PIT 對齊發布日）", since: 2012}
+  gross_margin: {desc: "毛利率（產品競爭力）", since: 2012}
+  op_margin:    {desc: "營業利益率（本業獲利能力）", since: 2012}
+  net_margin:   {desc: "稅後淨利率", since: 2012}
+  accruals:     {desc: "應計項（淨利-營業現金流)/資產；高應計=盈餘品質差，經典反向因子 (Sloan 1996)", since: 2012}
+  ocf_ratio:    {desc: "營業現金流/稅後淨利（盈餘含金量）", since: 2012}
+
+growth:
+  rev_yoy:       {desc: "月營收年增率 %（台股獨有的高頻基本面訊號）", since: 2012}
+  rev_yoy_ma3:   {desc: "月營收年增率 3 月移動平均（平滑單月波動）", since: 2012}
+  rev_mom:       {desc: "月營收月增率 %（短期營收動能）", since: 2012}
+  eps_yoy:       {desc: "EPS 年增率（季頻）", since: 2012}
+  op_income_yoy: {desc: "營業利益年增率（季頻，本業成長）", since: 2012}
+
+value:
+  ep: {desc: "盈餘殖利率 E/P（1/PE；前置專案證實台股純價值因子偏弱）", since: 2012}
+  bp: {desc: "淨值股價比 B/P", since: 2012}
+  sp: {desc: "營收市值比 S/P", since: 2012}
+  div_yield: {desc: "現金殖利率 %（交易所公告，TTM 口徑）", since: 2012}
+
+chips:
+  frgn_net_21: {desc: "外資近 21 日累積買賣超佔流通股數比（外資動向強度）", since: 2012}
+  trust_net_21: {desc: "投信近 21 日累積買賣超佔流通股數比（投信動向強度）", since: 2012}
+  frgn_ratio: {desc: "外資持股比率 %（外資長期認可度）", since: 2012}
+  frgn_ratio_d63: {desc: "外資持股比率 63 日變化（外資趨勢性加減碼）", since: 2012}
+  margin_d21: {desc: "融資餘額 21 日變化率（散戶槓桿增減）", since: 2012}
+  short_margin_ratio: {desc: "券資比（融券餘額/融資餘額，軋空潛能與空方情緒）", since: 2012}
+  lend_vol_21: {desc: "借券量 21 日均值佔成交量比（機構空方壓力代理）", since: 2012}

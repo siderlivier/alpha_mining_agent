@@ -1,0 +1,94 @@
+{
+ "round": 39,
+ "category": "value_momentum_confirmation",
+ "hypothesis": "純粹的高盈餘殖利率股票常是價值陷阱，因為便宜有其基本面原因；但當便宜股票同時出現中期價格動能轉強，代表市場已開始出現重新評價的催化劑，這種『價值+動能』雙重確認能過濾持續惡化的價值陷阱，市場對此組合訊號的重新定價存在滯後。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-002/F-015相關性<0.5(機制為價值x動能而非價值x基本面)",
+ "formula": "mul(cs_rank(ep),cs_rank(mom_120))",
+ "name_zh": "價值動能雙確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ep",
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ep),cs_rank(mom_120))",
+  "fhash": "9c1a8fc0fe3f1972",
+  "sub_train": {
+   "mean_ic": 0.052,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.063,
+   "icir": 0.73,
+   "decay_pct": -85.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    0.073,
+    "盤整"
+   ],
+   "2016": [
+    0.075,
+    "多頭"
+   ],
+   "2017": [
+    0.059,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.1,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.067,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.52,
+   "生技": 0.46,
+   "半導體": 0.27,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": 0.097,
+   "short_excess_ann": 0.047
+  },
+  "coverage": 0.9,
+  "turnover_m": 0.26,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.75,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.75 > 0.5"
+ },
+ "diagnosis": "多數指標優異：sub-train ICIR 0.4、validation 0.73(decay大幅改善)、多頭腿超額0.097為本輪最佳。但預測與F-002/F-015相關性<0.5，實際與F-002相關性高達0.75，遠超預期——ep x mom_120的組合很可能因高E/P股票偏向金融股，且與F-002的ROE成分產生機制重疊，導致「價值+動能雙確認」實質上退化為既有金融品質價值因子。",
+ "failure_type": "duplicate",
+ "lesson": "「價值x動能」組合在高E/P股票偏金融的情況下容易與金融品質價值因子(F-002)高度共線；提交前若ep/bp類價值變量的產業分佈集中在金融股，應優先檢查與F-002系列的相關性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0607",
+ "ts": "2026-08-12T09:06:34"
+}

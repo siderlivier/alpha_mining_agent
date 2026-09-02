@@ -1,0 +1,87 @@
+{
+ "round": 15,
+ "category": "foreign_flow_trend_financial",
+ "hypothesis": "金融股（銀行/保險）的獲利高度依賴利差與資本市場環境，其複雜的存放利差、備抵呆帳、投資損益等會計項目使一般投資人難以直接判讀基本面轉折；外資機構具備跨市場總經與利率週期分析能力，其對金融股持股比率的持續性上升趨勢（而非單期買賣超流量）反映對利差環境改善的提前判斷，此資訊優勢訊號在金融股上應特別顯著，且需數月才會被本土法人與散戶追認。",
+ "prediction": "sub-train ICIR > 0.4；金融產業industry_icir > 0.5且顯著高於其他產業；月換手率 < 0.4。",
+ "formula": "cs_rank(ts_mean(frgn_ratio_d63,3))",
+ "name_zh": "外資金融佈局",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(frgn_ratio_d63,3))",
+  "fhash": "0e014d5c216060aa",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.014,
+    "盤整"
+   ],
+   "2013": [
+    0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    -0.009,
+    "多頭"
+   ],
+   "2018": [
+    -0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.1,
+   "半導體": 0.02,
+   "金融": -0.14
+  },
+  "legs": {
+   "long_excess_ann": 0.004,
+   "short_excess_ann": 0.047
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.23,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融產業將是外資資訊優勢最強的產業，實際金融industry_icir為-0.14(全產業最低)，電子反而最高(0.23)；sub-train ICIR幾乎為零(-0.01)。假設的產業專屬性與整體訊號皆完全落空。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「外資對金融股有特殊資訊優勢」的敘事未獲支持，金融股外資持股趨勢反而是所有產業中最弱；與C-6(全市場版本)同屬外資持股類指標，兩案例皆失敗，顯示此類「持股水準/趨勢=認證」敘事證據薄弱。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0245",
+ "ts": "2026-07-21T12:24:47"
+}

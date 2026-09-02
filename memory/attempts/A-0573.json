@@ -1,0 +1,88 @@
+{
+ "round": 37,
+ "category": "semiconductor_belowline_normalization",
+ "hypothesis": "半導體業因高額資本支出，淨利率常因折舊、利息費用或業外一次性損失而落後於營業利益率；當淨利率與營業利益率的差距開始收斂，代表資本支出循環進入尾聲或債務負擔減輕，這是比單純營益率或淨利率水準更早的獲利正常化訊號，因分析師通常分別建模營業利益與業外項目，較少直接追蹤兩者收斂速度。",
+ "prediction": "sub-train ICIR>0.45；半導體產業industry_icir應為四產業最高；多頭腿年化超額報酬>0；與F-023相關性|ρ|<0.5。",
+ "formula": "cs_rank(delta(sub(net_margin,op_margin),6))",
+ "name_zh": "業外拖累收斂",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(sub(net_margin,op_margin),6))",
+  "fhash": "8ac138bab3bbd573",
+  "sub_train": {
+   "mean_ic": -0.026,
+   "icir": -0.28
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.04,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.047,
+    "盤整"
+   ],
+   "2013": [
+    -0.016,
+    "多頭"
+   ],
+   "2014": [
+    -0.069,
+    "多頭"
+   ],
+   "2015": [
+    -0.061,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.031,
+    "盤整"
+   ],
+   "2019": [
+    -0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.014,
+   "down_months": -0.028
+  },
+  "industry_icir": {
+   "電子": -0.1,
+   "生技": 0.0,
+   "半導體": -0.31,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.02,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測應為正向IC，但sub-train IC持續為負(平均-0.026，7年中5年為負)，方向與假設一致地相反，並非單純雜訊而是系統性反向結果。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "當因子的實際IC方向與假設持續相反(而非僅微弱)時，不必直接放棄該變數，應以反向假設重新提交測試(例如業外負擔擴大作為預警訊號)，而非視為單純的假設證偽終點。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0573",
+ "ts": "2026-07-30T01:03:36"
+}

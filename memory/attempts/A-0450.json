@@ -1,0 +1,87 @@
+{
+ "round": 29,
+ "category": "trend_reliability_weighted_growth",
+ "hypothesis": "市場對「穩定、可預測」的獲利成長趨勢反應不足，因為缺乏戲劇性、不易成為市場焦點（顯著性偏誤使投資人偏好波動大、故事性強的標的）。EPS年增率的斜率若同時具高度線性配適(R²高)，代表該成長趨勢並非單季雜訊而是持續性結構改善，這種「無聊但可靠」的成長比雜訊震盪的成長更容易被低估，是趨勢確定性溢酬而非單純動能。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0，與F-001相關係數 |ρ| < 0.5（驗證獨立於ROE水準）。",
+ "formula": "mul(cs_rank(ts_slope(eps_yoy,12)),cs_rank(ts_rsq(eps_yoy,12)))",
+ "name_zh": "穩定成長確定性",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_slope(eps_yoy,12)),cs_rank(ts_rsq(eps_yoy,12)))",
+  "fhash": "7d29e33c02b1b318",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.35
+  },
+  "validation": {
+   "mean_ic": 0.035,
+   "icir": 0.62,
+   "decay_pct": -78.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.043,
+    "盤整"
+   ],
+   "2016": [
+    0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.035,
+    "多頭"
+   ],
+   "2018": [
+    0.045,
+    "盤整"
+   ],
+   "2019": [
+    0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.09,
+   "半導體": 0.22,
+   "金融": 0.31
+  },
+  "legs": {
+   "long_excess_ann": 0.026,
+   "short_excess_ann": 0.005
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.23,
+  "stage2_max_rho": {
+   "factor": "F-016",
+   "rho": 0.14
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.35 < 0.45"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.35小幅未達，但逐年IC全部為正(7年全正，含2016盤整年僅0.003)，validation ICIR高達0.62（decay為負，越測越強），且與F-016相關性僅0.14，獨立性良好。這是難得的『全年份一致為正+驗證期更強』但卡在單一門檻的案例，較可能是mul(rank,rank)交乘構造稀釋了原本存在的訊號，而非機制不成立。",
+ "failure_type": "expression_bad",
+ "lesson": "當两個子訊號都用cs_rank後再相乘(mul)，只有兩者同時極端的個股才會得高分，這種構造可能會不必要地壓低sub-train IC；對於『穩定性加權成長』這類需要『高值×高可信度』邏輯的假說，可嘗試改用門檻篩選(先篩R²前段再排slope)或加權和取代乘積再重測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0450",
+ "ts": "2026-07-29T23:14:31"
+}

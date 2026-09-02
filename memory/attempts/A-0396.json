@@ -1,0 +1,90 @@
+{
+ "round": 25,
+ "category": "electronics_revenue_overextension",
+ "hypothesis": "電子供應鏈客戶常見提前拉貨行為，月增率明顯超過年增率代表短期出貨是透支性需求而非真實持續成長，市場易誤判為急單回補利多；此為先前已驗證機制(急單回補假設已被反向證實)的電子產業限定正式提交版本。",
+ "prediction": "電子產業子樣本sub-train ICIR > 0.4(direction=neg)；全年各月IC應一致為負，不需區分上漲/下跌月。",
+ "formula": "cs_rank(sub(rev_mom, rev_yoy))",
+ "name_zh": "拉貨透支警訊",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_mom, rev_yoy))",
+  "fhash": "af2e63ea4168dcb8",
+  "sub_train": {
+   "mean_ic": -0.04,
+   "icir": -0.58
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.34,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.037,
+    "多頭"
+   ],
+   "2015": [
+    -0.048,
+    "盤整"
+   ],
+   "2016": [
+    -0.048,
+    "多頭"
+   ],
+   "2017": [
+    -0.042,
+    "多頭"
+   ],
+   "2018": [
+    -0.026,
+    "盤整"
+   ],
+   "2019": [
+    -0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.034,
+   "down_months": -0.036
+  },
+  "industry_icir": {
+   "電子": -0.69,
+   "生技": -0.42,
+   "半導體": -0.35,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.079,
+   "short_excess_ann": -0.067
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.55,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": -0.52,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR預測>0.4(neg)且全年各月IC應一致為負不分上漲/下跌月，實際完全命中：sub-train icir -0.58，up_months(-0.034)與down_months(-0.036)幾乎相等，是本輪預測最精準的案例。但stage2被F-011(生技轉骨訊號，經濟上完全不相關)以ρ=-0.52判定重複，顯示兩者共享底層成長率運算結構而非經濟機制重疊。",
+ "failure_type": "duplicate",
+ "lesson": "stage2相關性檢查有時抓到『運算結構相似』而非『經濟機制相同』的配對；因子庫中已有大量成長率/動能類運算元家族因子佔滿統計子空間，新的成長率衍生因子容易誤撞紅海。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0396",
+ "ts": "2026-07-28T18:41:52"
+}

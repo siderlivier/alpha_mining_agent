@@ -1,0 +1,90 @@
+{
+ "round": 38,
+ "category": "biotech_cash_backed_growth",
+ "hypothesis": "生技公司營收成長常來自一次性里程碑金或授權金認列，這類收入應計項偏高、獲利品質存疑；若營收成長同時伴隨低應計項，代表成長來自實際商業化銷售的現金收入，是更可信的真成長訊號，但市場普遍只看營收成長率，未區辨成長品質，此機制僅在生技產業顯著。",
+ "prediction": "sub-train ICIR整體或生技產業industry_icir > 0.5；生技產業industry_icir應高於其他三產業；多頭腿年化超額報酬>0；與F-011相關性須<0.5。",
+ "formula": "mul(cs_rank(neg(accruals)), cs_rank(rev_yoy))",
+ "name_zh": "生技真實成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(accruals)), cs_rank(rev_yoy))",
+  "fhash": "d583176cbe9df433",
+  "sub_train": {
+   "mean_ic": 0.047,
+   "icir": 0.57
+  },
+  "validation": {
+   "mean_ic": 0.043,
+   "icir": 0.68,
+   "decay_pct": -20.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.079,
+    "盤整"
+   ],
+   "2016": [
+    0.045,
+    "多頭"
+   ],
+   "2017": [
+    0.047,
+    "多頭"
+   ],
+   "2018": [
+    0.039,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.05,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.62,
+   "生技": 0.35,
+   "半導體": 0.37,
+   "金融": 0.26
+  },
+  "legs": {
+   "long_excess_ann": 0.058,
+   "short_excess_ann": 0.038
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.39,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.52,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "整體門檻都過關(sub-train 0.57/validation 0.68)，但生技產業icir(0.35)反而低於電子(0.62)與半導體(0.37)，敘事鎖定的生技並非最強產業；最終因與F-011(生技轉骨訊號)ρ=0.52陣亡，兩者皆用rev_yoy作生技成長代理。",
+ "failure_type": "duplicate",
+ "lesson": "生技「成長品質」因子（accruals/gross_margin x rev_yoy）已是庫內紅海——本輪F-011、F-022分別命中C-11、C-5兩案；此因子在電子產業(0.62)表現明顯優於生技本身，建議下輪限定在非生技產業重新表達，避開生技子樣本的既有因子重疊。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0589",
+ "ts": "2026-07-30T01:16:47"
+}

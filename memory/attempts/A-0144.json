@@ -1,0 +1,93 @@
+{
+ "round": 9,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "月營收是台股特有的高頻揭露訊息，但分析師預測多以季/年為錨定基準，對「趨勢正在加速」反應遲緩；用3月均線去除單月雜訊後再取斜率，能捕捉真正持續的成長加速度，而非噪音，此訊息需數月才會完全反映在股價中。",
+ "prediction": "sub-train ICIR > 0.45，validation衰減 < 40%；電子/半導體產業內ICIR應明顯高於金融產業（差距 > 0.15）。",
+ "formula": "cs_rank(ts_slope(rev_yoy_ma3,6))",
+ "name_zh": "營收加速趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_yoy_ma3,6))",
+  "fhash": "c577b17ca34499b2",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.44,
+   "decay_pct": -16.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.055,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.056,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": 0.025
+  },
+  "industry_icir": {
+   "電子": 0.67,
+   "生技": 0.29,
+   "半導體": 0.39,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.076
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-003",
+   "rho": 0.22
+  },
+  "industry_scope": "電子",
+  "industry_metrics": {
+   "train_icir": 0.68,
+   "valid_icir": 0.65,
+   "decay_pct": 4
+  },
+  "verdict": "passed_industry",
+  "reason": "整體未達標（sub-train ICIR 0.38 < 0.45），但於「電子」產業內達到專屬門檻"
+ },
+ "diagnosis": "預測「sub-train ICIR>0.45」落空（實際0.38），但預測的產業分化（電子/半導體遠高於金融，差距>0.15）精準命中：電子0.67、半導體0.39 vs 金融-0.02，差距達0.69。整體門檻沒過，但在電子產業內以industry_metrics（train 0.68 / valid 0.65 / decay僅4%）穩定過關，判定passed_industry。月營收加速度假說本質成立，只是效果高度集中於有月營收揭露且分析師覆蓋密集的電子供應鏈，金融股沒有月營收資料使該假說天然不適用。",
+ "failure_type": "none",
+ "lesson": "高頻月營收類因子應直接以「電子/半導體」為預設適用範圍去做sub-train評估與交易，而非在全市場門檻上硬碰硬；下次同類假說可以直接限定產業子集重新提交評估，而非套用全市場ICIR門檻判死刑。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed_industry",
+ "id": "A-0144",
+ "ts": "2026-07-20T17:18:53"
+}

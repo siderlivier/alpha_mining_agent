@@ -1,0 +1,87 @@
+{
+ "round": 39,
+ "category": "growth_investment_expense_ratio",
+ "hypothesis": "毛利率與營業利益率的差距反映公司將毛利再投入研發/行銷等費用化支出的強度；市場因短期財報『費用增加侵蝕營益率』而給予懲罰性評價，但這類主動投資型支出往往是為未來成長鋪路，屬於被誤解為獲利惡化的成長訊號。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-004(毛利穩定度)相關性<0.5",
+ "formula": "cs_rank(sub(gross_margin,op_margin))",
+ "name_zh": "費用投資缺口",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(gross_margin,op_margin))",
+  "fhash": "b0b751fa87931268",
+  "sub_train": {
+   "mean_ic": -0.04,
+   "icir": -0.41
+  },
+  "validation": {
+   "mean_ic": -0.038,
+   "icir": -0.51,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.01,
+    "多頭"
+   ],
+   "2014": [
+    -0.029,
+    "多頭"
+   ],
+   "2015": [
+    -0.053,
+    "盤整"
+   ],
+   "2016": [
+    -0.069,
+    "多頭"
+   ],
+   "2017": [
+    -0.103,
+    "多頭"
+   ],
+   "2018": [
+    -0.008,
+    "盤整"
+   ],
+   "2019": [
+    -0.068,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.049,
+   "down_months": -0.015
+  },
+  "industry_icir": {
+   "電子": -0.33,
+   "生技": -0.34,
+   "半導體": -0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.026,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.06,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測毛利-營益差距(費用投資)為正面成長訊號被低估，但實際IC逐年幾乎全為負且方向一致(sub -0.41、validation -0.51)，即使在多頭年份(2016-2017)IC仍為-0.07~-0.10；市場對費用擴張的負向定價看起來是合理反映獲利品質下滑，而非過度懲罰被誤解的成長投資，方向與假設完全相反。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「費用增加=被誤解的成長投資」敘事在台股證據顯示恰好相反：毛利與營益差距擴大穩定預測負報酬，可能反映真實成本失控；可將方向反轉為品質因子重新提交，而非整條路線判死。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0598",
+ "ts": "2026-08-12T09:06:34"
+}

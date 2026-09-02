@@ -1,0 +1,84 @@
+{
+ "round": 65,
+ "category": "pead_earnings_price_gap",
+ "hypothesis": "EPS年增率半年內明顯加速，代表盈餘動能轉強，但若近一季動能(mom_60)仍偏弱，代表市場尚未消化此盈餘驚喜；由於分析師與投資人對財報數字的反應存在延遲擴散(PEAD盈餘後漂移現象)，加上台股法說會與財報公布時點分散，資訊消化速度慢，此價量落後於基本面的缺口存在套利機會。",
+ "prediction": "sub-train ICIR > 0.4；訊號應在財報季後1-3個月內IC達峰；與F-001/F-012(ROE趨勢家族)相關係數|ρ|<0.5，證明是價格滯後而非單純獲利趨勢重複。",
+ "formula": "mul(cs_rank(delta(eps_yoy,6)), cs_rank(neg(mom_60)))",
+ "name_zh": "盈餘驚喜價格落後",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(eps_yoy,6)), cs_rank(neg(mom_60)))",
+  "fhash": "f8e0d7a9781a4a16",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.041,
+   "icir": 0.6,
+   "decay_pct": -207.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.133,
+    "多頭"
+   ],
+   "2014": [
+    0.026,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    0.005,
+    "多頭"
+   ],
+   "2017": [
+    0.025,
+    "多頭"
+   ],
+   "2018": [
+    0.065,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.3,
+   "生技": 0.09,
+   "半導體": 0.29,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": -0.008
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.46,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 ICIR>0.4，實際 sub-train ICIR 0.2，且幾乎全靠 2013 單年 IC 0.133 撐起，2015-2016 轉負，多頭腿-0.8%。PEAD 機制本身有文獻基礎，失敗在表達：neg(mom_60) 當『價格尚未反映』代理=在台股大型股逆勢押注中期動能，持續拖累；月頻截面也無法捕捉『財報後 1-3 月達峰』的事件時間結構。",
+ "failure_type": "expression_bad",
+ "lesson": "把『價格落後基本面』表達成 neg(中期動能)會變成反動能賭注，在台股無效；事件驅動的 PEAD 應以財報公布日為錨的短窗表達，而非跨截面動能分位。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0989",
+ "ts": "2026-09-02T00:32:52"
+}

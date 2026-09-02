@@ -1,0 +1,93 @@
+{
+ "round": 25,
+ "category": "volatility_of_volatility_ambiguity",
+ "hypothesis": "投資人不僅厭惡波動本身，更厭惡「無法估計的波動」(模糊性/未知風險)；當個股波動度本身在過去半年劇烈起伏，投資人難以形成穩定風險評價模型，需求額外風險溢酬補償，此為獨立於低波動異常的行為偏誤。",
+ "prediction": "sub-train ICIR > 0.45；與F-005(低波動異常)截面相關係數 < 0.5，證明捕捉到與波動水準不同的獨立訊號。",
+ "formula": "cs_rank(neg(ts_std(vol_21,6)))",
+ "name_zh": "風險不確定性折價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(vol_21,6)))",
+  "fhash": "3c639482acaf5812",
+  "sub_train": {
+   "mean_ic": 0.055,
+   "icir": 0.6
+  },
+  "validation": {
+   "mean_ic": 0.092,
+   "icir": 0.98,
+   "decay_pct": -65.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.091,
+    "多頭"
+   ],
+   "2018": [
+    0.104,
+    "盤整"
+   ],
+   "2019": [
+    0.08,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.066,
+   "down_months": 0.061
+  },
+  "industry_icir": {
+   "電子": 0.73,
+   "生技": 0.53,
+   "半導體": 0.22,
+   "金融": 0.41
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": 0.008
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.27,
+  "stage2_culprit": {
+   "factor": "F-005",
+   "rho": 0.65,
+   "factor_name": "低波動異常",
+   "factor_desc": "長期波動度低的穩定股因散戶偏好高波動股而被低估"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-005 |ρ|=0.65 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR預測>0.45，實際0.60，強度預測準確(validation更強達0.98)。但相關性預測(與F-005 ρ<0.5)落空，實際ρ=0.65。『波動的波動』在數學上與『波動水準』高度共線，模糊性厭惡假說未提供增量資訊。",
+ "failure_type": "duplicate",
+ "lesson": "對既有波動類因子做二階變換(std of vol等)統計上很可能與一階版本高度相關，屬紅海邊界；此類假說應先對既有因子(如F-005)residualize後再測，以確保增量訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0386",
+ "ts": "2026-07-28T18:41:52"
+}

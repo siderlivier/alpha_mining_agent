@@ -1,0 +1,90 @@
+{
+ "round": 5,
+ "category": "value_growth_confirmation",
+ "hypothesis": "便宜（高E/P）且本業營業利益成長速度快的公司，代表低估值並非「價值陷阱」，而是有實質獲利動能支撐；用cs_rank對兩個變數分別排名後相加，取代過去用sign()做二元成長確認門檻的做法，能避免訊號在成長率正負臨界點附近的不穩定跳動，形成更平滑連續的複合訊號。",
+ "prediction": "sub-train ICIR > 0.45；此因子應優於單獨的cs_rank(ep)因子（驗證op_income_yoy確認的邊際貢獻），且應與F-003(sp×sign(rev_yoy))相關係數 < 0.5。",
+ "formula": "cs_rank(add(cs_rank(ep), cs_rank(op_income_yoy)))",
+ "name_zh": "價值成長雙確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ep",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(add(cs_rank(ep), cs_rank(op_income_yoy)))",
+  "fhash": "ad8b489956f799c3",
+  "sub_train": {
+   "mean_ic": 0.066,
+   "icir": 0.56
+  },
+  "validation": {
+   "mean_ic": 0.046,
+   "icir": 0.69,
+   "decay_pct": -24.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.05,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.1,
+    "盤整"
+   ],
+   "2016": [
+    0.077,
+    "多頭"
+   ],
+   "2017": [
+    0.063,
+    "多頭"
+   ],
+   "2018": [
+    0.035,
+    "盤整"
+   ],
+   "2019": [
+    0.057,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.062,
+   "down_months": 0.056
+  },
+  "industry_icir": {
+   "電子": 0.71,
+   "生技": 0.71,
+   "半導體": 0.18,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.074,
+   "short_excess_ann": 0.035
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.22,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.77,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.77 > 0.5"
+ },
+ "diagnosis": "量化預測全部達標甚至超越：sub-train ICIR 0.56、validation 0.69（decay -24%，反而改善）、電子/生技產業ICIR達0.71，是本輪表現最好的候選之一。但陣亡於與F-002相關係數0.77（我原本預測比對的是F-003，查錯了比較對象）。結合C-13（同輪也被F-002淘汰，公式完全不同），F-002似乎對任何『便宜估值+獲利/成長確認』類複合公式都有很寬的相關性陰影。",
+ "failure_type": "duplicate",
+ "lesson": "F-002（金融品質價值）與多種『便宜估值+獲利/成長確認』複合公式高度相關，即使表面機制設計不同，設計此類因子時應優先對F-002做相關性快篩。",
+ "lesson_confidence": "cross_validated",
+ "verdict": "rejected_stage2",
+ "id": "A-0097",
+ "ts": "2026-07-19T17:32:32"
+}

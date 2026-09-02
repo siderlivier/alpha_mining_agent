@@ -1,0 +1,89 @@
+{
+ "round": 31,
+ "category": "revenue_surprise_zscore",
+ "hypothesis": "以自身12個月波動度標準化的3個月營收年增率變化（類似財報surprise z-score），能區分『真正超出正常波動範圍的營收驚喜』與『正常季節性雜訊』；市場對經標準化後顯著的驚喜訊號存在漂移式反應（類似盈餘宣告後漂移），因多數投資人僅看原始年增率數字而非其相對自身歷史波動的顯著性。",
+ "prediction": "sub-train ICIR > 0.45；標準化值高的樣本後續1個月IC應高於全樣本平均IC；月換手率 < 0.4。",
+ "formula": "cs_rank(sdiv(delta(rev_yoy_ma3,3),ts_std(rev_yoy_ma3,12)))",
+ "name_zh": "營收驚喜標準化",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(rev_yoy_ma3,3),ts_std(rev_yoy_ma3,12)))",
+  "fhash": "392238d5e2c2feea",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.029,
+   "icir": 0.46,
+   "decay_pct": -5.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.058,
+    "多頭"
+   ],
+   "2017": [
+    0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.03,
+    "盤整"
+   ],
+   "2019": [
+    0.027,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.78,
+   "生技": 0.26,
+   "半導體": 0.39,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.087,
+   "short_excess_ann": 0.062
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.44,
+  "stage2_culprit": {
+   "factor": "F-009",
+   "rho": 0.68,
+   "factor_name": "營收加速趨勢",
+   "factor_desc": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-009 |ρ|=0.68 > 0.5"
+ },
+ "diagnosis": "指標表現穩健且優於預測：sub-train ICIR 0.44接近門檻，validation ICIR反升至0.46（衰減僅-5%，非常穩定），多頭腿超額+8.7%為正，換手率0.44接近但略超預測的<0.4門檻。標準化手法確實產生了統計上更穩健的訊號，但與F-009 rho=0.68（非邊緣，明確重疊），顯示『用自身波動度標準化營收年增變化』本質上仍是在同一顆營收加速度訊號上做數學變換，未脫離F-009的訊號空間。",
+ "failure_type": "duplicate",
+ "lesson": "以自身歷史波動度做z-score標準化，是統計手法上的『去雜訊』，不是『換機制』；若欲與既有的營收加速類因子（F-009）區隔，需换成不同的正規化基準（如產業內波動度、而非個股自身歷史波動度）或换用完全不同的驚喜代理（如財報預估落差），單純用ts_std標準化不足以去重。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0482",
+ "ts": "2026-07-29T23:46:18"
+}

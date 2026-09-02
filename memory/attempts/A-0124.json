@@ -1,0 +1,93 @@
+{
+ "round": 7,
+ "category": "margin_trend_underreaction",
+ "hypothesis": "參考先前rev_yoy趨勢因子改用產業內排名後validation不衰減反而轉強的經驗，過去營益率趨勢因子的過擬合可能源自全市場排名混入產業景氣循環雜訊，而非機制本身錯誤；本因子直接採用產業內排名重測。",
+ "prediction": "sub-train 產業內 ICIR>0.45，且樣本外(out-of-sample)相對sub-train的衰減幅度應<30%（對照過去全市場版本衰減60%+的紀錄）。",
+ "formula": "cs_rank(ts_slope(op_margin,6))",
+ "name_zh": "營益率轉強",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(op_margin,6))",
+  "fhash": "931de0aefdb52c6c",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.02,
+   "decay_pct": 106.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.007,
+    "盤整"
+   ],
+   "2013": [
+    0.051,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.072,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    0.036,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": 0.022
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.18,
+   "半導體": 0.33,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.035,
+   "short_excess_ann": 0.084
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.28,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.51,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "預測產業內排名可修復先前全市場版本的過擬合(decay應<30%)；實際decay反惡化到106%，且與F-001相關係數0.51在stage2即淘汰，比過去版本更早出局。換排序範圍未解決根本問題——營益率趨勢與ROE趨勢本就是同一獲利改善驅動力的不同會計表達。",
+ "failure_type": "duplicate",
+ "lesson": "營益率趨勢與ROE趨勢是同一經濟驅動力的兩種表達，即使排名範圍不同也難降低相關性；調整F-001系列前應先檢查新指標是否本就與ROE共線，而非假設換排名方式就能去相關。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0124",
+ "ts": "2026-07-19T17:59:13"
+}

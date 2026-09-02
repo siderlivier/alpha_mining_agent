@@ -1,0 +1,89 @@
+{
+ "round": 67,
+ "category": "momentum_attention_diffusion",
+ "hypothesis": "成交金額是法人研究與媒體關注度的代理。成交金額持續低於自身一年均值的個股，賣方追蹤稀疏，價格對已發生的基本面利多消化緩慢，中期動能需更久才被完全定價；高關注股資訊已被快速吸收，動能溢酬衰退。市場的系統性錯誤在於忽略『資訊擴散速度隨關注度而異』，對低關注股的既有動能反應不足。",
+ "prediction": "sub-train ICIR > 0.35；多頭腿(低關注×高動能)年化超額 > 0 且大於空頭腿絕對值；覆蓋率約 0.5（高關注股記 0）；低成交金額組的動能分組 IC 高於高關注組至少 0.02。",
+ "formula": "if_else(less(amt_21, ts_mean(amt_21,12)), cs_rank(mom_120), 0)",
+ "name_zh": "冷門股動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "if_else(less(amt_21, ts_mean(amt_21,12)), cs_rank(mom_120), 0)",
+  "fhash": "391db95adba63848",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.12
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.12,
+   "decay_pct": -2.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.008,
+    "盤整"
+   ],
+   "2013": [
+    0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.003,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    0.028,
+    "盤整"
+   ],
+   "2019": [
+    -0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.15,
+   "生技": 0.35,
+   "半導體": -0.1,
+   "金融": -0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.017,
+   "short_excess_ann": -0.051
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.54,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 coverage≈0.5、sub-train ICIR>0.35 皆落空。coverage 0.91 顯示 less(amt_21, ts_mean(amt_21,12)) 幾乎對整個 panel 恆為真，閘門形同虛設，因子退化成裸 cs_rank(mom_120)，而台股中期價格動能本就微弱(ICIR 0.12)。方向直覺部分對：cond_ic 順勢(0.012 vs 0.003)、僅 2016-17 為正、多頭腿+1.7%>短腿絕對值裡的正號部分——但強度嚴重高估。生技 0.35/半導體 -0.1 不一致，非穩健。證據不足以斷定低關注動能溢酬不存在，但目前公式測不到它。",
+ "failure_type": "expression_bad",
+ "lesson": "if_else 閘門在提交前要先估算條件的實際選擇性(coverage)：把『低於自身年均』這種約半數樣本恆成立的條件當過濾器等於沒過濾，因子退化成被包住的裸表達式。下次用歷史分位數閘門(成交金額分位<20%)或直接對關注度×動能做交乘，動能改用 12-1。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-001",
+ "id": "A-1014",
+ "ts": "2026-09-02T01:09:58"
+}

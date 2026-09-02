@@ -1,0 +1,83 @@
+{
+ "round": 20,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "EPS年增率在6個月內的變化相對其自身12個月波動度標準化後，代表盈餘動能顯著偏離常態的『驚奇』程度。投資人與分析師對財報訊息消化不足，形成類PEAD的價格漂移；採6個月窗口取代先前3個月版本可降低短窗雜訊、抑制過度換手。",
+ "prediction": "sub-train ICIR > 0.45；月換手率 < 0.45（優於先前3個月窗口版本的0.61）。",
+ "formula": "cs_rank(sdiv(delta(eps_yoy,6), ts_std(eps_yoy,12)))",
+ "name_zh": "標準化盈餘驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(eps_yoy,6), ts_std(eps_yoy,12)))",
+  "fhash": "95451da0e719ee0a",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.49,
+   "decay_pct": -100.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.022,
+    "多頭"
+   ],
+   "2015": [
+    -0.005,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.026,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.025,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.002
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.04,
+   "半導體": 0.05,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.026
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.37,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45且換手率<0.45(優於前版3個月窗口的0.61)，實際sub-train0.24未達門檻，但validation icir提升到0.49(decay-100%，越測越好)、換手率0.37確實優於前版本，驗證了拉長窗口降低換手的設計目標。這是迭代方向正確、只差再一步的案例。",
+ "failure_type": "expression_bad",
+ "lesson": "將盈餘驚奇窗口從3個月拉長到6個月成功降低換手且validation端表現改善，證實視窗延長的迭代方向有效，值得繼續往更長窗口(如9個月)微調而非放棄整個PEAD系族。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0318",
+ "ts": "2026-07-21T13:24:55"
+}

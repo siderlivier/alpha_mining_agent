@@ -1,0 +1,80 @@
+{
+ "round": 68,
+ "category": "accruals_improvement_underreaction",
+ "hypothesis": "Sloan(1996)的應計異常聚焦於水準；但應計項的『變化』也有資訊——當一家公司應計項逐年下降（盈餘越來越由現金流支撐），代表盈餘品質正在改善、未來盈餘持續性上升。市場對品質的『改善趨勢』比對品質『水準』更慢定價，因為識別趨勢需要多期資料，且趨勢不會出現在單一財報頭條。",
+ "prediction": "sub-train ICIR > 0.3；與F-006、F-012相關 |ρ| < 0.5；多頭腿年化超額 > 0；下跌月IC ≥ 上漲月。",
+ "formula": "cs_rank(neg(delta(accruals, 12)))",
+ "name_zh": "應計項改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(accruals, 12)))",
+  "fhash": "be57c4cd090c063a",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.05
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.15,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2014": [
+    0.009,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    -0.02,
+    "多頭"
+   ],
+   "2017": [
+    -0.013,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": -0.13,
+   "半導體": 0.03,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "distill_failed": true,
+ "id": "A-1042",
+ "ts": "2026-09-02T01:25:25"
+}

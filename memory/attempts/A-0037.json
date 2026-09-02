@@ -1,0 +1,87 @@
+{
+ "round": 1,
+ "category": "operating_leverage_underreaction",
+ "hypothesis": "當營業利益率的改善速度超過毛利率改善速度時，代表公司主要透過費用控管與規模經濟創造「營業槓桿」，而非單純受惠於產品價格；此類內部效率改善訊息不如營收成長顯眼，市場反應遲緩，尤其在規模效應明顯的電子代工業。",
+ "prediction": "產業內rank IC為正，sub-train ICIR>0.35；效應在電子（規模化代工、費用管控空間大）最強，在生技（研發費用重、非規模驅動）最弱。",
+ "formula": "cs_rank(sub(delta(op_margin,6), delta(gross_margin,6)))",
+ "name_zh": "營業槓桿改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(delta(op_margin,6), delta(gross_margin,6)))",
+  "fhash": "6f25ea0a2b00d7a5",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.09,
+   "decay_pct": 76.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.078,
+    "盤整"
+   ],
+   "2016": [
+    0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.013,
+    "多頭"
+   ],
+   "2018": [
+    -0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.25,
+   "生技": 0.06,
+   "半導體": 0.37
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": 0.059
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45; validation ICIR 0.09 < 0.3; validation 衰減 76% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR 0.39接近但略低於預測門檻，產業排序部分錯置(半導體0.37最強、電子0.25次之，非預測的電子最強)，生技最弱(0.06)符合預測。真正致命傷是validation ICIR驟降至0.09、衰減76%，屬典型過擬合特徵，顯示雙重delta公式可能過度擬合sub-train期間特定年度(如2015年IC異常達0.078)的雜訊。",
+ "failure_type": "expression_bad",
+ "lesson": "雙重差分(delta of delta)類公式對窗口與期間選取高度敏感，容易被單一年度離群值撐起sub-train表現，應優先檢查逐年IC是否有單一年度主導，再決定是否延長平滑窗口重測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0037",
+ "ts": "2026-07-18T21:37:41"
+}

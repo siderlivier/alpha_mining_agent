@@ -1,0 +1,88 @@
+{
+ "round": 51,
+ "category": "amihud_illiquidity_premium",
+ "hypothesis": "依流動性風險溢酬理論(Amihud 2002)，股價對成交金額的衝擊程度(月報酬絕對值/月均成交金額)越大，代表該股流動性越差；機構投資人受資金與部位限制，難以充分套利消除非流動性股票的錯價，因此持有這類股票需要額外報酬補償流動性風險。",
+ "prediction": "sub-train ICIR > 0.45；此效應在低成交金額(amt_21後20%)子集應比高成交金額子集更強；多頭腿(高非流動性組)年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(abs(mom_20),amt_21))",
+ "name_zh": "流動性風險溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(abs(mom_20),amt_21))",
+  "fhash": "05f4b2421a41086b",
+  "sub_train": {
+   "mean_ic": -0.01,
+   "icir": -0.1
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.18,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.015,
+    "盤整"
+   ],
+   "2013": [
+    0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.005,
+    "多頭"
+   ],
+   "2015": [
+    -0.021,
+    "盤整"
+   ],
+   "2016": [
+    -0.023,
+    "多頭"
+   ],
+   "2017": [
+    -0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": -0.038
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.21,
+   "半導體": -0.08,
+   "金融": -0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.99,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR為-0.10，方向與預測(pos)相反；condicional IC顯示下跌月(-0.038)比上漲月(-0.002)更負，代表非流動性股票在下跌時跌更多——這是「流動性風險懲罰」而非「流動性風險溢酬」，Amihud理論在此樣本被推翻。多空兩腿雖同為正(市場整體上漲貝他)，但相對排序方向確定是反的。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "機構視角的流動性風險溢酬理論不適用台股散戶主導的小型股市場：非流動性股票呈現的是下檔崩跌懲罰而非長期溢酬，此方向(非流動性程度越高預期報酬越高)可列入待避免清單。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0775",
+ "ts": "2026-08-14T01:05:54"
+}

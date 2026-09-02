@@ -1,0 +1,83 @@
+{
+ "round": 11,
+ "category": "institutional_herding_reversal",
+ "hypothesis": "投信基金經理人有季底作帳與追高的從眾行為(window dressing),投信買超集中的股票短期籌碼過熱,隨後投信因獲利了結或轉單效應賣壓浮現,導致短期均值回歸;此為籌碼過熱後的反轉,而非資訊優勢延續。",
+ "prediction": "sub-train ICIR>0.45;訊號經ts_mean(2)平滑後月換手<0.4",
+ "formula": "cs_rank(neg(trust_net_21))",
+ "name_zh": "投信作帳反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(trust_net_21))",
+  "fhash": "5b1202e4dbb03ae6",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.32,
+   "decay_pct": -18.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.044,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.01,
+   "半導體": 0.29,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45、平滑後換手<0.4，實際sub-train ICIR僅0.27(stage1淘汰)，validation略升至0.32(decay -18%)。更關鍵的是多頭腿超額報酬為負(-0.008)——分數高(投信買超少)的股票組合實際跑輸，與『籌碼過熱後反轉』假設所需的正向可交易多頭腿方向相反，空頭腿(0.009)方向雖對但台股難放空無法交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信作帳反轉假設的IC雖微弱為正，但多頭腿實際虧損，說明反轉效果主要體現在被投信賣壓那端(不利放空)而非可交易多頭端；測反轉類籌碼因子時要優先檢查多頭腿是否為正，IC微弱正值不能保證可交易性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0184",
+ "ts": "2026-07-21T11:33:49"
+}

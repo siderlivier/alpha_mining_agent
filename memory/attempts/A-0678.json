@@ -1,0 +1,90 @@
+{
+ "round": 44,
+ "category": "semiconductor_margin_cycle_bottom",
+ "hypothesis": "半導體/電子產業具明顯的庫存與價格循環性：當毛利率開始從谷底回升（正斜率）時，代表產業已完成去庫存、進入價格回升階段；市場因前期悲觀情緒滯後，對毛利率反轉的重新評價需要數月才能完全反映，此為景氣循環轉折點認知落後於財報數據本身的現象。",
+ "prediction": "電子/半導體產業限定：industry_icir > 0.5，decay < 25%；全市場版本可能不顯著（此為產業限定假設）；pos方向。",
+ "formula": "cs_rank(ts_slope(gross_margin, 6))",
+ "name_zh": "毛利谷底回升股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(gross_margin, 6))",
+  "fhash": "0bc21e9676bc55ea",
+  "sub_train": {
+   "mean_ic": 0.032,
+   "icir": 0.57
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.22,
+   "decay_pct": 62.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.034,
+    "盤整"
+   ],
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.041,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.027,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.32,
+   "半導體": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.072
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.38
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.22 < 0.3; validation 衰減 62% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測電子/半導體產業限定industry_icir>0.5、decay<25%，且半導體應是核心受益族群。實際電子0.44、半導體僅0.19(是四產業中最弱)，全樣本decay達62%(過擬合)。半導體作為假設的核心標的表現反而最弱，直接牴觸『半導體循環底部反轉』的核心敘事，較可能是sub-train期間(2012-2017)剛好吻合幾輪特定景氣循環的偶然擬合。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "毛利率斜率的『循環底部』訊號在半導體子產業表現最弱而非最強，說明景氣循環轉折的認知落後假說可能只適用於特定歷史循環週期(2012-2017的幾輪起伏)，不具跨週期穩健性；日後測產業循環類因子應把sub-train切分成至少兩個獨立循環週期分別檢驗一致性，而非只看整體decay。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0678",
+ "ts": "2026-08-12T14:15:12"
+}

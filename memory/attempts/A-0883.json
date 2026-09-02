@@ -1,0 +1,91 @@
+{
+ "round": 58,
+ "category": "domestic_institutional_flow_confirmation",
+ "hypothesis": "金融股多為本土型持股結構、外資研究覆蓋集中在少數大型金控，中小型金控的資訊優勢反而掌握在熟悉台灣利率環境與法規的投信手中；當投信近月持續買超且標的ROE偏高，代表本土法人基於基本面認知的建倉行為，訊號會比依賴外資動向的傳統代理更早出現。",
+ "prediction": "金融子樣本 sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；預期金融子樣本industry_icir在四產業中最高或次高。",
+ "formula": "mul(cs_rank(trust_net_21), cs_rank(roe))",
+ "name_zh": "投信認證金控股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "roe",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(trust_net_21), cs_rank(roe))",
+  "fhash": "b19d4b60b052e6fa",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.23
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.51,
+   "decay_pct": -126.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.024,
+    "多頭"
+   ],
+   "2014": [
+    -0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.063,
+    "多頭"
+   ],
+   "2017": [
+    0.034,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.055,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.5,
+   "半導體": -0.04,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.027,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.39,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.58,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.58 > 0.5"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "distill_failed": true,
+ "id": "A-0883",
+ "ts": "2026-08-19T00:25:17"
+}

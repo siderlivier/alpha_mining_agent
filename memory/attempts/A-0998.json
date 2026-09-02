@@ -1,0 +1,90 @@
+{
+ "round": 65,
+ "category": "value_margin_improvement_confirmation",
+ "hypothesis": "盈餘殖利率(E/P)便宜的股票中，若同時營業利益率呈現上升趨勢，代表便宜是暫時性低估而非基本面惡化的價值陷阱；市場常對低本益比股票一概而論套用便宜有理的懷疑態度，忽略本業效率其實正在改善，此為區分真假值股的過濾機制。",
+ "prediction": "sub-train ICIR > 0.4；與F-015(ep×sign(rev_yoy))相關係數|ρ|<0.5；多頭腿年化超額 > 0，且應優於單純ep因子的多頭腿表現。",
+ "formula": "mul(cs_rank(ep), cs_rank(delta(op_margin,12)))",
+ "name_zh": "真便宜非陷阱股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ep",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ep), cs_rank(delta(op_margin,12)))",
+  "fhash": "ed3efd0a3450f911",
+  "sub_train": {
+   "mean_ic": 0.088,
+   "icir": 0.92
+  },
+  "validation": {
+   "mean_ic": 0.045,
+   "icir": 0.43,
+   "decay_pct": 53.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.086,
+    "多頭"
+   ],
+   "2015": [
+    0.097,
+    "盤整"
+   ],
+   "2016": [
+    0.097,
+    "多頭"
+   ],
+   "2017": [
+    0.103,
+    "多頭"
+   ],
+   "2018": [
+    0.0,
+    "盤整"
+   ],
+   "2019": [
+    0.09,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.08,
+   "down_months": 0.064
+  },
+  "industry_icir": {
+   "電子": 0.8,
+   "生技": 0.66,
+   "半導體": 0.39,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.091,
+   "short_excess_ann": 0.076
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.22,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.81,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.81 > 0.5"
+ },
+ "diagnosis": "本輪 standalone 最強(sub-train ICIR 0.92、多頭腿+9.1%)，但 validation decay 53% 已示過擬合，且 ρ=0.81 撞 F-002。ep×delta(op_margin,12)『價值×獲利改善趨勢』與『價值×獲利水準』(bp×roe)實證上難分，因獲利在改善的公司通常也是高獲利公司；預測的 trend/level 正交化落空。",
+ "failure_type": "duplicate",
+ "lesson": "跨 C-10/C-12/C-15：價值(bp/ep)×獲利(roe/margin，不論 level/trend/delta)的交乘空間已被 F-002/R-016/R-022 佔滿；trend vs level 的正交期望在獲利維度普遍落空。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0998",
+ "ts": "2026-09-02T00:32:52"
+}

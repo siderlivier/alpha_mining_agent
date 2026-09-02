@@ -1,0 +1,84 @@
+{
+ "round": 30,
+ "category": "smart_money_retail_divergence",
+ "hypothesis": "外資近月淨買超(frgn_net_21)代表握有較佳資訊的法人正在建倉，融資餘額(margin_d21)下降代表散戶尚未追價；兩者同時發生代表聰明錢提前卡位但情緒面尚未反應，之後隨散戶跟進推升股價，屬資訊慢速擴散機會。",
+ "prediction": "sub-train ICIR>0.45；訊號在外資買超後1-2個月內IC應強於3個月後；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_rank(frgn_net_21), cs_rank(neg(margin_d21)))",
+ "name_zh": "外資散戶背離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_net_21), cs_rank(neg(margin_d21)))",
+  "fhash": "ea249012126dce84",
+  "sub_train": {
+   "mean_ic": 0.019,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": 96.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.056,
+    "多頭"
+   ],
+   "2014": [
+    0.048,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    0.002,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    -0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.16,
+   "生技": 0.08,
+   "半導體": 0.02,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.001,
+   "short_excess_ann": 0.002
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.71,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR(0.24)已未達門檻，且逐年IC由2013(0.056)、2014(0.048)單調遞減至2017轉負(-0.003)、2019(-0.018)，validation ICIR崩潰至0.01(decay 96%)。這是持續性衰退而非單一驗證期偶然失效，顯示外資買超+融資減少組合訊號可能早期確實存在，但隨市場效率提升逐漸被套利消化。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資與散戶籌碼背離這類公開流量資訊組合，即使歷史上曾有效，也可能已被市場套利消化殆盡——用逐年IC是否單調遞減來判斷「訊號仍在但被稀釋」還是「已死」。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0460",
+ "ts": "2026-07-29T23:26:46"
+}

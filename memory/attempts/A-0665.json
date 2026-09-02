@@ -1,0 +1,83 @@
+{
+ "round": 43,
+ "category": "semiconductor_inventory_turn_cycle",
+ "hypothesis": "半導體產業具有明顯的庫存/資本支出循環，週轉率長期上升趨勢反映市場交易熱度隨基本面回溫同步提升，但財報獲利數字因存貨去化與認列落後，市場對這類「量先價行」的循環回溫訊號反應不足，半導體業因資本支出週期長此落後效應更明顯。",
+ "prediction": "sub-train ICIR>0.45；半導體產業industry_icir應為四產業最高（>0.5，其餘<0.35）；與F-008相關度<0.5。",
+ "formula": "cs_rank(ts_slope(turn_21,12))",
+ "name_zh": "半導體量能回溫",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(turn_21,12))",
+  "fhash": "67e4f05e483a982d",
+  "sub_train": {
+   "mean_ic": -0.012,
+   "icir": -0.12
+  },
+  "validation": {
+   "mean_ic": -0.019,
+   "icir": -0.3,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.122,
+    "多頭"
+   ],
+   "2014": [
+    -0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.043,
+    "盤整"
+   ],
+   "2016": [
+    -0.025,
+    "多頭"
+   ],
+   "2017": [
+    -0.032,
+    "多頭"
+   ],
+   "2018": [
+    -0.039,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.016,
+   "down_months": -0.011
+  },
+  "industry_icir": {
+   "電子": -0.08,
+   "生技": -0.05,
+   "半導體": 0.07,
+   "金融": -0.23
+  },
+  "legs": {
+   "long_excess_ann": -0.009,
+   "short_excess_ann": 0.045
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "你預測半導體icir應為四產業最高且>0.5，實際僅0.07(雖是四產業最高但遠低於預測)，且sub-train/validation都是負向(-0.12, -0.30)，方向與假設完全相反，庫存循環→週轉率上升→報酬延續的機制沒有得到支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "週轉率長期趨勢(12個月斜率)無法作為半導體庫存回溫的領先訊號，即使限定半導體產業內效果也僅屬雜訊等級；產業循環類假設應改用更直接的庫存/資本支出資料。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0665",
+ "ts": "2026-08-12T14:04:06"
+}

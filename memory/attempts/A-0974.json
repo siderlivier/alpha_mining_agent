@@ -1,0 +1,87 @@
+{
+ "round": 64,
+ "category": "revenue_momentum_exhaustion_streak",
+ "hypothesis": "营收年增率连续为正的月数（streak）越长，代表市场对其成长故事的外推预期已经累积到高点，分析师与投资人容易线性外推近期趋势并给予过高评价；连续正成长期过长会使基期垫高、竞争者跟进模仿，边际成长动能衰竭机率上升，形成动能耗竭型反转而非持续型动能，此为对streak(sign(rev_yoy),6)先前呈现稳定负向IC的方向重新确认提交。",
+ "prediction": "全市场sub-train ICIR>0.4（方向为负）；streak前20%高分组未来3个月报酬应显著低于后20%低分组；逐年方向一致性>70%",
+ "formula": "cs_rank(streak(sign(rev_yoy),6))",
+ "name_zh": "营收动能耗竭",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(streak(sign(rev_yoy),6))",
+  "fhash": "c63ffdc72ef12c12",
+  "sub_train": {
+   "mean_ic": -0.023,
+   "icir": -0.39
+  },
+  "validation": {
+   "mean_ic": -0.011,
+   "icir": -0.22,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.021,
+    "多頭"
+   ],
+   "2014": [
+    -0.028,
+    "多頭"
+   ],
+   "2015": [
+    -0.036,
+    "盤整"
+   ],
+   "2016": [
+    0.002,
+    "多頭"
+   ],
+   "2017": [
+    -0.029,
+    "多頭"
+   ],
+   "2018": [
+    -0.013,
+    "盤整"
+   ],
+   "2019": [
+    -0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.013,
+   "down_months": -0.034
+  },
+  "industry_icir": {
+   "電子": -0.1,
+   "生技": -0.26,
+   "半導體": -0.04,
+   "金融": -0.24
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.62,
+  "stage2_max_rho": {
+   "factor": "F-015",
+   "rho": -0.11
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.39 < 0.45; validation ICIR -0.22 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.62 > 0.4"
+ },
+ "diagnosis": "方向(負)確認，6/7年為負方向一致，但強度不足跨過門檻(sub-train -0.39 vs 需求-0.45)，且月換手0.62過高、多頭腿超額為負(純空頭訊號台股不可交易)，三項門檻同時失守。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「動能延伸過久=外推偏誤」類假說即使方向正確，若訊號只存在於空頭腿而多頭腿無正報酬，在台股難放空限制下即為不可交易的偽訊號；此類假說應先評估多頭腿可交易性再投入回測資源。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0974",
+ "ts": "2026-08-27T21:49:57"
+}

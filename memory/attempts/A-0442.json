@@ -1,0 +1,87 @@
+{
+ "round": 28,
+ "category": "cross_scope_rank_divergence",
+ "hypothesis": "某些產業整體估值水準偏高(如生技本夢比)，用全市場淨值股價比篩選會把該產業內相對便宜的個股一併排除；但在產業內部排名中，這些個股仍是明確的相對便宜標的，只是被「產業整體不便宜」的市場印象掩蓋，屬於價值型投資人篩選死角。",
+ "prediction": "sub-train ICIR>0.4；此訊號在生技/半導體(產業整體估值分歧大)industry_icir應高於金融(產業估值同質性高)；多頭腿年化超額報酬>0；與F-002相關係數<0.5。",
+ "formula": "sub(cs_rank(bp), cs_rank_all(bp))",
+ "name_zh": "產業內價值孤例",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(bp), cs_rank_all(bp))",
+  "fhash": "825193f511db7045",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": -0.018,
+   "icir": -0.2,
+   "decay_pct": 178.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.001,
+    "多頭"
+   ],
+   "2014": [
+    0.019,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.054,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.041,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.007,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": 0.41,
+   "半導體": -0.06,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.039,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.09,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": -0.1
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.26 < 0.45; validation ICIR -0.2 < 0.3; validation 衰減 178% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測ICIR>0.4，實際sub-train 0.26不足，且validation翻負(-0.2)、decay 178%(過擬合徵兆)，長腿為負(-0.039)完全不可交易。產業別上，生技(0.41)確實最高，符合'產業估值分歧大的地方訊號更強'的部分預測，但半導體(-0.06)未如預測同樣突出，反而是負值，預測只對了一半。與C-3同屬cross_scope_rank_divergence類別，兩者都指向生技產業是此類因子的有效範圍。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "見學習庫'cross_scope_rank_divergence產業限定於生技'（與C-3合併記錄）。全市場版本的cross-scope divergence因子普遍呈現高decay、負向長腿，不具備全市場交易性，只有生技產業內例外。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0442",
+ "ts": "2026-07-28T19:19:09"
+}

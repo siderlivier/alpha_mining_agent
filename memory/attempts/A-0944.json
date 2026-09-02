@@ -1,0 +1,93 @@
+{
+ "round": 62,
+ "category": "fifty_two_week_high_magnitude_smoothing",
+ "hypothesis": "用6個月移動平均取代對px_hi252做24個月時序排名，可保留「多接近高點」的幅度資訊而非只留相對名次，避免二次排序稀釋訊號；市場對緩慢貼近新高(非急拉)的股票錨定效應反應不足。",
+ "prediction": "sub-train ICIR>0.4；與F-008/F-016截面相關|ρ|<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(ts_mean(px_hi252,6))",
+ "name_zh": "緩步貼近新高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(px_hi252,6))",
+  "fhash": "8420c024d5ed6b27",
+  "sub_train": {
+   "mean_ic": 0.063,
+   "icir": 0.45
+  },
+  "validation": {
+   "mean_ic": 0.09,
+   "icir": 0.74,
+   "decay_pct": -63.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.023,
+    "盤整"
+   ],
+   "2013": [
+    0.052,
+    "多頭"
+   ],
+   "2014": [
+    0.057,
+    "多頭"
+   ],
+   "2015": [
+    0.094,
+    "盤整"
+   ],
+   "2016": [
+    0.06,
+    "多頭"
+   ],
+   "2017": [
+    0.067,
+    "多頭"
+   ],
+   "2018": [
+    0.086,
+    "盤整"
+   ],
+   "2019": [
+    0.094,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.086,
+   "down_months": 0.033
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.55,
+   "半導體": 0.3,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": 0.087,
+   "short_excess_ann": 0.034
+  },
+  "coverage": 0.89,
+  "turnover_m": 0.13,
+  "stage2_culprit": {
+   "factor": "F-016",
+   "rho": 0.67,
+   "factor_name": "本業獲利創高股",
+   "factor_desc": "股價近高點且本業獲利成長佳，勝過單純營收確認。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-016 |ρ|=0.67 > 0.5"
+ },
+ "diagnosis": "預測與F-008/F-016 |ρ|<0.5，但與F-016(本業獲利創高股)ρ=0.67踩線。IC表現其實優異(sub-train 0.45, validation 0.74)，說明「緩步貼近新高」的訊號很強，但强度恰好證明它本質上就是px_hi252這個核心變數在驅動，用MA平滑取代排名並未脫離F-016的資訊核心。",
+ "failure_type": "duplicate",
+ "lesson": "px_hi252(貼近52週高點)本身是極強單變數訊號，光靠時序平滑/排名方式的變化很難與已用該變數的庫內因子(F-016)做出|ρ|<0.5的區隔，需要引入完全不同的輔助變數才能真正分化。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0944",
+ "ts": "2026-08-27T21:24:50"
+}

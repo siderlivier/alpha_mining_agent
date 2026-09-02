@@ -1,0 +1,90 @@
+{
+ "round": 8,
+ "category": "quality_composite_screening",
+ "hypothesis": "同時具備高資本報酬率與低應計項（盈餘含金量高）的公司，代表獲利品質真實且不依賴會計操作膨脹帳面數字；兩腳位先各自產業內排名再合併，避免直接用mul()相乘原始值造成尺度不一致的既有失敗教訓，需跨兩張報表交叉驗證的品質訊號較少被單一模型捕捉。",
+ "prediction": "sub-train ICIR > 0.45；與F-001、F-006相關係數均 < 0.5；上漲月與下跌月IC同向。",
+ "formula": "cs_rank(sub(cs_rank(roe), cs_rank(accruals)))",
+ "name_zh": "雙重品質篩選",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(cs_rank(roe), cs_rank(accruals)))",
+  "fhash": "8c7e3662d4d7c1e8",
+  "sub_train": {
+   "mean_ic": 0.043,
+   "icir": 0.47
+  },
+  "validation": {
+   "mean_ic": 0.046,
+   "icir": 0.64,
+   "decay_pct": -37.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.01,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.093,
+    "盤整"
+   ],
+   "2016": [
+    0.05,
+    "多頭"
+   ],
+   "2017": [
+    0.032,
+    "多頭"
+   ],
+   "2018": [
+    0.021,
+    "盤整"
+   ],
+   "2019": [
+    0.071,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.45,
+   "生技": 0.45,
+   "半導體": 0.29,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.053
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.14,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.6,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.47、validation ICIR 0.64(decay -37%，反而轉強)雙雙命中預測門檻，假設中特別強調「先各自cs_rank再相減以避免尺度不一致」的作法確實奏效，是本輪機制與表現對照最準的候選。但仍因與庫內F-002(金融品質價值)相關係數0.60被stage2淘汰，顯示『ROE排名減應計排名』這種品質/盈餘含金量複合構造，即使與F-002欄位組成不同，統計上仍高度重疊。",
+ "failure_type": "duplicate",
+ "lesson": "品質構面的複合排名因子（獲利能力×盈餘品質）容易與既有的『便宜×獲利能力』價值品質因子重疊，因為兩者都在篩選『真正賺錢且體質健康』的公司；做複合品質因子前應先檢查庫內是否已有類似的雙腳位品質/價值組合。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0137",
+ "ts": "2026-07-19T21:42:48"
+}

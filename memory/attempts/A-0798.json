@@ -1,0 +1,90 @@
+{
+ "round": 52,
+ "category": "net_margin_trend_value",
+ "hypothesis": "F-014用sp+op_income_yoy捕捉「便宜+本業成長」，但稅後淨利率的12個月上升趨勢反映的是包含業外、稅務效率在內的「整體獲利轉換效率」改善，市場過度聚焦營收與毛利成長，對淨利率趨勢改善的效率面訊號反應不足，屬於F-014未涵蓋的殘餘alpha。",
+ "prediction": "sub-train ICIR>0.45；與F-001/F-002/F-011/F-014相關係數<0.5；多頭腿年化超額>0",
+ "formula": "mul(cs_rank(sp), cs_rank(ts_slope(net_margin,12)))",
+ "name_zh": "淨利轉佳價值股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin",
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(sp), cs_rank(ts_slope(net_margin,12)))",
+  "fhash": "bd18ca880b7cf186",
+  "sub_train": {
+   "mean_ic": 0.06,
+   "icir": 0.48
+  },
+  "validation": {
+   "mean_ic": 0.02,
+   "icir": 0.19,
+   "decay_pct": 61.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.009,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.07,
+    "盤整"
+   ],
+   "2016": [
+    0.103,
+    "多頭"
+   ],
+   "2017": [
+    0.082,
+    "多頭"
+   ],
+   "2018": [
+    -0.013,
+    "盤整"
+   ],
+   "2019": [
+    0.054,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.056,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 1.0,
+   "生技": 0.61,
+   "半導體": 0.15,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.083,
+   "short_excess_ann": 0.075
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.18,
+  "stage2_culprit": {
+   "factor": "F-014",
+   "rho": 0.54,
+   "factor_name": "本業成長價值股",
+   "factor_desc": "營收市值比便宜且本業獲利成長佳，但因非熱門標籤被市場忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-014 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.48勉強達標，但validation崩至0.19(衰減61%，本身也會在stage4被剔除)；industry_icir顯示電子產業高達1.0而半導體僅0.15、金融僅0.03，訊號高度集中於電子股，並非假設宣稱的『整體獲利轉換效率』通則。最終在stage2因與F-014(本業成長價值股)相關係數0.54被剔除，sp(營收市值比)腿是可能的重疊來源。",
+ "failure_type": "duplicate",
+ "lesson": "與C-9同源：sp/ep類便宜估值腿容易觸發與F-014/F-002的高相關；另外此案訊號高度電子業集中，也暗示『整體』獲利效率敘事其實是產業特定現象。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0798",
+ "ts": "2026-08-14T01:18:09"
+}

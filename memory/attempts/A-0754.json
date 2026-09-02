@@ -1,0 +1,83 @@
+{
+ "round": 49,
+ "category": "cross_scope_rank_divergence",
+ "hypothesis": "生技股數量少、獲利波動大，機構常用全市場統一篩選器排序，導致生技股即使在同業內表現相對突出，仍因全市場排名被大型權值股稀釋而遭忽略。個股在產業內排名與全市場排名的落差正是這種分類粒度造成的錯誤定價，此機制在成分股集中、規模差異大的生技產業最顯著。",
+ "prediction": "sub-train ICIR>0.45；生技產業industry_icir應為四產業最高且顯著優於次高產業；多頭腿年化超額>0；其餘產業表現預期不穩定",
+ "formula": "sub(cs_rank(rev_yoy), cs_rank_all(rev_yoy))",
+ "name_zh": "產業內外排名落差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(rev_yoy), cs_rank_all(rev_yoy))",
+  "fhash": "86051192d88dfc56",
+  "sub_train": {
+   "mean_ic": 0.004,
+   "icir": 0.08
+  },
+  "validation": {
+   "mean_ic": -0.015,
+   "icir": -0.23,
+   "decay_pct": 397.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.035,
+    "多頭"
+   ],
+   "2018": [
+    -0.017,
+    "盤整"
+   ],
+   "2019": [
+    -0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": 0.28,
+   "生技": -0.23,
+   "半導體": 0.1,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.012,
+   "short_excess_ann": -0.016
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.61,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業ICIR應為四產業最高且顯著優於次高，實際生技反而最差(-0.23)，電子最高(0.28)，與預測完全顛倒。sub-train ICIR僅0.08，validation降至-0.23且decay 397%（樣本外反轉），顯示「產業內排名vs全市場排名落差」在生技股上非但沒有被低估的超額報酬，反而系統性是負向陷阱，可能因生技股本益比失真、題材炒作重，產業內領先的股票反而後續更差。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「小產業因全市場排序被稀釋而被低估」的機制在生技股上被證偽，方向相反；此類分類粒度套利假設不應預設小產業必然被低估，須先檢查該產業本身估值/籌碼特性是否主導了排名意義。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0754",
+ "ts": "2026-08-14T00:36:43"
+}

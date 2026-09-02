@@ -1,0 +1,82 @@
+{
+ "round": 28,
+ "category": "semiconductor_margin_trough_recovery",
+ "hypothesis": "半導體業毛利率受ASP與稼動率的景氣循環影響劇烈；毛利率剛脫離自身24個月低點，代表產品組合/報價正在改善的循環早期階段，但分析師調升毛利率預估通常落後實際財報一至兩季，形成可預測的延遲反應。",
+ "prediction": "sub-train ICIR>0.4；半導體industry_icir應為四產業中最高；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,24)))",
+ "name_zh": "半導體毛利落底",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,24)))",
+  "fhash": "fc03a70db59cc7a2",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": -0.014,
+   "icir": -0.2,
+   "decay_pct": 217.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.007,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.036,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.003,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.02,
+   "生技": 0.03,
+   "半導體": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.025,
+   "short_excess_ann": 0.075
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.12,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "與C-8高度相似：預測ICIR>0.4，sub-train僅0.17，validation翻負(-0.20)，decay 217%，方向反轉。半導體industry_icir僅0.03，並非預測的'四產業最高'，機制(毛利率落底=分析師預估落後的可預測延遲反應)未獲支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "同C-8，見學習庫'週期觸底/觸頂型因子對train/valid切分點敏感'。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0437",
+ "ts": "2026-07-28T19:19:09"
+}

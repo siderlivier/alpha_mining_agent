@@ -1,0 +1,86 @@
+{
+ "round": 25,
+ "category": "semiconductor_margin_trough_recovery",
+ "hypothesis": "半導體具明顯庫存/資本支出循環，毛利率觸底回升初期，分析師以落後多季平均建立獲利模型、更新滯後，未即時反映拐點；股價毛利率距自身12個月低點的正向偏離，捕捉循環回升初期尚未定價的訊號，僅在強庫存循環特徵的半導體/電子業成立。",
+ "prediction": "半導體產業子樣本sub-train ICIR > 0.4；半導體業industry_icir應高於金融業至少0.2。",
+ "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,12)))",
+ "name_zh": "半導體谷底翻揚",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,12)))",
+  "fhash": "2c1724358309766b",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.12,
+   "decay_pct": 136.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.031,
+    "盤整"
+   ],
+   "2013": [
+    0.001,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": 0.11,
+   "生技": 0.07,
+   "半導體": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.061
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR預測>0.4，實際0.33接近但未達標；validation劇烈反轉為-0.12(衰減136%)。半導體industry_icir(0.12)僅些微高於電子(0.11)，未達預測的>=0.2差距，且金融業因gross_margin不適用完全無資料，無法驗證與金融業的比較。",
+ "failure_type": "expression_bad",
+ "lesson": "『距12個月低點正向偏離』對單點雜訊過於敏感且驗證期表現不穩定；可改用相對均值/標準差正規化的谷底距離降低單點雜訊敏感度後重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0393",
+ "ts": "2026-07-28T18:41:52"
+}

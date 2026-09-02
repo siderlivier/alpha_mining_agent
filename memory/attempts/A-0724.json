@@ -1,0 +1,84 @@
+{
+ "round": 47,
+ "category": "long_term_reversal_quality_filter",
+ "hypothesis": "長期下跌（mom_240低）的股票中多數是基本面真正惡化的問題股，但少數只是市場過度悲觀的錯殺股；應計項偏低（盈餘品質真實）可作為過濾器篩出非基本面惡化型長期弱勢股，其下跌更可能是過度反應而非資訊反映。",
+ "prediction": "sub-train ICIR > 0.45；此因子IC應顯著優於單獨neg(mom_240)排序；多頭腿年化超額報酬 > 0。",
+ "formula": "mul(cs_rank(neg(mom_240)), cs_rank(neg(accruals)))",
+ "name_zh": "錯殺優質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(mom_240)), cs_rank(neg(accruals)))",
+  "fhash": "f86b54d18657832b",
+  "sub_train": {
+   "mean_ic": 0.006,
+   "icir": 0.08
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.21,
+   "decay_pct": -170.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.017,
+    "盤整"
+   ],
+   "2016": [
+    0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.052,
+    "盤整"
+   ],
+   "2019": [
+    -0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": 0.03,
+   "半導體": 0.21,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.027,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且優於單獨neg(mom_240)，實際sub-train僅0.08訊號極弱，多頭腿亦為負(-0.027)。應計項品質過濾長期弱勢股的假設未獲支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用accruals作為品質過濾器篩選'錯殺'長期弱勢股未產生正報酬，長期下跌股即便盈餘品質乾淨，市場定價可能仍反映其他真實的基本面惡化，accruals不足以區分。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0724",
+ "ts": "2026-08-12T14:54:09"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 64,
+ "category": "biotech_commercialization_inflection",
+ "hypothesis": "生技公司从研发烧钱阶段转为商业化阶段时，营业利益率会出现年度级别的结构性翻转（由负转正或大幅收敛），若同时营收维持成长，代表产品放量的商转里程碑已经发生；市场对生技股的估值仍锚定在长期亏损的刻板印象，对营运利益转骨的确认存在系统性反应不足，此机制不依赖eps_yoy因此与F-022区隔。",
+ "prediction": "生技产业子样本sub-train ICIR>0.4（产业限定）；op_margin近12月改善幅度前20%组，未来3个月报酬显著高于后20%组；与F-011、F-022截面相关性|ρ|<0.5",
+ "formula": "mul(cs_rank(delta(op_margin,12)), cs_rank(rev_yoy))",
+ "name_zh": "生技转骨确认",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(op_margin,12)), cs_rank(rev_yoy))",
+  "fhash": "edfd73585f99f2fa",
+  "sub_train": {
+   "mean_ic": 0.078,
+   "icir": 0.79
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.27,
+   "decay_pct": 66.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.081,
+    "多頭"
+   ],
+   "2015": [
+    0.073,
+    "盤整"
+   ],
+   "2016": [
+    0.074,
+    "多頭"
+   ],
+   "2017": [
+    0.108,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.049,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.059,
+   "down_months": 0.068
+  },
+  "industry_icir": {
+   "電子": 0.74,
+   "生技": 0.37,
+   "半導體": 0.39,
+   "金融": 0.28
+  },
+  "legs": {
+   "long_excess_ann": 0.095,
+   "short_excess_ann": 0.103
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.34,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.6,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "統計預測完全正確甚至超標(sub-train0.79)，但作者僅檢查與F-022的區隔，忽略了與F-011(生技轉骨訊號)本質更接近——兩者都是「營收成長+利潤率結構改善=從燒錢轉商轉」的敘事，ρ=0.60命中stage2。",
+ "failure_type": "duplicate",
+ "lesson": "生技「轉骨/商轉」敘事的因子空間已被F-011佔據，提交前應直接對照F-011而非只挑其他候選因子做區隔檢查。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0972",
+ "ts": "2026-08-27T21:49:57"
+}

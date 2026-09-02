@@ -1,0 +1,90 @@
+{
+ "round": 4,
+ "category": "margin_expansion_momentum",
+ "hypothesis": "毛利率短期轉折向上代表產品組合優化或定價權提升剛開始發生；多數投資人聚焦絕對毛利率水準而非邊際變化率，對「毛利率轉折點」的重新評價系統性落後於財報公布，此為方向性趨勢訊號，機制不同於毛利穩定度（波動水準）。",
+ "prediction": "sub-train ICIR>0.45；且與F-004(neg ts_std(gross_margin,12))的截面相關性|ρ|應<0.5（一為水準波動度，一為方向性趨勢，機制應可分離）",
+ "formula": "cs_rank(ts_slope(gross_margin,6))",
+ "name_zh": "毛利率轉折",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(gross_margin,6))",
+  "fhash": "0bc21e9676bc55ea",
+  "sub_train": {
+   "mean_ic": 0.032,
+   "icir": 0.57
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.22,
+   "decay_pct": 62.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.034,
+    "盤整"
+   ],
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.041,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.027,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.32,
+   "半導體": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.072
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.38
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.22 < 0.3; validation 衰減 62% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45命中(0.57)，且機制區隔預測部分驗證——stage2最高相關對象是F-001(ρ=0.38)而非預測的F-004，但仍<0.5，證明訊號確實與現有毛利穩定度因子不同源。然而validation ICIR驟降到0.22，decay 62%觸發過擬合警訊，是sub-train表現最好但out-of-sample掉最多的案例，與C-6、C-7同屬ts_slope類全市場排名因子普遍過擬合的模式；對照C-1改用產業內排名後validation反而變好，顯示排名方式(全市場vs產業內)可能是關鍵差異。",
+ "failure_type": "expression_bad",
+ "lesson": "毛利率轉折點的機制論述本身可能成立(sub-train強且與F-001區隔開)，但全市場排名版本明顯過擬合；下次應優先測試產業內排名版本。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0079",
+ "ts": "2026-07-19T17:21:03"
+}

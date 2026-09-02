@@ -1,0 +1,89 @@
+{
+ "round": 46,
+ "category": "earnings_consistency_premium_general",
+ "hypothesis": "F-022以EPS年增率相對自身波動度標準化，僅於生技產業驗證『去binary化的持續成長優於偶發爆發式成長』；此機制理論上應適用於任何產業——市場普遍偏好高成長率數字本身，卻忽略成長率的穩定度，若改用營業利益年增率（本業成長，排除業外雜訊）做同樣標準化並套用全市場，可驗證此低估是否為跨產業通用效應而非生技獨有。",
+ "prediction": "sub-train ICIR>0.45；與F-022相關性<0.5；validation decay<40%；多頭腿年化超額>0。",
+ "formula": "cs_rank(sdiv(op_income_yoy, ts_std(op_income_yoy,12)))",
+ "name_zh": "營益成長穩定股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_income_yoy, ts_std(op_income_yoy,12)))",
+  "fhash": "bb0f5e0792bce1d7",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": -0.003,
+   "icir": -0.03,
+   "decay_pct": 110.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.139,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    -0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.013,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.35,
+   "生技": 0.43,
+   "半導體": -0.03,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.68,
+  "turnover_m": 0.25,
+  "stage2_culprit": {
+   "factor": "F-016",
+   "rho": 0.68,
+   "factor_name": "本業獲利創高股",
+   "factor_desc": "股價近高點且本業獲利成長佳，勝過單純營收確認。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-016 |ρ|=0.68 > 0.5"
+ },
+ "diagnosis": "刻意的泛化測試：把F-022在生技驗證有效的『獲利成長穩定度溢酬』機制套用到全市場op_income_yoy。結果sub-train ICIR 0.36未達0.45，validation崩到-0.03(衰減110%)，且與F-016『本業獲利創高股』相關性0.68撞庫，顯示F-022的效應很可能是生技產業特有(低分析師覆蓋)，全市場版本不穩健且被既有動能因子完全覆蓋。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『獲利成長穩定度優於單純成長率』在生技(F-022)成立不代表能泛化到全市場；全市場版本會被既有獲利動能/創高類因子覆蓋，且訊號本身樣本外不穩健，是機制泛化邊界被證偽的案例。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0713",
+ "ts": "2026-08-12T14:41:10"
+}

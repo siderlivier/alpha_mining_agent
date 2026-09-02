@@ -1,0 +1,87 @@
+{
+ "round": 9,
+ "category": "standardized_earnings_surprise_drift",
+ "hypothesis": "EPS年增率相對自身歷史波動度標準化後的短期變化，類似傳統SUE標準化未預期盈餘；台股分析師覆蓋率低、預測修正緩慢，標準化盈餘驚奇會產生類似PEAD的延續效應，並避免高波動股的驚奇被錯誤放大。",
+ "prediction": "sub-train ICIR > 0.45；訊號強度應在近3個月內最強；validation衰減 < 40%。",
+ "formula": "cs_rank(sdiv(delta(eps_yoy,3),ts_std(eps_yoy,6)))",
+ "name_zh": "標準化盈餘驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(eps_yoy,3),ts_std(eps_yoy,6)))",
+  "fhash": "97191f259f0f784a",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.27,
+   "decay_pct": 28.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.07,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.025,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.027,
+   "down_months": 0.007
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": 0.2,
+   "半導體": 0.13,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.017,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.58,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.17
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.37 < 0.45; validation ICIR 0.27 < 0.3; 月換手 0.58 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.37、validation 0.27，皆低於門檻，且月換手0.58超過0.4上限，rejected_stage4。逐年來看效果並非全無（2013年0.07、2017年0.037皆不弱），下跌月遠弱於上漲月（0.007 vs 0.027）也與典型PEAD延續效應方向一致，只是強度和穩定度不夠、且3個月delta窗口換手率過高侵蝕交易可行性。屬於「假說可能仍成立，公式太敏感/太短窗口」的表達問題。",
+ "failure_type": "expression_bad",
+ "lesson": "標準化盈餘驚奇的PEAD式假說方向正確但強度不足、換手過高；下次應拉長delta視窗（如6個月而非3個月）或加入平滑處理降低換手率，同時可嘗試僅在電子/半導體等分析師覆蓋較低的子產業測試以放大訊號強度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0154",
+ "ts": "2026-07-20T17:18:53"
+}

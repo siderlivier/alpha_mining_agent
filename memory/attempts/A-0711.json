@@ -1,0 +1,90 @@
+{
+ "round": 46,
+ "category": "cash_value_smart_money_confirmation",
+ "hypothesis": "便宜的營收價值股（低sp）常因缺乏題材與成長故事而被主流資金忽略；但當這類股票同時出現較高的借券活動（顯示量化基金或套利機構已將其納入交易組合），代表聰明資金已提前關注並建立部位，領先於一般投資人對其重新評價，而非單純的空方看衰訊號。",
+ "prediction": "sub-train ICIR>0.45；與F-013、F-019相關性<0.5；validation decay<40%；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(sp), cs_rank(ts_mean(lend_vol_21,6)))",
+ "name_zh": "便宜借券熱股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21",
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(sp), cs_rank(ts_mean(lend_vol_21,6)))",
+  "fhash": "e4c352a9b487818a",
+  "sub_train": {
+   "mean_ic": 0.05,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.067,
+   "icir": 0.57,
+   "decay_pct": -33.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.056,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.111,
+    "多頭"
+   ],
+   "2017": [
+    0.048,
+    "多頭"
+   ],
+   "2018": [
+    0.079,
+    "盤整"
+   ],
+   "2019": [
+    0.055,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.069,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.51,
+   "生技": 0.45,
+   "半導體": 0.1,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.043,
+   "short_excess_ann": 0.031
+  },
+  "coverage": 0.43,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-014",
+   "rho": 0.53,
+   "factor_name": "本業成長價值股",
+   "factor_desc": "營收市值比便宜且本業獲利成長佳，但因非熱門標籤被市場忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-014 |ρ|=0.53 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.43接近但未達0.45門檻，validation反而更強(0.57)，coverage僅0.43偏低。真正死因是與F-014『本業成長價值股』相關性0.53撞庫——sp(營收市值比)這個價值分量在乘積中主導了排序，因子本質仍是便宜股篩選器。",
+ "failure_type": "duplicate",
+ "lesson": "用cs_rank(value_metric)乘以其他confirmation訊號時，若value分量的排序離散度遠大於confirmation分量，最終因子容易被value分量主導，導致與既有價值類因子高相關撞庫，confirmation的邊際貢獻被稀釋。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0711",
+ "ts": "2026-08-12T14:41:10"
+}

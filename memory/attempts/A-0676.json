@@ -1,0 +1,89 @@
+{
+ "round": 44,
+ "category": "turnover_stability_quiet_accumulation",
+ "hypothesis": "周轉率本身的『波動度』（而非水準）反映交易行為一致性：周轉率忽高忽低代表投機客頻繁進出、消息面驅動交易，周轉率穩定則代表長期投資人主導、持股結構穩固；此類股票因缺乏短線炒作帶來的價格發現過程，基本面資訊傳遞較慢，存在資訊擴散不足的溢酬，此機制與F-005（報酬波動度）不同，聚焦交易量而非報酬本身的穩定性。",
+ "prediction": "sub-train ICIR > 0.45；pos方向；此訊號應與F-005相關性 < 0.5，證明捕捉的是交易行為穩定而非報酬波動本身。",
+ "formula": "cs_rank(neg(ts_std(turn_21, 12)))",
+ "name_zh": "交易穩定籌碼股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(turn_21, 12)))",
+  "fhash": "b3144bd4e42aad36",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.058,
+   "icir": 0.36,
+   "decay_pct": -22.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.055,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.11,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.064,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.39,
+   "生技": 0.34,
+   "半導體": 0.24,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.09,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.77,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.77 > 0.5"
+ },
+ "diagnosis": "預測應與F-005(報酬波動度)相關性<0.5以證明捕捉的是交易行為而非報酬本身穩定性。實際上真正高相關的是F-008(低調接近新高，ρ0.77)而非F-005，顯示turnover的『波動度』穩定本質上跟F-008的『周轉率低+接近新高』概念高度共享同一種『安靜籌碼』語意。",
+ "failure_type": "duplicate",
+ "lesson": "『交易行為穩定』類假設容易與既有的周轉率/量能相關因子（不論是否含價格條件）重疊，因為核心都在anchoring於turnover這個欄位；下次測試周轉率衍生指標前，應先掃過庫內所有含turn_*欄位的因子做初篩，而非只挑報酬波動類做對照。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0676",
+ "ts": "2026-08-12T14:15:12"
+}

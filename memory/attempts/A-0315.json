@@ -1,0 +1,88 @@
+{
+ "round": 20,
+ "category": "cashflow_growth_confirmation",
+ "hypothesis": "現金流水準健全且本業獲利同時成長的公司，代表成長是真金白銀而非應計項或業外收益堆疊。雙重條件同時成立需要投資人交叉比對兩張財報，資訊整合成本較高，市場對這類複合確認訊號的定價速度較慢。",
+ "prediction": "sub-train ICIR > 0.45；此複合訊號頭部十分位多頭超額報酬 > 單獨op_income_yoy因子頭部十分位報酬；與F-001相關係數 < 0.5。",
+ "formula": "mul(cs_rank(ts_mean(ocf_ratio,6)), cs_rank(op_income_yoy))",
+ "name_zh": "現金獲利雙確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_mean(ocf_ratio,6)), cs_rank(op_income_yoy))",
+  "fhash": "e642bfde9ca64f35",
+  "sub_train": {
+   "mean_ic": 0.032,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.02,
+   "icir": 0.34,
+   "decay_pct": -5.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.055,
+    "盤整"
+   ],
+   "2016": [
+    0.032,
+    "多頭"
+   ],
+   "2017": [
+    0.036,
+    "多頭"
+   ],
+   "2018": [
+    0.029,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.029
+  },
+  "industry_icir": {
+   "電子": 0.35,
+   "生技": 0.43,
+   "半導體": 0.13,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.027,
+   "short_excess_ann": -0.016
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.31
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.32 < 0.45"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train0.32/val0.34、decay僅-5%(近乎零衰減)，上漲/下跌月同號(0.028/0.029)，多頭腿+2.7%、空頭腿-1.6%方向皆正確，與F-002相關僅0.31不重複。這是本輪內部一致性最好的案例，唯獨絕對強度未達0.45門檻。",
+ "failure_type": "expression_bad",
+ "lesson": "現金獲利雙確認因子的穩健度(decay、regime一致性、leg單調性)全部達標，只差絕對量級，屬於組合方式(rank相乘)可能稀釋訊號的表達問題，值得換成zscore加總等替代組合方式重試，而非判定機制無效。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0315",
+ "ts": "2026-07-21T13:24:55"
+}

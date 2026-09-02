@@ -1,0 +1,87 @@
+{
+ "round": 17,
+ "category": "liquidity_attention_momentum",
+ "hypothesis": "成交金額的持續放大趨勢(而非單日爆量)代表市場關注度與資金流入正系統性提升，這種中期(半年)關注度累積反映機構逐步建倉與資訊逐步擴散的過程；市場對「緩慢但持續」的關注度提升不如單日爆量顯眼，存在反應不足，後續關注度會帶動更多資金與研究覆蓋，形成正向報酬延續。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；與F-008相關係數<0.5(純成交金額趨勢，未涉及價格位置或週轉率)",
+ "formula": "cs_rank(ts_slope(amt_21,6))",
+ "name_zh": "成交關注度攀升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(amt_21,6))",
+  "fhash": "6f21c24e840c4a42",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": 44.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.045,
+    "盤整"
+   ],
+   "2013": [
+    -0.005,
+    "多頭"
+   ],
+   "2014": [
+    0.029,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.017,
+    "多頭"
+   ],
+   "2017": [
+    -0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": -0.011
+  },
+  "industry_icir": {
+   "電子": -0.02,
+   "生技": -0.09,
+   "半導體": -0.02,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.055
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45、換手<0.4。實際sub-train ICIR僅0.03，幾乎無訊號，各產業ICIR皆接近零(僅金融0.13)。amt_21(成交金額)=股價×成交量，其6月斜率天然混入股價上漲趨勢，與純粹「關注度」訊號難以區分，導致此表達式實質上是稀釋版的價格動能，兩者疊加後訊號被抵消或稀釋成雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "成交金額(price×volume)類欄位的趨勢天生混入價格動能，無法乾淨代表「關注度」，是本輪第二個因分母/組成含價格而失敗的案例。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0278",
+ "ts": "2026-07-21T12:47:40"
+}

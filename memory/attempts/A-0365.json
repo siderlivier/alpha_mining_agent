@@ -1,0 +1,92 @@
+{
+ "round": 23,
+ "category": "momentum_continuation",
+ "hypothesis": "長期動能強但近期(一季)動能轉弱的股票，代表法人長線佈局尚未出場、短期回檔提供加碼機會；扣除近期短動能可排除純粹追高的短線資金推升，聚焦真正法人建倉延續的核心信號。",
+ "prediction": "sub-train ICIR>0.4；與C-11(純mom_240)相關係數需<0.7始具增量價值；多頭腿超額報酬>0。",
+ "formula": "sub(cs_rank(mom_240), cs_rank(mom_60))",
+ "name_zh": "建倉未出場",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(mom_240), cs_rank(mom_60))",
+  "fhash": "928f32bae96dc483",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.09,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.177,
+    "盤整"
+   ],
+   "2013": [
+    0.052,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.035,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    -0.025,
+    "盤整"
+   ],
+   "2019": [
+    0.043,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.028
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": 0.26,
+   "半導體": 0.18,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.41,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.12
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.4 < 0.45; validation ICIR 0.09 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.41 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.4剛好壓線達標，但明顯受2012年單一異常值(IC=0.177，早年資料量薄)拉抬；validation崩至0.09(decay 78%)，且多頭腿轉負(-0.016)，直接違反「建倉未出場、多頭腿應為正」的預測，反而空頭腿(0.027)較強。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「長動能強但近期回檔」的建倉延續假說未獲支持，且sub-train達標很可能是早期樣本雜訊造成的假象；長動能組合類factor需檢查是否被單一早期年份主導，而非只看整體sub-train ICIR。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0365",
+ "ts": "2026-07-21T14:03:28"
+}

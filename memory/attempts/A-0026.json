@@ -1,0 +1,87 @@
+{
+ "round": 1,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "行為財務學中的錨定效應顯示，投資人將52週高點當作心理參考價，股價逼近或創新高時因「感覺變貴」而猶豫追價，造成反應不足與緩慢修正（George & Hwang 2004機制），使接近新高的股票後續持續有超額報酬。",
+ "prediction": "產業內rank IC為正，sub-train ICIR>0.35；散戶主導的電子/生技效應強於法人主導的金融；上漲月IC高於下跌月（錨定偏誤主要作用於上檔猶豫）。",
+ "formula": "cs_rank(px_hi252)",
+ "name_zh": "新高錨定慣性",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(px_hi252)",
+  "fhash": "78a645f1f59211e1",
+  "sub_train": {
+   "mean_ic": 0.045,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.074,
+   "icir": 0.57,
+   "decay_pct": -90.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.028,
+    "盤整"
+   ],
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.031,
+    "多頭"
+   ],
+   "2015": [
+    0.08,
+    "盤整"
+   ],
+   "2016": [
+    0.05,
+    "多頭"
+   ],
+   "2017": [
+    0.067,
+    "多頭"
+   ],
+   "2018": [
+    0.061,
+    "盤整"
+   ],
+   "2019": [
+    0.086,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.069,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": 0.45,
+   "生技": 0.38,
+   "半導體": 0.15,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.109,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.93,
+  "turnover_m": 0.38,
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.3 < 0.45"
+ },
+ "diagnosis": "行為機制大致驗證：validation ICIR 0.57遠優於sub-train 0.30(decay為負，樣本外反而更強)，上漲月IC(0.069)遠高於下跌月(0.01)完全符合錨定偏誤預測，電子/生技ICIR最高符合散戶主導預測，多頭腿超額10.9%可交易。唯獨sub-train ICIR 0.30未達0.45門檻於stage4被拒——比較C-15(同樣px_hi252但除以vol_21)sub-train ICIR達0.60，證明只是原始表達式效率不足，非機制錯誤。",
+ "failure_type": "expression_bad",
+ "lesson": "見learnings_additions（規則B：錨定類因子除以波動率大幅提升表達力）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0026",
+ "ts": "2026-07-18T21:37:41"
+}

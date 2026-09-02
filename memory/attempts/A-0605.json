@@ -1,0 +1,90 @@
+{
+ "round": 39,
+ "category": "liquidity_screening_bias_value_orphan",
+ "hypothesis": "機構價值選股模型通常內建最低成交金額門檻以確保部位可執行性，導致淨值便宜但成交清淡的小型股被系統性排除在機構關注範圍之外；這種『流動性篩選偏誤』而非基本面缺陷造成的低估，會隨規模效應或流動性改善事件而修正。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-020相關性<0.5(機制為淨值價值而非獲利率)",
+ "formula": "mul(cs_rank(bp),cs_rank(neg(amt_21)))",
+ "name_zh": "流動性價值孤兒",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp),cs_rank(neg(amt_21)))",
+  "fhash": "b11702803e9038ae",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.031,
+    "多頭"
+   ],
+   "2014": [
+    0.029,
+    "多頭"
+   ],
+   "2015": [
+    0.017,
+    "盤整"
+   ],
+   "2016": [
+    0.079,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    -0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.036,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": 0.57,
+   "半導體": 0.03,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.065,
+   "short_excess_ann": 0.035
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.16,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.55,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.55 > 0.5"
+ },
+ "diagnosis": "預測流動性篩選偏誤使冷門便宜股被低估，sub-train ICIR 0.36已偏弱，validation大幅衰減至0.08(decay 78%)，2019年IC甚至轉負(-0.021)，樣本內效果多為巧合而非穩健關係。最終因與F-008(低調接近新高，ρ=0.55)相關而死——低成交金額x便宜淨值的組合再次收斂到「低調不被炒作」這個既有因子維度。",
+ "failure_type": "duplicate",
+ "lesson": "用neg(amt_21)作為「流動性冷門」代理變量，本輪第二次(繼C-1)與F-008高相關；amt_21類的冷門/低調訊號已被F-008充分捕捉，未來應避免單純用成交金額排序作核心變量。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0605",
+ "ts": "2026-08-12T09:06:34"
+}

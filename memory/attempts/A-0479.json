@@ -1,0 +1,86 @@
+{
+ "round": 31,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "ROE年度改善若同時有真實營運現金流(ocf_ratio)佐證，代表獲利品質紮實而非會計調整所致；市場多數投資人僅關注ROE數字本身，忽略現金含金量，對『現金流確認後的獲利改善』反應遲緩。相較F-012以應計項扣除雜訊，本因子改用現金流水準做正向確認，機制與構造均不同。",
+ "prediction": "sub-train ICIR > 0.45；與F-001/F-012相關性 |ρ| < 0.5；多頭腿年化超額報酬 > 0。",
+ "formula": "mul(cs_rank(delta(roe,12)), cs_rank(ocf_ratio))",
+ "name_zh": "現金流佐證獲利",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(roe,12)), cs_rank(ocf_ratio))",
+  "fhash": "399de06238ec688e",
+  "sub_train": {
+   "mean_ic": 0.052,
+   "icir": 0.77
+  },
+  "validation": {
+   "mean_ic": 0.041,
+   "icir": 0.6,
+   "decay_pct": 22.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.045,
+    "多頭"
+   ],
+   "2015": [
+    0.053,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.063,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    0.069,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.052,
+   "down_months": 0.041
+  },
+  "industry_icir": {
+   "電子": 0.6,
+   "生技": 0.38,
+   "半導體": 0.2,
+   "金融": 0.5
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.049
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.21,
+  "stage2_culprit": {
+   "factor": "F-012",
+   "rho": 0.71,
+   "factor_name": "淨化ROE動能",
+   "factor_desc": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-012 |ρ|=0.71 > 0.5"
+ },
+ "diagnosis": "各項指標穩健：sub-train ICIR 0.77、validation 0.6、衰減僅22%（健康）、多頭腿+4.2%為正，符合預測的大部分門檻，唯獨與F-012 rho=0.71（超過0.5門檻不少，非邊緣案例）。顯示『ROE改善+品質確認』無論品質代理用應計項剔除（F-012）還是現金流水準（本因子），最終收斂到高度相似的訊號空間，機制假設本身可能是對的，但『用不同品質代理來重新包裝ROE動能』這條路已經被F-012佔據。",
+ "failure_type": "duplicate",
+ "lesson": "『ROE年度改善』作為主訊號時，無論疊加哪種品質過濾（應計項、現金流），結果都會收斂到同一訊號空間並與F-012高度相關；此紅海邊界已相對明確，未來若要用ROE動能出因子，應改變主訊號本身（如改用非ROE的獲利指標），而非只換品質過濾腿。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0479",
+ "ts": "2026-07-29T23:46:18"
+}

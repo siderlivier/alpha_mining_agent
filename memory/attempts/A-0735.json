@@ -1,0 +1,90 @@
+{
+ "round": 48,
+ "category": "operating_leverage_overextension_correction",
+ "hypothesis": "當營益率成長速度(ts_slope)明顯快於營收成長速度，代表獲利改善主要來自成本壓縮等一次性效率提升而非真實業務擴張，這種「營運槓桿背離」已提前反映市場樂觀預期，容易面臨估值修正；反之營收成長跟得上獲利改善的公司更健康、更可能延續。",
+ "prediction": "sub-train ICIR>0.45；背離程度低端(訊號正端)多頭腿年化超額>0；下跌月與上漲月IC方向一致。",
+ "formula": "cs_rank(sub(ts_slope(rev_yoy,6), ts_slope(op_margin,6)))",
+ "name_zh": "營收獲利同步股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ts_slope(rev_yoy,6), ts_slope(op_margin,6)))",
+  "fhash": "6598302b725f622e",
+  "sub_train": {
+   "mean_ic": 0.047,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.3,
+   "decay_pct": 31.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.078,
+    "多頭"
+   ],
+   "2015": [
+    0.017,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.07,
+    "多頭"
+   ],
+   "2018": [
+    0.052,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.045,
+   "down_months": 0.035
+  },
+  "industry_icir": {
+   "電子": 0.74,
+   "生技": 0.17,
+   "半導體": 0.38,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.062,
+   "short_excess_ann": 0.085
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.38,
+  "stage2_culprit": {
+   "factor": "F-009",
+   "rho": 0.76,
+   "factor_name": "營收加速趨勢",
+   "factor_desc": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-009 |ρ|=0.76 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.44接近但略低於門檻，本可視為邊緣通過的假說，但與F-009的相關性高達0.76(全輪最高)，顯示op_margin slope這個相減項幾乎沒有貢獻邊際訊息，複合因子事實上主要由rev_yoy slope單項驅動；兩腿皆為正(0.062/0.085)也支持這是抓到共同成長beta而非『背離』差異。",
+ "failure_type": "duplicate",
+ "lesson": "用兩個slope項相減來構造『背離』訊號時，若其中一項方差主導整體，複合結果會退化成單項因子的近似複製品。下次構造相減型背離因子前，應先檢查兩個子項各自與現有庫內同源因子的相關性，確認相減後仍保有獨立訊息。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0735",
+ "ts": "2026-08-14T00:25:09"
+}

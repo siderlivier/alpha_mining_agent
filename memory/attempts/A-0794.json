@@ -1,0 +1,90 @@
+{
+ "round": 52,
+ "category": "semiconductor_margin_trough/半導體限定",
+ "hypothesis": "半導體產業具強烈庫存/報價循環，毛利率脫離近12個月低點後回升，代表產業進入去化尾聲、報價與稼動率同步回溫，市場往往等到財報明確轉佳才反應，對「已確認回升但尚未達長期高點」的中段訊號存在低估。",
+ "prediction": "sub-train ICIR>0.45(半導體產業子樣本)；validation decay<50%(短窗口12月降低景氣循環過擬合風險)；多頭腿年化超額>0",
+ "formula": "cs_rank(sdiv(gross_margin, ts_min(gross_margin,12)))",
+ "name_zh": "半導體毛利復甦",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(gross_margin, ts_min(gross_margin,12)))",
+  "fhash": "3cbc7f0ca6b217f6",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.72
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.22,
+   "decay_pct": 69.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.046,
+    "盤整"
+   ],
+   "2013": [
+    0.016,
+    "多頭"
+   ],
+   "2014": [
+    0.049,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.055,
+    "多頭"
+   ],
+   "2017": [
+    0.05,
+    "多頭"
+   ],
+   "2018": [
+    -0.018,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.033,
+   "down_months": 0.029
+  },
+  "industry_icir": {
+   "電子": 0.51,
+   "生技": 0.44,
+   "半導體": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.17,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.29
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.22 < 0.3; validation 衰減 69% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR 0.72遠超預測門檻，但validation崩至0.22、衰減69%(超過50%過擬合門檻)，在stage4被剔除。更關鍵的是industry_icir顯示半導體本身只有0.16，是四產業中最低，反而電子(0.51)、生技(0.44)更強——這直接推翻了『半導體景氣循環特定機制』的因果故事，顯示訓練期的高ICIR很可能是特定歷史景氣週期(2013-2017)的過擬合，而非半導體產業結構性訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "宣稱『產業特定循環機制』的候選，應同時檢查industry_icir是否真的在目標產業最高；本案目標產業(半導體)反而最弱，顯示所謂的產業因果敘事站不住腳，訓練期高分只是特定景氣週期的擬合。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0794",
+ "ts": "2026-08-14T01:18:09"
+}

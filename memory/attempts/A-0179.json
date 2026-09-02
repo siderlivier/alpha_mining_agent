@@ -1,0 +1,92 @@
+{
+ "round": 11,
+ "category": "volatility_compression_reversion",
+ "hypothesis": "當個股短期波動度(vol_21)明顯低於半年波動度(vol_126),代表近期不確定性正在收斂、消息面趨於平靜,這種波動壓縮常發生在重大不確定性事件(訴訟、法規、財報疑慮)落幕後。多數投資人仍錨定過去的高波動印象,對『風險已解除』訊息消化慢,股價修正不足。",
+ "prediction": "sub-train ICIR>0.45;與F-005(neg vol_126)相關係數<0.5(機制是波動壓縮而非長期低波動水準)",
+ "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+ "name_zh": "波動壓縮訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 月換手 0.67 > 0.4"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且與F-005相關係數<0.5，實際sub-train ICIR僅0.36未達標，validation驟降至0.08(decay 78%)，換手0.67過高；與F-005相關性預測確實通過(rho 0.27<0.5)，證明『波動壓縮』與『長期低波動水準』機制可區分，但訊號本身不穩定。上漲月IC(0.024)明顯高於下跌月(0.009)，更像順勢型訊號而非『風險解除後修正』的事件驅動型。",
+ "failure_type": "expression_bad",
+ "lesson": "vol_21/vol_126比值未平滑導致高換手與過擬合；下次測波動壓縮類假設應先對比值做移動平均，或改用事件研究法(壓縮後N個月報酬)而非連續打分，更貼近『事件落幕』假設本質。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0179",
+ "ts": "2026-07-21T11:33:49"
+}

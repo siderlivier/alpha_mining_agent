@@ -1,0 +1,90 @@
+{
+ "round": 55,
+ "category": "income_growth_style_orphan",
+ "hypothesis": "市場的風格分類習慣將「高股利」歸為價值型、「營收成長」歸為成長型，兩者分屬不同投資人群體與篩選器，導致同時具備高殖利率與營收成長動能的公司（GARP型收益成長股）因不符合單一風格標籤而被兩邊機構篩選器都忽略，形成風格孤兒股的錯誤定價。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-003、F-014、F-015相關性均需|ρ|<0.5。",
+ "formula": "mul(cs_rank(div_yield), cs_rank(rev_yoy))",
+ "name_zh": "收益成長孤兒股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(div_yield), cs_rank(rev_yoy))",
+  "fhash": "5d642f71c19c1126",
+  "sub_train": {
+   "mean_ic": 0.069,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.087,
+   "icir": 1.21,
+   "decay_pct": -119.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.033,
+    "多頭"
+   ],
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.089,
+    "盤整"
+   ],
+   "2016": [
+    0.101,
+    "多頭"
+   ],
+   "2017": [
+    0.083,
+    "多頭"
+   ],
+   "2018": [
+    0.08,
+    "盤整"
+   ],
+   "2019": [
+    0.094,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.08,
+   "down_months": 0.061
+  },
+  "industry_icir": {
+   "電子": 0.79,
+   "生技": 0.59,
+   "半導體": 0.4,
+   "金融": 0.31
+  },
+  "legs": {
+   "long_excess_ann": 0.062,
+   "short_excess_ann": 0.058
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.36,
+  "stage2_culprit": {
+   "factor": "F-018",
+   "rho": 0.67,
+   "factor_name": "低波動隱藏成長股",
+   "factor_desc": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-018 |ρ|=0.67 > 0.5"
+ },
+ "diagnosis": "訓練/驗證ICIR皆強(0.55→1.21)，多頭腿報酬0.062為正，是本輪表現最強的候選之一；死因是與F-018相關0.67，div_yield×rev_yoy一旦包含rev_yoy成長成分，就難以繞開F-018這個成長因子群，是本輪第三個因rev_yoy相關而死的案例（連同C-3, C-4），同時也呼應C-13的accruals紅海現象。",
+ "failure_type": "duplicate",
+ "lesson": "rev_yoy驅動的訊號幾乎必然落入F-013/F-018紅海，不論搭配融資、股利或周轉率哪個第二軸。",
+ "lesson_confidence": "cross_validated",
+ "verdict": "rejected_stage2",
+ "id": "A-0848",
+ "ts": "2026-08-18T23:46:33"
+}

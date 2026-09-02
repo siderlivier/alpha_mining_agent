@@ -1,0 +1,84 @@
+{
+ "round": 26,
+ "category": "earnings_revenue_divergence_quality",
+ "hypothesis": "當營收成長率明顯超過EPS成長率，代表營收成長未能轉化為每股獲利成長，可能來自毛利壓縮、業外虧損或股本稀釋等獲利品質惡化因素；市場容易被亮眼營收數字吸引而忽略獲利未同步成長的警訊，此落差對未來報酬有負向預測力（故neg後方向為pos）。",
+ "prediction": "sub-train ICIR>0.40；多頭腿超額報酬>0；與F-001、F-003相關係數<0.5（金融股因增資/備抵提列結構可能反應更明顯，但不作為主要通過依據）。",
+ "formula": "cs_rank(neg(sub(rev_yoy, eps_yoy)))",
+ "name_zh": "營收獲利落差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(rev_yoy, eps_yoy)))",
+  "fhash": "922c51267b24217b",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.52,
+   "decay_pct": -117.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.026,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.024,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.37,
+   "半導體": -0.18,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.015,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.31,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.24未達0.40門檻遭stage1淘汰，但validation ICIR反而大幅走高至0.52（decay -117%），落差極大。無法排除是2018-2019財報揭露或市場結構改變讓機制在後期變強，也可能只是訓練期雜訊；現有gate機制（先卡sub-train）會直接淘汰這類「訓練期弱、驗證期強」的候選而不進一步檢視。",
+ "failure_type": "expression_bad",
+ "lesson": "當validation顯著優於sub-train且落差極大時，不能單純判定假設無效，也要考慮是否為訓練窗期選取或機制隨時間增強所致；此類case值得標記為「窗口敏感」而非直接判死，但單一案例尚不足以下通則。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0409",
+ "ts": "2026-07-28T18:54:36"
+}

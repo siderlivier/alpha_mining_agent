@@ -1,0 +1,83 @@
+{
+ "round": 67,
+ "category": "trend_quality_smoothness",
+ "hypothesis": "法人默默進貨會產生平滑、低雜訊的價格推升（趨勢對時間的 R² 高），散戶或消息驅動行情則呈鋸齒狀。朝 52 週高點的高 R² 上升趨勢是耐心知情買盤尚未結束的指紋；市場對價格『水準』有反應，卻不對路徑的『品質/平滑度』定價，低估了平滑度所隱含的資訊含量。",
+ "prediction": "sub-train ICIR > 0.35；多頭腿年化超額 > 0；與 F-008 之 |ρ| < 0.5；同斜率下高 R² 組報酬顯著高於低 R² 組。",
+ "formula": "cs_rank(mul(ts_rsq(px_hi252,12), ts_slope(px_hi252,12)))",
+ "name_zh": "平滑趨勢腳印",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(ts_rsq(px_hi252,12), ts_slope(px_hi252,12)))",
+  "fhash": "2b9e0fbe923875da",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.46,
+   "decay_pct": -158.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.013,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.045,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.002,
+    "多頭"
+   ],
+   "2018": [
+    0.029,
+    "盤整"
+   ],
+   "2019": [
+    0.043,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.25,
+   "半導體": 0.21,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.082
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.18 未達標，validation 0.46 明顯較好(decay -158%)。多頭腿+4.9% 為正但短腿+8.2% 更強、cond_ic 順勢(0.025 vs 0.012)。公式 mul(ts_rsq, ts_slope) 把『平滑度』與『斜率大小』乘在一起，無法檢驗假設宣稱的『同斜率下高 R² 更好』。台股裸動能弱，趨勢品質是否有增額 alpha 尚未被乾淨測到。",
+ "failure_type": "expression_bad",
+ "lesson": "要驗證『路徑品質(R²)被低估』，須先在控制斜率的條件下比較高/低 R² 組報酬，或把 R² 當既有動能因子的調節閘門，而不是直接與斜率相乘成複合體。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1020",
+ "ts": "2026-09-02T01:09:58"
+}

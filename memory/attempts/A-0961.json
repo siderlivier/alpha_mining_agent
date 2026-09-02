@@ -1,0 +1,88 @@
+{
+ "round": 63,
+ "category": "emerging_attention_quality_confirmation",
+ "hypothesis": "與「低關注度」邏輯相反，成交金額「加速上升」(delta)搭配現金流真實(ocf_ratio高)，代表資金剛開始注意到財務體質良好的公司，此為法人流入初期階段尚未完全反映在股價，捕捉「被發現初期」窗口，避開F-019/F-020已飽和的靜態低關注度紅海。",
+ "prediction": "sub-train ICIR>0.4；與F-019(sp×ocf_ratio)、F-020(op_margin×neg(amt_21))截面相關|ρ|<0.5。",
+ "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(ocf_ratio))",
+ "name_zh": "資金初嗅現金股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(ocf_ratio))",
+  "fhash": "51990fb231268e47",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.04,
+   "decay_pct": 72.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.044,
+    "盤整"
+   ],
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    0.019,
+    "盤整"
+   ],
+   "2016": [
+    0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": 0.1,
+   "生技": -0.02,
+   "半導體": 0.11,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.011,
+   "short_excess_ann": 0.024
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.41,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4嚴重高估：sub-train僅0.13，validation更降到0.04（decay 72%）。『資金初嗅』假設（成交金額加速上升+現金流真實=法人剛開始注意）在數據上幾乎不存在，各年IC正負交錯無穩定模式，非單純表達問題。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "成交金額的『變化率』(delta)本身雜訊很大，不足以作為『法人剛開始關注』的有效代理；量能類訊號若要捕捉資金流入初期，可能需要更結構化的代理（如三大法人買賣超變化），而非單純成交金額加速度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0961",
+ "ts": "2026-08-27T21:36:00"
+}

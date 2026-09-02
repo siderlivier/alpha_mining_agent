@@ -1,0 +1,87 @@
+{
+ "round": 48,
+ "category": "attention_discovery_migration",
+ "hypothesis": "成交金額的「加速上升」(delta(amt_21,6))代表市場關注度正從冷門過渡到熱門的早期階段，資訊仍在擴散、尚未被完全定價；這與F-008鎖定的「已經高關注但周轉率仍低」的成熟狀態不同，捕捉的是「即將被發現」的更早期訊號。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；月換手率(以delta,6平滑)應<0.4。",
+ "formula": "cs_rank(delta(amt_21,6))",
+ "name_zh": "關注度崛起初期股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(amt_21,6))",
+  "fhash": "c3dadc3a4505e3c5",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.03
+  },
+  "validation": {
+   "mean_ic": -0.014,
+   "icir": -0.16,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.021,
+    "盤整"
+   ],
+   "2013": [
+    -0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.009,
+    "多頭"
+   ],
+   "2015": [
+    0.018,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.006,
+    "盤整"
+   ],
+   "2019": [
+    -0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.001,
+   "down_months": -0.018
+  },
+  "industry_icir": {
+   "電子": -0.07,
+   "生技": -0.11,
+   "半導體": -0.01,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.06
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.4,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且多頭腿為正，實際icir為-0.03（接近零/略負），多數年份符號為負或接近零，『關注度加速上升=早期發現訊號』完全未獲支持。有趣的是這與C-1的『關注度水位低』訊號（有效但duplicate）形成對比。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "關注度的『加速度』(delta(amt,6))本身不具預測力，與C-1顯示『關注度水準低』搭配獲利品質有效形成對照——關注度這個維度可能只在『靜態水位』上有用，而非『變化速度』上有用。下次若仍想用關注度變化量，應搭配水位分組(如僅在低frgn_ratio子集內測delta)而非全市場單獨使用。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0736",
+ "ts": "2026-08-14T00:25:09"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 43,
+ "category": "sequential_momentum_underreaction",
+ "hypothesis": "市場高度關注月營收年增率(yoy)這類被廣泛追蹤的數字，卻對月增率(mom)本身的連續加速趨勢反應較慢，因為mom序列雜訊大、較少被系統性追蹤；當mom連續數月呈現加速上升趨勢，代表真正的環比動能轉強，往往領先yoy數字轉強前就已開始，形成資訊落差。",
+ "prediction": "sub-train ICIR>0.45；與F-009相關度<0.5（用mom而非yoy）；電子產業industry_icir相對突出（>0.5）。",
+ "formula": "cs_rank(ts_slope(rev_mom,6))",
+ "name_zh": "營收環比加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_mom,6))",
+  "fhash": "be561bad7ba0daf1",
+  "sub_train": {
+   "mean_ic": -0.006,
+   "icir": -0.11
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.31,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.012,
+    "盤整"
+   ],
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    -0.024,
+    "盤整"
+   ],
+   "2016": [
+    -0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": -0.022
+  },
+  "industry_icir": {
+   "電子": -0.14,
+   "生技": -0.05,
+   "半導體": 0.13,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.018,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.94,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "你預測電子產業icir應突出(>0.5)，實際為-0.14，方向完全相反；sub-train ICIR也是負值(-0.11)，validation才翻正(0.31)，訊號不穩定，且換手率0.62超過你自訂的0.4門檻。你對「電子業對mom反應慢」的先驗判斷落空。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "月營收環比加速趨勢在電子產業未展現預期的資訊落差效應，方向也不穩；月頻財務斜率類因子天生換手率偏高(0.62)，即使訊號存在也可能因交易成本不可行。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0664",
+ "ts": "2026-08-12T14:04:06"
+}

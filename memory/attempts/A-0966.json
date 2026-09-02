@@ -1,0 +1,25 @@
+{
+ "round": 63,
+ "category": "moat_quality_confirmation",
+ "hypothesis": "高毛利率「搭配」低營收波動度，代表獲利來自結構性競爭優勢(護城河)而非景氣循環運氣；市場常擔心高毛利股是週期甜蜜點而給予估值折價，但若同時營收穩定，代表可持續競爭優勢，此組合訊號未被正確辨識。",
+ "prediction": "sub-train ICIR>0.4；與F-004(neg(ts_std(gross_margin,12)))、F-007(neg(ts_std(rev_mom,6)))截面相關|ρ|<0.5。",
+ "formula": "mul(cs_rank(gross_margin), cs_rank(neg(ts_std(rev_mom,6))))",
+ "name_zh": "護城河穩健股",
+ "direction": "pos",
+ "complexity": {
+  "depth": null,
+  "fields": null
+ },
+ "result": {
+  "formula": "mul(cs_rank(gross_margin), cs_rank(neg(ts_std(rev_mom,6))))",
+  "verdict": "rejected_syntax",
+  "reason": "[too_deep] 運算子深度 4 超過上限 3"
+ },
+ "diagnosis": "假設（高毛利率+低營收波動=護城河）未被測試——同樣是四層巢狀(ts_std(rev_mom,6)外包neg再cs_rank，與另一cs_rank相乘)在深度4被rejected_syntax擋下。",
+ "failure_type": "expression_bad",
+ "lesson": "『穩定度』類特徵（neg(ts_std(x,n))）搭配另一cs_rank相乘同樣容易踩到深度4；若ts_std本身已是常用既有欄位（如F-004/F-007已有現成的ts_std特徵），應優先直接引用既有欄位而非重新巢狀組裝，同時降低深度也降低與F-004/F-007的意外撞期風險。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_syntax",
+ "id": "A-0966",
+ "ts": "2026-08-27T21:36:00"
+}

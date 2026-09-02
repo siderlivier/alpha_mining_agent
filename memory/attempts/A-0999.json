@@ -1,0 +1,86 @@
+{
+ "round": 66,
+ "category": "revenue_growth_persistence",
+ "hypothesis": "月營收年增率連續為正的月數，反映需求端結構性擴張而非單月拉貨。台股散戶與動能投資人只看最新一期營收年增的『數字大小』，不追蹤『已連續多久』；機構對長期營收動能的定價需要多期確認。連續正成長月數長代表訂單能見度高、營運槓桿逐步發酵，市場對這種慢變數定價不足，形成持續性（非反轉）超額。",
+ "prediction": "standalone 月均 rank IC > 0.03；sub-train ICIR > 0.45；2012-2019 逐年 IC 全為正；decay < 15%；多頭腿年化超額 > 0 且大於空頭腿絕對值；與 F-009/F-011/F-013 之 |ρ| < 0.5（0.5-0.6 進殘差化）。",
+ "formula": "cs_rank(streak_true(greater(rev_yoy,0),24))",
+ "name_zh": "營收連正月數",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(streak_true(greater(rev_yoy,0),24))",
+  "fhash": "b9b9414ded42ebe2",
+  "sub_train": {
+   "mean_ic": 0.052,
+   "icir": 0.71
+  },
+  "validation": {
+   "mean_ic": 0.038,
+   "icir": 0.54,
+   "decay_pct": 24.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.031,
+    "多頭"
+   ],
+   "2015": [
+    0.053,
+    "盤整"
+   ],
+   "2016": [
+    0.059,
+    "多頭"
+   ],
+   "2017": [
+    0.058,
+    "多頭"
+   ],
+   "2018": [
+    0.043,
+    "盤整"
+   ],
+   "2019": [
+    0.033,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.053,
+   "down_months": 0.033
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.45,
+   "半導體": 0.2,
+   "金融": 0.42
+  },
+  "legs": {
+   "long_excess_ann": 0.06,
+   "short_excess_ann": 0.025
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.15,
+  "stage2_culprit": {
+   "factor": "F-003",
+   "rho": 0.75,
+   "factor_name": "風格孤兒股",
+   "factor_desc": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-003 |ρ|=0.75 > 0.5"
+ },
+ "diagnosis": "預測命中因子本體:standalone 月均 IC 0.052(>0.03)、sub-train ICIR 0.71(>0.45)、逐年全為正、多頭腿 +6% 且大於空頭腿絕對值——這些都對。預測失準處:decay 24% 高於預期的 <15%(仍可接受);更關鍵是相關性檢查點名錯對象——你只比對 F-009/F-011/F-013(營收動能族),實際卻與 F-003『風格孤兒股(便宜+營收成長)』ρ=0.75。連正月數的經濟內涵不是『營收動能』而是『長期穩定成長股』,自然落進價值×成長的紅海。",
+ "failure_type": "duplicate",
+ "lesson": "營收『連續正成長月數』因子雖表現優異,但本質是在挑長期穩定成長股,與庫內『價值×成長』因子高度共線。下次設計成長持續性因子時,相關性預檢名單必須納入價值×成長與品質族,或直接對 F-003 殘差化後再評估 standalone。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "from_queue": "Q-034",
+ "id": "A-0999",
+ "ts": "2026-09-02T00:51:49"
+}

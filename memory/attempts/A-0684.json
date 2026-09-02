@@ -1,0 +1,90 @@
+{
+ "round": 45,
+ "category": "low_risk_growth_mismatch",
+ "hypothesis": "低波動且營收成長強的股票長期被市場誤判為『無聊股』而低估：波動度是散戶對『刺激性』的代理，缺乏話題性導致成長訊號被忽視。此版本改用半年波動(vol_63)與三月平滑營收年增(rev_yoy_ma3)取代原始月頻訊號以降低換手，並在全市場（非限定電子）驗證機制是否泛化。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4（原電子限定版因換手超標卡關）；全市場多頭腿年化超額報酬>0；與F-018相關性0.5~0.7區間視為獨立跨產業訊號，>0.85視為重複。",
+ "formula": "mul(cs_rank(neg(vol_63)), cs_rank(rev_yoy_ma3))",
+ "name_zh": "平滑低波成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy_ma3",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(vol_63)), cs_rank(rev_yoy_ma3))",
+  "fhash": "f61ad8c2f8b58d59",
+  "sub_train": {
+   "mean_ic": 0.081,
+   "icir": 0.81
+  },
+  "validation": {
+   "mean_ic": 0.107,
+   "icir": 0.99,
+   "decay_pct": -21.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.082,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.09,
+    "盤整"
+   ],
+   "2016": [
+    0.09,
+    "多頭"
+   ],
+   "2017": [
+    0.092,
+    "多頭"
+   ],
+   "2018": [
+    0.126,
+    "盤整"
+   ],
+   "2019": [
+    0.089,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.1,
+   "down_months": 0.062
+  },
+  "industry_icir": {
+   "電子": 1.02,
+   "生技": 0.82,
+   "半導體": 0.54,
+   "金融": 0.39
+  },
+  "legs": {
+   "long_excess_ann": 0.068,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.27,
+  "stage2_culprit": {
+   "factor": "F-018",
+   "rho": 0.81,
+   "factor_name": "低波動隱藏成長股",
+   "factor_desc": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-018 |ρ|=0.81 > 0.5"
+ },
+ "diagnosis": "ICIR預測大幅低估實際表現（預測>0.45，實際sub-train 0.81/validation 0.99，decay為負代表驗證期反而更強），換手率與多頭腿方向也都對；核心誤判在相關性帶：預期0.5~0.7視為獨立訊號、>0.85才算重複，但實際|ρ|=0.81即被stage2判定重複（系統門檻是0.5非0.85）。半年波動與三月平滑營收年增只是把F-018的訊號用不同頻率重新表達，並未改變其經濟本質。",
+ "failure_type": "duplicate",
+ "lesson": "對『低波動+成長』這類雙變數rank-multiply組合，換用更長平滑窗口（vol_63、ma3）不足以與F-018脫鉤；若要繼續此方向，需換掉其中一條腿的資料源（例如以非財務面的關注度代理取代波動度），而非只調整既有兩個變數的頻率。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0684",
+ "ts": "2026-08-12T14:25:46"
+}

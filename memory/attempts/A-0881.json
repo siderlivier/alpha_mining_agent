@@ -1,0 +1,93 @@
+{
+ "round": 58,
+ "category": "biotech_margin_revenue_quality",
+ "hypothesis": "生技股從研發期轉向商業化期的關鍵訊號是毛利率結構性回升；當毛利改善同時股價已有季度動能確認，代表部分知情資金已開始反應，但因生技股資訊不對稱高、分析師覆蓋率低，訊號擴散仍需時間，形成可持續數月的報酬延續。",
+ "prediction": "生技子樣本 sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；預期生技子樣本industry_icir高於半導體與金融兩組。",
+ "formula": "mul(cs_rank(delta(op_margin,6)), cs_rank(mom_60))",
+ "name_zh": "生技毛利轉骨股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_60",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(op_margin,6)), cs_rank(mom_60))",
+  "fhash": "07a545ef12f8846c",
+  "sub_train": {
+   "mean_ic": 0.042,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.042,
+   "icir": 0.4,
+   "decay_pct": -32.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.154,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.122,
+    "盤整"
+   ],
+   "2016": [
+    0.048,
+    "多頭"
+   ],
+   "2017": [
+    -0.002,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.072,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.044,
+   "down_months": 0.037
+  },
+  "industry_icir": {
+   "電子": 0.36,
+   "生技": 0.23,
+   "半導體": 0.14,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.07,
+   "short_excess_ann": 0.059
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.48
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.31 < 0.45"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "distill_failed": true,
+ "id": "A-0881",
+ "ts": "2026-08-19T00:25:17"
+}

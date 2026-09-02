@@ -1,0 +1,87 @@
+{
+ "round": 16,
+ "category": "book_value_reappraisal",
+ "hypothesis": "淨值股價比相對於自身兩年常態水準出現明顯偏高，代表個股相對「自己的歷史估值区間」被錯殺（非跨產業比較，避開產業結構差異雜訊），錨定效應使市場投資人仍以舊有估值印象定價，直到財報或事件催化才會修正，形成價值回歸機會；此為個股內時序錨定而非F-002(bp×roe跨股比較)的跨截面價值判斷。",
+ "prediction": "sub-train ICIR>0.45；與F-002相關係數|ρ|<0.5（因F-002強調ROE交乘,本因子純粹是bp的自身時序偏離）；金融產業因淨值變動平緩，industry_icir可望相對穩定但不強求最高。",
+ "formula": "cs_rank(sub(bp, ts_med(bp,12)))",
+ "name_zh": "淨值比回升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(bp, ts_med(bp,12)))",
+  "fhash": "50a63becef5688d6",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.28
+  },
+  "validation": {
+   "mean_ic": 0.007,
+   "icir": 0.05,
+   "decay_pct": 82.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.083,
+    "多頭"
+   ],
+   "2014": [
+    0.09,
+    "多頭"
+   ],
+   "2015": [
+    0.041,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    -0.022,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": 0.058
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.07,
+   "半導體": 0.07,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": -0.045
+  },
+  "coverage": 0.65,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": -0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.28 < 0.45; validation ICIR 0.05 < 0.3; validation 衰減 82% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測與F-002相關性<0.5成立(因提前在stage4被拒未進入stage2驗證)，但核心「個股自身估值回歸」假說未獲支持：sub-train ICIR僅0.28，逐年IC從2013(0.083)、2014(0.09)高峰持續遞減至2017轉負(-0.022)，2018-2019趨近於零；多頭腿超額報酬為負(-1.1%)，代表此因子在台股無法透過做多兌現。與C-13(sp版本)呈現幾乎相同的時間衰退曲線。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「個股相對自身歷史估值分位」類回歸假說若只在2013-2014顯著、之後系統性衰退，應視為反映特定市場週期(後金融海嘯修復期)而非持續性定價錯置機制，與C-13同屬一類失敗。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0254",
+ "ts": "2026-07-21T12:37:07"
+}

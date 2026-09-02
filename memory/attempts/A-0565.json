@@ -1,0 +1,91 @@
+{
+ "round": 37,
+ "category": "electronics_inventory_destocking_turn",
+ "hypothesis": "電子/半導體業存貨去化循環中，營收動能與毛利率因產能利用率低、殺價競爭同步走弱；當短期營收動能與毛利率同時由降轉升，代表去化循環真正結束、訂單與價格同步回溫，這是比單一指標更可信的落底訊號，但分析師常錨定前期下滑趨勢延遲上修，形成系統性低估。",
+ "prediction": "電子/半導體industry_icir>全市場平均且>0.5；sub-train ICIR>0.45；多頭腿年化超額報酬>0；月換手率<0.4。",
+ "formula": "mul(cs_rank(delta(rev_mom,3)), cs_rank(delta(gross_margin,3)))",
+ "name_zh": "電子去化落底",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(rev_mom,3)), cs_rank(delta(gross_margin,3)))",
+  "fhash": "2baa98a0e0a87517",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.35,
+   "decay_pct": 9.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.034,
+    "盤整"
+   ],
+   "2013": [
+    0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.029
+  },
+  "industry_icir": {
+   "電子": 0.51,
+   "生技": 0.16,
+   "半導體": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.023,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.75,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.17
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.38 < 0.45; 月換手 0.75 > 0.4"
+ },
+ "diagnosis": "電子產業industry_icir 0.51符合預測(>0.5且高於其他產業)，確認去化落底機制集中於電子業的假設；但sub-train ICIR 0.38未達0.45門檻，且月換手率0.75遠超0.4上限——兩個短窗(delta,3)訊號相乘放大了雜訊與換手，稀釋了整體統計效力，即便產業層級方向正確。",
+ "failure_type": "expression_bad",
+ "lesson": "疊加兩個短窗(3個月)delta訊號並相乘，經濟邏輯正確但換手率會顯著放大；應先對各子項做平滑(如ts_mean或拉長delta窗口)再合成，以控制換手率在門檻內。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0565",
+ "ts": "2026-07-30T01:03:36"
+}

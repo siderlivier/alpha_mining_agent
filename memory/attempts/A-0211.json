@@ -1,0 +1,87 @@
+{
+ "round": 13,
+ "category": "attention_diffusion_momentum",
+ "hypothesis": "依漸進資訊擴散理論(Hong & Stein)，個股成交金額的持續上升趨勢（而非單日爆量）代表新資訊正透過關注力有限的投資人群體緩慢擴散；此擴散過程慢，伴隨的正向重新評價會延續數月而非立即反映完畢。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；電子股(法人研究覆蓋最集中)industry_icir應相對其他產業更高。",
+ "formula": "cs_rank(ts_slope(amt_21,6))",
+ "name_zh": "關注度緩步擴散",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(amt_21,6))",
+  "fhash": "6f21c24e840c4a42",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": 44.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.045,
+    "盤整"
+   ],
+   "2013": [
+    -0.005,
+    "多頭"
+   ],
+   "2014": [
+    0.029,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.017,
+    "多頭"
+   ],
+   "2017": [
+    -0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": -0.011
+  },
+  "industry_icir": {
+   "電子": -0.02,
+   "生技": -0.09,
+   "半導體": -0.02,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.055
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45、電子產業表現最佳、多頭腿超額>0，三項全部落空：ICIR僅0.03，電子industry_icir為-0.02（負），多頭腿超額-0.008為負而空頭腿+0.055才是主要來源，顯示成交金額持續走升更像是關注過熱／短線炒作訊號而非Hong & Stein式漸進擴散正報酬。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「成交金額持續上升=資訊緩步擴散=正報酬」在台股個股層級未獲支持，實際空頭腿貢獻更大暗示方向可能相反；下次若再測關注度擴散類假說，應先檢查反向(neg)是否才是正確方向，而非預設漸進擴散理論原始方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0211",
+ "ts": "2026-07-21T11:59:28"
+}

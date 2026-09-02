@@ -1,0 +1,94 @@
+{
+ "round": 22,
+ "category": "borrow_supply_short_crowding",
+ "hypothesis": "借券量主要來自避險與收益增強策略（如可轉債避險、ETF成分股借出），未必代表方向性放空意圖；當借券供給量相對實際融券餘額偏高時，顯示真正具資訊優勢、方向性放空的部位占比其實偏低，該股面臨的知情放空下跌壓力有限。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；非缺失樣本覆蓋率需>0.4。",
+ "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+ "name_zh": "借券供給寬鬆",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+  "fhash": "ec7f5f8e3d40146e",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.26,
+   "decay_pct": 19.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.069,
+    "盤整"
+   ],
+   "2013": [
+    0.04,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.039,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.2,
+   "半導體": 0.18,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.43,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.62,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "除sub-train ICIR 0.32略低於0.45門檻外，其餘表現全面優異：validation ICIR 0.26、decay僅19%(本輪最低過擬合跡象之一)、逐年IC八年全部同號為正、多頭腿超額0.042>0完全命中預測、coverage 0.43剛好過門檻。最終死因是與庫內F-008(低調接近新高)相關係數0.62，屬stage2的duplicate淘汰，而非機制或表達問題。",
+ "failure_type": "duplicate",
+ "lesson": "借券供給相對融券餘額的借券寬鬆訊號本質穩健(八年同號、低decay)，但與F-008系列低調/低關注度強勢股的訊號空間重疊；此紅海邊界值得記錄，未來同類因子應先檢查與F-008相關係數再投入評估資源。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0347",
+ "ts": "2026-07-21T13:51:27"
+}

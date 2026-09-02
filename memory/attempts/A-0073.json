@@ -1,0 +1,84 @@
+{
+ "round": 4,
+ "category": "earnings_consistency_quality",
+ "hypothesis": "當公司本業成長(op_income_yoy)與每股盈餘成長(eps_yoy)長期同步變動（高時序相關），代表獲利品質純淨、不受業外損益或稅務認列干擾EPS；市場缺乏簡單工具衡量這種「一致性」，尤其生技業業外收益雜訊多，一致度高的公司因此被系統性低估。",
+ "prediction": "sub-train ICIR>0.45；一致度最高20%組合之未來報酬應顯著高於最低20%組，且生技產業內ICIR應相對更高（業外雜訊過濾效果更明顯）",
+ "formula": "cs_rank(ts_corr(op_income_yoy, eps_yoy, 12))",
+ "name_zh": "獲利一致性",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(op_income_yoy, eps_yoy, 12))",
+  "fhash": "bf6fe2e7f1e7f8c1",
+  "sub_train": {
+   "mean_ic": -0.009,
+   "icir": -0.12
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.1,
+    "多頭"
+   ],
+   "2014": [
+    -0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.002,
+    "多頭"
+   ],
+   "2018": [
+    -0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": -0.021
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": -0.36,
+   "半導體": -0.06,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.021,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『生技產業因業外雜訊多，一致度濾網效果應更明顯(ICIR應相對更高)』，結果完全相反——生技產業ICIR為-0.36，四個產業中最負，整體sub-train ICIR僅-0.12接近零。訊號方向與強度都不支持『一致性=品質』的假設，尤其在原本預期效果最強的產業反而最差，直接打臉機制假設。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『時序相關性=獲利品質純淨』這個機制在台股（至少生技業）不成立，時序相關可能只反映公司獲利結構單純（如業外少的傳產股），而非市場低估的品質溢酬；不建議再用ts_corr(op_income_yoy, eps_yoy)類指標作為品質代理，除非有新的機制論述。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0073",
+ "ts": "2026-07-19T17:21:03"
+}

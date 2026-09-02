@@ -1,0 +1,79 @@
+{
+ "round": 20,
+ "category": "margin_revenue_synchronization",
+ "hypothesis": "當營收成長與毛利率呈現正向同步（而非以價換量、犧牲毛利衝營收），代表公司具備真正的定價權與需求驅動成長。此同步性訊號統計上需要較長窗口才具效力，先前12個月版本因僅約4個獨立季度觀測而效力不足，改用24個月窗口應能取得足夠統計力。",
+ "prediction": "sub-train ICIR > 0.45（相較先前12個月窗口版本已知效力不足失敗，24個月窗口應顯著改善）；validation decay < 40%。",
+ "formula": "cs_rank(ts_corr(gross_margin, rev_yoy, 24))",
+ "name_zh": "量價同步成長",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(gross_margin, rev_yoy, 24))",
+  "fhash": "501ad375b4ef2696",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.2
+  },
+  "validation": {
+   "mean_ic": -0.016,
+   "icir": -0.34,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2014": [
+    -0.034,
+    "多頭"
+   ],
+   "2015": [
+    -0.003,
+    "盤整"
+   ],
+   "2016": [
+    -0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    -0.024,
+    "盤整"
+   ],
+   "2019": [
+    -0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": -0.023
+  },
+  "industry_icir": {
+   "電子": -0.35,
+   "生技": -0.25,
+   "半導體": 0.09
+  },
+  "legs": {
+   "long_excess_ann": -0.012,
+   "short_excess_ann": -0.024
+  },
+  "coverage": 0.6,
+  "turnover_m": 0.12,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "假設宣稱前版12個月窗口『效力不足』，拉長到24個月應能改善，但實際結果不只沒改善，反而方向整個反轉(sub-train icir從近0變-0.20，validation-0.34)，電子業icir更達-0.35。拉長窗口沒有增加統計力，反而放大了均值回歸或雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "毛利率與營收成長的長窗口相關性(『量價同步=定價權』)在台股呈現負向，可能是硬體代工類股的規模效應/景氣循環主導了毛利與營收的正相關，而非定價權訊號；此與C-2、C-14同屬『財務指標差分/相關型』構造，三個獨立案例皆失敗或反號，構造方式本身可能是死路。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0319",
+ "ts": "2026-07-21T13:24:55"
+}

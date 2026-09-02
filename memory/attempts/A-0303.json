@@ -1,0 +1,83 @@
+{
+ "round": 19,
+ "category": "earnings_surprise_drift",
+ "hypothesis": "EPS年增率的短期(3個月)變化捕捉盈餘驚奇的即時衝擊，但單月數字雜訊大；以移動平均平滑後，才能萃取出真正具訊息含量、緩慢擴散進價格的盈餘驚奇延續效果(PEAD)。",
+ "prediction": "sub-train ICIR>0.4；validation期decay幅度<30%；月換手率<0.45。",
+ "formula": "cs_rank(ts_mean(delta(eps_yoy, 3), 3))",
+ "name_zh": "平滑盈餘驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(delta(eps_yoy, 3), 3))",
+  "fhash": "06b2bf6d70ec5da8",
+  "sub_train": {
+   "mean_ic": 0.0,
+   "icir": 0.01
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.32,
+   "decay_pct": -4131.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.015,
+    "多頭"
+   ],
+   "2014": [
+    -0.002,
+    "多頭"
+   ],
+   "2015": [
+    -0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.013,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": 0.16,
+   "生技": -0.07,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.009,
+   "short_excess_ann": 0.012
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測decay<30%，但sub-train ICIR僅0.01幾乎是純雜訊，validation ICIR 0.32看似不錯，但decay_pct的-4131%只是分母趨近零造成的數學假象，不能解讀為樣本外改善。逐年IC本身很小(多在±0.02內)，顯示二階平滑(先delta再ts_mean)可能把EPS驚奇訊號的時效性磨平，導致訊號強度不足而非方向錯誤。",
+ "failure_type": "expression_bad",
+ "lesson": "對本質上依賴時效性的訊號(如盈餘驚奇)做雙重平滑(delta後再ts_mean)容易把訊號時效性磨掉；平滑應只做一次，不要用「平滑後的差分再平滑」。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0303",
+ "ts": "2026-07-21T13:13:10"
+}

@@ -1,0 +1,93 @@
+{
+ "round": 41,
+ "category": "earnings_surprise_beyond_trend",
+ "hypothesis": "淨利率3個月變化量除以自身12個月波動度，構成標準化的「淨利率驚喜z-score」：直接比較原始變化量會被天生波動大的公司主導排序，除以自身波動度後才能公平比較「相對自己正常波動範圍而言，這次改善有多罕見」，此標準化驚喜訊號因需要跨期比較個股自身波動基準，屬於認知處理成本較高的資訊，市場消化較慢。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-023相關性|ρ|<0.5（結構相似但分子分母定義不同，需驗證非重複）。",
+ "formula": "cs_rank(sdiv(delta(net_margin,3), ts_std(net_margin,12)))",
+ "name_zh": "淨利率驚喜值",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(net_margin,3), ts_std(net_margin,12)))",
+  "fhash": "e9b1daa9e29efcfc",
+  "sub_train": {
+   "mean_ic": 0.031,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.18,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.066,
+    "盤整"
+   ],
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.055,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.23,
+   "半導體": 0.16,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.045,
+   "short_excess_ann": 0.05
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.42,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.59,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.59 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR剛好0.4壓線達標，但驗證期衰減54%（已超過50%過擬合警戒線，即使沒撞相關性也可能死於stage4）。死因為stage2與F-001（ROE趨勢改善）相關性0.59，候選預測的是F-023，又一次猜錯真正的相關性元兇。z-score標準化的『淨利率驚喜』本質上仍是在抓『獲利結構性提升』，與F-001衡量ROE結構性提升的機制高度重疊，只是換了不同的財務比率載體。",
+ "failure_type": "duplicate",
+ "lesson": "『淨利率』與『ROE』兩個看似不同的獲利能力指標，在做『相對自身歷史改善程度』的標準化構造時，實際傳遞的橫斷面排序高度相似，容易與既有ROE類品質因子（F-001）撞車；下次構造『獲利能力驚喜/改善度』因子時，應假設不同獲利率欄位（毛利率/營益率/淨利率/ROE）彼此高度共線，優先檢查是否已有其他獲利率欄位的類似構造存在於庫內。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0635",
+ "ts": "2026-08-12T09:31:55"
+}

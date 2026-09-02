@@ -1,0 +1,94 @@
+{
+ "round": 59,
+ "category": "financial_dividend_capital_signal",
+ "hypothesis": "金融業配息需經主管機關資本適足性審核，非管理層可任意決定；淨利率高且同時維持高現金殖利率的金融股，隱含管理層與監理機關對其資本水位有信心，此為金融業特有的資本品質確認訊號，一般投資人只看殖利率數字追高息股，未能解讀其背後的資本意涵。",
+ "prediction": "sub-train ICIR > 0.4（金融子樣本）；industry_icir金融 > 其他三產業；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(net_margin),cs_rank(div_yield))",
+ "name_zh": "金控配息底氣股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(net_margin),cs_rank(div_yield))",
+  "fhash": "9693ceedbcbf2156",
+  "sub_train": {
+   "mean_ic": 0.059,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.105,
+   "icir": 0.88,
+   "decay_pct": -107.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.039,
+    "盤整"
+   ],
+   "2013": [
+    0.042,
+    "多頭"
+   ],
+   "2014": [
+    0.035,
+    "多頭"
+   ],
+   "2015": [
+    0.087,
+    "盤整"
+   ],
+   "2016": [
+    0.079,
+    "多頭"
+   ],
+   "2017": [
+    0.063,
+    "多頭"
+   ],
+   "2018": [
+    0.081,
+    "盤整"
+   ],
+   "2019": [
+    0.129,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.071,
+   "down_months": 0.071
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.49,
+   "半導體": 0.38,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.12,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.74,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.74 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR預測>0.4，實際0.42達標且validation更強達0.88，方向與強度預測基本正確；但被stage2判定與F-002 ρ=0.74重疊而拒絕。更關鍵的是『金融業特有監理資本訊號』的核心敘事被證偽：金融產業industry_icir僅0.21，是四產業中最低，反而電子(0.55)、生技(0.49)最高，說明net_margin×div_yield其實是泛用的品質-殖利率複合因子，並非金融業特有機制。",
+ "failure_type": "duplicate",
+ "lesson": "淨利率×殖利率的品質配息複合因子已被F-002覆蓋；同時本案顯示『產業特有』故事不能只看industry_icir最高是否落在目標產業，見[[C-2]][[C-10]]同型落差。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0898",
+ "ts": "2026-08-19T10:08:40"
+}

@@ -1,0 +1,92 @@
+{
+ "round": 3,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "承接已驗證之px_hi252/vol_21錨定比值訊號（sub-train ICIR 0.60），加入3個月平滑以降低雜訊與換手率，同時保留「貼近前高且波動低」的定錨效應——散戶對前高的錨定與從眾賣壓不足，使此類股票被低估後緩慢修正。",
+ "prediction": "sub-train ICIR≥0.45；換手率<0.4（較原始版本降低）。",
+ "formula": "cs_rank(ts_mean(sdiv(px_hi252, vol_21),3))",
+ "name_zh": "新高波動平滑比",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(sdiv(px_hi252, vol_21),3))",
+  "fhash": "f247f53b92fbb9e9",
+  "sub_train": {
+   "mean_ic": 0.071,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.108,
+   "icir": 0.72,
+   "decay_pct": -32.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.016,
+    "盤整"
+   ],
+   "2013": [
+    0.084,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.084,
+    "盤整"
+   ],
+   "2016": [
+    0.09,
+    "多頭"
+   ],
+   "2017": [
+    0.086,
+    "多頭"
+   ],
+   "2018": [
+    0.13,
+    "盤整"
+   ],
+   "2019": [
+    0.085,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.099,
+   "down_months": 0.031
+  },
+  "industry_icir": {
+   "電子": 0.74,
+   "生技": 0.52,
+   "半導體": 0.33,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.038
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.3
+  },
+  "verdict": "rejected_stage3",
+  "reason": "與同批 C-15 |ρ|=0.86，保留 ICIR 較高者"
+ },
+ "diagnosis": "預測『sub-train ICIR≥0.45且turnover<0.4』。實際大幅超標（sub-train 0.55、驗證0.72、decay -32%、turnover僅0.18），標準上看是本輪最強候選之一。但stage3揪出與同批C-15（低波動異常，純neg(vol_126)）高相關(ρ=0.86)，說明px_hi252/vol_21中的vol_21分母把低波動溢酬直接帶進了訊號，『52週高點錨定』的敘事其實大半是低波動效應在驅動。",
+ "failure_type": "duplicate",
+ "lesson": "價格分子除以波動度分母的因子構造，會天然繼承低波動異常的暴露；送測前應先與同批的低波動類候選做相關性排查，避免把波動效應誤認成別的機制。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage3",
+ "id": "A-0059",
+ "ts": "2026-07-19T17:08:22"
+}

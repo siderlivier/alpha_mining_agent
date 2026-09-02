@@ -1,0 +1,88 @@
+{
+ "round": 43,
+ "category": "quality_short_momentum",
+ "hypothesis": "低應計項（盈餘含金量高）且短期月增率動能轉強的公司，代表這波營收動能是真實現金流驅動而非財報操作；市場對「品質確認的短期動能」反應不足，因為rev_mom雜訊大常被忽略，唯有搭配應計品質篩選才具備穩定性與可信度。",
+ "prediction": "sub-train ICIR>0.45；與F-006、F-012相關度<0.5（用rev_mom而非delta roe）；月換手率<0.4。",
+ "formula": "mul(cs_rank(neg(accruals)), cs_rank(rev_mom))",
+ "name_zh": "品質短動能股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(accruals)), cs_rank(rev_mom))",
+  "fhash": "44a6e4f06a79b994",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.7,
+   "decay_pct": -93.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.003,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.046,
+    "盤整"
+   ],
+   "2016": [
+    0.011,
+    "多頭"
+   ],
+   "2017": [
+    0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.033,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.25,
+   "生技": 0.16,
+   "半導體": 0.24,
+   "金融": 0.28
+  },
+  "legs": {
+   "long_excess_ann": 0.016,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.68,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.47
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; 月換手 0.68 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.36低於0.45門檻，但validation達0.70，方向與品質×動能機制大致相符(cond_ic上漲月0.033>下跌月0.011)，且與庫內因子最高相關僅0.47(未觸發stage2淘汰)，顯示機制本身可能成立。真正死因是換手率0.68過高(門檻0.4)，rev_mom每月劇烈變化導致因子值不穩定。",
+ "failure_type": "expression_bad",
+ "lesson": "rev_mom直接使用會產生過高換手率，即使搭配品質過濾器(accruals)也難壓低到可交易範圍；應對rev_mom做2-3個月平滑再組合，兼顧訊號新鮮度與換手率門檻。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0668",
+ "ts": "2026-08-12T14:04:06"
+}

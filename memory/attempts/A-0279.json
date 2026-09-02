@@ -1,0 +1,84 @@
+{
+ "round": 18,
+ "category": "earnings_quality_consistency",
+ "hypothesis": "當EPS年增率(含業外/業內全部損益)與營業利益年增率(純本業)出現大幅分歧時，代表帳面獲利成長主要靠業外損益或一次性項目墊高，不具持續性；市場短期容易被亮眼EPS數字吸引而給予過高評價，但這種分歧本身就是獲利品質警訊，未來容易隨業外效果消失而反轉走弱。分歧小、本業與帳面一致的公司則因缺乏『爆發式』故事性而被低估。",
+ "prediction": "sub-train ICIR(絕對值)>0.45；分歧度最高組相對分歧度最低組的多空報酬差為負；下跌月與上漲月IC方向一致(非regime依賴)",
+ "formula": "cs_rank(abs(sub(op_income_yoy, eps_yoy)))",
+ "name_zh": "帳面本業一致度",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(abs(sub(op_income_yoy, eps_yoy)))",
+  "fhash": "ac713fd0b7ef5ca5",
+  "sub_train": {
+   "mean_ic": -0.017,
+   "icir": -0.17
+  },
+  "validation": {
+   "mean_ic": -0.032,
+   "icir": -0.39,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.06,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    -0.036,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.028,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.02,
+   "半導體": -0.02,
+   "金融": -0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 sub-train ICIR(絕對值)>0.45，實際僅 0.17，差一個數量級。上漲月與下跌月IC同號(符合預測)，但2016/2017年IC翻正，與『分歧即警訊』的單向假設矛盾。abs()把『EPS靠業外墊高』與『EPS被業外拖累』這兩種本質相反的情境合併成同一個分數，很可能互相抵消了訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "當假設隱含『分歧方向本身有意義』（業外墊高 vs 業外拖累是不同故事）時，不要用 abs() 把方向資訊抹掉；應拆成兩個單邊因子分別測試，或用 signed diff 保留方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0279",
+ "ts": "2026-07-21T12:59:43"
+}

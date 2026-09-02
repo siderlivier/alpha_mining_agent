@@ -1,0 +1,87 @@
+{
+ "round": 3,
+ "category": "revenue_momentum_acceleration_industry",
+ "hypothesis": "月營收年增率相對3個月前的變化量捕捉需求趨勢轉折，尤其電子供應鏈訂單能見度使此變化率具有預測性；法人對月營收資料的消化存在1-2個月落差，此為資訊擴散慢的證據。",
+ "prediction": "sub-train ICIR>0.45；電子/半導體產業ICIR應顯著高於生技/金融（差距>0.15）。",
+ "formula": "cs_rank(sub(rev_yoy, delay(rev_yoy,3)))",
+ "name_zh": "營收動能變化率",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_yoy, delay(rev_yoy,3)))",
+  "fhash": "e6b8c02c0342f31d",
+  "sub_train": {
+   "mean_ic": 0.02,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.26,
+   "decay_pct": 4.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.005,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.0,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.024,
+    "盤整"
+   ],
+   "2019": [
+    0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.62,
+   "生技": -0.1,
+   "半導體": 0.29,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.041,
+   "short_excess_ann": 0.054
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.61,
+  "stage2_max_rho": {
+   "factor": "F-003",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.27 < 0.45; validation ICIR 0.26 < 0.3; 月換手 0.61 > 0.4"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.45且電子/半導體ICIR差距>0.15』。整體門檻同樣未達（0.27，驗證0.26穩定無衰減），但產業差距預測再次強烈成立（電子0.62 vs 生技-0.10，差距0.72），且與C-1形成一致的獨立證據。另外月換手0.61超出上限，也是拒絕原因之一。",
+ "failure_type": "expression_bad",
+ "lesson": "與C-1同一結論：電子供應鏈專屬的營收動能機制本身有效，但全市場cs_rank稀釋+換手率過高是表達層面的問題，非機制證偽。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0060",
+ "ts": "2026-07-19T17:08:22"
+}

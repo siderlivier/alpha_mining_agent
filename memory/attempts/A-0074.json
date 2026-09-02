@@ -1,0 +1,92 @@
+{
+ "round": 4,
+ "category": "long_term_trend_continuation",
+ "hypothesis": "外資、投信建立大型部位需數月才能完成；長期動能(mom_240)相對近期動能(mom_60)若仍偏強，代表法人尚未建倉完畢，後續資金將持續流入，此為建倉週期造成的動能延續，機制與短期資訊反應型動能不同。",
+ "prediction": "sub-train ICIR>0.45；且此訊號與mom_60本身的截面相關性|ρ|應<0.3，證明捕捉的是不同於短期動能的法人建倉資訊",
+ "formula": "cs_rank(sub(mom_240, mom_60))",
+ "name_zh": "長期動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "預測『與mom_60相關性<0.3應證明捕捉到不同資訊』命中(stage2 ρ=0.24)，證明長短期動能差確實是獨立訊號來源；但整體強度不足且不穩定——sub-train ICIR 0.36未達門檻，逐年IC從2012年獨大的0.132快速衰退到2014年近零，2018年甚至轉負(-0.033)，validation decay達47%已觸及過擬合警戒線。差異化的機制論述可能對，但訊號強度與穩定性不足以支撐『法人建倉週期』這個具體敘事。",
+ "failure_type": "expression_bad",
+ "lesson": "sub(mom_240, mom_60)這類長短期動能差公式方向可能仍有價值(已證明非mom_60的重複)，但需處理2012年極端值主導整體統計量的問題，可考慮winsorize或改用相對強度比而非絕對差值再重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0074",
+ "ts": "2026-07-19T17:21:03"
+}

@@ -1,0 +1,89 @@
+{
+ "round": 68,
+ "category": "relative_margin_momentum",
+ "hypothesis": "一家公司毛利率的改善幅度若超過同產業平均，代表它在產業景氣中相對勝出（搶市佔、成本控制較佳、產品組合升級），而非只是搭上產業順風。市場常把個股毛利改善歸因於產業beta而反應不足，忽略了相對強弱所隱含的競爭態勢變化；用industry_demean剝離產業共同項後再全市場排名。",
+ "prediction": "sub-train ICIR > 0.35；與R-018、F-001相關 |ρ| < 0.5；多頭腿年化超額 > 0；四產業方向一致。",
+ "formula": "cs_rank_all(industry_demean(delta(gross_margin, 12)))",
+ "name_zh": "相對毛利改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank_all(industry_demean(delta(gross_margin, 12)))",
+  "fhash": "201deac68fe85fa8",
+  "sub_train": {
+   "mean_ic": 0.034,
+   "icir": 0.6
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.19,
+   "decay_pct": 68.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.032,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.029,
+    "盤整"
+   ],
+   "2016": [
+    0.048,
+    "多頭"
+   ],
+   "2017": [
+    0.022,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.027,
+   "down_months": 0.029
+  },
+  "industry_icir": {
+   "電子": 0.49,
+   "生技": 0.32,
+   "半導體": 0.13
+  },
+  "legs": {
+   "long_excess_ann": 0.068,
+   "short_excess_ann": 0.071
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.19,
+  "stage2_culprit": {
+   "factor": "R-018",
+   "rho": 0.96,
+   "factor_name": "毛利率年變化",
+   "factor_desc": "毛利率的 12 個月變化"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 R-018 |ρ|=0.96 > 0.5"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "distill_failed": true,
+ "id": "A-1041",
+ "ts": "2026-09-02T01:25:25"
+}

@@ -1,0 +1,79 @@
+{
+ "round": 40,
+ "category": "accrual_quality_improvement",
+ "hypothesis": "F-006驗證應計項「水準」偏低有alpha，但應計項「變化方向」捕捉管理層近期會計政策轉向保守、認列更趨現金基礎的動態轉折，這與水準因子不完全重疊(水準仍高但正快速改善)，市場對轉向訊號反應通常落後於絕對水準認知。",
+ "prediction": "sub-train ICIR>0.45；與F-006相關係數|ρ|<0.5；多頭腿年化超額>0；月換手率<0.4(已用12月窗口)。",
+ "formula": "cs_rank(neg(delta(accruals,12)))",
+ "name_zh": "應計改善動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(accruals,12)))",
+  "fhash": "be57c4cd090c063a",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.05
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.15,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2014": [
+    0.009,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    -0.02,
+    "多頭"
+   ],
+   "2017": [
+    -0.013,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": -0.13,
+   "半導體": 0.03,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際-0.05，validation僅0.15，兩期皆接近零、無穩定方向，『應計項變化方向捕捉會計政策轉向保守』的假設沒有得到數據支持——不是符號相反被證偽，而是根本沒有可辨識的訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "應計項的12個月變化量本身資訊量不足，可能是因為accruals水準本身（F-006）已經包含了大部分可預測資訊，其一階差分反而放大了季度間的會計雜訊、稀釋了訊號；提醒往後看到『已驗證的水準因子』想改成『變化量』版本時，先檢查該指標的季度波動特性，波動大的科目直接取差分風險高。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0617",
+ "ts": "2026-08-12T09:17:43"
+}

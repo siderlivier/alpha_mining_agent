@@ -1,0 +1,88 @@
+{
+ "round": 3,
+ "category": "style_box_orphan_stocks",
+ "hypothesis": "承接已入庫F-003（sp×sign(rev_yoy)）的風格孤兒股假設，改用op_income_yoy（本業獲利成長）取代營收年增作為品質確認欄位：營收市值比便宜且本業獲利成長為正，代表基本面轉佳但因不符單一價值或成長標籤而被機構篩選機制忽略，形成同構穩健性檢驗。",
+ "prediction": "sub-train ICIR>0.40；與F-003之截面相關性|ρ|<0.5（若過高視為重複因子）。",
+ "formula": "cs_rank(mul(sp, sign(op_income_yoy)))",
+ "name_zh": "便宜本業成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy",
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(sp, sign(op_income_yoy)))",
+  "fhash": "b6dfd0175e806e0c",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.17,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.052,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    0.045,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.17,
+   "生技": 0.39,
+   "半導體": -0.09,
+   "金融": 0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.048,
+   "short_excess_ann": -0.034
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.19,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.23
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.37 < 0.45; validation ICIR 0.17 < 0.3; validation 衰減 54% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.40且與F-003相關<0.5』。實際sub-train 0.37接近門檻，驗證期降至0.17（decay 54%，過擬合徵兆），相關性0.23確實達成分散化目標。空頭腿轉負(-0.034)，代表多數殘存的alpha集中在無法放空的多頭腿而不穩定。sign(op_income_yoy)這個二元閘門再次表現不佳，與C-3的失敗模式一致。",
+ "failure_type": "expression_bad",
+ "lesson": "sign(op_income_yoy)類二元乘法閘門在兩個獨立候選中都不穩定，應改用連續值/rank表達。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0065",
+ "ts": "2026-07-19T17:08:22"
+}

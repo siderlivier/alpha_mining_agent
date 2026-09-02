@@ -1,0 +1,91 @@
+{
+ "round": 57,
+ "category": "dual_institutional_flow_fundamental_confirmation",
+ "hypothesis": "外資與投信是兩類獨立運作、資訊來源與誘因結構不同的法人買方(外資側重國際比較與總經,投信側重台股相對報酬與基金績效壓力)。兩者同時淨買超同一檔股票,代表兩個獨立訊息來源交叉驗證,比單一法人買超更能排除單一機構偏誤;疊加本業獲利能力確認基本面支撐,訊號持續性應優於單一法人流量指標(純法人流量因子因缺基本面錨點而偏弱,見經驗庫規則14)。",
+ "prediction": "sub-train ICIR>0.4;多頭腿年化超額報酬>0;需與F-017相關性<0.5。",
+ "formula": "mul(cs_rank(add(frgn_net_21, trust_net_21)), cs_rank(op_margin))",
+ "name_zh": "雙法人確認股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "op_margin",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(add(frgn_net_21, trust_net_21)), cs_rank(op_margin))",
+  "fhash": "54ebb6ada37865c4",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.052,
+   "icir": 0.58,
+   "decay_pct": -132.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.013,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.037,
+    "盤整"
+   ],
+   "2016": [
+    0.049,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    0.031,
+    "盤整"
+   ],
+   "2019": [
+    0.073,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.047,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.42,
+   "半導體": 0.04,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.031
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.45,
+  "stage2_culprit": {
+   "factor": "F-017",
+   "rho": 0.57,
+   "factor_name": "外資認證營收動能",
+   "factor_desc": "外資買超又逢營收成長，電子供應鏈的資金與基本面雙重確認訊號最可信。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-017 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.4，實際sub-train 0.25、validation 0.58(decay -132%大幅改善)，多空腿皆正、電子/生技表現最佳，數字健康。但與F-017(外資認證營收動能)相關性0.57觸發stage2淘汰，雙法人加總與獲利率的組合，經濟本質上與『外資買超+營收動能』高度重疊。",
+ "failure_type": "duplicate",
+ "lesson": "法人買超x基本面確認這類組合已是庫內紅海(F-002、F-017)：本輪C-7也在此邊界(與F-002 rho=0.50)、C-15直接命中F-017(rho=0.57)。未來同類組合應先與F-002/F-017做相關性預檢，或改用非動能類基本面變數(如ROE變化、負債比改善)與法人流量交叉驗證以脫離重疊。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0878",
+ "ts": "2026-08-19T00:11:01"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 66,
+ "category": "bottom_line_conversion_improvement",
+ "hypothesis": "稅後淨利率與毛利率的差距（負值，代表營業費用、利息、稅、業外的總拖累）在 12 個月內縮小，代表非營業項目的負擔正在減輕——去槓桿降息、稅務效率提升或業外虧損收斂。市場對損益表『營業線以上』定價充分，對『營業線以下』的結構性改善反應遲鈍，因為這些項目被視為 noise。",
+ "prediction": "direction pos（差距縮小/上升者報酬高）；sub-train ICIR > 0.4；多頭腿年化超額 > 0；與 F-012、R-015、R-011 之 |ρ| < 0.5；非金融較強、金融因財務結構特殊可能較弱。",
+ "formula": "cs_rank(delta(sub(net_margin,gross_margin),12))",
+ "name_zh": "淨利轉換改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(sub(net_margin,gross_margin),12))",
+  "fhash": "b75a8fb73e61ac0f",
+  "sub_train": {
+   "mean_ic": 0.006,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.11,
+   "decay_pct": 13.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.014,
+    "多頭"
+   ],
+   "2014": [
+    -0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.025,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.08,
+   "半導體": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.002,
+   "short_excess_ann": 0.045
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 pos、ICIR>0.4、多頭腿為正。實際 sub-train 與 validation IC 皆 ~0.006、ICIR ~0.12、decay 13%(穩定但幾乎沒訊號),多頭腿年化 -0.2%(訊號僅在空頭腿)。『營業線以下負擔減輕被當 noise』——市場當 noise,因子也抓不到,delta(net_margin - gross_margin, 12) 幾乎無截面區辨力。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『非營業項目結構性改善』的截面訊號太弱,margin 差的差分無法萃取。下次若仍要試,聚焦單一直接科目(業外損益佔營收比、利息保障倍數的變化)而非兩個 margin 相減再差分;但整體優先級應調低。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1010",
+ "ts": "2026-09-02T00:51:50"
+}

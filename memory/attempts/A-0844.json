@@ -1,0 +1,83 @@
+{
+ "round": 55,
+ "category": "fundamental_price_rerating_lag",
+ "hypothesis": "當公司毛利率較一年前顯著回升，但股價卻仍遠低於自身52週高點時，代表基本面已經領先價格改善，市場對毛利率轉佳的重新評價存在時間落差（因價格錨定於舊有的低獲利印象），這種基本面-價格背離最終會被修正。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；跨年度穩健性檢查：正IC年份佔比≥60%。",
+ "formula": "mul(cs_rank(delta(gross_margin,12)), cs_rank(neg(px_hi252)))",
+ "name_zh": "毛利搶先價格股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(gross_margin,12)), cs_rank(neg(px_hi252)))",
+  "fhash": "133e399765c5a033",
+  "sub_train": {
+   "mean_ic": -0.014,
+   "icir": -0.19
+  },
+  "validation": {
+   "mean_ic": -0.023,
+   "icir": -0.22,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.035,
+    "多頭"
+   ],
+   "2014": [
+    0.015,
+    "多頭"
+   ],
+   "2015": [
+    -0.028,
+    "盤整"
+   ],
+   "2016": [
+    -0.005,
+    "多頭"
+   ],
+   "2017": [
+    -0.023,
+    "多頭"
+   ],
+   "2018": [
+    -0.02,
+    "盤整"
+   ],
+   "2019": [
+    -0.025,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.031,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.25,
+   "半導體": -0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.021,
+   "short_excess_ann": -0.005
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向為正，實際sub-train IC為-0.014（icir -0.19），方向完全相反，且跨年度絕大多數為負、多空腿雙雙為負，是穩定的負向訊號而非雜訊。代表「毛利轉佳但價格落後→補漲」的重新評價假說本身有問題，遠低於52週高點的股票即使基本面轉佳仍持續是動能落後股。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「基本面轉佳但價格落後→補漲」的邏輯在「毛利率轉佳×遠離52週高點」這個組合上不成立，實證穩定為負；未來基本面-價格背離類假說應優先考慮「價格已開始反應+基本面確認」的動能確認方向，而非押注價格落後的補漲。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0844",
+ "ts": "2026-08-18T23:46:33"
+}

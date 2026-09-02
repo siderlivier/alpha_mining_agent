@@ -1,0 +1,89 @@
+{
+ "round": 21,
+ "category": "turnover_volatility_noise_trader",
+ "hypothesis": "週轉率波動度高代表該股票交易型態不穩定、容易吸引雜訊交易者的投機性進出（noise trader risk），這類股票因雜訊風險溢酬長期被高估；相對地週轉率穩定的「悶股」因缺乏題材性交易而長期被低估，此為以周轉率而非價格波動度衡量雜訊交易強度的新維度。",
+ "prediction": "sub-train ICIR>0.45；與F-005相關係數<0.5（驗證周轉率波動與價格波動屬不同維度）；多頭腿（低週轉波動）超額報酬須>0。",
+ "formula": "cs_rank(neg(ts_std(turn_21,12)))",
+ "name_zh": "週轉率噪音溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(turn_21,12)))",
+  "fhash": "b3144bd4e42aad36",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.058,
+   "icir": 0.36,
+   "decay_pct": -22.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.055,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.11,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.064,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.39,
+   "生技": 0.34,
+   "半導體": 0.24,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.09,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.77,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.77 > 0.5"
+ },
+ "diagnosis": "指標本身表現不錯：sub-train ICIR 0.30、validation 0.36(decay -22%，樣本外變好)，換手率極低(0.09)，產業廣泛分布(電子0.39、生技0.34)。作者預測「與F-005(價格波動)相關係數<0.5」正確方向，但沒有檢查與F-008(周轉率基礎)的重疊，結果ρ=0.77被stage2淘汰——這是本輪第三個死於F-008的案例(連同C-8、C-12)，確立周轉率相關構造是本庫的高頻紅海。",
+ "failure_type": "duplicate",
+ "lesson": "任何隱含「周轉率穩定度/悶股/低週轉」概念的新因子，即使與price-volatility類因子(F-005)不相關，也極可能與turnover-based的F-008高度重疊；未來提交前應把F-008相關係數檢查列為必查項，而不只檢查價格波動類因子。",
+ "lesson_confidence": "pattern",
+ "verdict": "rejected_stage2",
+ "id": "A-0337",
+ "ts": "2026-07-21T13:38:15"
+}

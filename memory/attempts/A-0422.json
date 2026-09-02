@@ -1,0 +1,83 @@
+{
+ "round": 27,
+ "category": "earnings_surprise_persistence",
+ "hypothesis": "EPS年增率的季頻更新使市場需要時間消化與更新預期；台灣中小型股分析師覆蓋率低，資訊處理與模型調整存在延遲，導致獲利成長加速（盈餘驚奇的持續性，PEAD）無法立即反映在股價中。先以3個月移動平均平滑單季雜訊，再取6個月變化捕捉真正的獲利趨勢加速，避免單季雜訊誤導。",
+ "prediction": "sub-train ICIR>0.45；財報公布後1-2個月內多頭腿累積超額報酬應持續為正（drift特徵）；效應在低成交金額(amt_21低分位)子集應更強。",
+ "formula": "cs_rank(delta(ts_mean(eps_yoy,3),6))",
+ "name_zh": "獲利加速漂移",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ts_mean(eps_yoy,3),6))",
+  "fhash": "fe1fcc3039dec03a",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.39,
+   "decay_pct": -60.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.066,
+    "多頭"
+   ],
+   "2014": [
+    0.006,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.005,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.025,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": 0.27,
+   "生技": 0.14,
+   "半導體": 0.03,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.02,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，實際僅0.25，未達門檻。驗證期反而更強(0.39, decay -60%)，暗示訊號並非過擬合而是強度不足/被稀釋。假設本身預期低成交金額(小型股)子集效應更強，但公式delta(ts_mean(eps_yoy,3),6)未做任何流動性篩選或加權，直接在全市場排名，把假設認為效應較弱的高流動性大型股也納入，拉低整體IC。",
+ "failure_type": "expression_bad",
+ "lesson": "假設若預期效應集中在特定子集（產業、流動性分層、日曆時點）或需要「A且B同時成立」的交集條件，但公式僅用add/sub做全市場排名、未做子集限定或改用乘法交互，訊號會被不相關樣本稀釋，即使機制方向正確也常在sub-train止步。應優先用mul(cs_rank(A),cs_rank(B))表達AND邏輯，或先限定在目標子集內測試。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0422",
+ "ts": "2026-07-28T19:08:22"
+}

@@ -1,0 +1,86 @@
+{
+ "round": 4,
+ "category": "accruals_quality_anomaly",
+ "hypothesis": "高應計代表當期獲利大量來自非現金項目（應收帳款增加、存貨堆積），投資人習慣將會計盈餘等同於現金盈餘、系統性高估高應計公司的獲利持續性，直到後續應計反轉、財報令人失望才修正（Sloan 1996）；用12個月移動平均過濾單季雜訊，捕捉結構性偏低應計的公司。",
+ "prediction": "sub-train ICIR>0.45；因涉及放空限制風險，需額外檢查多頭腿(低應計組，即formula高分組)的超額報酬是否>0以確認可交易性，而非僅依賴空頭腿(高應計組)跑輸",
+ "formula": "cs_rank(neg(ts_mean(accruals,12)))",
+ "name_zh": "低應計品質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(accruals,12)))",
+  "fhash": "4ee00a6a8c9515a0",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.46
+  },
+  "validation": {
+   "mean_ic": 0.02,
+   "icir": 0.33,
+   "decay_pct": 28.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.063,
+    "盤整"
+   ],
+   "2016": [
+    0.033,
+    "多頭"
+   ],
+   "2017": [
+    0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": 0.55,
+   "半導體": 0.42,
+   "金融": -0.13
+  },
+  "legs": {
+   "long_excess_ann": 0.008,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.07,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.16
+  },
+  "verdict": "passed"
+ },
+ "diagnosis": "預測『需額外檢查多頭腿超額報酬是否>0以確認可交易性』的風控意識正確——多頭腿(低應計組)年化超額報酬0.008>0雖不高但為正，通過可交易性檢查；sub-train ICIR 0.46剛好達標，validation 0.33(decay 28%，可接受範圍)，產業別上生技(0.55)與半導體(0.42)ICIR最強、金融(-0.13)最弱，與Sloan(1996)應計異常在成熟市場的既有文獻方向一致，且turnover極低(0.07)代表交易成本低，是本輪唯一通過全部關卡的候選。",
+ "failure_type": "none",
+ "lesson": "Sloan應計異常(neg(ts_mean(accruals,12)))在台股依然有效，且用12個月移動平均過濾單季雜訊的表達方式奏效(turnover低、多頭腿為正)；金融業ICIR為負提示應計異常可能不適用於金融股（會計科目結構不同），未來同類因子可考慮排除金融業或分開評估。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed",
+ "id": "A-0083",
+ "ts": "2026-07-19T17:21:03"
+}

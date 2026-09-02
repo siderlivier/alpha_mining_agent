@@ -1,0 +1,87 @@
+{
+ "round": 51,
+ "category": "turnover_mean_reversion",
+ "hypothesis": "當個股週轉率明顯低於自身過去一年常態水準，代表交易冷靜、短線投機客較少涉入，籌碼穩定使基本面資訊能更有效反映到股價；反之週轉率遠高於自身常態，代表雜訊交易者湧入，缺乏基本面支撐，事後容易均值回歸。此為個股相對自身的週轉異常，而非橫斷面週轉率水準比較。",
+ "prediction": "sub-train ICIR > 0.45；此訊號與F-008相關係數應<0.5(機制為相對自身歷史偏離而非搭配股價創高)；多頭腿(週轉冷靜組)年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(ts_mean(turn_21,12),turn_21))",
+ "name_zh": "週轉冷卻優勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(ts_mean(turn_21,12),turn_21))",
+  "fhash": "5213ff5db63390ce",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.05,
+   "decay_pct": 123.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.011,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.2,
+   "半導體": 0.08,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.032,
+   "short_excess_ann": -0.018
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.45,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.44
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.21 < 0.45; validation ICIR -0.05 < 0.3; validation 衰減 123% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.45 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.21遠低於門檻，核心預測『多頭腿為正』被推翻——多頭腿超額為-3.2%，短頭腿也是負值(-1.8%)，代表週轉冷靜股票組合本身跑輸大盤而非只是空頭腿表現差。與F-008相關度0.44已相當接近0.5重複門檻，顯示此訊號可能只是F-008的雜訊化變體而非獨立資訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『相對自身歷史的週轉異常』機制未展現預期的均值回歸溢酬，多空兩腿同時為負顯示此為單純弱因子；與既有籌碼類因子F-008高度接近(ρ=0.44)也提示週轉率變形操作的紅海邊界，非核心的表達變體很難帶來增量資訊。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0781",
+ "ts": "2026-08-14T01:05:54"
+}

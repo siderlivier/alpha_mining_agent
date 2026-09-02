@@ -1,0 +1,90 @@
+{
+ "round": 32,
+ "category": "low_risk_growth_mismatch",
+ "hypothesis": "低波動且營收成長穩健的個股常被市場視為「無趣、無故事性」股票而系統性低估：散戶偏好高波動、話題性股票（lottery preference bias），機構覆蓋不足導致這類股票基本面改善的傳導緩慢。改用vol_63（季波動，換手天生更低）與rev_yoy_ma3（三月均線，濾除單月雜訊）雙重平滑，在保留F-018核心機制的前提下降低訊號翻轉頻率，並擴大至全市場（非僅電子業）。",
+ "prediction": "sub-train ICIR>0.45；全市場（不限電子）多頭腿年化超額>0；月換手率<0.4，且較原始vol_21/rev_yoy版本明顯下降。",
+ "formula": "mul(cs_rank(neg(vol_63)), cs_rank(rev_yoy_ma3))",
+ "name_zh": "全市場低波成長",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy_ma3",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(vol_63)), cs_rank(rev_yoy_ma3))",
+  "fhash": "f61ad8c2f8b58d59",
+  "sub_train": {
+   "mean_ic": 0.081,
+   "icir": 0.81
+  },
+  "validation": {
+   "mean_ic": 0.107,
+   "icir": 0.99,
+   "decay_pct": -21.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.082,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.09,
+    "盤整"
+   ],
+   "2016": [
+    0.09,
+    "多頭"
+   ],
+   "2017": [
+    0.092,
+    "多頭"
+   ],
+   "2018": [
+    0.126,
+    "盤整"
+   ],
+   "2019": [
+    0.089,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.1,
+   "down_months": 0.062
+  },
+  "industry_icir": {
+   "電子": 1.02,
+   "生技": 0.82,
+   "半導體": 0.54,
+   "金融": 0.39
+  },
+  "legs": {
+   "long_excess_ann": 0.068,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.27,
+  "stage2_culprit": {
+   "factor": "F-018",
+   "rho": 0.81,
+   "factor_name": "低波動隱藏成長股",
+   "factor_desc": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-018 |ρ|=0.81 > 0.5"
+ },
+ "diagnosis": "統計面完全達標甚至超標（sub-train ICIR 0.81、validation 0.99，遠超預測門檻0.45），全市場覆蓋預測也成立（電子0.83~金融0.39皆為正），換手率0.27亦符合『明顯下降』的預測。但核心問題是預測遺漏了：把vol_21→vol_63、rev_yoy→rev_yoy_ma3做時間窗口平滑，本質上只是把F-018的訊號做低通濾波，機制完全沒變，導致與F-018相關性高達0.81。統計預測校準良好，但『能否構成新因子』的預測是錯的。",
+ "failure_type": "duplicate",
+ "lesson": "對既有top因子做『窗口拉長/平滑化+擴大universe』的變體，統計指標通常會變好看（因為降噪），但機制未變，幾乎必然與原factor高度相關。應在花費完整回測前，先用低成本相關性檢查快篩此類『同機制換窗口』候選。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0489",
+ "ts": "2026-07-29T23:57:20"
+}

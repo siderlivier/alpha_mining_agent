@@ -1,0 +1,87 @@
+{
+ "round": 14,
+ "category": "dividend_capacity_signal",
+ "hypothesis": "金融控股股受資本適足率等監理限制，配息政策調整緩慢；當現金殖利率明顯高於自身近一年常態水準，反映資本緩衝已改善、股利能力提升，但以殖利率為錨定的存股型投資人調整緩慢，導致重新評價滯後，此機制僅在受資本監理約束的金融業成立。",
+ "prediction": "金融產業industry_icir > 0.45；整體sub-train ICIR > 0.3；月換手率 < 0.4（如過高需疊加ts_mean平滑）",
+ "formula": "cs_rank(sub(div_yield, ts_med(div_yield,12)))",
+ "name_zh": "股息力回升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(div_yield, ts_med(div_yield,12)))",
+  "fhash": "78d06065414265a0",
+  "sub_train": {
+   "mean_ic": -0.0,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": -0.009,
+   "icir": -0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.001,
+    "盤整"
+   ],
+   "2013": [
+    -0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.028,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    -0.015,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.013,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": -0.16,
+   "生技": 0.05,
+   "半導體": -0.06,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.04,
+   "short_excess_ann": -0.028
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融產業industry_icir>0.45，實際僅0.02，sub-train與validation全期IC都接近零或微負，僅2016年出現較強年份(0.028)但無法穩定重現。『殖利率偏離自身12月中位數=資本緩衝改善』機制在金融股完全不成立，殖利率短期波動更可能反映配息政策的技術性調整而非資本適足性訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用『殖利率偏離自身歷史』作為金融股資本體質代理變數的假說本輪未獲任何支持；若要再測金融股資本監理延遲效應，應換用更直接的資本適足率或ROE相關指標而非殖利率。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0221",
+ "ts": "2026-07-21T12:11:51"
+}

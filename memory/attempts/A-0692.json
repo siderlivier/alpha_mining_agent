@@ -1,0 +1,90 @@
+{
+ "round": 45,
+ "category": "cash_backed_value_orphan",
+ "hypothesis": "電子業存貨/現金循環短，現金流品質(ocf_ratio)與營收成長(rev_yoy)同時走強代表訂單能見度提升且非靠應收/存貨虛增獲利；分析師多聚焦營收/EPS成長率而忽略現金流細節，市場對此雙重確認訊號反應不足。",
+ "prediction": "電子產業industry_icir>0.5；多頭腿年化超額報酬>0；與F-011/F-018相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(ocf_ratio), cs_rank(rev_yoy))",
+ "name_zh": "現金確認成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio), cs_rank(rev_yoy))",
+  "fhash": "409d4f9ba8bab34e",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.5
+  },
+  "validation": {
+   "mean_ic": 0.038,
+   "icir": 0.65,
+   "decay_pct": -30.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.003,
+    "多頭"
+   ],
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.052,
+    "盤整"
+   ],
+   "2016": [
+    0.051,
+    "多頭"
+   ],
+   "2017": [
+    0.046,
+    "多頭"
+   ],
+   "2018": [
+    0.03,
+    "盤整"
+   ],
+   "2019": [
+    0.045,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.042,
+   "down_months": 0.029
+  },
+  "industry_icir": {
+   "電子": 0.6,
+   "生技": 0.27,
+   "半導體": 0.34,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.41,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.57,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR預測>0.4（隱含全市場門檻），實際0.5達標且電子產業industry_icir 0.6也符合預期>0.5，驗證期decay -30%表現穩定，多頭腿超額0.049為正，指標面幾乎全部達標。唯獨相關性判準未如預期：預測與F-011/F-018 |ρ|<0.5，實際與F-011（生技轉骨訊號，非預期的F-018）相關0.57，跨產業命名不同（電子 vs 生技）但本質相同（ocf_ratio×成長）。",
+ "failure_type": "duplicate",
+ "lesson": "ocf_ratio×rev_yoy這個『現金流品質+營收成長』雙確認結構已被F-011以生技包裝的形式覆蓋，即使換成電子產業框架、其他指標全面達標，仍會在相關性檢查陣亡；此類『現金流確認成長』的核心構型已是紅海，未來提案需檢查的比對對象不能只鎖定命名相似的因子（如F-018），也要查語意相近但產業敘事不同的因子（如F-011）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0692",
+ "ts": "2026-08-12T14:25:46"
+}

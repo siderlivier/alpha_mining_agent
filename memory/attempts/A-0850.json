@@ -1,0 +1,94 @@
+{
+ "round": 56,
+ "category": "overlooked_profitability_foreign_neglect",
+ "hypothesis": "外資持股比率低代表個股尚未被國際機構納入研究覆蓋；本業獲利率高但外資佔比低的電子公司，其基本面資訊需仰賴外資逐步建倉才會完整反映在股價，因此存在系統性時間落差，此機制在電子業因供應鏈國際能見度高、外資覆蓋密度差異大而特別明顯。",
+ "prediction": "電子產業子樣本sub-train ICIR>0.45；電子產業industry_icir須為四產業中最高；多頭腿年化超額>0。",
+ "formula": "cs_rank(sdiv(op_margin, frgn_ratio))",
+ "name_zh": "外資盲區獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_margin, frgn_ratio))",
+  "fhash": "9bf9c4be12092c78",
+  "sub_train": {
+   "mean_ic": 0.059,
+   "icir": 0.47
+  },
+  "validation": {
+   "mean_ic": 0.065,
+   "icir": 0.75,
+   "decay_pct": -58.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.023,
+    "盤整"
+   ],
+   "2013": [
+    0.03,
+    "多頭"
+   ],
+   "2014": [
+    0.06,
+    "多頭"
+   ],
+   "2015": [
+    0.108,
+    "盤整"
+   ],
+   "2016": [
+    0.051,
+    "多頭"
+   ],
+   "2017": [
+    0.068,
+    "多頭"
+   ],
+   "2018": [
+    0.047,
+    "盤整"
+   ],
+   "2019": [
+    0.083,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.063,
+   "down_months": 0.054
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.49,
+   "半導體": 0.3,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.039,
+   "short_excess_ann": 0.04
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.14,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.64,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.64 > 0.5"
+ },
+ "diagnosis": "預測電子業ICIR>0.45大致符合方向（電子industry_icir=0.53，整體sub-train0.47貼近門檻），驗證期表現不錯；但改用frgn_ratio取代amt_21作為關注度代理，仍與F-020相關係數達0.64。顯示F-020的解釋力主要來自op_margin這個分子本身，換掉分母（成交金額→外資比）並未帶來足夠正交性。",
+ "failure_type": "duplicate",
+ "lesson": "op_margin搭配任何『低關注度』代理變數（成交金額、外資比、股息等）組成的比值型因子，容易與F-020系列高度相關；問題核心在分子而非分母，換代理變數難以解決。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0850",
+ "ts": "2026-08-18T23:55:52"
+}

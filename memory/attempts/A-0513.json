@@ -1,0 +1,88 @@
+{
+ "round": 33,
+ "category": "deleveraging_rally_quality",
+ "hypothesis": "若股價上漲同時融資餘額不增反減，代表這波上漲並非散戶槓桿追價堆疊的假突破，而是籌碼結構健康、賣壓已消化的真實需求驅動；技術面交易者容易把任何上漲聯想為融資過熱風險而過度謹慎，導致這類去槓桿式上漲被系統性低估，直到動能持續才被重新認可。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額 > 0；月換手率需監控，若>0.4需回頭以ts_mean平滑margin_d21重送。",
+ "formula": "mul(cs_rank(mom_60), cs_rank(neg(margin_d21)))",
+ "name_zh": "去槓桿真突破",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(mom_60), cs_rank(neg(margin_d21)))",
+  "fhash": "4ab813f007ee4b6a",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.1
+  },
+  "validation": {
+   "mean_ic": 0.019,
+   "icir": 0.21,
+   "decay_pct": -100.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.028,
+    "盤整"
+   ],
+   "2013": [
+    0.035,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": -0.015
+  },
+  "industry_icir": {
+   "電子": 0.2,
+   "生技": 0.05,
+   "半導體": 0.09,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.02,
+   "short_excess_ann": 0.012
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.66,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR(0.10)遠低於預測0.45，換手率(0.66)也超標。cond_ic在漲月(+0.025)與跌月(-0.015)符號相反，兩腿報酬皆偏弱，顯示mom_60 x neg(margin_d21)並未捕捉到獨立於純動能之外的'去槓桿真突破'效應，較像是動能雜訊與融資變化的隨機組合。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "動能條件式的融資變化組合，若conditional IC在漲跌月符號相反，代表該組合尚未分離出獨立於純動能的訊號；此類'品質過濾動能'假說需要更強的自身效應才值得與動能相乘。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0513",
+ "ts": "2026-07-30T00:08:12"
+}

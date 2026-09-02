@@ -1,0 +1,91 @@
+{
+ "round": 51,
+ "category": "trading_stability_premium",
+ "hypothesis": "成交金額波動度相對其自身均值越低，代表這檔股票的持有者結構以長期價值型投資人為主，而非短線投機客頻繁進出；穩定的交易關注度使股價較少受籌碼面雜訊干擾，基本面訊號能更有效傳遞到股價，形成資訊效率較高但因缺乏話題性而被市場低估的安靜關注度溢酬。",
+ "prediction": "sub-train ICIR > 0.45；此訊號與F-008、F-020相關係數應<0.5(機制為成交金額穩定度而非水準)；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(ts_mean(amt_21,12),ts_std(amt_21,12)))",
+ "name_zh": "成交穩定溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(ts_mean(amt_21,12),ts_std(amt_21,12)))",
+  "fhash": "44ee11dabe0ce370",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.045,
+   "icir": 0.55,
+   "decay_pct": -43.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.031,
+    "盤整"
+   ],
+   "2013": [
+    0.005,
+    "多頭"
+   ],
+   "2014": [
+    0.026,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    0.072,
+    "多頭"
+   ],
+   "2017": [
+    0.049,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.041,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.4,
+   "生技": 0.28,
+   "半導體": 0.26,
+   "金融": 0.28
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.16,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.29
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "本因子統計上穩健且樣本外變強(sub-train ICIR 0.39→validation 0.55，decay -43%)，與F-005相關度僅0.29(非重複)，符合大部分統計預測，但核心預測『多頭腿超額>0』失敗——多頭腿為-0.8%，短頭腿反而+0.6%，顯示alpha集中在『交易不穩定股票下跌』而非『交易穩定股票上漲』。因台股放空限制，這是結構性不可交易，而非統計假說錯誤。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『安靜關注度溢酬』的機制方向判斷錯誤——真正驅動報酬差異的是『交易極不穩定股票被錯殺式賣壓』(空頭腿效應)，而非『穩定股票被低估後修復』(多頭腿效應)；此為本輪第二個IC/ICIR達標但因long-only限制被淘汰的案例(另見C-8)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0788",
+ "ts": "2026-08-14T01:05:54"
+}

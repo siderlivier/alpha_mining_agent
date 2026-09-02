@@ -1,0 +1,91 @@
+{
+ "round": 37,
+ "category": "biotech_margin_inflection_attention",
+ "hypothesis": "生技股從燒錢期轉商轉獲利時，毛利率會出現結構性跳升，同時成交金額因新藥獲批或訂單等消息面首度放大而上升；市場對這種『初步確認』反應仍不足，因媒體與分析師敘事通常要等財報正式公佈才追認，形成價格與基本面確認之間的落後。",
+ "prediction": "sub-train ICIR>0.45；生技產業industry_icir應為四產業中最高(>0.5)；多頭腿年化超額報酬>0；月換手率<0.4。",
+ "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(delta(amt_21,6)))",
+ "name_zh": "生技轉盈確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(delta(amt_21,6)))",
+  "fhash": "fac390ad4963d918",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.41
+  },
+  "validation": {
+   "mean_ic": 0.003,
+   "icir": 0.05,
+   "decay_pct": 87.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.036,
+    "盤整"
+   ],
+   "2013": [
+    0.01,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.052,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    -0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.019
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.15,
+   "半導體": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.048,
+   "short_excess_ann": 0.076
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.37
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.41 < 0.45; validation ICIR 0.05 < 0.3; validation 衰減 87% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測生技產業industry_icir應為最高(>0.5)，但實際電子0.38才是最高，生技僅0.15，核心的『生技轉盈確認』產業歸因假設被證偽；加上驗證期ICIR從0.41崩跌至0.05(衰減87%)，顯示sub-train擬合的很可能是生技少數個股的特例事件，而非可重複機制。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "毛利率跳升加成交金額放大的組合，作為通用的『動能確認』訊號可能比作為生技產業敘事更有效；小樣本產業故事(如生技)在sub-train階段容易過擬合，應先檢查預測領先的產業是否真的表現最好，再信任sub-train結果。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0566",
+ "ts": "2026-07-30T01:03:36"
+}

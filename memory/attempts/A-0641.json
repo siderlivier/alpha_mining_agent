@@ -1,0 +1,92 @@
+{
+ "round": 42,
+ "category": "forced_deleveraging_reversal",
+ "hypothesis": "融資餘額增減反映散戶槓桿情緒；融資成長與近月動能同步走高代表追價槓桿堆疊，脆弱易回落；兩者同步降溫代表籌碼已洗清，後續下檔風險低、易迎反彈修正，屬反轉機制而非摩擦延續。",
+ "prediction": "sub-train ICIR>0.45(高值端預測較低報酬)；多頭腿(低融資成長×低動能組)年化超額報酬>0；月換手率<0.4；下跌後反彈期IC應強於持續上漲期。",
+ "formula": "mul(cs_rank(ts_mean(margin_d21,6)), cs_rank(mom_20))",
+ "name_zh": "融資退燒反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_mean(margin_d21,6)), cs_rank(mom_20))",
+  "fhash": "1b437b47088297d8",
+  "sub_train": {
+   "mean_ic": -0.037,
+   "icir": -0.4
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.18,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.08,
+    "盤整"
+   ],
+   "2013": [
+    -0.076,
+    "多頭"
+   ],
+   "2014": [
+    -0.054,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    -0.033,
+    "多頭"
+   ],
+   "2017": [
+    -0.007,
+    "多頭"
+   ],
+   "2018": [
+    -0.009,
+    "盤整"
+   ],
+   "2019": [
+    -0.026,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.025,
+   "down_months": -0.049
+  },
+  "industry_icir": {
+   "電子": -0.32,
+   "生技": -0.28,
+   "半導體": -0.26,
+   "金融": -0.09
+  },
+  "legs": {
+   "long_excess_ann": -0.007,
+   "short_excess_ann": -0.036
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.63,
+  "stage2_max_rho": {
+   "factor": "F-016",
+   "rho": 0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.4 < 0.45; validation ICIR -0.18 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.63 > 0.4"
+ },
+ "diagnosis": "預測反轉方向（高融資成長×高動能預測較低報酬）成立且sub-train ICIR應>0.45（絕對值）；實際sub-train ICIR為-0.4，方向對但強度略不足，年度IC多數為負（6/8年）支持方向正確。但多頭腿（低融資成長×低動能組）超額報酬為-0.007（≤0，台股不可空頭腿交易），且月換手0.63超過0.4門檻，機制statistically方向正確但不具可交易性。",
+ "failure_type": "expression_bad",
+ "lesson": "方向正確但換手過高、多頭腿不獲利的因子，問題常出在平滑窗口太短導致雜訊換手——下次可嘗試拉長margin_d21的ts_mean窗口或改用月頻資料降低換手，而非放棄整個反轉機制。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0641",
+ "ts": "2026-08-12T09:45:43"
+}

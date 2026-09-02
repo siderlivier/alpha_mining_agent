@@ -1,0 +1,84 @@
+{
+ "round": 64,
+ "category": "financial_provisioning_trend_value",
+ "hypothesis": "金融股应计项若持续下降（更趋保守，如加提呆帐准备金、降低盈余认列积极度），同时ROE仍维持高档，代表管理层是在获利良好情况下主动增提保守准备而非因营运恶化被迫认列损失；市场容易将应计项下降的公司误读为获利转差的警讯而错杀，此机制仅在金融业因监管资本要求与准备金政策而成立，一般产业应计项下降通常直接反映获利真实转差。",
+ "prediction": "金融产业子样本sub-train ICIR>0.4（产业限定）；与F-006、F-021截面相关性|ρ|<0.5",
+ "formula": "mul(neg(delta(accruals,6)), cs_rank(roe))",
+ "name_zh": "金融保守增提",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(neg(delta(accruals,6)), cs_rank(roe))",
+  "fhash": "8650bd2c4c1c1159",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.07
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.13,
+   "decay_pct": -87.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.017,
+    "多頭"
+   ],
+   "2014": [
+    -0.011,
+    "多頭"
+   ],
+   "2015": [
+    0.034,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.11,
+   "生技": -0.03,
+   "半導體": -0.07,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.013,
+   "short_excess_ann": -0.018
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融子樣本ICIR>0.4，實際sub-train僅0.07、validation0.13，逐年IC正負交錯無穩定型態。「保守增提準備金」訊號在accruals下降+高ROE組合中完全偵測不到。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "金融業「應計項下降=保守增提」假說目前無資料支持，accruals在金融業的定義/計算可能與一般產業意義不同(呆帳提列與一般應計項調整機制有別)，此類金融業特化會計假說需先確認底層欄位在金融業的適用性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0981",
+ "ts": "2026-08-27T21:49:57"
+}

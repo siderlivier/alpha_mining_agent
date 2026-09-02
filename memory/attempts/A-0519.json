@@ -1,0 +1,93 @@
+{
+ "round": 34,
+ "category": "short_interest_information_signal",
+ "hypothesis": "台股融資融券制度下，券資比（融券/融資）長期偏高不只是軋空籌碼，更是市場對該股籌碼結構與資訊透明度存疑的持續性代理（主力信用交易度高、籌碼凌亂、法人不願參與）。此劣勢非單一事件而是慢性狀態，市場未充分將其折價進股價，因為多數投資人只關注券資比的『軋空』面向而忽略其『資訊品質』面向。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(低券資比端)年化超額報酬>0；效果在大盤下跌月IC顯著高於上漲月（風險趨避時籌碼品質更重要）。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "券資比籌碼壓力",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "預測「大盤下跌月IC顯著高於上漲月」與實際完全相反（實際上漲月0.049 vs 下跌月-0.017），顯示券資比籌碼壓力其實是順勢而非避險機制。sub-train ICIR僅0.27遠低於預測的0.45門檻，但validation穩定(decay僅6%)且多頭腿超額報酬為正(0.053)，本質是穩健但普通的因子。真正死因是Stage2與F-008「低調接近新高」高相關(ρ=0.57)——低券資比其實是「無炒作、籌碼安定股票也常低調創高」的另一種表達。",
+ "failure_type": "duplicate",
+ "lesson": "券資比/信用交易度類籌碼健康度因子與「低調創高」因子高度重疊，因兩者都在捕捉「無炒作、資訊透明度高」的同一潛在因子；提交前應優先檢查與F-008相關性。同時校準：此類因子傾向順勢(多頭月效果更強)而非避險，未來假設方向不應預設避險屬性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0519",
+ "ts": "2026-07-30T00:21:47"
+}

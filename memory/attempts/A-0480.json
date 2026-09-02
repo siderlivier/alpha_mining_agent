@@ -1,0 +1,87 @@
+{
+ "round": 31,
+ "category": "cash_flow_certainty",
+ "hypothesis": "現金流含金量(ocf_ratio)若能長期（12個月內排名）維持高檔而非單季偶發，代表企業獲利品質具持續性；法人對現金流量表的關注度低於損益表，需要多期確認才會逐步重新評價，形成緩慢的資訊擴散型低估，此欄位尚未被現有因子庫使用。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿(top20%)年化超額報酬 > 0 且需驗證leg單調性；與F-006(accruals)相關性 |ρ| < 0.5。",
+ "formula": "cs_rank(ts_rank(ocf_ratio,12))",
+ "name_zh": "現金流常勝股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(ocf_ratio,12))",
+  "fhash": "0c492836025d7ad6",
+  "sub_train": {
+   "mean_ic": -0.01,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.11,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.004,
+    "盤整"
+   ],
+   "2013": [
+    -0.028,
+    "多頭"
+   ],
+   "2014": [
+    -0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.004,
+   "down_months": -0.013
+  },
+  "industry_icir": {
+   "電子": -0.19,
+   "生技": -0.07,
+   "半導體": -0.1,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測完全落空：sub-train mean IC為負（-0.01，ICIR -0.18），現金流佔比的持續高排名單獨使用不僅無法確認獲利品質，甚至方向微幅為負，各產業ICIR也全數為負或接近零。與C-6對照顯示：ocf_ratio只有在與ROE改善『疊加』時才有效（C-6 ICIR 0.77），單獨作為水準型持續性因子則毫無訊號，證明C-6的訊號主要來自ROE動能本身，ocf_ratio只是輔助過濾器而非獨立可交易的信息源。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金流佔比（ocf_ratio）本身不具備獨立的橫截面預測力，其在C-6中的貢獻應理解為『品質過濾器』而非『主訊號』；未來設計含ocf_ratio的因子時，應將其固定為輔助排名或篩選條件，不要單獨或作為ts_rank主體使用。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0480",
+ "ts": "2026-07-29T23:46:18"
+}

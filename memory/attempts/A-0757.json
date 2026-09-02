@@ -1,0 +1,91 @@
+{
+ "round": 49,
+ "category": "opex_investment_intensity",
+ "hypothesis": "毛利率與營益率之間的缺口反映銷管/研發費用佔營收比重。過去驗證顯示此缺口與未來報酬呈穩定負相關（費用侵蝕型公司長期跑輸），代表市場並非低估這些公司的「先投資後收成」潛力，而是持續且正確地用較低估值反映其較差的營運效率。本次反轉方向提交，直接以「費用效率」作為正向品質因子，重點驗證多頭腿是否能提供正的可交易超額報酬。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(低費用缺口)年化超額>0(核心待驗證重點，過去版本alpha集中空頭腿)；decay<50%；與F-004相關係數|ρ|<0.5",
+ "formula": "cs_rank(neg(sub(gross_margin,op_margin)))",
+ "name_zh": "費用效率溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(gross_margin,op_margin)))",
+  "fhash": "569e486e264c6f77",
+  "sub_train": {
+   "mean_ic": 0.04,
+   "icir": 0.41
+  },
+  "validation": {
+   "mean_ic": 0.038,
+   "icir": 0.51,
+   "decay_pct": -23.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.025,
+    "盤整"
+   ],
+   "2013": [
+    -0.01,
+    "多頭"
+   ],
+   "2014": [
+    0.029,
+    "多頭"
+   ],
+   "2015": [
+    0.053,
+    "盤整"
+   ],
+   "2016": [
+    0.069,
+    "多頭"
+   ],
+   "2017": [
+    0.103,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.068,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.33,
+   "生技": 0.34,
+   "半導體": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.009,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.06,
+  "stage2_max_rho": {
+   "factor": "F-014",
+   "rho": 0.38
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.41 < 0.45; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45(實際0.41略低)，但validation改善至0.51(decay -23%，穩健)，整體rank IC訊號真實且穩定。然而核心待驗證項目「多頭腿(低費用缺口)超額應為正」明確落空：long_excess為-0.009，收益完全由short_excess(0.028)貢獻，與假設文字自承的「過去版本alpha集中空頭腿」問題重演——即使反轉方向重新定義正向品質因子，多空非對稱性依然存在。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "毛利-營益缺口（費用強度）因子的alpha結構性地集中在空頭腿（費用侵蝕嚴重公司被懲罰），無論包裝成哪個方向多頭腿都難有正超額；台股放空受限下，這類「懲罰劣質」而非「獎勵優質」型態的訊號基本不可交易，除非能找到多頭腿本身獨立的正向驅動力。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0757",
+ "ts": "2026-08-14T00:36:43"
+}

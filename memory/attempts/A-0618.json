@@ -1,0 +1,83 @@
+{
+ "round": 40,
+ "category": "chip_concentration_liquidity_dryup",
+ "hypothesis": "amt_21的12個月變化量捕捉投機性交易者是否已離場；成交金額持續萎縮代表短線游資退出，剩餘持股集中於長期投資人，股價對後續基本面消息反應速度提升(衝擊成本降低)，此為流動性乾涸帶來的資訊效率效果，與F-008/F-020的水準值機制不同。",
+ "prediction": "sub-train ICIR>0.45；與F-008、F-020相關係數|ρ|<0.5；多頭腿年化超額>0；月換手率<0.4。",
+ "formula": "cs_rank(neg(delta(amt_21,12)))",
+ "name_zh": "籌碼沉澱訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(amt_21,12)))",
+  "fhash": "9301875a861b2867",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.04
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.13,
+   "decay_pct": -259.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.009,
+    "多頭"
+   ],
+   "2014": [
+    0.024,
+    "多頭"
+   ],
+   "2015": [
+    -0.036,
+    "盤整"
+   ],
+   "2016": [
+    0.038,
+    "多頭"
+   ],
+   "2017": [
+    -0.019,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    -0.0,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.05,
+   "半導體": 0.11,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.053,
+   "short_excess_ann": 0.017
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.34,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45、多頭腿年化超額>0；實際sub-train ICIR僅0.04，且多頭腿（成交金額萎縮端）超額報酬為-0.053，明顯為負，直接違反自訂的可交易性門檻，代表『成交萎縮=浮額沉澱=資訊效率提升』這個方向在台股是錯的或至少無法透過多頭腿獲利。decay為-259%（sub-train與validation關係極不穩定），進一步佐證這是雜訊而非結構性效果。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "成交金額萎縮（流動性乾涸）在台股更可能對應『失去市場關注、籌碼沒人要』而非『游資出清、資訊效率提升』，兩者外觀相似但方向相反；用amt_21變化量做流動性代理時，需要額外條件（如同時搭配基本面轉強）才能把「乏人問津」與「籌碼真正沉澱到長期投資人」區分開，否則直接用量縮排序容易誤傷冷門爛股。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0618",
+ "ts": "2026-08-12T09:17:43"
+}

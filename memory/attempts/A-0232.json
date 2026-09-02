@@ -1,0 +1,83 @@
+{
+ "round": 14,
+ "category": "valuation_mean_reversion",
+ "hypothesis": "台股以散戶為主導，容易對短期利空過度反應，導致個股淨值股價比相對自身兩年歷史大幅推高（股價相對淨值變得異常便宜）；此為情緒驅動的暫時性錯價，而非基本面惡化，待情緒消退後估值倍數容易向自身歷史常態回歸，機制是個股層級的估值均值回歸而非產業或風格因子。",
+ "prediction": "sub-train ICIR > 0.45；效果應在大盤下跌月更顯著（逆勢特性）；月換手率 < 0.4",
+ "formula": "cs_rank(sub(bp, ts_med(bp,24)))",
+ "name_zh": "淨值溢價修正",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(bp, ts_med(bp,24)))",
+  "fhash": "23a80ea306931c36",
+  "sub_train": {
+   "mean_ic": 0.02,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.1,
+   "decay_pct": 33.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.112,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    -0.026,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.007,
+   "down_months": 0.042
+  },
+  "industry_icir": {
+   "電子": 0.2,
+   "生技": -0.03,
+   "半導體": 0.18,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.004,
+   "short_excess_ann": -0.021
+  },
+  "coverage": 0.57,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.14 < 0.45; validation ICIR 0.1 < 0.3; 覆蓋率 0.57 < 0.6"
+ },
+ "diagnosis": "預測效果應在下跌月更顯著，cond_ic確實驗證了這點：下跌月IC 0.042遠高於上漲月0.007，方向判斷正確。但整體強度太弱（sub-train ICIR 0.14）且coverage僅0.57（低於0.6門檻），bp欄位資料缺失比例偏高稀釋了訊號，stage2_max_rho與F-005僅0.26代表方向本身與既有低波動異常因子區隔度足夠。",
+ "failure_type": "expression_bad",
+ "lesson": "coverage不足(0.57)是本案主要硬傷之一，與訊號強度不足同時發生；淨值溢價均值回歸類假說下次應先確認bp欄位的資料完整度，或改用較短的ts_med窗口（如12個月）換取更高coverage再測ICIR。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0232",
+ "ts": "2026-07-21T12:11:51"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 58,
+ "category": "revenue_surprise_drift",
+ "hypothesis": "借鑑post-earnings-announcement drift邏輯，將月營收年增率用自身24月標準差正規化得到「驚喜幅度」，正規化後的極端值代表相對於該公司歷史常態的真正意外消息(而非規模效應造成的表面高成長)；台股月營收公告後市場消化速度慢(尤其中小型股)，意外訊息會在後續數月逐步反映到股價。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；與F-007(營收穩健溢價)相關性 < 0.5，因兩者機制方向相反(一個獎勵穩定、一個獎勵驚喜)。",
+ "formula": "cs_rank(sdiv(rev_mom, ts_std(rev_mom,24)))",
+ "name_zh": "營收驚喜漂移股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(rev_mom, ts_std(rev_mom,24)))",
+  "fhash": "55a3f4c52cdad4dc",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.07
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.38,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.024,
+    "多頭"
+   ],
+   "2014": [
+    -0.014,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": -0.01,
+   "生技": -0.17,
+   "半導體": 0.07,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.87,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "distill_failed": true,
+ "id": "A-0886",
+ "ts": "2026-08-19T00:25:17"
+}

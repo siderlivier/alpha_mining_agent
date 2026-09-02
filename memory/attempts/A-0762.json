@@ -1,0 +1,90 @@
+{
+ "round": 50,
+ "category": "margin_recovery_underreaction",
+ "hypothesis": "電子/半導體業處於存貨去化循環尾聲時，毛利率率先脫離谷底回升，但財報僅季頻揭露、分析師模型更新滯後，市場對毛利率連續回升趨勢的確認落後於實際發生時點，使得毛利率斜率轉正初期仍有低估空間。",
+ "prediction": "sub-train ICIR>0.45；industry_icir於電子/半導體應高於生技/金融至少0.15；改用12個月窗口以降低對單一景氣循環切分點的過擬合(對照全域規則9)。",
+ "formula": "cs_rank(ts_slope(gross_margin,12))",
+ "name_zh": "毛利率回升確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(gross_margin,12))",
+  "fhash": "35006a6795dcdd2e",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.19,
+   "decay_pct": 64.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.012,
+    "盤整"
+   ],
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.031,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.025,
+    "多頭"
+   ],
+   "2018": [
+    -0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.24,
+   "半導體": 0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.027,
+   "short_excess_ann": 0.074
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.3
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.19 < 0.3; validation 衰減 64% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測 sub-train ICIR>0.45 且電子/半導體industry_icir應同時領先生技/金融0.15以上，並用12個月窗口降低過擬合。實際 sub-train 0.52達標，但validation僅0.19、decay 64%明顯過擬合；產業拆解顯示電子0.44尚可但半導體僅0.05，與「同屬存貨循環尾聲」的產業配對假設不符，暗示效應可能只捕捉到電子代工業在2013-2017特定循環的偶發現象。",
+ "failure_type": "expression_bad",
+ "lesson": "12個月斜率窗口不足以解決半導體與電子業毛利率回升節奏不同步的問題；若保留「毛利率回升落後確認」假設，應分產業分別設定斜率窗口(半導體晶圓循環週期通常較長)，而非套用同一窗口跨產業比較。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0762",
+ "ts": "2026-08-14T00:51:32"
+}

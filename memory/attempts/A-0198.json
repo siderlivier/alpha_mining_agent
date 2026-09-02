@@ -1,0 +1,90 @@
+{
+ "round": 12,
+ "category": "revenue_pullforward_warning",
+ "hypothesis": "延續前次驗證(A-0161)已確認的方向：電子供應鏈月增率大幅領先年增率，代表短期急單效應透支未來需求(通路塞貨/拉貨)，這種效應在需求正常化後將反轉；市場常誤將月增動能解讀為趨勢延續，而非拉貨透支警訊。",
+ "prediction": "sub-train ICIR > 0.45（neg方向）；electronics/semiconductor產業cond_ic全年應多數為負，方向與歷史驗證一致；若月換手>0.4需加ts_mean平滑",
+ "formula": "cs_rank(sub(rev_mom, rev_yoy))",
+ "name_zh": "拉貨透支警訊",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_mom, rev_yoy))",
+  "fhash": "af2e63ea4168dcb8",
+  "sub_train": {
+   "mean_ic": -0.04,
+   "icir": -0.58
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.34,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.037,
+    "多頭"
+   ],
+   "2015": [
+    -0.048,
+    "盤整"
+   ],
+   "2016": [
+    -0.048,
+    "多頭"
+   ],
+   "2017": [
+    -0.042,
+    "多頭"
+   ],
+   "2018": [
+    -0.026,
+    "盤整"
+   ],
+   "2019": [
+    -0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.034,
+   "down_months": -0.036
+  },
+  "industry_icir": {
+   "電子": -0.69,
+   "生技": -0.42,
+   "半導體": -0.35,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.079,
+   "short_excess_ann": -0.067
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.55,
+  "stage2_culprit": {
+   "factor": "F-003",
+   "rho": -0.5,
+   "factor_name": "風格孤兒股",
+   "factor_desc": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-003 |ρ|=0.50 > 0.5"
+ },
+ "diagnosis": "診斷數字幾乎完全驗證假設——sub-train ICIR -0.58、validation -0.34、四產業ICIR排序與預測完全吻合(電子>生技>半導體>金融,且皆強負值)、cond_ic上漲下跌月皆穩定為負,是本輪機制預測最準的一個。唯一問題是與庫內F-003(風格孤兒股)相關係數達-0.50觸發重複淘汰,非假設錯誤。",
+ "failure_type": "duplicate",
+ "lesson": "rev_mom與rev_yoy差值(急單透支訊號)與F-003(營收市值比×成長)存在意外高相關,即使概念故事不同,只要共用核心欄位(rev_yoy)就容易撞庫;下次設計類似「透支/虛胖成長」直覺的因子應優先換用不重疊的原始欄位(如存貨天數、應收帳款)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0198",
+ "ts": "2026-07-21T11:46:43"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 18,
+ "category": "cash_quality_growth_confirmation",
+ "hypothesis": "現金流品質(ocf_ratio)與本業獲利成長(op_income_yoy)同時強勁的公司，代表其成長是由本業驅動且有現金流佐證的『真成長』，而非依賴應計項或業外墊高；市場常見的成長因子只看盈餘成長不看現金流佐證，對這種雙重確認但可能增速中等、缺乏顯眼故事性的公司存在系統性低估。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；與F-006、F-012相關係數|ρ|<0.5",
+ "formula": "add(cs_rank(ts_mean(ocf_ratio,6)), cs_rank(op_income_yoy))",
+ "name_zh": "現金成長雙確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_rank(ts_mean(ocf_ratio,6)), cs_rank(op_income_yoy))",
+  "fhash": "c236644b8d046aa8",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.22,
+   "decay_pct": 34.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.035,
+    "多頭"
+   ],
+   "2015": [
+    0.055,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.029,
+    "多頭"
+   ],
+   "2018": [
+    0.02,
+    "盤整"
+   ],
+   "2019": [
+    0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.026,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.3,
+   "生技": 0.42,
+   "半導體": 0.1,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": -0.005
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.29
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.33 < 0.45; validation ICIR 0.22 < 0.3"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train 0.33、validation 0.22，衰減34%(未達過擬合門檻但兩期都偏弱)，多頭腿超額為正(0.021)代表方向沒錯、只是強度不夠。公式用cs_rank相加做『雙重確認』，但相加本質是OR邏輯(任一維度強就能拉高分數)，與假設要求的『現金流與本業成長同時強』(AND邏輯)不符，可能稀釋了真正雙確認股票的訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "當假設本質是『兩個條件同時成立』的聯合確認，用cs_rank相加(OR-like)無法真正篩出雙強股票，應改用乘積、min()或交集式邏輯來逼近AND語意，再測試訊號強度是否提升。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0287",
+ "ts": "2026-07-21T12:59:43"
+}

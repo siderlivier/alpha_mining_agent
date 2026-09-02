@@ -1,0 +1,88 @@
+{
+ "round": 51,
+ "category": "earnings_resilience_amid_slowdown",
+ "hypothesis": "當公司營收月增率明顯放緩，但淨利率仍持續改善，代表管理層透過成本控制、產品組合優化或費用紀律維持獲利，而非單純仰賴營收擴張；這種逆風中的獲利韌性比營收獲利同步成長更能反映管理品質，但市場多聚焦營收數字，對此結構性韌性訊號定價不足，景氣轉弱階段辨識度更高。",
+ "prediction": "sub-train ICIR > 0.45；下跌月/景氣轉弱期IC應高於上漲月；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_z(neg(rev_mom)),cs_z(delta(net_margin,6)))",
+ "name_zh": "逆風獲利韌性",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_z(neg(rev_mom)),cs_z(delta(net_margin,6)))",
+  "fhash": "e14ad105caa134cd",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.019,
+   "icir": 0.37,
+   "decay_pct": -48.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.045,
+    "盤整"
+   ],
+   "2013": [
+    0.035,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.017,
+    "盤整"
+   ],
+   "2016": [
+    0.016,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.018
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": 0.13,
+   "半導體": 0.09,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.005,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.72,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.25低於門檻，核心預測『下跌/景氣轉弱月IC應高於上漲月』完全落空——上漲月與下跌月IC完全相同(皆0.018)，顯示『逆風獲利韌性』的辨識度優勢在下跌期並未浮現。月換手率高達0.72(全批最高)，顯示雙變數交乘組合訊號變化極快、噪音大。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『營收放緩但淨利率韌性』的管理品質敘事未展現預測的景氣狀態依賴性，且高換手率(0.72)顯示此類雙變數交乘因子換手成本過高難以交易；獲利韌性類假說重試時應先用單變數(delta net_margin)驗證基礎效果，再談與營收動能的交乘增量，避免一次疊加兩個變化率變數放大雜訊。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0784",
+ "ts": "2026-08-14T01:05:54"
+}

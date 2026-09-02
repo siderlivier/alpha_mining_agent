@@ -1,0 +1,91 @@
+{
+ "round": 45,
+ "category": "margin_surprise_standardized_shock",
+ "hypothesis": "營業利益率季變動經自身12個月波動度標準化後若構成統計顯著驚喜，代表獲利結構出現非雜訊性實質轉變；市場多只關注YoY成長率絕對數字而忽略相對自身波動的標準化幅度，導致顯著邊際利潤改善訊號被低估延遲反映。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；月換手率<0.4；與F-004/F-001相關性|ρ|<0.5。",
+ "formula": "cs_rank(sdiv(delta(op_margin,3), ts_std(op_margin,12)))",
+ "name_zh": "營益率驚喜訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(op_margin,3), ts_std(op_margin,12)))",
+  "fhash": "a0d79236c52a3f80",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.48
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.09,
+   "decay_pct": 118.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.031,
+    "盤整"
+   ],
+   "2013": [
+    0.054,
+    "多頭"
+   ],
+   "2014": [
+    0.048,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    0.028,
+    "多頭"
+   ],
+   "2017": [
+    0.05,
+    "多頭"
+   ],
+   "2018": [
+    -0.044,
+    "盤整"
+   ],
+   "2019": [
+    0.032,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.041
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.27,
+   "半導體": 0.29,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.063,
+   "short_excess_ann": 0.057
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.41,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.43
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR -0.09 < 0.3; validation 衰減 118% > 50%（過擬合徵兆）; 月換手 0.41 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR預測>0.4，實際0.48達標，相關性也通過（max rho 0.43<0.5）。但validation ICIR驟降至-0.09、decay 118%，且2018年（盤整年）IC出現-0.044的劇烈反轉，顯示以trailing 12個月std標準化op_margin變動的作法對波動regime切換高度敏感，訓練期表現是特定期間的過擬合。",
+ "failure_type": "expression_bad",
+ "lesson": "用ts_std做分母標準化的『驚喜』類因子在波動regime轉換年份（如2018）容易劇烈反轉，因為短窗std本身在低波動期會放大微小變動；若要保留『相對自身波動的顯著性』這個想法，應改用更長的std估計窗口或加winsorize/clip，而非直接除以12個月std。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0695",
+ "ts": "2026-08-12T14:25:46"
+}

@@ -1,0 +1,91 @@
+{
+ "round": 36,
+ "category": "electronics_inventory_cycle_turn",
+ "hypothesis": "電子業存貨與訂單週期會先反映在毛利率轉折，再擴散到當月營收動能；當毛利率半年內改善且當月營收動能同步轉強，代表庫存去化完成、新訂單能見度提升，此雙重確認訊號比單獨看營收成長更能過濾雜訊，市場對毛利率結構性轉折的認知落後1-2季。",
+ "prediction": "電子產業industry_icir > 0.5；sub-train ICIR(電子子樣本) > 0.45；與F-009相關性 |ρ| < 0.5。",
+ "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(rev_mom))",
+ "name_zh": "電子庫存週期轉折",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(rev_mom))",
+  "fhash": "41b0d85516b81500",
+  "sub_train": {
+   "mean_ic": 0.026,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.023,
+   "icir": 0.39,
+   "decay_pct": 9.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.042,
+    "盤整"
+   ],
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.029,
+    "多頭"
+   ],
+   "2015": [
+    0.028,
+    "盤整"
+   ],
+   "2016": [
+    0.04,
+    "多頭"
+   ],
+   "2017": [
+    0.039,
+    "多頭"
+   ],
+   "2018": [
+    0.002,
+    "盤整"
+   ],
+   "2019": [
+    0.044,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.022,
+   "down_months": 0.031
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.21,
+   "半導體": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.039,
+   "short_excess_ann": 0.059
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.72,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.43 < 0.45; 月換手 0.72 > 0.4"
+ },
+ "diagnosis": "預測電子業ICIR>0.5，實際剛好0.5（幾乎精準命中），validation decay僅9%（本輪最穩定案例之一），顯示毛利率轉折+營收動能雙確認的產業機制判斷正確；但敗在操作面：sub-train ICIR 0.43微幅未達0.45門檻，且月換手率0.72遠超0.4上限，rev_mom（當月營收動能）本身雜訊過大導致換手率失控。這不是機制錯誤，而是表達方式（未平滑的月度動能）不當。",
+ "failure_type": "expression_bad",
+ "lesson": "機制本身（電子業毛利率轉折領先動能）方向正確且產業ICIR吻合預測、decay低，問題出在rev_mom未平滑導致換手率超標；下次可用ts_mean(rev_mom,2或3)重新表達同一假設以降低換手率。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0558",
+ "ts": "2026-07-30T00:46:50"
+}

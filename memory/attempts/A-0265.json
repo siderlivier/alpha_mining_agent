@@ -1,0 +1,83 @@
+{
+ "round": 17,
+ "category": "institutional_flow_momentum",
+ "hypothesis": "投信買超具有資訊優勢與擇股能力，但因分批建倉、資訊擴散需時間，其買超力道中期延續(3月平滑)反映持續性研究結論而非單日噪音；市場對法人分批進場消化緩慢。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；半導體/電子產業ICIR應顯著高於金融產業(法人覆蓋密度高、資訊優勢較低)",
+ "formula": "cs_rank(ts_mean(trust_net_21,3))",
+ "name_zh": "投信買超延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(trust_net_21,3))",
+  "fhash": "a96aba087c509690",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.33,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.003,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    -0.025,
+    "多頭"
+   ],
+   "2017": [
+    -0.02,
+    "多頭"
+   ],
+   "2018": [
+    -0.021,
+    "盤整"
+   ],
+   "2019": [
+    -0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": -0.09,
+   "半導體": -0.14,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.023,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測投信買超延續應有正向IC且半導體/電子ICIR高於金融。實際方向完全相反：sub-train IC為-0.011、validation更負至-0.021，2015年後幾乎每年都是負值，電子產業僅微幅正值(0.09)其餘皆負。這代表法人買超力道在中期(3月平滑)反而伴隨後續反轉，而非持續性研究結論的延續——很可能法人買超已被市場即時消化定價，後續呈現均值回歸而非動能延續。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "法人買超力道的「延續性」假設方向錯誤；trust_net的中期平滑訊號在此樣本呈現的是反轉而非動能，若要重探法人流量題材應優先測試反向(買超後續走弱)而非再嘗試不同平滑窗口。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0265",
+ "ts": "2026-07-21T12:47:40"
+}

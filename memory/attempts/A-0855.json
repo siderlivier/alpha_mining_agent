@@ -1,0 +1,93 @@
+{
+ "round": 56,
+ "category": "channel_stuffing_quality",
+ "hypothesis": "電子代工/零組件廠常見「拉貨潮」現象，通路端為避免缺貨提前拉高訂單；若營收月增率大幅超過毛利率改善幅度，代表可能是渠道囤貨而非真實終端需求，後續將面臨去庫存修正。此現象因電子業存貨週期短、供應鏈層級多而特別明顯，其他產業較不適用。",
+ "prediction": "電子產業子樣本sub-train ICIR>0.4（direction=neg，高值代表囤貨風險，預測未來報酬較低）；空頭腿（高值端）年化報酬顯著低於多頭腿；若多頭腿超額≤0仍可作為排除型濾網入庫。",
+ "formula": "sub(cs_rank(rev_mom), cs_rank(delta(gross_margin,6)))",
+ "name_zh": "拉貨囤積警訊",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(rev_mom), cs_rank(delta(gross_margin,6)))",
+  "fhash": "81c2bd78f6c597e8",
+  "sub_train": {
+   "mean_ic": -0.036,
+   "icir": -0.71
+  },
+  "validation": {
+   "mean_ic": -0.007,
+   "icir": -0.17,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.012,
+    "盤整"
+   ],
+   "2013": [
+    -0.032,
+    "多頭"
+   ],
+   "2014": [
+    -0.039,
+    "多頭"
+   ],
+   "2015": [
+    -0.042,
+    "盤整"
+   ],
+   "2016": [
+    -0.04,
+    "多頭"
+   ],
+   "2017": [
+    -0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    -0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.028,
+   "down_months": -0.028
+  },
+  "industry_icir": {
+   "電子": -0.38,
+   "生技": -0.44,
+   "半導體": -0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.047,
+   "short_excess_ann": -0.044
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.7,
+  "stage2_culprit": {
+   "factor": "F-025",
+   "rho": -0.93,
+   "factor_name": "半導體毛利拐點股",
+   "factor_desc": "毛利率半年內回升但營收還沒跟上，代表景氣循環早期反轉訊號。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-025 |ρ|=0.93 > 0.5"
+ },
+ "diagnosis": "預測方向(neg)在電子業成立，甚至強於預期（sub-train icir -0.71 遠超±0.4門檻），『拉貨囤積』機制方向上被驗證；但stage2發現與F-025「半導體毛利拐點股」相關係數達-0.93，幾乎是後者的符號翻轉版本（rev_mom−ΔGM vs ΔGM−rev_mom），屬同一輸入空間的鏡像重複而非新假設。",
+ "failure_type": "duplicate",
+ "lesson": "提出『反向警訊』型因子前，應先檢查是否只是庫內既有因子的符號翻轉；同一組輸入變數的正負向組合本質上是同一因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0855",
+ "ts": "2026-08-18T23:55:52"
+}

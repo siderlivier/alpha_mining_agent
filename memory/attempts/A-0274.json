@@ -1,0 +1,87 @@
+{
+ "round": 17,
+ "category": "cash_flow_quality_own_trend",
+ "hypothesis": "營業現金流/稅後淨利比率明顯高於自身兩年中位數，代表本期盈餘含金量正在改善(現金流入品質提升而非會計數字堆疊)；此邊際改善不像EPS或營收成長容易成為市場焦點，屬於無聊的財務體質訊號，存在系統性認知延遲。",
+ "prediction": "sub-train ICIR>0.45；與F-006、F-012相關係數<0.5(相對自身歷史偏離而非水準，未使用accruals欄位)",
+ "formula": "cs_rank(sub(ocf_ratio, ts_med(ocf_ratio,12)))",
+ "name_zh": "現金含金量改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ocf_ratio, ts_med(ocf_ratio,12)))",
+  "fhash": "d937b57e02044e5b",
+  "sub_train": {
+   "mean_ic": -0.019,
+   "icir": -0.31
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.007,
+    "盤整"
+   ],
+   "2013": [
+    -0.033,
+    "多頭"
+   ],
+   "2014": [
+    -0.017,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    -0.028,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.004,
+    "盤整"
+   ],
+   "2019": [
+    0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.014
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.19,
+   "半導體": -0.13,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.03,
+   "short_excess_ann": -0.006
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，方向為正(高OCF品質改善=看多)。實際sub-train ICIR為-0.31，方向完全相反，且8個年度中7個為負值(僅2019年微幅正0.014)，一致性很高。顯示本期ocf_ratio明顯高於自身兩年中位數，後續反而是負報酬——較可能是均值回歸(異常高OCF品質難以持續，或反映一次性營運資金釋放而非結構性改善)，而非市場對「無聊訊號」的系統性低估。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金流品質相對自身歷史的正向偏離，在此樣本呈現的是均值回歸而非低估延續，若要重探現金流品質題材應優先測試反向(偏離度過高=警訊)而非重新調整表達式。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0274",
+ "ts": "2026-07-21T12:47:40"
+}

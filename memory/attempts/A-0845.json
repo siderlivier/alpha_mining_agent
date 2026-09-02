@@ -1,0 +1,84 @@
+{
+ "round": 55,
+ "category": "informed_flow_quality_confirmation",
+ "hypothesis": "外資近月買超(frgn_net_21)單獨使用訊號不穩，但當外資買超同時發生在應計項偏低（盈餘品質高）的公司時，代表這波外資買盤是基於真實基本面研究而非被動指數調整或短線動能追逐，此雙重確認的資訊含量顯著高於單純法人流量。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-006、F-017相關性均需|ρ|<0.5。",
+ "formula": "mul(cs_rank(frgn_net_21), cs_rank(neg(accruals)))",
+ "name_zh": "真買盤確認股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "frgn_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_net_21), cs_rank(neg(accruals)))",
+  "fhash": "7911b394bc2642ac",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.15
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.24,
+   "decay_pct": -56.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.001,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.027,
+    "盤整"
+   ],
+   "2016": [
+    0.016,
+    "多頭"
+   ],
+   "2017": [
+    -0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.025,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": 0.2,
+   "生技": 0.23,
+   "半導體": 0.05,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.49,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4，實際僅0.15，方向雖為正但強度接近雜訊，且下跌月轉負(-0.01)與上漲月(0.023)不一致。frgn_net_21與accruals皆為庫內已知偏弱的獨立訊號，兩者rank相乘未產生預期的雙重確認增益。診斷資訊不足以完全排除是相乘結構稀釋了真訊號的可能，但整體強度太弱，傾向判定機制本身不成立。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用cs_rank(A)*cs_rank(B)做雙重確認，本質是連續值相乘而非條件篩選(AND)，若兩成分本身訊號都弱，相乘後難產生綜效；驗證雙重確認假說時應優先挑選至少一個成分本身IC夠強的組合。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0845",
+ "ts": "2026-08-18T23:46:33"
+}

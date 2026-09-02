@@ -1,0 +1,84 @@
+{
+ "round": 66,
+ "category": "earnings_quality_operating_vs_reported",
+ "hypothesis": "營業利益年增率高於 EPS 年增率，代表獲利成長由本業驅動、未被業外一次性利益（處分資產、匯兌、金融資產評價）灌水；反之 EPS 成長遠快於營業利益成長者獲利品質差、成長不可持續。市場對 headline EPS 成長給予同質溢價、不區分成長來源，因此本業驅動的乾淨成長被相對低估。",
+ "prediction": "direction pos；sub-train ICIR > 0.4；多頭腿年化超額 > 0；空頭腿（EPS 灌水股）年化超額 < 0（雙向有效）；與 C-6、R-008、R-013 之 |ρ| < 0.5。",
+ "formula": "cs_rank(sub(op_income_yoy, eps_yoy))",
+ "name_zh": "本業純度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(op_income_yoy, eps_yoy))",
+  "fhash": "86a2e9a15c39d304",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.55,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 pos、ICIR>0.4、多頭腿為正、空頭腿為負(雙向有效)。實際 sub-train ICIR -0.06、validation ICIR -0.55(強烈反向)、逐年多為負、2019 -0.053。所有窗口皆無正向證據,方向與『本業驅動的乾淨成長被低估』假說相反(EPS 成長快於營業利益者近期反而不弱)。同時 sub(op_income_yoy, eps_yoy) 也是成長率相減的不穩構造——證據不足以完全區分是機制反向還是構造假象,但無任何窗口支持原假設。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『獲利成長來源純度溢價』在台股近期尺度不成立甚至反向。下次獲利品質改以 level 型指標(應計項目、現金含量比、業外佔比水準)表達;避免用兩個 YoY 成長率相減,該構造既不穩又可能系統性載入反向訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1011",
+ "ts": "2026-09-02T00:51:50"
+}

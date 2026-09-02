@@ -1,0 +1,93 @@
+{
+ "round": 52,
+ "category": "earnings_quality_divergence",
+ "hypothesis": "分析師與市場模型多聚焦營業利益(op_margin)變化，對稅後淨利率(net_margin，涵蓋業外損益與稅務效率)的短期跳升較少交叉檢視；相對自身歷史波動標準化後的淨利率驚喜分數，捕捉這類容易被忽略的稅後線意外，市場消化速度較慢。",
+ "prediction": "sub-train ICIR>0.45；上漲月與下跌月IC同號；月換手率<0.4",
+ "formula": "cs_rank(sdiv(delta(net_margin,3), ts_std(net_margin,12)))",
+ "name_zh": "淨利率意外分",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(net_margin,3), ts_std(net_margin,12)))",
+  "fhash": "e9b1daa9e29efcfc",
+  "sub_train": {
+   "mean_ic": 0.031,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.18,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.066,
+    "盤整"
+   ],
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.055,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.23,
+   "半導體": 0.16,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.045,
+   "short_excess_ann": 0.05
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.42,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.59,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.59 > 0.5"
+ },
+ "diagnosis": "cond_ic預測正確(up 0.028/down 0.02同號)，但ICIR預測失準(train 0.4/validation 0.18，衰減54%，本身也逼近stage4邊界)。最終在stage2因與F-001(ROE趨勢改善)相關係數0.59被剔除——淨利率變化與ROE趨勢在DuPont分解下本就高度共線。",
+ "failure_type": "duplicate",
+ "lesson": "獲利率類(淨利率/營益率/ROE)的『趨勢/驚喜分數』彼此存在機械式共線性，naive rank-normalize的獲利率delta類公式很容易與F-001系ROE趨勢因子高相關。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0795",
+ "ts": "2026-08-14T01:18:09"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 17,
+ "category": "price_volume_trend_confirmation",
+ "hypothesis": "股價動能與成交金額呈穩定正相關(價漲量增、價跌量縮)，代表趨勢由真實資金流入驅動而非籌碼混亂；此量價同步品質缺乏敘事吸引力，市場對其中蘊含的真實買盤反應不足。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；電子/半導體產業ICIR應高於金融產業(散戶占比高、易現量價背離)",
+ "formula": "cs_rank(ts_corr(mom_20, amt_21, 6))",
+ "name_zh": "量價同步趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(mom_20, amt_21, 6))",
+  "fhash": "dcf509e4b1172040",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.016,
+   "icir": -0.2,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.032,
+    "盤整"
+   ],
+   "2013": [
+    -0.006,
+    "多頭"
+   ],
+   "2014": [
+    -0.002,
+    "多頭"
+   ],
+   "2015": [
+    -0.035,
+    "盤整"
+   ],
+   "2016": [
+    0.036,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.019,
+    "盤整"
+   ],
+   "2019": [
+    -0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.016,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": -0.24,
+   "生技": 0.01,
+   "半導體": 0.0,
+   "金融": -0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.0
+  },
+  "coverage": 0.95,
+  "turnover_m": 0.44,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測量價同步應有正向ICIR且電子/半導體優於金融。實際sub-train ICIR僅-0.06接近雜訊，電子產業反而最差(-0.24)，與預測方向相反；cond_ic在上漲月為負、下跌月為正，符號不穩定，顯示這是隨機雜訊而非真實訊號。量價同步「品質」的敘事在此表達下完全未捕捉到任何訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "以6月滾動相關係數衡量「量價同步品質」在台股未展現訊號，且電子股(理論上散戶多、易背離)反而最弱，暗示這類正確性判別可能需要更長窗口或不同動量/量能欄位組合，而非目前表達方式的簡單調參可以救回。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0266",
+ "ts": "2026-07-21T12:47:40"
+}

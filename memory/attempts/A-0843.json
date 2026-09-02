@@ -1,0 +1,94 @@
+{
+ "round": 55,
+ "category": "financial_franchise_stability_dividend",
+ "hypothesis": "金融股中，融券空方壓力低且股利殖利率高的公司，代表市場對其特許經營權與獲利穩定性有高度共識，這類「無聊但穩健」的標的因缺乏話題性被成長型資金忽略，屬於低關注度溢酬而非單純殖利率因子。",
+ "prediction": "金融限定industry_icir>0.4；多頭腿年化超額報酬>0；與F-023相關性|ρ|<0.5。",
+ "formula": "sub(cs_rank(div_yield), cs_rank(short_margin_ratio))",
+ "name_zh": "穩健配息金控",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(div_yield), cs_rank(short_margin_ratio))",
+  "fhash": "736264e6b8b14a85",
+  "sub_train": {
+   "mean_ic": 0.056,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.071,
+   "icir": 0.55,
+   "decay_pct": -5.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.033,
+    "盤整"
+   ],
+   "2013": [
+    0.055,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.057,
+    "盤整"
+   ],
+   "2016": [
+    0.093,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    0.11,
+    "盤整"
+   ],
+   "2019": [
+    0.033,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.073,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.7,
+   "生技": 0.46,
+   "半導體": 0.21,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": 0.059
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.25,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.58,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.58 > 0.5"
+ },
+ "diagnosis": "金融限定ICIR預測>0.4，實際0.17（四組最低，電子0.70最高），是本輪第三次出現「產業限定敘事與資料不符」（同C-7, C-9），確立為系統性模式而非單一個案。死因為與F-020相關0.58，短期融券比率作為關注度代理與F-020的低成交金額代理概念重疊。",
+ "failure_type": "duplicate",
+ "lesson": "產業限定敘事常是事後合理化：本輪6個產業限定候選中僅1個目標產業真的industry_icir最高，其餘5個都不是。",
+ "lesson_confidence": "cross_validated",
+ "verdict": "rejected_stage2",
+ "id": "A-0843",
+ "ts": "2026-08-18T23:46:33"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 46,
+ "category": "trend_residual_surprise",
+ "hypothesis": "投資人評估公司獲利改善時習慣以線性外推方式看待近期趨勢（trend extrapolation bias）；當本期ROE明顯偏離其自身12個月線性趨勢線的預測值（即殘差為正），代表出現非線性、非預期的獲利跳升，這類『趨勢外驚喜』比單純的趨勢延續（如F-001用中位數偏離）更難被慣於線性外推的投資人立即消化，因此存在持續性的價格修正空間。",
+ "prediction": "sub-train ICIR>0.45；與F-001、F-012相關性<0.5；validation decay<40%；多頭腿年化超額>0。",
+ "formula": "cs_rank(ts_resi(roe,12))",
+ "name_zh": "ROE趨勢殘差驚喜",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_resi(roe,12))",
+  "fhash": "4951711f88863a40",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.02,
+   "decay_pct": 93.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.01,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.029,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.022,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.08,
+   "半導體": 0.16,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": -0.006,
+   "short_excess_ann": 0.04
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.33,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.46
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.32 < 0.45; validation ICIR 0.02 < 0.3; validation 衰減 93% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.32已未達標；validation崩至0.02(衰減93%)；且多頭腿超額為負(-0.006)、空頭腿反而正(0.04)，代表因子實際運作方向與『正殘差可做多』的假設相反，同時與F-001相關性0.46已接近撞庫邊界。",
+ "failure_type": "expression_bad",
+ "lesson": "線性去趨勢殘差(ts_resi)在sub-train訊號微弱、validation完全消失且多頭腿翻負，顯示可能主要捕捉雜訊而非『非線性趨勢外驚喜』；驗證此類假設宜用事件型(顯著超出歷史區間)指標取代連續殘差值。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0701",
+ "ts": "2026-08-12T14:41:10"
+}

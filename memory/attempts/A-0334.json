@@ -1,0 +1,84 @@
+{
+ "round": 21,
+ "category": "earnings_composition_quality",
+ "hypothesis": "當EPS年增率明顯高於營業利益年增率，代表獲利成長主要來自業外一次性損益而非本業改善，投資人常有功能固著偏誤，僅看EPS headline外推未來成長卻忽略獲利品質，此落差因非經常性項目不持續而在後續季度回歸、股價隨之修正。",
+ "prediction": "sub-train ICIR>0.45；金融產業（業外收益如金融資產處分損益常見）industry_icir應顯著高於其他產業；空頭腿超額報酬應顯著為負。",
+ "formula": "cs_rank(neg(sub(eps_yoy, op_income_yoy)))",
+ "name_zh": "業外墊高警訊",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(eps_yoy, op_income_yoy)))",
+  "fhash": "63869bce533b668f",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.55,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測EPS成長快於營業利益成長（業外灌水）應被市場修正、產生負報酬。實際sub-train ICIR為-0.06（弱且方向偏反），validation達-0.55（頗強的反向）。產業別全為負，金融最負(-0.19)，方向與『金融業外收益常見』的產業預測部分吻合，但整體訊號方向與假設相反：市場似乎持續給予headline EPS成長溢價，而非事後修正業外灌水股。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「EPS成長快於營業利益成長」的獲利品質落差因子方向與預測相反，尤其金融業最明顯，顯示市場對headline EPS成長存在持續性溢價而非及時修正；若要延續此機制思路應嘗試反向（做多灌水股的動能延續）而非做空。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0334",
+ "ts": "2026-07-21T13:38:15"
+}

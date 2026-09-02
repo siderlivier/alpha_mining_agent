@@ -1,0 +1,84 @@
+{
+ "round": 11,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "應計項偏低的公司,其ROE上升趨勢反映真實獲利改善;應計項偏高者的ROE上升更可能是盈餘管理操縱的結果。市場多數投資人只看ROE絕對值,不做應計項交叉驗證,因此對『已被品質驗證』的獲利改善訊號存在系統性反應不足。",
+ "prediction": "sub-train ICIR>0.45;accruals低於12月中位數子集內cond_ic顯著為正且該子集多頭腿年化超額報酬>0;validation對sub-train的decay<30%",
+ "formula": "if_else(less(accruals, ts_med(accruals,12)), cs_rank(ts_slope(roe,6)), 0)",
+ "name_zh": "淨化獲利改善動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "if_else(less(accruals, ts_med(accruals,12)), cs_rank(ts_slope(roe,6)), 0)",
+  "fhash": "bf2a65a52da81b87",
+  "sub_train": {
+   "mean_ic": 0.007,
+   "icir": 0.1
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.04,
+   "decay_pct": 138.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.106,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.041,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.013,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": 0.21,
+   "生技": -0.12,
+   "半導體": -0.01,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": -0.002
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.35,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且accruals低分組cond_ic顯著正、多頭腿正報酬，實際sub-train ICIR僅0.1、validation轉負(-0.04)，decay 138%。if_else對accruals高者填0等於把半數股票分數壓平，稀釋了整體rank IC；即使看分組較有利的電子(0.21)也遠不到預測強度，生技甚至為負(-0.12)，說明底層ROE 6月動能本身信息量不足，不足以支撐這個二階交叉假設。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用『應計品質過濾+ROE動能』的二階交叉假設，若底層ROE動能本身信號很弱，疊加品質濾網不會無中生有出alpha；應先確認被過濾的基礎變數有邊際IC，再考慮交叉版本。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0174",
+ "ts": "2026-07-21T11:33:49"
+}

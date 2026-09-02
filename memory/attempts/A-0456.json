@@ -1,0 +1,84 @@
+{
+ "round": 29,
+ "category": "flow_price_synchronicity",
+ "hypothesis": "部分個股的外資買賣行為具有持續性的價格領先關係（外資買超後續一段時間股價確實上漲），這種「資訊含量」是個股層級的穩定特徵（可能與該股外資研究覆蓋深度、資訊不對稱程度有關），而非單一期的買賣超水準。透過歷史相關係數篩選出「外資買賣超歷來對此股價格最具領先解釋力」的個股，預期這種可預測性具持續性（結構性資訊不對稱不會突然消失），故當期外資動向對這些個股仍具較高訊息含量。",
+ "prediction": "sub-train ICIR > 0.45；與C-4/C-10等單期外資流量因子相關係數 |ρ| < 0.5（驗證捕捉個股特徵而非單期水準）。",
+ "formula": "cs_rank(ts_corr(frgn_net_21,mom_20,24))",
+ "name_zh": "外資領先歷史強度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(frgn_net_21,mom_20,24))",
+  "fhash": "b9eddfec5fed69b7",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.53
+  },
+  "validation": {
+   "mean_ic": -0.001,
+   "icir": -0.01,
+   "decay_pct": 103.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.049,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.055,
+    "多頭"
+   ],
+   "2017": [
+    0.013,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.019,
+   "down_months": 0.031
+  },
+  "industry_icir": {
+   "電子": 0.22,
+   "生技": 0.33,
+   "半導體": 0.12,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.002,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.12,
+  "stage2_max_rho": {
+   "factor": "F-013",
+   "rho": -0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR -0.01 < 0.3; validation 衰減 103% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.53達標，個股層級『外資-動能』歷史相關性看似能篩出資訊優勢股；但validation ICIR崩至-0.01，decay 103%，屬嚴重過擬合。24個月的ts_corr是統計上方差很大的估計量(樣本點少)，sub-train期間篩出的『高相關股票』很可能只是特定期間的巧合相關而非穩定的個股特徵。與F-013相關性低(ρ=-0.24)排除了單純重複的可能，問題出在估計穩定性而非概念重複。",
+ "failure_type": "expression_bad",
+ "lesson": "用24月滾動相關係數衡量『個股層級穩定資訊領先關係』的構造，估計方差過大、容易把巧合相關當成穩定特徵，導致sub-train大幅跑贏validation。此類短窗口ts_corr構造需標記為高過擬合風險。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0456",
+ "ts": "2026-07-29T23:14:31"
+}

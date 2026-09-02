@@ -1,0 +1,93 @@
+{
+ "round": 58,
+ "category": "foreign_accumulation_quality_confirmation",
+ "hypothesis": "frgn_ratio_d63的三月平滑走勢代表外資中期部位調整方向(排除單日雜訊)，當外資持續加碼且標的本業獲利率高，顯示外資基於基本面研究緩步建倉；外資分批建倉以降低市場衝擊，價格發現速度慢於部位變化速度，形成可預測的持續性報酬。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；換手率 < 0.4；訊號應在後續1-2個月延續而非單月均值回歸。",
+ "formula": "mul(cs_rank(ts_mean(frgn_ratio_d63,3)), cs_rank(op_margin))",
+ "name_zh": "外資潛伏獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio_d63",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_mean(frgn_ratio_d63,3)), cs_rank(op_margin))",
+  "fhash": "37ec3e0bba239bf9",
+  "sub_train": {
+   "mean_ic": 0.041,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": 0.073,
+   "icir": 0.83,
+   "decay_pct": -148.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.032,
+    "盤整"
+   ],
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.06,
+    "多頭"
+   ],
+   "2015": [
+    0.044,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.043,
+    "多頭"
+   ],
+   "2018": [
+    0.035,
+    "盤整"
+   ],
+   "2019": [
+    0.111,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.065,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.58,
+   "生技": 0.41,
+   "半導體": 0.33,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.04,
+   "short_excess_ann": 0.069
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.5
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.33 < 0.45"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "distill_failed": true,
+ "id": "A-0880",
+ "ts": "2026-08-19T00:25:17"
+}

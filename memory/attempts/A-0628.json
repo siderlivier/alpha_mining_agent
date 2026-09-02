@@ -1,0 +1,90 @@
+{
+ "round": 41,
+ "category": "inventory_cycle_margin_recovery",
+ "hypothesis": "半導體/電子業毛利率具有強烈庫存週期性：訂單能見度領先出貨認列，毛利率通常在營收年增率仍為負值時就已從谷底回升（庫存去化完成、產能利用率回升先於營收數字反轉）。用ts_rank衡量毛利率在自身12個月區間的百分位，比單純比較距離最低點的絕對差（對切分點敏感，見既有經驗規則9）更穩健，能平滑捕捉「已脫離谷底」的階段。",
+ "prediction": "sub-train ICIR>0.4；半導體產業industry_icir應為四產業中最高，顯著高於金融/生技；多頭腿年化超額報酬>0；驗證期方向不可反轉。",
+ "formula": "cs_rank(ts_rank(gross_margin,12))",
+ "name_zh": "毛利谷底回升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(gross_margin,12))",
+  "fhash": "e8cb26f89756b153",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.73
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.19,
+   "decay_pct": 74.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.019,
+    "盤整"
+   ],
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.046,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.053,
+    "多頭"
+   ],
+   "2017": [
+    0.043,
+    "多頭"
+   ],
+   "2018": [
+    -0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.025
+  },
+  "industry_icir": {
+   "電子": 0.58,
+   "生技": 0.35,
+   "半導體": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.067,
+   "short_excess_ann": 0.068
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.4
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.19 < 0.3; validation 衰減 74% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR 0.73遠超預測門檻(>0.4)，表現亮眼；但驗證期崩落至0.19，衰減74%，典型過擬合訊號。更關鍵的是核心機制預測『半導體industry_icir應最高』完全落空——半導體僅0.16是三產業中最低，反而電子0.58最高、生技0.35次之。顯示訊號可能只是抓到2012-2017（尤其2016-17半導體超級周期期間，那幾年IC也確實最高：0.046/0.053/0.043）的特定歷史事件，而非『半導體庫存週期領先毛利』這個特定機制在樣本外持續存在。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "當候選明確主張『某特定產業的訊號應最強』時，industry_icir是很好的證偽工具——本次與C-11同樣出現『預測產業與實際最強產業不符』，顯示『產業特定機制敘事』的預測準確率偏低，應對此類敘事保持保留，並優先用產業別ICIR做事前檢查而非事後解釋。原始的『毛利率在自身12月區間百分位』構造本身有強訊號(sub-train ICIR 0.73)，但需要用更嚴格/滾動的驗證方式排查是否為特定歷史周期(如2016-17半導體超級周期)所驅動，而非真正穩定的機制。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0628",
+ "ts": "2026-08-12T09:31:55"
+}

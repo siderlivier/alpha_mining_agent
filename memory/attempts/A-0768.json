@@ -1,0 +1,93 @@
+{
+ "round": 50,
+ "category": "financial_provisioning_opacity_discount",
+ "hypothesis": "金融股的會計損益表因備抵呆帳/保險準備金提列規則複雜，使得跨銀行/壽險公司間的獲利能力比較困難，市場傾向用簡化的ROE/EPS做比較而忽略本業營業利益率(op_margin)這個較不受提存政策扭曲的核心獲利指標，導致本業獲利率高的金融股被結構性低估。",
+ "prediction": "sub-train ICIR>0.4（產業限定門檻）；金融產業industry_icir應為四產業最高。",
+ "formula": "cs_rank(op_margin)",
+ "name_zh": "金控本業獲利率",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(op_margin)",
+  "fhash": "52f3257aa1fdc64e",
+  "sub_train": {
+   "mean_ic": 0.055,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.055,
+   "icir": 0.54,
+   "decay_pct": -24.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.083,
+    "盤整"
+   ],
+   "2013": [
+    0.047,
+    "多頭"
+   ],
+   "2014": [
+    0.063,
+    "多頭"
+   ],
+   "2015": [
+    0.073,
+    "盤整"
+   ],
+   "2016": [
+    0.019,
+    "多頭"
+   ],
+   "2017": [
+    0.056,
+    "多頭"
+   ],
+   "2018": [
+    0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.063,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.065,
+   "down_months": 0.031
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.38,
+   "半導體": 0.35,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.053
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.09,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.67,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.67 > 0.5"
+ },
+ "diagnosis": "預測金融限定門檻0.4、金融industry_icir應四產業最高，實際sub-train 0.44(略低於全域0.45但達產業門檻)、validation 0.54尚可，但金融industry_icir僅0.15是四產業最低(電子0.53最高)，與C-6、C-14同模式：「金融股結構性議題」假設完全找不到金融業專屬優勢；最終因與F-002(金融品質價值)相關係數0.67(本輪最高)於stage2淘汰，證實這其實是通用獲利力價值訊號，非金融限定的會計扭曲解讀落差。",
+ "failure_type": "duplicate",
+ "lesson": "本輪三個「金融股XX被低估」敘事(C-6現金股息、C-10本業獲利率、C-14利差轉折)全數在金融業industry_icir上非最高甚至最低，真正訊號來自電子/生技業；測金融股結構性議題前應先看跨產業ICIR分布再判斷是否真為產業限定，而非僅憑機制敘事假設。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0768",
+ "ts": "2026-08-14T00:51:32"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 21,
+ "category": "risk_adjusted_momentum",
+ "hypothesis": "投資人常犯代表性捷思偏誤，只看動能幅度不調整所承擔的波動風險，導致高波動股的假動能被高估、真正risk-adjusted趨勢反而被低估，此偏誤在散戶參與度高、追高殺低頻繁的電子/半導體族群應更明顯，修正需跨期比較故較慢。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC不劣於上漲月IC（顯示非純粹beta效應）；電子/半導體industry_icir應高於金融。",
+ "formula": "cs_rank(sdiv(mom_120, vol_63))",
+ "name_zh": "風險調整動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_120",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(mom_120, vol_63))",
+  "fhash": "a8c5386fcc163216",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.12
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.34,
+   "decay_pct": -195.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.038,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.016,
+    "盤整"
+   ],
+   "2016": [
+    0.04,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.19,
+   "半導體": 0.03,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.087,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測「下跌月IC不劣於上漲月」用來排除純beta效應，但實際下跌月IC為-0.01、上漲月0.028，直接被推翻——顯示這仍是順週期的beta/動能暴露，不是行為偏誤修正。產業預測也錯：預期半導體industry_icir應高，實際半導體最低(0.03)，電子最高(0.23)。sub-train ICIR僅0.12，validation反而0.34（樣本不穩定的訊號，非真正穩健）。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "風險調整動能在下跌月近乎歸零/轉負，且產業分布與「電子/半導體風險認知偏誤」假說相反；未來測risk-adjusted動能類應先看條件IC是否真的regime-neutral，再談是否為行為偏誤修正。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0325",
+ "ts": "2026-07-21T13:38:15"
+}

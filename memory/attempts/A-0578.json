@@ -1,0 +1,91 @@
+{
+ "round": 37,
+ "category": "financial_spread_early_inflection",
+ "hypothesis": "金控股淨利率創兩年新高(F-023)是利差擴張的確認訊號，但利差反轉通常先經歷短期斜率翻正才逐步墊高至新高，若能提早捕捉淨利率短期斜率剛轉正的階段，可以比等待創新高的訊號更早進場，因分析師通常等待正式數據確認才調升評等，對趨勢轉折的早期訊號反應遲緩。",
+ "prediction": "sub-train ICIR>0.45；金融產業industry_icir應為四產業最高；多頭腿年化超額報酬>0；與F-023相關性|ρ|<0.5(預期低於F-023因窗口與構造不同)。",
+ "formula": "cs_rank(ts_slope(net_margin,3))",
+ "name_zh": "利差提早翻正",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(net_margin,3))",
+  "fhash": "3783db4f344c9a34",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.22,
+   "decay_pct": 39.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.06,
+    "盤整"
+   ],
+   "2013": [
+    0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.073,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.032,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.026,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.37,
+   "生技": 0.33,
+   "半導體": 0.24,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.04,
+   "short_excess_ann": 0.034
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.48,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.42
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.22 < 0.3; 月換手 0.48 > 0.4"
+ },
+ "diagnosis": "預測金融產業industry_icir應最高，但實際電子(0.37)最高、金融(0.07)最低——本輪第三次出現金融產業專屬假設的因子中，金融產業本身表現反而最弱的情況(另見C-4, C-12)；加上sub-train ICIR 0.36、驗證期0.22皆未達標、月換手0.48略超上限，顯示『提早捕捉利差翻正』這個機制並未展現出金融特有的早期訊號優勢。",
+ "failure_type": "expression_bad",
+ "lesson": "本輪生技產業industry_icir在不同候選中呈現兩極化擺盪(C-3偏低、C-4與C-12異常高)，遠比電子/半導體/金融劇烈，較可能是生技股樣本數小造成的變異放大，而非真正的產業機制差異；金融產業專屬敘事的基本面因子也再度驗證『金融本身industry_icir反而最弱』的模式。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0578",
+ "ts": "2026-07-30T01:03:36"
+}

@@ -1,0 +1,94 @@
+{
+ "round": 60,
+ "category": "semiconductor_smart_money_accumulation/半導體限定",
+ "hypothesis": "半導體供應鏈資訊複雜、法人研究覆蓋深度不一，消息面常經多層代理商與終端客戶才擴散至市場；當個股成交金額溫和放大(非爆量投機)同時本業獲利率良好，可能代表知情資金提前布局；此訊號在半導體業因供應鏈資訊不透明度高而特別顯著。",
+ "prediction": "半導體子樣本sub-train ICIR>0.4；多頭腿年化超額報酬>0；月換手率<0.4(6月窗口已平滑)。",
+ "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(op_margin))",
+ "name_zh": "半導體資金潛入股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(op_margin))",
+  "fhash": "2f0f59adf19ad337",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.046,
+   "icir": 0.56,
+   "decay_pct": -77.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.01,
+    "盤整"
+   ],
+   "2013": [
+    0.026,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.066,
+    "盤整"
+   ],
+   "2016": [
+    0.045,
+    "多頭"
+   ],
+   "2017": [
+    0.035,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.059,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.016
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.24,
+   "半導體": 0.27,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.037,
+   "short_excess_ann": 0.062
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.34,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.51,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "預測與F-002相關度<0.5，實際|ρ|=0.51剛好壓線超標；同時sub-train ICIR僅0.31，也未達預測門檻0.4，訊號本身即偏弱。op_margin作為獲利篩選成分，很可能是與F-002(bp×roe金融品質價值)產生共同重疊的驅動因子，儘管兩者機制敘事(半導體資金潛入 vs 金融品質價值)完全不同產業。",
+ "failure_type": "duplicate",
+ "lesson": "op_margin這類通用獲利率欄位在跨產業、跨機制的候選中反覆出現時，容易與庫內任何「獲利品質」相關因子(不限同產業)產生意外的中度相關，即使兩者敘事邏輯毫無關聯；相關度檢查不能只看敘事相似度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0921",
+ "ts": "2026-08-20T08:30:15"
+}

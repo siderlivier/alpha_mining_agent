@@ -1,0 +1,84 @@
+{
+ "round": 17,
+ "category": "core_vs_headline_divergence",
+ "hypothesis": "當營業利益年增率明顯高於EPS年增率，代表本業獲利成長強勁但因業外一次性因素(匯損、業外減損、稅務調整)拖累帳面EPS；市場以EPS頭條數字定價，忽略本業真實成長動能，待業外雜訊消退後市場將重新認可，形成資訊修正型正報酬。",
+ "prediction": "sub-train ICIR>0.45；電子/半導體產業(業外雜訊如匯損影響大)ICIR應高於金融產業；下跌月IC不弱於上漲月IC",
+ "formula": "sub(cs_rank(op_income_yoy), cs_rank(eps_yoy))",
+ "name_zh": "本業優於帳面",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(op_income_yoy), cs_rank(eps_yoy))",
+  "fhash": "f9a4fc30e5c56d4b",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.19
+  },
+  "validation": {
+   "mean_ic": -0.026,
+   "icir": -0.39,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.055,
+    "多頭"
+   ],
+   "2014": [
+    -0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    -0.036,
+    "多頭"
+   ],
+   "2017": [
+    -0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.019
+  },
+  "industry_icir": {
+   "電子": -0.2,
+   "生技": 0.0,
+   "半導體": -0.09,
+   "金融": -0.22
+  },
+  "legs": {
+   "long_excess_ann": -0.004,
+   "short_excess_ann": -0.017
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測正向IC且電子/半導體ICIR高於金融、下跌月不弱於上漲月。實際方向相反：sub-train IC為-0.019，7年中6年為負，且電子(-0.2)、金融(-0.22)皆為負值，並非電子/半導體特別突出。當營業利益成長優於EPS成長時，市場很可能正確地將業外缺口視為獲利品質風險(如認列不確定性、稅務調整不透明)並給予折價，而非像假設所說的「忽略本業成長」。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "本業與帳面獲利成長的差距被市場「有效定價為風險」而非「被忽略的正面訊號」，此類「市場只看頭條數字」的敘事在使用差值/背離類表達時，方向常與直覺相反，值得優先檢查反向假設。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0275",
+ "ts": "2026-07-21T12:47:40"
+}

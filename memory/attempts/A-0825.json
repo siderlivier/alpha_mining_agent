@@ -1,0 +1,84 @@
+{
+ "round": 54,
+ "category": "trust_flow_growth_confirmation",
+ "hypothesis": "投信對中小型股的研究覆蓋通常比只聚焦權值科技股的外資更深入；投信買超又搭配本業獲利成長的公司，代表本土法人基於基本面研究的高信心確認，此訊號在非權值股中應比外資版本（F-017）更具資訊含量。",
+ "prediction": "sub-train ICIR>0.45；與F-017相關係數|ρ|<0.5；多頭腿年化超額報酬>0，且非半導體產業（權值股較少）表現應優於半導體。",
+ "formula": "mul(cs_rank(trust_net_21), cs_rank(op_income_yoy))",
+ "name_zh": "投信認證獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_income_yoy",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(trust_net_21), cs_rank(op_income_yoy))",
+  "fhash": "6de66854f44736a0",
+  "sub_train": {
+   "mean_ic": -0.0,
+   "icir": -0.0
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.13,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.008,
+    "多頭"
+   ],
+   "2014": [
+    -0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.008,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    -0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.005,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.21,
+   "生技": 0.25,
+   "半導體": -0.23,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.025,
+   "short_excess_ann": 0.0
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.43,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際幾乎為0（0.00），全年IC在-0.04到0.01間震盪，無穩定方向；半導體industry_icir甚至為-0.23。投信買超x獲利成長的『本土法人信心確認』假說在資料上完全未得到支持，與外資版本F-017的類比機制沒有成立。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信資金流不像外資資金流具有『資訊優勢確認』的效果，可能因為投信規模與研究覆蓋深度不足以形成可觀測的定價領先訊號；『法人買超x基本面確認』的機制不應直接套用不同法人主體。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0825",
+ "ts": "2026-08-18T21:21:48"
+}

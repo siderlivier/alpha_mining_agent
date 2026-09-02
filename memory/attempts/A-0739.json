@@ -1,0 +1,83 @@
+{
+ "round": 48,
+ "category": "financial_capital_accumulation_momentum",
+ "hypothesis": "金控股淨值(bp)的持續成長趨勢反映其資本內生累積能力(主要來自盈餘保留而非外部融資稀釋)；股價若未同步反映淨值增厚速度，代表市場低估其資本雄厚度與未來股利/成長空間，此機制對高度依賴自身資本累積的金融業特別顯著。",
+ "prediction": "金融產業industry_icir應為四產業最高(>0.5)；sub-train ICIR>0.45；多頭腿年化超額>0。",
+ "formula": "cs_rank(ts_slope(bp,12))",
+ "name_zh": "金控淨值成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(bp,12))",
+  "fhash": "dc692d57acb69428",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.04
+  },
+  "validation": {
+   "mean_ic": -0.012,
+   "icir": -0.09,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.055,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    -0.008,
+    "盤整"
+   ],
+   "2016": [
+    -0.011,
+    "多頭"
+   ],
+   "2017": [
+    -0.054,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.014,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.18,
+   "半導體": -0.05,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.024,
+   "short_excess_ann": -0.059
+  },
+  "coverage": 0.65,
+  "turnover_m": 0.15,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融產業ICIR最高(>0.5)——相對排序方向確實命中(金融0.03為四產業最高)，但量級預測嚴重失準（實際0.03遠低於>0.5），整體sub-train ICIR也接近零偏負(-0.04)，本質上bp成長趨勢在金融股也不具備可用的預測力。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "相對排序猜對不代表假說成立——即使金控淨值成長趨勢的『相對優勢』方向正確，其絕對訊號強度仍可能趨近雜訊。之後對『產業最適用』類預測，應同時設定量級門檻，而不僅檢查排序是否符合預期。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0739",
+ "ts": "2026-08-14T00:25:09"
+}

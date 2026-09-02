@@ -1,0 +1,87 @@
+{
+ "round": 10,
+ "category": "illiquidity_premium",
+ "hypothesis": "成交金額長期偏低的股票乏人問津、法人研究覆蓋率低，資訊需要更久才能被定價；一旦基本面獲得驗證，這類冷門股有較大重新評價空間，屬於流動性驅動的緩慢資訊擴散溢價。",
+ "prediction": "sub-train ICIR>0.4；與F-005、F-008之ρ<0.5；持有期換手率<0.3。",
+ "formula": "cs_rank(neg(ts_mean(amt_21,12)))",
+ "name_zh": "冷門流動溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(amt_21,12)))",
+  "fhash": "a632e9ab55eb1eb6",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.01,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.001,
+    "盤整"
+   ],
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.006,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.039,
+    "盤整"
+   ],
+   "2019": [
+    -0.035,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": -0.051
+  },
+  "industry_icir": {
+   "電子": 0.17,
+   "生技": 0.35,
+   "半導體": -0.07,
+   "金融": -0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.065,
+   "short_excess_ann": 0.046
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.05,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際僅0.03基本無訊號；但條件式細看：上漲月IC+0.024、下跌月IC-0.051，呈現『多頭有效、空頭反轉』規律，顯示冷門股流動性溢價只在多頭成立，空頭時反而跌更慘，與『緩慢資訊擴散』假說不符，更像流動性風險溢酬的另一面。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "低成交金額股的溢價在全樣本期無效，但方向隨市場狀態反轉，顯示真正機制可能是『空頭時冷門股缺乏買盤照顧』的流動性風險而非『資訊擴散慢』；應改包裝成市場狀態條件式假說重新提交，而非原始的緩慢定價假說。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0171",
+ "ts": "2026-07-21T11:22:51"
+}

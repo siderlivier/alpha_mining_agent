@@ -1,0 +1,93 @@
+{
+ "round": 57,
+ "category": "securities_lending_informed_short_signal",
+ "hypothesis": "借券量佔成交量比例反映機構/避險基金主動建立空頭部位所需的實際借券行為,不同於以散戶為主的融券。台股放空制度成本高(借券費率、回補壓力),只有具強烈資訊優勢的專業空方才會大量借券,因此高借券量是關於未來基本面惡化的資訊性訊號;散戶難以觀察借券數據,市場消化此訊號緩慢。",
+ "prediction": "sub-train ICIR<-0.4;多頭腿(訊號最高端=借券量低)年化超額報酬>0;空頭腿(借券量高)年化超額報酬顯著<0。",
+ "formula": "cs_rank(neg(ts_mean(lend_vol_21,3)))",
+ "name_zh": "借券空頭訊號",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(lend_vol_21,3)))",
+  "fhash": "95f63e0000f7c0ed",
+  "sub_train": {
+   "mean_ic": -0.022,
+   "icir": -0.21
+  },
+  "validation": {
+   "mean_ic": -0.054,
+   "icir": -0.54,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.046,
+    "盤整"
+   ],
+   "2013": [
+    -0.027,
+    "多頭"
+   ],
+   "2014": [
+    -0.016,
+    "多頭"
+   ],
+   "2015": [
+    -0.014,
+    "盤整"
+   ],
+   "2016": [
+    -0.014,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    -0.079,
+    "盤整"
+   ],
+   "2019": [
+    -0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.045,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": -0.42,
+   "生技": -0.29,
+   "半導體": -0.19,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.044,
+   "short_excess_ann": -0.028
+  },
+  "coverage": 0.53,
+  "turnover_m": 0.24,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": -0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "方向預測部分正確：sub-train icir=-0.21與validation=-0.54皆為負，驗證期甚至強化，符合『高借券量預示未來下跌』的方向。但預測『多頭腿(借券量低端)年化超額報酬>0』落空，實際long_excess=-0.044為負，報酬幾乎全部來自空頭腿(-0.028)，在台股放空受限下難以交易。真正致命傷是與庫內F-008(低調接近新高)相關性達-0.57，經濟上兩者可能捕捉同一種『機構安靜佈局/離場』資訊。",
+ "failure_type": "duplicate",
+ "lesson": "借券量訊號與既有『安靜接近新高』價格型因子存在資訊重疊；未來若再嘗試借券類因子，應先與F-008等價格/周轉率型態因子做相關性預檢，並確認多頭腿本身能獨立產生正超額報酬，不能只靠空頭腿撐數字。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0864",
+ "ts": "2026-08-19T00:11:01"
+}

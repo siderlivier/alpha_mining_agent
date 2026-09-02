@@ -1,0 +1,83 @@
+{
+ "round": 22,
+ "category": "trust_window_dressing_reversal",
+ "hypothesis": "投信基金經理人有季底/月底作帳誘因，會集中買超特定持股美化淨值表現，此類買盤驅動的上漲並非基本面重新評價，而是暫時籌碼壓力；作帳誘因消失後價格易回落至基本面水準，形成短期均值回歸。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+ "name_zh": "投信作帳反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+  "fhash": "18a151d16911b800",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.33,
+   "decay_pct": -78.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.021,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": 0.09,
+   "半導體": 0.14,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.032,
+   "short_excess_ann": -0.023
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.18低於門檻，但IC方向在2015-2019五年中持續穩定為正(0.011~0.025)，validation ICIR反而提升到0.33(decay為負)，換手率0.27<0.4符合預期。唯一明顯違反預測的是多頭腿超額為負(-0.032)，空頭腿超額也為負(-0.023)，顯示rank IC為正但兩端極端組相對大盤都跑輸，可交易性存疑。訊號存在但偏弱、且未能轉換成可交易的多頭超額報酬。",
+ "failure_type": "expression_bad",
+ "lesson": "投信3個月滾動買賣超的作帳反轉訊號存在但偏弱、未反映在多頭腿超額報酬上；滾動平均可能把作帳期與非作帳期訊號混在一起稀釋效果，值得改用季底/月底前N個交易日的事件式視窗聚焦真正的作帳時點。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0344",
+ "ts": "2026-07-21T13:51:27"
+}

@@ -1,0 +1,92 @@
+{
+ "round": 2,
+ "category": "momentum_continuation_institutional",
+ "hypothesis": "mom_240傳統上被視為長期反轉訊號，但台股法人（投信、外資）存在緩慢建倉行為；扣除近一個月的短期漲幅後，若年動能仍強，代表法人資金仍在持續流入而非追高，延續效應可能壓過反轉效應。",
+ "prediction": "sub-train ICIR>0.3且方向為正（與傳統長期反轉文獻相反）；若ICIR為負或方向相反則證偽此機制，應列入禁忌方向。",
+ "formula": "cs_rank(sub(mom_240, mom_20))",
+ "name_zh": "長線動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_20",
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_20))",
+  "fhash": "2f4e40aa855024ac",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.22,
+   "decay_pct": 26.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.098,
+    "盤整"
+   ],
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.053,
+    "盤整"
+   ],
+   "2016": [
+    0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.048,
+    "多頭"
+   ],
+   "2018": [
+    -0.029,
+    "盤整"
+   ],
+   "2019": [
+    0.079,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.036,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": 0.22,
+   "生技": 0.35,
+   "半導體": 0.12,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.038,
+   "short_excess_ann": 0.038
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.2,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.28
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.3 < 0.45; validation ICIR 0.22 < 0.3"
+ },
+ "diagnosis": "預測方向獲得證實：mom_240減mom_20為正、與傳統長期反轉文獻相反，sub-train ICIR剛好0.3且方向正確，與F-002相關度僅0.28不算重複；但強度未達真實關卡0.45，驗證期又衰退到0.22，屬方向正確但強度不足，非假設證偽。",
+ "failure_type": "expression_bad",
+ "lesson": "見全域規則門檻校準：預測門檻應對齊0.45而非0.3。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0043",
+ "ts": "2026-07-19T09:53:03"
+}

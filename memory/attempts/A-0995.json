@@ -1,0 +1,90 @@
+{
+ "round": 65,
+ "category": "financial_value_short_interest_confirmation",
+ "hypothesis": "金融股淨值便宜(高B/P)同時融券空方部位極低，代表空方認為金融股資產品質無虞、沒有做空誘因，這種便宜且無人看空的組合比單純便宜更可信，因為空方通常最先嗅到金融股潛在資產品質或利差風險，其缺席本身就是一種消極確認訊號，市場尚未將此納入定價。",
+ "prediction": "限金融產業，industry_icir(金融) > 0.4；與F-008/F-021相關係數|ρ|<0.5；多頭腿年化超額 > 0。",
+ "formula": "mul(cs_rank(bp), cs_rank(neg(short_margin_ratio)))",
+ "name_zh": "金融便宜無空方股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(neg(short_margin_ratio)))",
+  "fhash": "7df5f77200b38a52",
+  "sub_train": {
+   "mean_ic": 0.057,
+   "icir": 0.68
+  },
+  "validation": {
+   "mean_ic": 0.054,
+   "icir": 0.36,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.057,
+    "多頭"
+   ],
+   "2014": [
+    0.046,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.098,
+    "多頭"
+   ],
+   "2017": [
+    0.051,
+    "多頭"
+   ],
+   "2018": [
+    0.083,
+    "盤整"
+   ],
+   "2019": [
+    0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.066,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.52,
+   "生技": 0.46,
+   "半導體": 0.13,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.064,
+   "short_excess_ann": 0.054
+  },
+  "coverage": 0.57,
+  "turnover_m": 0.23,
+  "stage2_culprit": {
+   "factor": "R-022",
+   "rho": 0.75,
+   "factor_name": "淨值股價比",
+   "factor_desc": "股東權益 / 市值"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 R-022 |ρ|=0.75 > 0.5"
+ },
+ "diagnosis": "預測金融 industry_icir>0.4，實際 0.20(未過自身門檻)，最強在電子 0.52。standalone sub-train ICIR 0.68 但 validation 掉到 0.36(decay 47%)。ρ=0.75 撞 R-022(淨值股價比)——bp×neg(空方) 幾乎就是 bp 本身，空方缺席那條腿貢獻有限。",
+ "failure_type": "duplicate",
+ "lesson": "cs_rank(bp)×cs_rank(neg(short_margin_ratio)) 中 bp 主導，空方確認腿無法提供獨立資訊；『便宜且無人看空』在資料上等於『便宜』。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0995",
+ "ts": "2026-09-02T00:32:52"
+}

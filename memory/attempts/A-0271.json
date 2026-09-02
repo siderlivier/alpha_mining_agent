@@ -1,0 +1,79 @@
+{
+ "round": 17,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "標準化EPS驚奇(半年變化除以兩年標準差)衡量相對自身歷史波動的異常獲利加速度(類SUE)，市場對財報盈餘存在post-earnings drift，尤其法人覆蓋不足的中小型股消化更慢；用較長窗口取代原始3/12月設計，降低單季雜訊。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；與3/12月版本相比decay應收斂在30%以內",
+ "formula": "cs_rank(sdiv(delta(eps_yoy,6), ts_std(eps_yoy,24)))",
+ "name_zh": "標準化盈餘驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(eps_yoy,6), ts_std(eps_yoy,24)))",
+  "fhash": "a93a0c94794f3c7a",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.44,
+   "decay_pct": -216.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.0,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    -0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    0.03,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.39,
+   "生技": 0.13,
+   "半導體": 0.02,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": 0.023,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.6,
+  "turnover_m": 0.31,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45、衰減收斂在30%內。實際sub-train ICIR僅0.14(未達門檻，stage1即死)，但validation ICIR反而高達0.44(衰減-216%，即大幅轉強)。逐年IC顯示明顯爬升軌跡(2014-2016接近0，2017-2019穩定在0.018-0.03)，且coverage僅0.6，24月滾動std門檻可能過長，導致早期樣本大量因歷史資料不足被排除或估計不穩定，拖累sub-train整體表現，而非機制本身無效。",
+ "failure_type": "expression_bad",
+ "lesson": "當coverage明顯偏低(<0.7)且IC呈現逐年爬升而非衰減時，該歸因為早期樣本因窗口過長(如24月std)造成的資料稀疏問題，而非假設被證偽；可縮短標準化窗口或改用可得樣本更早涵蓋的欄位重新表達。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0271",
+ "ts": "2026-07-21T12:47:40"
+}

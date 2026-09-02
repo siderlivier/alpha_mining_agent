@@ -1,0 +1,87 @@
+{
+ "round": 48,
+ "category": "biotech_cash_runway_improvement",
+ "hypothesis": "生技股普遍處於燒錢驗證階段，現金流量比(ocf_ratio)的持續改善趨勢(ts_slope)代表公司正從「燒錢驗證期」邁向「自給自足期」的結構性轉折，因生技財報單期雜訊大，市場對趨勢性改善反應遲緩，此機制僅在現金消耗為關鍵生存變數的生技產業中特別顯著。",
+ "prediction": "生技產業industry_icir應為四產業中最高(>0.5)；sub-train全市場ICIR可能未達0.45但生技子樣本decay<50%；多頭腿年化超額>0。",
+ "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+ "name_zh": "生技現金轉骨股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+  "fhash": "df7f6e9bc413f841",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.25
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.029,
+    "盤整"
+   ],
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    -0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.12,
+   "半導體": -0.06,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業ICIR應為四產業最高(>0.5)，實測生技為-0.12，非最高（電子更差-0.22）且全部產業與整體sub-train ICIR(-0.25)都是負號，方向與預測完全相反，非僅僅『未達標』而是被證偽。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "ocf_ratio的ts_slope對生技燒錢轉自給假說沒有支持；生技股OCF常年為負或接近零，比率型指標的slope可能放大分母雜訊而非捕捉真實轉折。若重測生技現金流假說，建議改用現金水位/月燒錢速度等非比率型指標，而非對ratio做slope。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0738",
+ "ts": "2026-08-14T00:25:09"
+}

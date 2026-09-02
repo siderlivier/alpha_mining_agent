@@ -1,0 +1,79 @@
+{
+ "round": 41,
+ "category": "accounting_regime_shift",
+ "hypothesis": "應計項相對於「自身」過去24個月歷史處於低百分位（而非全市場橫斷面低水準），代表該公司會計行為出現制度性轉向保守（如換簽會計師、新任財務長、公司治理改善），此為個股內部行為轉變，需要長期追蹤個股歷史脈絡才能察覺，一般散戶與被動篩選器難以捕捉，屬於認知成本高的資訊，市場消化緩慢。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-006(應計品質)、F-012(淨化ROE動能)相關性|ρ|<0.5，證明捕捉的是「個股內部轉變」而非「跨產業低應計水準」。",
+ "formula": "cs_rank(neg(ts_rank(accruals,24)))",
+ "name_zh": "應計自我改善度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_rank(accruals,24)))",
+  "fhash": "af53b5feab27f692",
+  "sub_train": {
+   "mean_ic": 0.0,
+   "icir": 0.0
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.04,
+   "decay_pct": -1181.0
+  },
+  "ic_by_year": {
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.01,
+    "多頭"
+   ],
+   "2017": [
+    -0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.0,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": -0.1,
+   "半導體": 0.02,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.004,
+   "short_excess_ann": 0.005
+  },
+  "coverage": 0.63,
+  "turnover_m": 0.25,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.0，逐年IC在±0.02間隨機震盪、無方向性；coverage僅0.63偏低。問題可能出在把應計項轉成『個股自身24個月歷史百分位』後，抹除了應計項原本賴以生效的『跨個股橫斷面比較』差異——結構保守轉向若不與同業對照，很難分離出訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "把一個本質上是『跨個股比較』的因子（應計品質）強制改成『個股自我時間序列百分位』，可能會把訊號洗掉；假設『個股會計行為轉向保守』本身未被證偽，只是表達方式錯誤，下次可嘗試『先算應計相對產業中位數，再取其24個月變化』的雙層表達。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0625",
+ "ts": "2026-08-12T09:31:55"
+}

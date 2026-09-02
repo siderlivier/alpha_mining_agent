@@ -1,0 +1,88 @@
+{
+ "round": 14,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "股價接近52週高點且應計項偏低（盈餘品質佳），代表這波接近新高是由真實獲利驅動而非會計操縱撐出的假象；相較F-008以周轉率（籌碼面）作為確認腿，本因子改用應計項（財報品質面）確認，機制為『真實獲利驅動的錨定效應延續』而非籌碼冷熱。",
+ "prediction": "sub-train ICIR > 0.45；與F-008相關係數 |ρ| < 0.5（因確認腿改為財報品質而非流動性）；decay < 30%",
+ "formula": "cs_rank(sub(cs_rank(px_hi252), cs_rank(accruals)))",
+ "name_zh": "真高點濾網",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(cs_rank(px_hi252), cs_rank(accruals)))",
+  "fhash": "e5d24257fc78cbe0",
+  "sub_train": {
+   "mean_ic": 0.043,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.059,
+   "icir": 0.59,
+   "decay_pct": -52.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.007,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.083,
+    "盤整"
+   ],
+   "2016": [
+    0.032,
+    "多頭"
+   ],
+   "2017": [
+    0.044,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.076,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.062,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": 0.49,
+   "生技": 0.42,
+   "半導體": 0.22,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.064,
+   "short_excess_ann": 0.039
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.29,
+  "stage2_max_rho": {
+   "factor": "F-006",
+   "rho": 0.46
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.39僅一步之遙，但validation端表現極強（ICIR 0.59，decay -52%即不降反升），industry_icir在電子(0.49)、生技(0.42)都相當強，long leg超額報酬達6.4%，是本輪體質最好的候選之一，卻因sub-train門檻0.06之差被拒。cond_ic上漲月0.062遠高於下跌月0.014，符合52週高點錨定效應本應偏多頭順勢的預期。",
+ "failure_type": "expression_bad",
+ "lesson": "這是本輪最明確的『sub-train單期門檻誤殺』案例：validation比sub-train強很多，代表2012-2017子樣本可能包含較多雜訊年份（如2013年僅0.007）；評估流程應考慮sub-train+validation加權或雙期均值作為輔助通過條件，而非只看sub-train單一數字。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0228",
+ "ts": "2026-07-21T12:11:51"
+}

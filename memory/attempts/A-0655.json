@@ -1,0 +1,87 @@
+{
+ "round": 43,
+ "category": "retail_leverage_overhang",
+ "hypothesis": "融資餘額快速成長代表散戶槓桿堆疊，處置效應與斷頭風險隨之上升；一旦股價回檔即觸發融資追繳的強制賣壓，形成報酬拖累。融資成長趨緩或收斂的股票籌碼結構相對健康，未來報酬較佳。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC絕對值應大於上漲月（槓桿去化壓力在下跌時放大）；月換手率<0.4。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,6)))",
+ "name_zh": "融資降溫股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,6)))",
+  "fhash": "644251112a5cce0b",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.18,
+   "decay_pct": 20.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.004,
+    "盤整"
+   ],
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.011,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.14,
+   "半導體": 0.0,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.22，直接死於stage1。你預測「下跌月效應應大於上漲月」，但實際相反(上漲月0.021 > 下跌月0.005)，槓桿去化在下跌時放大的機制未獲支持，整體IC也偏弱。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "融資餘額6個月平滑趨勢對報酬的預測力弱，且條件IC方向與「斷頭賣壓」敘事相反；若重試槓桿類因子，應改用急速變化量或槓桿水準本身，而非平滑趨勢。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0655",
+ "ts": "2026-08-12T14:04:06"
+}

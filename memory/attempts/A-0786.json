@@ -1,0 +1,94 @@
+{
+ "round": 51,
+ "category": "cheap_stable_earnings_quality",
+ "hypothesis": "盈餘殖利率便宜且營益率波動度低(獲利結構穩定)的公司，代表獲利能力具備持續性、非景氣循環財；這類便宜又穩定的股票因缺乏成長故事或熱門題材，常被成長型或動能型機構篩選器忽略，形成風格孤兒股的現金流獲利穩定版本，市場對此組合特徵定價效率偏低。",
+ "prediction": "sub-train ICIR > 0.45；此訊號與F-002相關係數應<0.5；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(ep,ts_std(op_margin,12)))",
+ "name_zh": "便宜穩定獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ep",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(ep,ts_std(op_margin,12)))",
+  "fhash": "e7f8971afe9c666d",
+  "sub_train": {
+   "mean_ic": 0.083,
+   "icir": 0.62
+  },
+  "validation": {
+   "mean_ic": 0.075,
+   "icir": 0.73,
+   "decay_pct": -17.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.146,
+    "盤整"
+   ],
+   "2013": [
+    -0.01,
+    "多頭"
+   ],
+   "2014": [
+    0.08,
+    "多頭"
+   ],
+   "2015": [
+    0.116,
+    "盤整"
+   ],
+   "2016": [
+    0.137,
+    "多頭"
+   ],
+   "2017": [
+    0.087,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.118,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.075,
+   "down_months": 0.096
+  },
+  "industry_icir": {
+   "電子": 0.75,
+   "生技": 0.64,
+   "半導體": 0.28,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.047,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.15,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.84,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.84 > 0.5"
+ },
+ "diagnosis": "本因子統計上表現最強(sub-train ICIR 0.62、validation 0.73、decay -17%)，多項預測幾乎全部命中，但在stage2相關性檢查中與庫內F-002『金融品質價值』相關度高達0.84，判定為重複。值得注意的是本因子產業別ICIR最強的是電子(0.75)而非金融(0.23)，但pooled時間序列仍與F-002高度相關，顯示EP(盈餘殖利率)作為共同成分足以驅動高相關，即使產業側重不同。",
+ "failure_type": "duplicate",
+ "lesson": "『便宜(EP) + 獲利穩定度』的組合容易與既有『便宜+高ROE』價值品質因子(F-002)高度重疊，即使新因子的產業訊號來源不同，只要核心估值分母(EP)相同，pooled相關度仍可能很高；未來設計價值-品質交乘因子應優先更換估值錨點(如BP/SP/FCF殖利率)，而非僅改變品質面的第二變數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0786",
+ "ts": "2026-08-14T01:05:54"
+}

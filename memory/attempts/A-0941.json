@@ -1,0 +1,83 @@
+{
+ "round": 62,
+ "category": "biotech_margin_delta_confirmed",
+ "hypothesis": "生技股毛利率半年內的變化幅度，搭配營收方向(sign(rev_yoy))連續加權而非清零，代表產品組合真正轉向高毛利品項且營收未同步萎縮；市場對生技股仍錨定過去燒錢形象，對毛利結構性改善反應遲緩，移除eps_yoy成分以降低與F-022重疊。",
+ "prediction": "sub-train ICIR>0.4；與F-022截面相關|ρ|<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(mul(delta(gross_margin,6), sign(rev_yoy)))",
+ "name_zh": "生技毛利轉骨",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(delta(gross_margin,6), sign(rev_yoy)))",
+  "fhash": "9fbd69f97190e2a9",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": -0.01,
+   "icir": -0.21,
+   "decay_pct": 200.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.016,
+    "多頭"
+   ],
+   "2014": [
+    0.032,
+    "多頭"
+   ],
+   "2015": [
+    0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.001,
+    "多頭"
+   ],
+   "2017": [
+    -0.007,
+    "多頭"
+   ],
+   "2018": [
+    -0.01,
+    "盤整"
+   ],
+   "2019": [
+    -0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.007,
+   "down_months": -0.003
+  },
+  "industry_icir": {
+   "電子": -0.0,
+   "生技": 0.05,
+   "半導體": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.009,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.42,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4，實得0.21且逐年衰退至validation轉負(2013:0.032→2019:-0.01)，非單純過擬合而是訊號隨時間單調消失。與C-4同樣採用sign(rev_yoy)做連續乘法加權，兩案IC都被壓到接近零，懷疑是表達方式而非「生技毛利結構轉好」的機制本身有問題。",
+ "failure_type": "expression_bad",
+ "lesson": "sign()連續乘法加權在兩個獨立案例(C-3, C-4)中都把訊號稀釋到接近零，可能是因為rev_yoy為負時的極端值透過sign()仍全額參與交乘，放大雜訊而非降噪。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0941",
+ "ts": "2026-08-27T21:24:50"
+}

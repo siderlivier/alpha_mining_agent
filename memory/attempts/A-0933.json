@@ -1,0 +1,83 @@
+{
+ "round": 61,
+ "category": "electronics_revenue_margin_coherence",
+ "hypothesis": "電子股營收成長與毛利率同步走高（正相關），代表這是需求驅動的量價齊揚，而非降價出貨衝量掩蓋獲利惡化；市場僅分別觀察營收或毛利單一指標，忽略兩者同步性所蘊含的訊息，此為全新的相關性結構類別。",
+ "prediction": "電子產業內sub-train ICIR > 0.4；與F-009/F-011等既有營收類因子截面相關 |ρ| < 0.5",
+ "formula": "cs_rank(ts_corr(rev_yoy,gross_margin,12))",
+ "name_zh": "量價利同步電子股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(rev_yoy,gross_margin,12))",
+  "fhash": "da9be75d3919f9db",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.05
+  },
+  "validation": {
+   "mean_ic": 0.0,
+   "icir": 0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.009,
+    "多頭"
+   ],
+   "2014": [
+    -0.007,
+    "多頭"
+   ],
+   "2015": [
+    -0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.003,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    -0.015,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": -0.019
+  },
+  "industry_icir": {
+   "電子": -0.06,
+   "生技": -0.12,
+   "半導體": 0.1
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.008
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.22,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測電子產業內ICIR>0.4，結果全池與電子業內ICIR都趨近於零（電子-0.06），逐年IC也在正負間隨機游走，沒有任何持續性。「營收成長與毛利率同步走高代表需求驅動」這個相關性結構假說在數據上找不到支撐，屬於機制本身不成立而非表達問題。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用ts_corr(rev_yoy, gross_margin)衡量「量價利同步」不具預測力，這類二階相關性結構因子在本資料上訊噪比太低，不建議再用相關係數本身當因子輸出。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0933",
+ "ts": "2026-08-27T10:25:20"
+}

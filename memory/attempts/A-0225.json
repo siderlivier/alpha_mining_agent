@@ -1,0 +1,87 @@
+{
+ "round": 14,
+ "category": "retail_leverage_reversal",
+ "hypothesis": "融資餘額急速下降代表散戶因追繳或恐慌而被迫平倉，造成短期流動性驅動的超賣，此壓力與公司基本面無關，待強迫賣壓釋放後價格容易均值回歸反彈；機制為流動性衝擊而非資訊性訊號，與券資比/借券等『資訊性放空』故事不同，需留意此類摩擦假說過去多次方向反轉，若實測方向相反則代表去槓桿反而延續弱勢而非反彈。",
+ "prediction": "sub-train ICIR > 0.45；效果應集中於大盤下跌月（下跌月IC顯著高於上漲月）；短窗delta需檢查月換手率，若>0.4則需疊加ts_mean(2)",
+ "formula": "cs_rank(neg(ts_slope(margin_d21,3)))",
+ "name_zh": "融資急縮反彈",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_slope(margin_d21,3)))",
+  "fhash": "71c8489949982b68",
+  "sub_train": {
+   "mean_ic": 0.012,
+   "icir": 0.16
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.07,
+   "decay_pct": 57.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.005,
+    "盤整"
+   ],
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.035,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    -0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.01,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": 0.08,
+   "生技": 0.0,
+   "半導體": 0.14,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.001
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.71,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測效果應集中於下跌月且ICIR>0.45，實際下跌月IC(0.014)確實高於上漲月(0.008)，方向猜對但整體強度太弱（sub-train ICIR僅0.16），decay高達57%。融資急縮反彈的流動性衝擊機制方向正確但訊號雜訊過大（turnover 0.71偏高），短窗ts_slope(margin_d21,3)可能捕捉太多非事件性波動。",
+ "failure_type": "expression_bad",
+ "lesson": "融資水準的短窗slope表達雜訊過大（turnover 0.71），下次同類流動性衝擊假說應改用更長平滑窗，或將『急縮幅度相對自身歷史波動標準化』取代原始slope，以降低換手率並放大真實訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0225",
+ "ts": "2026-07-21T12:11:51"
+}

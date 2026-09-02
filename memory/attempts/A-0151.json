@@ -1,0 +1,91 @@
+{
+ "round": 9,
+ "category": "retail_margin_deleveraging_risk",
+ "hypothesis": "融資餘額21日快速增加代表散戶正追高加槓桿；台股散戶占比高，融資是過度自信與追漲行為代理指標，快速攀升隱含強制斷頭賣壓風險，此機制在中小型股尤其顯著，導致未來報酬系統性偏低。",
+ "prediction": "sub-train ICIR > 0.4（已embed neg，預期方向為正）；大盤下跌月IC應顯著強於上漲月；validation衰減 < 45%。",
+ "formula": "cs_rank(neg(margin_d21))",
+ "name_zh": "融資追高風險",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(margin_d21))",
+  "fhash": "bc1c0bd9e57225b6",
+  "sub_train": {
+   "mean_ic": 0.031,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.15,
+   "decay_pct": 64.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.021,
+    "盤整"
+   ],
+   "2013": [
+    0.073,
+    "多頭"
+   ],
+   "2014": [
+    0.045,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.032,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.026,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.33,
+   "生技": 0.24,
+   "半導體": 0.17,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.7,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.18
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.43 < 0.45; validation ICIR 0.15 < 0.3; validation 衰減 64% > 50%（過擬合徵兆）; 月換手 0.7 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.43，接近但未達0.45門檻，方向正確（下跌月風險敘事在早期樣本成立：2013年0.073、2014年0.045），但validation嚴重衰減至0.15（衰減64%，過擬合警訊），且月換手0.7過高。逐年拆解顯示效果幾乎完全集中在2013-2014年，之後逐年遞減至2018-2019年接近零，看起來像是效果本身隨時間淡化（融資占比重要性下降、市場結構改變），而非單純過擬合雜訊。21日窗口也可能太短導致換手率過高侵蝕報酬。",
+ "failure_type": "expression_bad",
+ "lesson": "融資餘額變化的斷頭風險敘事可能仍成立，但21日短窗口造成換手過高且效果隨時間淡化；下次可嘗試拉長平滑窗口（如ts_mean(margin_d21,3)取代單期delta）降低換手，並同時檢視效果是否僅是2013-2014特定融資結構下的一次性現象（若拉長樣本後仍持續衰減，才升級為hypothesis_wrong）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0151",
+ "ts": "2026-07-20T17:18:53"
+}

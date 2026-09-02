@@ -1,0 +1,90 @@
+{
+ "round": 54,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "F-009單純看斜率無法區分「真正結構性加速」與「高波動雜訊股剛好半年內上揚」；把三月平滑後營收年增率的半年變化除以該股自身12月營收波動度做標準化，能篩出統計上顯著的加速，而非雜訊堆出的假加速，此效果應可推廣至全市場而非僅電子業。",
+ "prediction": "sub-train ICIR>0.45；與F-009相關係數|ρ|<0.5；四產業中至少3個industry IC同號為正（非電子限定）。",
+ "formula": "cs_rank(sdiv(delta(rev_yoy_ma3,6), ts_std(rev_yoy,12)))",
+ "name_zh": "風險調整營收加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(rev_yoy_ma3,6), ts_std(rev_yoy,12)))",
+  "fhash": "984af014c638ee08",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.4,
+   "decay_pct": -25.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.047,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.052,
+    "多頭"
+   ],
+   "2017": [
+    0.002,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.71,
+   "生技": 0.33,
+   "半導體": 0.41,
+   "金融": -0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.079,
+   "short_excess_ann": 0.088
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.31,
+  "stage2_culprit": {
+   "factor": "F-009",
+   "rho": 0.82,
+   "factor_name": "營收加速趨勢",
+   "factor_desc": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-009 |ρ|=0.82 > 0.5"
+ },
+ "diagnosis": "預測ρ<0.5、至少3產業同號正，實際3/4產業同號正（電子0.71/半導體0.41/生技0.33，金融-0.12）產業泛化部分符合預期，但ρ=0.82與F-009高度重複，『風險調整』（除以ts_std(rev_yoy,12)）並未如預期地把『真加速』與『雜訊假加速』分開，反而與F-009的原始斜率排序幾乎一致。",
+ "failure_type": "duplicate",
+ "lesson": "對既有因子做『除以自身波動度』的風險調整，往往不會改變cs_rank排序太多（因為分子分母的橫斷面相關性本身已高），這類『標準化包裝』式的變體很容易與原始因子重複；要真正差異化需改變分子的計算邏輯本身，而非加一層標準化。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0830",
+ "ts": "2026-08-18T21:21:48"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 22,
+ "category": "institutional_flow_momentum_quality",
+ "hypothesis": "中期動能(mom_120)訊號品質參差不齊，可能來自基本面改善也可能來自炒作雜訊；當動能出現同時伴隨外資近月買超(frgn_net_21>0)，代表此動能較可能有基本面研究支撐（外資交易通常伴隨產業研究），用法人流向篩選動能品質應使其延續性優於未經篩選的原始動能。",
+ "prediction": "sub-train ICIR>0.45；優於未篩選版本sub(cs_rank(mom_240),cs_rank(mom_60))之ICIR；多頭腿年化超額報酬>0；月換手率<0.4。",
+ "formula": "cs_rank(if_else(greater(frgn_net_21,0), mom_120, 0))",
+ "name_zh": "外資認證動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(frgn_net_21,0), mom_120, 0))",
+  "fhash": "d06ac7243563f2bd",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.11,
+   "decay_pct": 38.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.009,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    -0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.02,
+   "down_months": -0.007
+  },
+  "industry_icir": {
+   "電子": 0.15,
+   "生技": 0.3,
+   "半導體": 0.06,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.034
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.53,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測「篩選後ICIR應優於未篩選版本(C-7的0.4)」直接落空：sub-train ICIR僅0.17。但另一機制其實成立：多頭腿超額由C-7的-0.016(負)翻正為0.049，decay也從C-7的78%降到38%，顯示外資買超篩選確實改善了訊號的可交易性與穩健度，只是if_else零值填補的表達方式反而拉低了rank IC/ICIR這個統計量，與C-4觀察到的同一種模式。換手率0.53仍超過0.4門檻。",
+ "failure_type": "expression_bad",
+ "lesson": "用法人流向篩選動能品質的機制部分成立(多頭腿超額由負轉正、decay下降)，但if_else(...,mom,0)的零值填補系統性壓低rank IC/ICIR；應改用連續加權(如乘上外資買超強度的0-1分數)取代硬性零值門控，同時保留篩選效果又不犧牲統計量。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0353",
+ "ts": "2026-07-21T13:51:27"
+}

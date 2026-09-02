@@ -1,0 +1,85 @@
+{
+ "round": 59,
+ "category": "genuine_profitability_source_confirmation",
+ "hypothesis": "ROE的提升可能來自本業毛利改善（真實、可持續），也可能來自財務槓桿或一次性業外收益（不可持續，即財務工程）；市場對ROE改善一律正面解讀，未區分來源；當ROE改善同時伴隨毛利率同步改善時，代表獲利提升確實源自本業競爭力增強而非財務操作，這類「真材實料」的ROE改善比單純ROE改善更被低估。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿年化超額>0；與F-001/F-012相關性<0.5(以毛利率交叉確認做差異化，預期降低重疊)。",
+ "formula": "mul(cs_rank(delta(roe,12)),cs_rank(delta(gross_margin,12)))",
+ "name_zh": "真材實料ROE股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(roe,12)),cs_rank(delta(gross_margin,12)))",
+  "fhash": "dc87624a9feea133",
+  "sub_train": {
+   "mean_ic": 0.049,
+   "icir": 0.73
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.32,
+   "decay_pct": 56.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.046,
+    "盤整"
+   ],
+   "2016": [
+    0.059,
+    "多頭"
+   ],
+   "2017": [
+    0.05,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.043,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.042,
+   "down_months": 0.038
+  },
+  "industry_icir": {
+   "電子": 0.69,
+   "生技": 0.51,
+   "半導體": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.075,
+   "short_excess_ann": 0.087
+  },
+  "coverage": 0.63,
+  "turnover_m": 0.19,
+  "stage2_culprit": {
+   "factor": "F-012",
+   "rho": 0.61,
+   "factor_name": "淨化ROE動能",
+   "factor_desc": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-012 |ρ|=0.61 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際0.73遠超預期，validation ICIR 0.32(衰減56%>50%屬過擬合徵兆但仍為正)，cond_ic同號、多頭腿報酬佳(0.075)；最終因與F-012(淨化ROE動能) ρ=0.61重疊被拒——事先預期『用毛利率交叉確認可降低與F-012重疊』的假設沒有成立，兩種過濾高應計/雜訊ROE改善的方法殊途同歸指向相似的一群股票。",
+ "failure_type": "duplicate",
+ "lesson": "『用另一個品質指標交叉確認ROE改善』這種去雜訊邏輯，即使表達方式(delta gross_margin vs 剔除高應計)不同，也很可能收斂到同一群股票；此類ROE品質過濾方向已接近飽和，紅海邊界包含F-012。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0908",
+ "ts": "2026-08-19T10:08:40"
+}

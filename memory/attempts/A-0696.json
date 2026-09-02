@@ -1,0 +1,86 @@
+{
+ "round": 45,
+ "category": "margin_trough_recovery_underreaction",
+ "hypothesis": "毛利率相對兩年低點的回升幅度反映成本控制或產品組合升級的結構性改善；市場容易錨定景氣低谷時期的悲觀印象，對已明顯脫離谷底的復甦股仍給予過低評價，直到財報持續確認才逐步修正。",
+ "prediction": "sub-train ICIR>0.4；驗證期decay<60%（週期觸底類因子對切分點敏感，需跨子窗口交叉檢查）；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(gross_margin, ts_min(gross_margin,24)))",
+ "name_zh": "毛利谷底復甦股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(gross_margin, ts_min(gross_margin,24)))",
+  "fhash": "ff329e995f0867f1",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.63
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.3,
+   "decay_pct": 52.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.065,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.049,
+    "多頭"
+   ],
+   "2017": [
+    0.032,
+    "多頭"
+   ],
+   "2018": [
+    -0.011,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.032,
+   "down_months": 0.033
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.52,
+   "半導體": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.044,
+   "short_excess_ann": 0.049
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.11,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.23
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation 衰減 52% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "候選人事先預判此類週期觸底因子對切分點敏感，主動放寬decay預期至<60%，且結果幾乎驗證了這個擔憂：sub-train ICIR 0.63達標、驗證期ICIR 0.30、相關性0.23低、兩腿報酬皆正，唯獨decay剛好52%，僅比系統實際的50%硬門檻高2個百分點被拒。這是本輪最接近『可能只是表達細節問題』的案例。",
+ "failure_type": "expression_bad",
+ "lesson": "毛利率相對24個月低點的復甦假說本身數據面相當健康（低相關、雙腿為正），僅因decay踩線被拒；候選人自行預判的60%門檻與系統實際50%門檻的落差值得記錄，未來對『對切分點敏感』的週期類因子應主動測試多組sub-train/validation切分點取平均decay，而非單一切分。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0696",
+ "ts": "2026-08-12T14:25:46"
+}

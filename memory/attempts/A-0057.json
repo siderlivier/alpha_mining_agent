@@ -1,0 +1,91 @@
+{
+ "round": 3,
+ "category": "long_term_momentum_continuation",
+ "hypothesis": "一年期價格動能反映外資與投信對中大型股持續加碼建倉的緩慢過程；台股法人主導、資訊擴散慢，過去一年強勢股在未來仍延續超額報酬，而非美股個股層面常見的長期過度反應反轉。",
+ "prediction": "sub-train ICIR>0.45；多頭腿（訊號最高組）超額報酬>0，避免alpha僅集中在空頭腿。",
+ "formula": "cs_rank(mom_240)",
+ "name_zh": "年度動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_240)",
+  "fhash": "30124ce2fa791c47",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.047,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.23,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.28
+  },
+  "verdict": "rejected_stage3",
+  "reason": "與同批 C-9 |ρ|=0.86，保留 ICIR 較高者"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.45且多頭腿>0』。實際ICIR僅0.20、驗證期0.09（decay 54%，過擬合徵兆），且與C-9（mom_240-mom_60）高度重疊(ρ=0.86)。多頭腿方向確實為正(0.033)印證了『法人緩慢建倉、非過度反應反轉』的直覺，但單獨的原始mom_240訊號強度不足且與庫內動能因子高度重複。",
+ "failure_type": "duplicate",
+ "lesson": "原始長期動能(mom_240)在本庫已是紅海，其衍生的差分版本(C-9)也未能獨立過關，此軸線短期內難再挖掘。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage3",
+ "id": "A-0057",
+ "ts": "2026-07-19T17:08:22"
+}

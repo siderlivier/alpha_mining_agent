@@ -1,0 +1,90 @@
+{
+ "round": 26,
+ "category": "financial_spread_capital_efficiency",
+ "hypothesis": "金融股（銀行/壽險）獲利由利差收入效率(op_margin代理)與資產規模成長(rev_yoy代理放款/保費成長)共同驅動；兩者同時強勁代表資本運用效率與規模擴張同步向上，但市場因金融業財報揭露複雜、分析師覆蓋不均，對此複合訊號反應遲緩，此機制只在利差型金融業成立。",
+ "prediction": "全市場sub-train ICIR>0.40；金融產業industry_icir應顯著高於全市場值(>0.5)；多頭腿超額報酬>0（過去多次金融最強預測落空，若金融非最強但整體仍過0.45門檻仍可視為一般因子成立）。",
+ "formula": "add(cs_rank(op_margin), cs_rank(rev_yoy))",
+ "name_zh": "金融利差成長",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_rank(op_margin), cs_rank(rev_yoy))",
+  "fhash": "7c04b2c475ca3a4e",
+  "sub_train": {
+   "mean_ic": 0.067,
+   "icir": 0.58
+  },
+  "validation": {
+   "mean_ic": 0.058,
+   "icir": 0.59,
+   "decay_pct": -2.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.045,
+    "多頭"
+   ],
+   "2014": [
+    0.082,
+    "多頭"
+   ],
+   "2015": [
+    0.059,
+    "盤整"
+   ],
+   "2016": [
+    0.057,
+    "多頭"
+   ],
+   "2017": [
+    0.094,
+    "多頭"
+   ],
+   "2018": [
+    0.034,
+    "盤整"
+   ],
+   "2019": [
+    0.083,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.073,
+   "down_months": 0.044
+  },
+  "industry_icir": {
+   "電子": 0.64,
+   "生技": 0.41,
+   "半導體": 0.42,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.075,
+   "short_excess_ann": 0.066
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.31,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.79,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.79 > 0.5"
+ },
+ "diagnosis": "數字表現遠超預期（sub-train/validation ICIR 0.58/0.59，decay -2%），但「金融業利差效率」敘事被證偽：預測金融industry_icir應最高(>0.5)，實際金融是四產業最低(0.23)，電子最高(0.64)；stage2也非撞上金融類因子而是撞上生技敘事的F-011（ρ=0.79）。這說明op_margin+rev_yoy組合是通用成長×品質複合訊號，與「金融資本運用效率」機制無關，且與F-011本質重疊。",
+ "failure_type": "duplicate",
+ "lesson": "op_margin×rev_yoy這類「營運利潤率+營收成長」複合公式本質上是通用成長品質因子，會被電子權值股主導而非目標產業，且已被F-011佔據紅海；為特定產業編故事前應先看industry_icir分佈形狀是否真的偏向該產業。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0401",
+ "ts": "2026-07-28T18:54:35"
+}

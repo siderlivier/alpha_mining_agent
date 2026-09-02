@@ -1,0 +1,92 @@
+{
+ "round": 37,
+ "category": "institutional_lending_demand_quality",
+ "hypothesis": "借券量偏高多數反映機構為指數套利、可轉債避險或選擇權造市而產生的股票借貸需求，集中在高流動性、法人長期持有信心的權值股，而非單純看空標的；當借券活躍度同時伴隨本業獲利率(op_margin)改善，代表機構基礎建設關注與基本面轉強同步發生，散戶容易誤將借券與放空劃上等號而低估這類股票。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-008、F-020相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(lend_vol_21), cs_rank(delta(op_margin,6)))",
+ "name_zh": "借券獲利雙升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(lend_vol_21), cs_rank(delta(op_margin,6)))",
+  "fhash": "4e426f6170796529",
+  "sub_train": {
+   "mean_ic": 0.049,
+   "icir": 0.47
+  },
+  "validation": {
+   "mean_ic": 0.074,
+   "icir": 0.86,
+   "decay_pct": -85.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.059,
+    "盤整"
+   ],
+   "2013": [
+    0.058,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.045,
+    "盤整"
+   ],
+   "2016": [
+    0.083,
+    "多頭"
+   ],
+   "2017": [
+    0.053,
+    "多頭"
+   ],
+   "2018": [
+    0.095,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.059,
+   "down_months": 0.048
+  },
+  "industry_icir": {
+   "電子": 0.88,
+   "生技": 0.4,
+   "半導體": 0.34,
+   "金融": -0.26
+  },
+  "legs": {
+   "long_excess_ann": 0.076,
+   "short_excess_ann": 0.063
+  },
+  "coverage": 0.46,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.43
+  },
+  "verdict": "rejected_stage4",
+  "reason": "覆蓋率 0.46 < 0.6"
+ },
+ "diagnosis": "本案幾乎完全驗證了預測——sub-train ICIR 0.47達標，驗證期ICIR 0.86，多空腿報酬皆為正(0.076/0.063)，且電子產業industry_icir 0.88最高，符合借券需求集中在高流動性機構持股的假設。最終純粹因覆蓋率0.46<0.6被淘汰，並非機制本身失敗。",
+ "failure_type": "expression_bad",
+ "lesson": "訊號本身經濟意義與統計表現俱佳，卻因借券量欄位覆蓋率過窄被淘汰；遇到依賴窄覆蓋率欄位的因子，應明確將論域限縮到該欄位有資料的子集，或尋找覆蓋率更廣的替代指標，而非直接放棄機制。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0570",
+ "ts": "2026-07-30T01:03:36"
+}

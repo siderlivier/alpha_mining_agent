@@ -1,0 +1,87 @@
+{
+ "round": 52,
+ "category": "securities_lending_information_activity",
+ "hypothesis": "借券量常被解讀為空方壓力(且先前延續性假說已證偽並與F-008重疊)，但另一種解釋是借券活躍度代表法人為執行可轉債套利、事件驅動等策略而進行的精細資訊生產，這類「被機構深度研究覆蓋」的個股定價效率理論上更高，此候選直接測試正向(而非空方悲觀)方向。",
+ "prediction": "sub-train ICIR>0.45(正向)；與F-008相關係數<0.5；多頭腿年化超額>0",
+ "formula": "cs_rank(ts_mean(lend_vol_21,6))",
+ "name_zh": "借券活躍認知股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(lend_vol_21,6))",
+  "fhash": "52bd911cbdef0096",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.1
+  },
+  "validation": {
+   "mean_ic": 0.054,
+   "icir": 0.51,
+   "decay_pct": -432.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.044,
+    "盤整"
+   ],
+   "2013": [
+    0.031,
+    "多頭"
+   ],
+   "2014": [
+    0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.023,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.078,
+    "盤整"
+   ],
+   "2019": [
+    0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.038,
+   "down_months": -0.02
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.29,
+   "半導體": 0.14,
+   "金融": -0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.034,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.52,
+  "turnover_m": 0.13,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45未達標(train僅0.10，stage1剔除)，但validation大幅躍升至0.51(衰減-432%)。值得注意coverage僅0.52，是本輪最低(其餘介於0.7-0.87)，顯示2012-2017子訓練期借券資料可能稀疏/尚未成熟，這會機械性拉低並加噪train期IC，而非機制本身無效——validation期資料成熟後IC反而轉強，支持此為資料期間問題而非假設證偽。",
+ "failure_type": "expression_bad",
+ "lesson": "coverage明顯偏低(如本案0.52 vs其他普遍0.7+)的候選，若stage1失敗但validation期IC轉強，應懷疑是早期資料稀疏/不成熟造成的表達問題，而非機制證偽；可考慮改用較短、覆蓋率較高的樣本期重新檢驗，而非直接放棄整個方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0800",
+ "ts": "2026-08-14T01:18:09"
+}

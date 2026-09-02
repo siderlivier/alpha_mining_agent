@@ -1,0 +1,93 @@
+{
+ "round": 53,
+ "category": "informed_short_selling_signal",
+ "hypothesis": "融券賣壓長期偏高反映放空者（相對具資訊優勢的法人與專業投資人）對個股基本面持續看空的信念，此為空方的『資訊內涵』而非純粹軋空延續，機制上與台股放空受限下的延續性摩擦假說不同。",
+ "prediction": "sub-train ICIR>0.45，且方向須為負（高券資比預示低報酬，依過去驗證的base rate）；此訊號IC應在下跌月更顯著。",
+ "formula": "cs_rank(ts_mean(short_margin_ratio, 6))",
+ "name_zh": "券資訊優勢",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(short_margin_ratio, 6))",
+  "fhash": "468057e082a7f8c6",
+  "sub_train": {
+   "mean_ic": -0.028,
+   "icir": -0.27
+  },
+  "validation": {
+   "mean_ic": -0.036,
+   "icir": -0.25,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.017,
+    "盤整"
+   ],
+   "2013": [
+    -0.048,
+    "多頭"
+   ],
+   "2014": [
+    -0.034,
+    "多頭"
+   ],
+   "2015": [
+    -0.015,
+    "盤整"
+   ],
+   "2016": [
+    -0.041,
+    "多頭"
+   ],
+   "2017": [
+    -0.033,
+    "多頭"
+   ],
+   "2018": [
+    -0.068,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.049,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": -0.47,
+   "生技": -0.29,
+   "半導體": -0.08,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.047,
+   "short_excess_ann": -0.054
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.09,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": -0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "方向確認正確(neg，ICIR -0.27/-0.25，效應穩定)，但同樣未預料到會與F-008重疊(rho=-0.57)。券資比高的股票往往也是高週轉投機股，與F-008的低週轉端存在結構性負相關，即使表面機制(放空資訊優勢)與F-008不同。",
+ "failure_type": "duplicate",
+ "lesson": "這是本輪第二個「籌碼過熱/放空訊號」死於F-008重疊的案例，可視為紅海邊界而非單一個案。",
+ "lesson_confidence": "cross_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0806",
+ "ts": "2026-08-15T11:33:03"
+}

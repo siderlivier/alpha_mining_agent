@@ -1,0 +1,91 @@
+{
+ "round": 24,
+ "category": "retail_leverage_crowding",
+ "hypothesis": "融資餘額近期快速擴張的股票，反映散戶槓桿性追價行為集中湧入，這類過度自信驅動的買盤會推升價格超過基本面支撐，且未來面臨斷頭賣壓風險升高；此為連續性的擁擠關係（買盤越擁擠、未來報酬越弱），而非僅限於極端去槓桿後反彈的特殊情境（該情境已證實在validation期系統性崩潰）。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿（margin_d21最低即無槓桿擴張族群）超額報酬須>0；月換手率<0.4。",
+ "formula": "cs_rank(ts_mean(margin_d21,3))",
+ "name_zh": "融資擁擠度",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(margin_d21,3))",
+  "fhash": "5853486c4f3563dc",
+  "sub_train": {
+   "mean_ic": -0.027,
+   "icir": -0.39
+  },
+  "validation": {
+   "mean_ic": -0.013,
+   "icir": -0.21,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.041,
+    "盤整"
+   ],
+   "2013": [
+    -0.037,
+    "多頭"
+   ],
+   "2014": [
+    -0.025,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    -0.025,
+    "多頭"
+   ],
+   "2017": [
+    -0.024,
+    "多頭"
+   ],
+   "2018": [
+    -0.018,
+    "盤整"
+   ],
+   "2019": [
+    -0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.025,
+   "down_months": -0.021
+  },
+  "industry_icir": {
+   "電子": -0.29,
+   "生技": -0.22,
+   "半導體": -0.11,
+   "金融": -0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.002,
+   "short_excess_ann": -0.021
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.37,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": -0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.39 < 0.45; validation ICIR -0.21 < 0.3"
+ },
+ "diagnosis": "這是本輪逐年最穩定的候選之一：2012-2019八個年度IC符號全部為負（與假設一致，融資擴張→未來報酬弱），上漲月(-0.025)與下跌月(-0.021)符號和量級都接近，證實『連續性擁擠關係』而非僅限特殊情境的假設是對的，這點預測命中。但預測sub-train ICIR>0.4（絕對值），實際-0.39，差一點點未達，validation icir -0.21<0.3門檻也是同樣的『差一點』模式。多頭腿超額報酬預測>0，實際0.002勉強為正但幾乎為零，偏弱。",
+ "failure_type": "expression_bad",
+ "lesson": "融資餘額擴張的擁擠度方向、跨年度穩定性、跨regime一致性全部驗證了機制存在，只是ts_mean(margin_d21,3)這個表達的訊號強度差臨門一腳；下次可嘗試更長平滑窗（如6-9日或標準化margin_d21相對自身歷史波動）來提升訊號雜訊比，而非放棄這個方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0382",
+ "ts": "2026-07-28T18:28:36"
+}

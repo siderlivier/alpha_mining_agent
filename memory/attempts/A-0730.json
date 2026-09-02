@@ -1,0 +1,88 @@
+{
+ "round": 48,
+ "category": "dividend_re_rating_catalyst",
+ "hypothesis": "股息殖利率的上升「趨勢」(ts_slope)代表股利成長由獲利驅動、而非股價下跌被動推升；當公司同時淨值便宜(高bp)，代表市場尚未把股利成長動能反映進估值，形成資訊擴散延遲的重估機會，此機制不同於單純殖利率水準的防禦型敘事。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC不劣於上漲月(非單邊防禦型)；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(ts_slope(div_yield,12)), cs_rank(bp))",
+ "name_zh": "股息趨勢重估股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp",
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_slope(div_yield,12)), cs_rank(bp))",
+  "fhash": "2450d455c589cca2",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.064,
+   "icir": 0.53,
+   "decay_pct": -137.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.024,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.013,
+    "多頭"
+   ],
+   "2018": [
+    0.08,
+    "盤整"
+   ],
+   "2019": [
+    0.048,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": 0.047
+  },
+  "industry_icir": {
+   "電子": 0.22,
+   "生技": 0.39,
+   "半導體": 0.01,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.03,
+   "short_excess_ann": -0.005
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.15,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.45
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.22 < 0.45"
+ },
+ "diagnosis": "預測 sub-train ICIR>0.45 未達（實際0.22），但方向訊號其實每年皆為正（2013-2017全正）、validation ICIR大幅轉強(0.53)，衰減為負代表越測越強而非過擬合。較可能是sub-train期資料覆蓋率偏低(0.66)+monthly雜訊拉低ICIR，而非機制本身無效。",
+ "failure_type": "expression_bad",
+ "lesson": "股息殖利率slope類因子在covearge較低的早期樣本可能被雜訊嚴重拉低ICIR，即使年度符號一致。下次可嘗試拉長ts_slope平滑窗口或設定覆蓋率門檻子集再測，而非直接判死。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0730",
+ "ts": "2026-08-14T00:25:09"
+}

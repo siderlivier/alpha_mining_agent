@@ -1,0 +1,84 @@
+{
+ "round": 4,
+ "category": "cash_backed_value",
+ "hypothesis": "淨值便宜（高bp）同時現金流含金量高（ocf_ratio高）的公司，代表帳面資產品質可信、獲利真能轉換成現金；市場對「便宜」股票普遍存在盈餘品質疑慮而給予額外折價，一旦現金流佐證品質無虞，此折價會隨時間修正，機制與獲利能力(ROE)品質確認不同。",
+ "prediction": "sub-train ICIR>0.45；且與F-002(bp×roe)的截面相關性|ρ|應<0.5（現金流品質與獲利能力是不同維度的品質確認）",
+ "formula": "cs_rank(mul(bp, ocf_ratio))",
+ "name_zh": "現金佐證便宜股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(bp, ocf_ratio))",
+  "fhash": "16d6ab18c64f3ba8",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.29,
+   "decay_pct": -794.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    0.022,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.005,
+    "多頭"
+   ],
+   "2017": [
+    0.013,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.056,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": 0.33,
+   "半導體": 0.14,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.001,
+   "short_excess_ann": -0.004
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.03接近零，多空兩腿超額報酬都接近零甚至為負(-0.001/-0.004)，訊號強度嚴重不足，連基本可交易性都沒有。bp與ocf_ratio同為mul()相乘原始帶符號值的交乘因子，與C-3、C-4、C-14同屬本輪交乘因子普遍失敗的模式。",
+ "failure_type": "expression_bad",
+ "lesson": "見全域規則(mul()相乘原始值稀釋訊號)；此外bp×ocf_ratio的敘事也可能與F-002(bp×roe)的『便宜+獲利品質』概念高度重疊，若要重試建議先個別rank後用加權平均而非交乘，並提前檢查與F-002的相關性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0081",
+ "ts": "2026-07-19T17:21:03"
+}

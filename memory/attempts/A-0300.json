@@ -1,0 +1,83 @@
+{
+ "round": 19,
+ "category": "electronics_inventory_cycle_quality",
+ "hypothesis": "半導體與電子硬體產業具典型存貨/產能循環：健康營收成長應伴隨毛利率同步走高（規模經濟與稼動率提升），若兩者長期同步性（12個月相關）高，代表成長是真實需求驅動；相關性低甚至負代表可能靠降價出清庫存，法人反應遲緩。",
+ "prediction": "半導體/電子產業sub-train ICIR>0.4且顯著高於金融/生技；相關性低子集(後20%)多頭腿超額報酬應為負或近0。",
+ "formula": "cs_rank(ts_corr(gross_margin, rev_yoy, 12))",
+ "name_zh": "成長品質共振",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(gross_margin, rev_yoy, 12))",
+  "fhash": "7078d8634843ea11",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.05
+  },
+  "validation": {
+   "mean_ic": 0.0,
+   "icir": 0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.009,
+    "多頭"
+   ],
+   "2014": [
+    -0.007,
+    "多頭"
+   ],
+   "2015": [
+    -0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.003,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    -0.015,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": -0.019
+  },
+  "industry_icir": {
+   "電子": -0.06,
+   "生技": -0.12,
+   "半導體": 0.1
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.008
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.22,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測半導體/電子ICIR應顯著高於金融/生技，但sub-train ICIR僅-0.05接近雜訊，半導體(0.1)略高於電子(-0.06)、生技(-0.12)但方向弱且未達門檻。gross_margin與rev_yoy多為季頻基本面資料按月forward-fill，12個月ts_corr視窗實際上只涵蓋約4個獨立季度觀測值，相關係數估計統計效力極低，證據不足以判斷假設本身對錯，更可能是表達方式(視窗過短)的問題。",
+ "failure_type": "expression_bad",
+ "lesson": "對季頻基本面欄位使用ts_corr等需要較多獨立觀測值的運算子時，視窗長度應以「獨立資料點數」而非「月數」為準；12個月視窗對季頻資料只有~4點，估計極不穩定，應改用24個月以上視窗或非相關係數類同步性衡量。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0300",
+ "ts": "2026-07-21T13:13:10"
+}

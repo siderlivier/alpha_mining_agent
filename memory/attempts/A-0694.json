@@ -1,0 +1,87 @@
+{
+ "round": 45,
+ "category": "biotech_cashflow_overreaction_fade",
+ "hypothesis": "生技股現金流轉正(ocf_ratio半年顯著改善)常被市場解讀為轉骨里程碑而過度炒作，但單期轉正常只是一次性應收/存貨時點效應，尚不代表商業模式穩定獲利；市場對『轉正』的過度樂觀會在後續數月隨改善未持續而修正反轉。",
+ "prediction": "生技產業sub-train ICIR>0.4（direction=neg）；空頭腿（現金流改善最劇烈端）報酬顯著低於多頭腿；驗證期decay<50%；若多頭腿超額≤0則以產業限定身份評估。",
+ "formula": "cs_rank(delta(ocf_ratio,6))",
+ "name_zh": "生技現金流反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,6))",
+  "fhash": "783142a9647722c0",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.19
+  },
+  "validation": {
+   "mean_ic": -0.001,
+   "icir": -0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.041,
+    "盤整"
+   ],
+   "2013": [
+    -0.037,
+    "多頭"
+   ],
+   "2014": [
+    -0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.032,
+    "多頭"
+   ],
+   "2017": [
+    0.007,
+    "多頭"
+   ],
+   "2018": [
+    -0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": -0.26,
+   "生技": -0.19,
+   "半導體": -0.13,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": -0.025,
+   "short_excess_ann": -0.003
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業ICIR量級達0.4（方向為負），實際整體sub-train icir僅-0.19、生技產業本身也只有-0.19，遠不及預期的訊號強度；上漲/下跌月IC幾乎相同（-0.008 vs -0.009），沒有呈現『過度樂觀後修正』該有的時間差異，機制強度不足。coverage 0.84尚可，不是資料問題。",
+ "failure_type": "expression_bad",
+ "lesson": "簡單的6個月ocf_ratio變動量無法區分『一次性應收/存貨時點效應』與『真實持續改善』，導致訊號被稀釋成雜訊；若要驗證『生技現金流轉正過度樂觀後修正』假說，需要能過濾出『改善後又回落』或『僅單期跳升』模式的表達方式，而非單純看6個月差分。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0694",
+ "ts": "2026-08-12T14:25:46"
+}

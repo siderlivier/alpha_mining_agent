@@ -1,0 +1,88 @@
+{
+ "round": 34,
+ "category": "informed_flow_leverage_confirmation",
+ "hypothesis": "外資買超搭配券資比偏低，代表股價上漲是由基本面驅動的真實資金推升，而非融資投機堆砌所致；相對地『外資買超但融資券比同時暴增』的組合常是短線題材炒作而非長線資金布局，市場容易將所有外資買超一視同仁，未區分背後是否伴隨投機雜訊，此雙重過濾可提升外資訊號的純度。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-017、C-1相關性均須<0.5方能入庫，證明此為獨立的資金品質過濾訊號。",
+ "formula": "mul(cs_rank(frgn_net_21), cs_rank(neg(short_margin_ratio)))",
+ "name_zh": "外資無炒作確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_net_21), cs_rank(neg(short_margin_ratio)))",
+  "fhash": "2216661b0e1bcc30",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.45
+  },
+  "validation": {
+   "mean_ic": 0.027,
+   "icir": 0.22,
+   "decay_pct": 50.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.054,
+    "多頭"
+   ],
+   "2014": [
+    0.049,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.037,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    0.066,
+    "盤整"
+   ],
+   "2019": [
+    -0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.044,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.49,
+   "生技": 0.27,
+   "半導體": 0.03,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.039
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.56,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.45
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.22 < 0.3; 月換手 0.56 > 0.4"
+ },
+ "diagnosis": "預測相關性風險(F-017、C-1)未命中——實際最高相關是F-008(ρ=0.45，仍在容許範圍內非死因)，真正死因是validation ICIR 0.22<0.3(衰減50%)以及月換手0.56過高，與C-2、C-11同樣栽在「21日流量指標換手率過高」問題上。",
+ "failure_type": "expression_bad",
+ "lesson": "與C-11同源——外資買超與融資/券資比等快速變動資金流指標交乘時，若任一腳用21日窗口，容易造成整體換手率超標，這是本輪第三次出現同一表達層面問題(C-2, C-11, C-12)。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0530",
+ "ts": "2026-07-30T00:21:47"
+}

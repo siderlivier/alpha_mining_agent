@@ -1,0 +1,93 @@
+{
+ "round": 58,
+ "category": "deleveraged_breakout_momentum",
+ "hypothesis": "融資餘額持續下滑同時股價接近歷史高點，代表這波上漲是由基本面買盤(非追高融資客)推動；散戶去槓桿降低了未來斷頭賣壓的隱藏風險，市場只看價格本身而忽略籌碼結構，因此低估了這類「乾淨上漲」的持續性。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；在大盤下跌月的IC應優於全樣本平均IC，因去槓桿股較無融資斷頭賣壓拖累。",
+ "formula": "sub(cs_rank(px_hi252), cs_rank(ts_mean(margin_d21,6)))",
+ "name_zh": "去槓桿創高股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(px_hi252), cs_rank(ts_mean(margin_d21,6)))",
+  "fhash": "f7125488df1cd298",
+  "sub_train": {
+   "mean_ic": 0.041,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.055,
+   "icir": 0.39,
+   "decay_pct": -26.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.031,
+    "盤整"
+   ],
+   "2013": [
+    0.065,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.075,
+    "盤整"
+   ],
+   "2016": [
+    0.04,
+    "多頭"
+   ],
+   "2017": [
+    0.043,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.051,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.063,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.28,
+   "半導體": 0.1,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.053
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.29,
+  "stage2_max_rho": {
+   "factor": "F-016",
+   "rho": 0.47
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.31 < 0.45"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "distill_failed": true,
+ "id": "A-0879",
+ "ts": "2026-08-19T00:25:17"
+}

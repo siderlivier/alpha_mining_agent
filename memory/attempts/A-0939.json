@@ -1,0 +1,94 @@
+{
+ "round": 62,
+ "category": "institutional_neglect_profitability",
+ "hypothesis": "機構(尤其外資)持股比率低的公司代表法人研究覆蓋與資訊擴散不足；若同時本業獲利率高，因缺乏機構關注導致資訊尚未充分反映於股價，此為「關注度」而非「交易活躍度」代理，機制上與週轉率/成交金額類冷門代理不同。",
+ "prediction": "sub-train ICIR>0.4；多頭腿(高op_margin+低frgn_ratio組)年化超額報酬需>0；與F-020(op_margin×neg(amt_21))截面相關|ρ|<0.5方視為通過去重。",
+ "formula": "mul(cs_rank(op_margin), cs_rank(neg(frgn_ratio)))",
+ "name_zh": "冷門法人獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(op_margin), cs_rank(neg(frgn_ratio)))",
+  "fhash": "7a94e51837c9cb82",
+  "sub_train": {
+   "mean_ic": 0.048,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.07,
+   "icir": 0.78,
+   "decay_pct": -103.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.058,
+    "盤整"
+   ],
+   "2013": [
+    0.06,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.065,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.081,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.059,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.5,
+   "半導體": 0.21,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.051,
+   "short_excess_ann": 0.043
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.67,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.67 > 0.5"
+ },
+ "diagnosis": "預測要求與F-020|ρ|<0.5才算通過去重，但實測ρ=0.67，直接踩線。IC/ICIR本身表現其實不差(sub-train 0.38, validation反而增強)，說明「機構關注度」與「成交清淡」在台股中高度共線——低外資持股與低成交量幾乎是同一件事的兩種量法，並非各自獨立的機制。",
+ "failure_type": "duplicate",
+ "lesson": "「法人/關注度代理 × 獲利率」這一大類因子空間已被F-020佔據，任何用不同冷門代理(frgn_ratio、amt、turnover)做同構交乘，都可能與其高度相關。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0939",
+ "ts": "2026-08-27T21:24:50"
+}

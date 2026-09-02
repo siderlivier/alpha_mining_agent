@@ -1,0 +1,87 @@
+{
+ "round": 32,
+ "category": "revenue_surprise_zscore",
+ "hypothesis": "用個股自身12個月營收年增率的波動度，將3個月營收年增變化標準化，捕捉「相對自身正常波動而言統計顯著」的營收驚喜，而非絕對變化量。市場對統計上顯著的驚喜反應不足，因分析師模型更新有滯後，驚喜的資訊含量需數期才被完全消化。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；下跌月IC不應顯著低於上漲月（排除純風險代理特徵）。",
+ "formula": "cs_rank(sdiv(delta(rev_yoy,3),ts_std(rev_yoy,12)))",
+ "name_zh": "營收驚喜標準分",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(rev_yoy,3),ts_std(rev_yoy,12)))",
+  "fhash": "da68068b47fea870",
+  "sub_train": {
+   "mean_ic": 0.021,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.21,
+   "decay_pct": 31.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    -0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.042,
+    "多頭"
+   ],
+   "2017": [
+    -0.001,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.59,
+   "生技": 0.04,
+   "半導體": 0.29,
+   "金融": 0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.054,
+   "short_excess_ann": 0.051
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.65,
+  "stage2_max_rho": {
+   "factor": "F-013",
+   "rho": 0.32
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.31 < 0.45; validation ICIR 0.21 < 0.3; 月換手 0.65 > 0.4"
+ },
+ "diagnosis": "假設方向未被證偽（IC全期為正、跨年多為正值），但強度不足以通過門檻（sub-train ICIR 0.31、validation 0.21，皆低於0.45/0.3），且月換手0.65過高。cond_ic上漲/下跌月接近（0.016 vs 0.021），確實如預測驗證了『非純風險代理』，這部分校準正確。真正的問題在於delta(rev_yoy,3)/ts_std(rev_yoy,12)這個z-score表達式雜訊過大：短窗口delta對單月雜訊敏感，導致訊號翻轉頻繁、稀釋了驚喜資訊。與庫內因子相關性僅0.32，並非重疊死因。",
+ "failure_type": "expression_bad",
+ "lesson": "用短窗口delta標準化營收驚喜時，換手率容易失控；同樣的『相對自身波動顯著』構想若改用較長窗口的變化量或加入時間平滑，可能保留訊號同時壓低換手。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0493",
+ "ts": "2026-07-29T23:57:20"
+}

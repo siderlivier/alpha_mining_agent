@@ -1,0 +1,94 @@
+{
+ "round": 30,
+ "category": "securities_lending_liquidity",
+ "hypothesis": "借券量相對融券餘額的比值高，代表借券供給充沛、市場中存在大量非方向性活動(如可轉債避險、指數調整套利)而非單純看空押注；過去單獨用券資比看空常方向相反，顯示市場誤把高借券活動當看空訊息而過度折價，之後隨誤解修正產生正報酬。",
+ "prediction": "sub-train ICIR>0.45；此訊號IC方向應與neg(short_margin_ratio)單獨排序時相反或更強；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+ "name_zh": "借券流動性佳",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+  "fhash": "ec7f5f8e3d40146e",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.26,
+   "decay_pct": 19.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.069,
+    "盤整"
+   ],
+   "2013": [
+    0.04,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.039,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.2,
+   "半導體": 0.18,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.43,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.62,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR(0.32)與validation(0.26)雖未達0.45門檻但相對穩定(decay僅19%，本輪最穩定之一)，legs兩腿皆正且不小(4.2%/3.6%)，本應是不錯候選，但stage2判定與F-008(低調接近新高)相關係數0.62過高而淘汰。",
+ "failure_type": "duplicate",
+ "lesson": "借券/週轉率類的「非炒作」流動性訊號容易與F-008(低調接近新高)重疊，屬紅海邊界方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0465",
+ "ts": "2026-07-29T23:26:46"
+}

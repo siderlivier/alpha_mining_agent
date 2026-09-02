@@ -1,0 +1,83 @@
+{
+ "round": 62,
+ "category": "financial_provisioning_consistency_streak",
+ "hypothesis": "金融股應計項若連續多月為正(持續透過會計估計墊高獲利而非真實現金流入)，比單月高應計更能反映管理層系統性的獲利操縱傾向；金融股資產減損與提存準備調整具連續性，streak比單期水準更能捕捉持續性差的資產品質，市場反應不足。",
+ "prediction": "sub-train ICIR>0.4(以neg方向計)；streak越長組別未來報酬應單調遞減；與F-021(bp×neg(accruals))截面相關|ρ|<0.5。",
+ "formula": "cs_rank(streak(sign(accruals),6))",
+ "name_zh": "金融應計連續性",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(streak(sign(accruals),6))",
+  "fhash": "9a248d1432748e65",
+  "sub_train": {
+   "mean_ic": -0.01,
+   "icir": -0.17
+  },
+  "validation": {
+   "mean_ic": 0.007,
+   "icir": 0.15,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.028,
+    "多頭"
+   ],
+   "2014": [
+    -0.003,
+    "多頭"
+   ],
+   "2015": [
+    -0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    -0.03,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.007,
+   "down_months": -0.024
+  },
+  "industry_icir": {
+   "電子": -0.29,
+   "生技": -0.14,
+   "半導體": -0.27,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.004
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.51,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "假設明確鎖定「金融股」的應計連續性，但formula未做產業篩選、對全市場計算。結果金融產業ICIR(0.08)雖是四產業中最不負的，但其餘產業(電子-0.29、半導體-0.27)強烈負向，把全市場平均IC拖成雜訊(sub-train -0.17)。這與假設宣稱的方向(neg)其實隱含一致，但因未gate產業導致訊號被稀釋/污染。",
+ "failure_type": "expression_bad",
+ "lesson": "宣稱「僅限特定產業」的假設，若formula沒有實際做產業filter/gate，會被其他產業的雜訊或反向效果稀釋；金融雖是四產業中相對最不負的，暗示效果可能真的集中在金融股，值得加上產業限定重測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0948",
+ "ts": "2026-08-27T21:24:50"
+}

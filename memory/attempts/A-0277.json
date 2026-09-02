@@ -1,0 +1,84 @@
+{
+ "round": 17,
+ "category": "biotech_cash_runway_improvement",
+ "hypothesis": "生技公司常年燒錢，市場習慣用營收/毛利率判斷轉骨，但更早期訊號是現金流結構改善——現金流對淨利比率上升同時應計項下降，代表燒錢速度減緩且盈餘品質提升(可能對應里程碑金到帳或授權金認列)，通常先於營收/毛利實質好轉，市場對生技財報解讀多聚焦損益表而非現金流量表，此訊號被系統性低估。",
+ "prediction": "生技產業industry_icir>0.45且高於其他三產業；全樣本sub-train ICIR>0.35；與F-011相關係數<0.5(欄位完全不同)",
+ "formula": "sub(cs_rank(ocf_ratio), cs_rank(accruals))",
+ "name_zh": "生技燒錢趨緩",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ocf_ratio), cs_rank(accruals))",
+  "fhash": "60c7b35307ab1793",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.4,
+   "decay_pct": -62.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.03,
+    "多頭"
+   ],
+   "2015": [
+    0.035,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.019,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": 0.11,
+   "生技": 0.19,
+   "半導體": 0.24,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.006,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業ICIR>0.45且為四產業最高，全樣本sub-train ICIR>0.35。實際全樣本sub-train ICIR僅0.25(未達0.35門檻)，validation反而轉強至0.40(衰減-62%)，屬於樣本外變好的少見情況。產業歸因也錯：生技ICIR僅0.19，半導體(0.24)才是四產業最高，暗示「現金流品質改善先於營收好轉」機制可能更適用於資本支出循環明顯的半導體業，而非生技燒錢敘事。",
+ "failure_type": "expression_bad",
+ "lesson": "全樣本效果偏弱但validation不衰反增，加上實際受益產業(半導體)與假設產業(生技)不同，顯示核心機制可能成立但故事錯配了產業；建議下次直接針對半導體做產業限定版本重新測試，而非放棄整個方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0277",
+ "ts": "2026-07-21T12:47:40"
+}

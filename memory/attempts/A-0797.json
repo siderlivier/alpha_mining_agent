@@ -1,0 +1,94 @@
+{
+ "round": 52,
+ "category": "value_retail_capitulation",
+ "hypothesis": "便宜股(高盈餘殖利率)通常因缺乏題材而長期滯銷；當融資餘額同時下降，代表過去追價、後續套牢的散戶籌碼正在退場，估值面與籌碼面出現罕見同向轉強訊號，市場對兩者共振的資訊含量反應不足。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；月換手率<0.4",
+ "formula": "mul(cs_rank(ep), cs_rank(neg(margin_d21)))",
+ "name_zh": "便宜籌碼淨化股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ep",
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ep), cs_rank(neg(margin_d21)))",
+  "fhash": "df4eaafa2de5ca68",
+  "sub_train": {
+   "mean_ic": 0.062,
+   "icir": 0.6
+  },
+  "validation": {
+   "mean_ic": 0.047,
+   "icir": 0.79,
+   "decay_pct": -31.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.049,
+    "盤整"
+   ],
+   "2013": [
+    0.065,
+    "多頭"
+   ],
+   "2014": [
+    0.047,
+    "多頭"
+   ],
+   "2015": [
+    0.074,
+    "盤整"
+   ],
+   "2016": [
+    0.076,
+    "多頭"
+   ],
+   "2017": [
+    0.058,
+    "多頭"
+   ],
+   "2018": [
+    0.048,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.064,
+   "down_months": 0.043
+  },
+  "industry_icir": {
+   "電子": 0.69,
+   "生技": 0.48,
+   "半導體": 0.24,
+   "金融": 0.32
+  },
+  "legs": {
+   "long_excess_ann": 0.037,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.6,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.6,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "各項預測全數達標甚至超標(ICIR 0.6→0.79，衰減-31%，多空腿皆正)，是本輪品質最佳候選之一。但在stage2因與F-002(金融品質價值)相關係數0.60被剔除，推測是ep(盈餘殖利率)這條腿主導了相關性，margin_d21籌碼腿沒能提供足夠差異化。",
+ "failure_type": "duplicate",
+ "lesson": "便宜估值(ep)類複合因子容易與F-002等既有價值/ROE因子高度相關，無論配對的第二訊號為何，這是紅海邊界。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0797",
+ "ts": "2026-08-14T01:18:09"
+}

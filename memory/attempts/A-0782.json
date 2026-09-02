@@ -1,0 +1,87 @@
+{
+ "round": 51,
+ "category": "revenue_momentum_acceleration",
+ "hypothesis": "營收月增率的斜率(二階動能)反映營收成長是否正在加速中的加速，這比一階年增率更難被依賴線性外推的分析師模型捕捉；當月增率斜率持續為正，代表營收動能正在系統性增強而非單月雜訊波動，市場對此二階資訊定價效率較低。",
+ "prediction": "sub-train ICIR > 0.45；此訊號與F-009相關係數應<0.5(機制為月增率而非年增率的斜率)；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(ts_slope(rev_mom,6))",
+ "name_zh": "營收加速度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_mom,6))",
+  "fhash": "be561bad7ba0daf1",
+  "sub_train": {
+   "mean_ic": -0.006,
+   "icir": -0.11
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.31,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.012,
+    "盤整"
+   ],
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    -0.024,
+    "盤整"
+   ],
+   "2016": [
+    -0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": -0.022
+  },
+  "industry_icir": {
+   "電子": -0.14,
+   "生技": -0.05,
+   "半導體": 0.13,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.018,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.94,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train IC方向與預測(pos)相反(ICIR -0.11)，多頭腿超額亦為負(-1.8%)，『營收月增率斜率(二階動能)』假說在訓練期即被證偽而非僅表達不佳；驗證期雖轉正(0.31)但正負不一致(decay無法計算)，屬於不穩定雜訊而非穩健的樣本外浮現。條件IC顯示下跌月更負(-0.022)，暗示追逐加速成長股在市場轉弱時反而危險(可能是追高陷阱)。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "營收『二階動能』(月增率的斜率)未如預期捕捉到分析師外推模型忽略的加速訊號，反而在下跌月出現更負IC，暗示此指標可能標記到的是『追高延伸過度』的股票而非真成長加速股；動能因子的階數提升(一階→二階)不必然帶來資訊增量。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0782",
+ "ts": "2026-08-14T01:05:54"
+}

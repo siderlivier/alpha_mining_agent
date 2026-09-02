@@ -1,0 +1,84 @@
+{
+ "round": 51,
+ "category": "institutional_disagreement_signal",
+ "hypothesis": "外資交易由全球資產配置與國際研究視角驅動，投信操作則受季底作帳、散戶申購贖回壓力影響雜訊較多；當外資買超但投信同時賣超(法人意見分歧)，代表市場資訊尚未收斂，而外資因資訊處理能力與獨立性較高，其方向最終較可能主導後續股價走勢，比法人一致買超(已知易反轉)更具持續資訊含量。",
+ "prediction": "sub-train ICIR > 0.45；此效應在frgn_net_21與trust_net_21異號的子集應比同號子集更強；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_z(frgn_net_21),cs_z(neg(trust_net_21)))",
+ "name_zh": "法人分歧領先",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_z(frgn_net_21),cs_z(neg(trust_net_21)))",
+  "fhash": "8bd8568ebc1a0e3e",
+  "sub_train": {
+   "mean_ic": -0.0,
+   "icir": -0.0
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    -0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.016,
+    "多頭"
+   ],
+   "2018": [
+    -0.016,
+    "盤整"
+   ],
+   "2019": [
+    -0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.003,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": -0.06,
+   "生技": -0.03,
+   "半導體": -0.11,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.025,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.66,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR幾乎為0(-0.00)，多頭腿超額為負(-2.5%)，法人意見分歧的資訊含量假說完全未獲支持；condicional IC在上漲/下跌月皆接近0，顯示外資與投信買賣方向分歧本身不具可預測性，可能是雜訊而非資訊不對稱訊號。連同C-1(融資降溫)、C-10(投信抄底)一起看，本輪三個『法人/融資情緒交乘』類因子在sub-train階段全數失敗(ICIR≈0或反向)。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資與投信『意見分歧』的交乘構造未能提煉出資訊含量，可能因外資與投信操作動機混雜(基本面/資金流/作帳)而使簡單分歧度量失效；未搭配基本面錨點的純籌碼情緒交乘假說在此評估管線下勝率偏低。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0787",
+ "ts": "2026-08-14T01:05:54"
+}

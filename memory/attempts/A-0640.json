@@ -1,0 +1,84 @@
+{
+ "round": 42,
+ "category": "quality_momentum_interaction",
+ "hypothesis": "動能訊號混雜基本面資訊擴散與情緒雜訊；應計項偏低（盈餘品質乾淨）公司的動能較可能來自真實資訊緩慢擴散，市場對這類「品質認證動能」系統性低估，高應計股動能則多為雜訊易反轉。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(高動能低應計)年化超額報酬>0；IC應顯著高於單純cs_rank(mom_120)與單純F-006。",
+ "formula": "mul(cs_rank(mom_120), cs_rank(neg(accruals)))",
+ "name_zh": "品質認證動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(mom_120), cs_rank(neg(accruals)))",
+  "fhash": "c2235009a7e64c06",
+  "sub_train": {
+   "mean_ic": 0.019,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.033,
+   "icir": 0.44,
+   "decay_pct": -139.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.041,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.06,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": -0.003
+  },
+  "industry_icir": {
+   "電子": 0.27,
+   "生技": 0.28,
+   "半導體": 0.16,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.048,
+   "short_excess_ann": 0.025
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45；實際僅0.18被stage1淘汰，但validation ICIR達0.44（decay -139%，即驗證期反而變強），且cond_ic顯示效果集中在上漲月(0.034) vs 下跌月(-0.003)，符合『動能品質認證』在趨勢市場才發揮作用的邏輯。rank相乘的表達方式可能在雜訊較大的2012-2017稀釋了訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "rank相乘的組合公式在早期高雜訊子期可能低估真實存在的交乘效應；此類train弱、validation強的模式應排入待驗證佇列換表達（如改用z-score加總或限制於正動能股票池）重試，而非直接判定假設無效。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0640",
+ "ts": "2026-08-12T09:45:43"
+}

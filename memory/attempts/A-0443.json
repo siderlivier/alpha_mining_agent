@@ -1,0 +1,94 @@
+{
+ "round": 28,
+ "category": "securities_lending_arbitrage_flow",
+ "hypothesis": "借券量相對券資比偏高時，可能反映的是可轉債避險、ETF實物申贖、選擇權造市等中性套利/避險活動帶來的借券需求，而非融券放空的方向性看空；過去以「借券=看空訊號」的假設方向可能搞反，這類流動性活絡股份反而伴隨機構參與度高、資訊效率較佳。",
+ "prediction": "sub-train ICIR>0.35(資料覆蓋率較低，門檻放寬)；多頭腿年化超額報酬>0，驗證與先前neg方向假設完全相反的結果；覆蓋率(非缺值比例)需>0.5方視為有效訊號。",
+ "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+ "name_zh": "借券避險訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+  "fhash": "ec7f5f8e3d40146e",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.26,
+   "decay_pct": 19.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.069,
+    "盤整"
+   ],
+   "2013": [
+    0.04,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.039,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.2,
+   "半導體": 0.18,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.43,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.62,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.35(已放寬)，實際sub-train 0.32接近但未達，validation 0.26、decay僅19%(不算過擬合)，本身訊號相對穩定，覆蓋率0.43也低於自訂的>0.5門檻。但真正致命的是stage2發現與庫內F-008('低調接近新高')相關係數0.62——顯示'借券量高但券資比未同步升高'的股票，本質上就是那些正在悄悄創高、周轉率不高的股票，兩者是同一批股票的不同側面描述，並非獨立的中性套利/避險機制。",
+ "failure_type": "duplicate",
+ "lesson": "借券/融資融券流量類指標很容易與'價量溫和創高'類因子(如F-008)本質重疊，因為兩者背後都是同一批被機構悄悄布局、流動性活絡的股票；日後若要開發借券/籌碼流量類因子，應先與庫內價量創高、周轉率類因子做相關性初篩，避免重新發現同一批股票。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0443",
+ "ts": "2026-07-28T19:19:09"
+}

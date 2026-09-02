@@ -1,0 +1,15 @@
+{
+ "done": [
+  "rank_nz|A-0116",
+  "rank_nz|A-0143",
+  "rank_nz|A-0281",
+  "rank_nz|A-0353",
+  "rank_nz|A-0433",
+  "industry_demean|A-0615",
+  "industry_demean|A-0652",
+  "streak|A-0537",
+  "streak|A-0694",
+  "clip_std|A-0823"
+ ],
+ "last_run": "2026-08-31T17:21:26"
+}

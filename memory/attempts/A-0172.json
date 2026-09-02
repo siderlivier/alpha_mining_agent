@@ -1,0 +1,84 @@
+{
+ "round": 10,
+ "category": "foreign_recognition_reversal",
+ "hypothesis": "外資持股比率長期偏低代表過去被外資研究圈忽略，但近期買超轉正顯示開始被重新發掘；兩者同時具備時，代表處於「從冷翻熱」的資訊重估初期，市場對此轉折的反應通常滯後於外資報告發布。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與C-8之ρ<0.5。",
+ "formula": "add(cs_rank(neg(frgn_ratio)), cs_rank(frgn_net_21))",
+ "name_zh": "外資翻多訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "frgn_ratio"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_rank(neg(frgn_ratio)), cs_rank(frgn_net_21))",
+  "fhash": "1f741ea39d2f80cc",
+  "sub_train": {
+   "mean_ic": 0.001,
+   "icir": 0.01
+  },
+  "validation": {
+   "mean_ic": -0.026,
+   "icir": -0.31,
+   "decay_pct": 3200.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.035,
+    "多頭"
+   ],
+   "2014": [
+    0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.008,
+    "多頭"
+   ],
+   "2017": [
+    -0.027,
+    "多頭"
+   ],
+   "2018": [
+    -0.002,
+    "盤整"
+   ],
+   "2019": [
+    -0.049,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.001,
+   "down_months": -0.021
+  },
+  "industry_icir": {
+   "電子": -0.01,
+   "生技": 0.04,
+   "半導體": -0.22,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.008,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.47,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.01幾乎無訊號，validation轉負-0.31(decay 3200%因基期趨近於零而失去意義)。逐年看2013-2015尚正、2016起轉負，顯示『外資從冷翻熱』在後期樣本反而不成立，可能與2016-2019外資結構性集中大型權值股有關。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "低外資持股+近期買超轉正的組合在2016年後不再有效，可能反映外資資金集中大型權值股的結構性趨勢，『從冷翻熱』重估故事在近年台股不成立；若重測應鎖定更近期樣本並排除大型權值股干擾。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0172",
+ "ts": "2026-07-21T11:22:51"
+}

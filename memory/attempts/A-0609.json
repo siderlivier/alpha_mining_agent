@@ -1,0 +1,93 @@
+{
+ "round": 40,
+ "category": "short_interest_deleveraging",
+ "hypothesis": "台股放空成本高，融券多為避險/套利而非單純看空，個股融資券比持續偏高反映市場對其資訊不對稱疑慮升溫、聰明資金已透過融券管道對沖風險，而非坊間認為的「軋空延續」。六個月平滑後券資比持續偏低的個股籌碼結構乾淨，未來報酬應優於券資比偏高者。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(低券資比端)年化超額報酬>0；下跌月IC不弱於上漲月；月換手率<0.4。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "券資去化訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.27，未達標但仍進入stage2；預測下跌月IC不弱於上漲月（排除避險型特徵），實際下跌月IC為-0.017，反而由正轉負，明顯弱於上漲月0.049，代表這其實更像順勢/多頭偏態訊號而非純粹避險去化訊號，直覺判斷有誤。多頭腿超額0.053>0符合預期。最終死因是與F-008（低調接近新高）相關係數0.57，顯示『券資比持續偏低』在數據上高度重疊於『價漲但周轉率不高、未被炒作』這條既有訊號——低券資比與低調吸籌是同一枚硬幣的兩面。",
+ "failure_type": "duplicate",
+ "lesson": "『低券資比/籌碼乾淨』類訊號與『價格接近高點但周轉率不高』類訊號在台股高度共線；下次設計去化/籌碼類因子前，先檢查與F-008的相關性，或改用『券資比水準 vs 同族群』的橫斷面殘差來去除價格趨勢共通成分，避免重覆造輪子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0609",
+ "ts": "2026-08-12T09:17:43"
+}

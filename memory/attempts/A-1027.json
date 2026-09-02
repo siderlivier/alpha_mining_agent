@@ -1,0 +1,83 @@
+{
+ "round": 67,
+ "category": "earnings_predictability_premium",
+ "hypothesis": "EPS 年增率的波動度（截尾後）低，代表獲利可預測性高、經營模式穩定。多數投資人追逐高成長而非穩定成長，對『盈餘可預測性』這項風險特徵定價不足，使低盈餘波動的公司享有較高的風險調整後報酬。此機制不限金融或生技，是全市場的品質溢酬。",
+ "prediction": "sub-train ICIR > 0.3；多頭腿年化超額 > 0；方向四大產業一致；與 F-022、F-010 之 |ρ| < 0.5；效果不僅限金融。",
+ "formula": "cs_rank(neg(clip_std(eps_yoy,12)))",
+ "name_zh": "盈餘可預測性",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(clip_std(eps_yoy,12)))",
+  "fhash": "347af615bef6f139",
+  "sub_train": {
+   "mean_ic": -0.035,
+   "icir": -0.51
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.7,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.053,
+    "多頭"
+   ],
+   "2014": [
+    -0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.039,
+    "盤整"
+   ],
+   "2016": [
+    -0.037,
+    "多頭"
+   ],
+   "2017": [
+    -0.029,
+    "多頭"
+   ],
+   "2018": [
+    -0.036,
+    "盤整"
+   ],
+   "2019": [
+    -0.044,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.037,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": -0.49,
+   "生技": -0.42,
+   "半導體": 0.01,
+   "金融": -0.35
+  },
+  "legs": {
+   "long_excess_ann": 0.001,
+   "short_excess_ann": -0.031
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "sub-train ICIR −0.51、每一年每一產業(除半導體≈0)都是負，方向與假設(pos)完全相反且極穩定。預測『多頭腿>0、四產業一致為正、不僅限金融』全錯。本輪最乾淨的證偽：台股低 EPS 年增率波動 = 較低報酬，不是品質溢酬。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "台股『低盈餘波動=品質溢酬』方向反轉：低 eps_yoy 波動的是缺乏成長的停滯名單、系統性跑輸。反向(高波動為正)本身多半只是成長代理，入待驗證前先檢查與成長動能因子的相關，避免重複造輪。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1027",
+ "ts": "2026-09-02T01:09:58"
+}

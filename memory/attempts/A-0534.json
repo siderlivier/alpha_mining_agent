@@ -1,0 +1,93 @@
+{
+ "round": 35,
+ "category": "short_interest_information_decay",
+ "hypothesis": "台股放空管道以融資融券為主，券資比持續偏高代表市場分歧擴大、知情空頭提前布局；過去測試『軋空延續』或『回補反轉』等正向敘事皆失敗，但原始IC穩定為負，顯示券資比高本身就是負面資訊擴散緩慢的訊號，而非交易摩擦效應。",
+ "prediction": "sub-train ICIR>0.45；下跌月與上漲月IC同向為正；多頭腿（券資比低分位）年化超額>0；月換手率<0.4。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "券資比趨緩股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45未達成(實際0.27)，但validation ICIR 0.25、decay僅6%顯示訊號穩定不過擬合；預測「下跌月與上漲月IC同向為正」也未成立，下跌月實際轉負(-0.017)，代表避險/知情空頭敘事在空頭月站不住腳。長腿超額0.053>0、turnover 0.11均達標。最終死因是與F-008(低調接近新高)高相關(ρ0.57)，而非假設本身被推翻。",
+ "failure_type": "duplicate",
+ "lesson": "券資比類負面資訊因子容易與「價格動能+低周轉」型態因子高度重疊，兩者本質上都在捕捉未被爆量認可的價格行為；未來測試信用資訊因子前應先與價格/周轉類因子做相關性預檢。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0534",
+ "ts": "2026-07-30T00:34:10"
+}

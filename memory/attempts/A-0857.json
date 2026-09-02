@@ -1,0 +1,90 @@
+{
+ "round": 56,
+ "category": "cash_backed_earnings_growth",
+ "hypothesis": "EPS年增率高但若非由實際營運現金流支撐（可能來自業外收益或一次性項目），獲利品質存疑；OCF/淨利比高則確認獲利有真實現金流佐證，市場短期對「有無現金支撐」的差異定價不足。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；與F-024相關係數需<0.5。",
+ "formula": "mul(cs_rank(eps_yoy), cs_rank(ocf_ratio))",
+ "name_zh": "現金撐腰成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(eps_yoy), cs_rank(ocf_ratio))",
+  "fhash": "a8b7f1552aab8037",
+  "sub_train": {
+   "mean_ic": 0.04,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.043,
+   "icir": 0.82,
+   "decay_pct": -48.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.056,
+    "盤整"
+   ],
+   "2016": [
+    0.052,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.055,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.043,
+   "down_months": 0.037
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.38,
+   "半導體": 0.14,
+   "金融": 0.4
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": -0.002
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.2,
+  "stage2_culprit": {
+   "factor": "F-022",
+   "rho": 0.59,
+   "factor_name": "生技穩健成長",
+   "factor_desc": "生技股EPS成長相對自身波動穩定，代表已脫離燒錢賭博期、進入穩定收成階段。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-022 |ρ|=0.59 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.45準確命中（sub-train 0.55，validation更高達0.82），是本輪預測準確度最高的候選；但stage2發現與F-022「生技穩健成長」相關係數0.59（中度），EPS成長×現金流佐證與EPS成長穩定性的經濟故事有所不同，但兩者輸入高度重疊。",
+ "failure_type": "duplicate",
+ "lesson": "『EPS成長×現金流品質』與『EPS成長穩定性』兩種敘事雖邏輯不同，但用EPS成長作為共同分子時容易產生中度以上相關；未來可考慮用成長意外(surprise)或成長品質的變化量取代原始成長率作為分子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0857",
+ "ts": "2026-08-18T23:55:52"
+}

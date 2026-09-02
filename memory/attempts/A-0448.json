@@ -1,0 +1,87 @@
+{
+ "round": 29,
+ "category": "turnover_shock_reversal",
+ "hypothesis": "週轉率短期內(3個月)急速放大常伴隨消息面炒作、當沖與短線投機資金介入，這類熱度是不可持續的注意力驅動交易而非長期資金布局。行為財務學中散戶對受矚目股票有過度追捧傾向，導致短期周轉率暴增的股票隨後因投機資金退潮而報酬轉弱。此為週轉率「變化」而非「水準」的動能崩潰效應，與F-008(周轉率水準搭配價格位置)屬不同維度。",
+ "prediction": "sub-train ICIR > 0.45；與F-008相關係數 |ρ| < 0.5；多頭腿（周轉率未放大子集）年化超額報酬 > 0。",
+ "formula": "cs_rank(neg(delta(turn_21,3)))",
+ "name_zh": "週轉率暴衝反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(turn_21,3)))",
+  "fhash": "f3c507c4d83e6be1",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": -0.018,
+   "icir": -0.24,
+   "decay_pct": 165.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.049,
+    "多頭"
+   ],
+   "2015": [
+    0.046,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    -0.042,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.013,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": 0.21,
+   "半導體": 0.15,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.027,
+   "short_excess_ann": 0.024
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.52,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.23
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR -0.24 < 0.3; validation 衰減 165% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.52 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.36接近但未達0.45門檻，2013-2017逐年IC全為正且穩定(0.02~0.05)，看似有效；但2018年IC驟降至-0.042，導致validation ICIR翻負(-0.24)、decay高達165%，屬明顯的過擬合/regime依賴。與F-008相關性極低(ρ=0.23)確認了假說文本中『與F-008不同維度』的主張成立，但這不足以救回整體表現。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "週轉率3月變化量(delta)的反轉效果高度集中於2013-2017多頭期，2018年反轉甚至倒轉方向，顯示此為對特定牛市樣本的過擬合而非穩定的注意力衰退機制。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0448",
+ "ts": "2026-07-29T23:14:31"
+}

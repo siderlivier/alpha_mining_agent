@@ -1,0 +1,84 @@
+{
+ "round": 5,
+ "category": "earnings_quality_growth_composite",
+ "hypothesis": "應計項偏低（盈餘含金量高）同時ROE正在改善的公司，代表獲利提升是真實營運改善帶動、而非會計操縱堆砌出的暫時性數字，這種「真成長+高品質」複合訊號比單獨的應計或ROE趨勢因子更能篩選出真正被低估的績優成長股，市場對這種複合確認訊號的反應通常較單一訊號更慢。",
+ "prediction": "sub-train ICIR > 0.45；且應同時通過與F-006(neg應計)、F-001(ROE改善)的相關性檢查(ρ<0.5)，證明複合訊號並非純粹重複既有因子。",
+ "formula": "cs_rank(sub(ts_slope(roe,6), cs_z(accruals)))",
+ "name_zh": "真實獲利改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ts_slope(roe,6), cs_z(accruals)))",
+  "fhash": "10f38079db1cf0e4",
+  "sub_train": {
+   "mean_ic": 0.019,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.27,
+   "decay_pct": 18.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.01,
+    "多頭"
+   ],
+   "2014": [
+    0.031,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": 0.21,
+   "生技": 0.21,
+   "半導體": 0.29,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.002,
+   "short_excess_ann": 0.024
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.17,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.33，屬於『有訊號但不夠強』而非完全無效。問題可能出在公式本身：sub(ts_slope(roe,6), cs_z(accruals))把一個原始尺度、未正規化的時序斜率，直接與一個已經cs_z正規化的橫截面變數相減，兩者尺度不一致，導致其中一項可能主導合併結果，稀釋了原本想要的複合確認效果。",
+ "failure_type": "expression_bad",
+ "lesson": "複合公式在合併前，每個子項都要先做cs_rank或cs_z正規化，否則其中一項的原始尺度會蓋過另一項。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0092",
+ "ts": "2026-07-19T17:32:32"
+}

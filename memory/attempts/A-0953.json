@@ -1,0 +1,83 @@
+{
+ "round": 62,
+ "category": "semiconductor_order_streak_confirmation",
+ "hypothesis": "半導體業從去化循環底部復甦時，需連續數月營收年增轉正才能確認庫存調整真正結束(而非單月拉貨雜訊)；半導體訂單能見度低，市場對「連續確認」訊號的重新評價存在落後，streak計數比單月數值更能過濾雜訊並捕捉持續性復甦，與C-2互為不同角度驗證。",
+ "prediction": "sub-train ICIR>0.4；streak≥3組月報酬應顯著高於streak=0組；與C-2/C-7截面相關|ρ|<0.5。",
+ "formula": "cs_rank(streak(sign(rev_yoy),6))",
+ "name_zh": "半導體連增確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(streak(sign(rev_yoy),6))",
+  "fhash": "c63ffdc72ef12c12",
+  "sub_train": {
+   "mean_ic": -0.023,
+   "icir": -0.39
+  },
+  "validation": {
+   "mean_ic": -0.011,
+   "icir": -0.22,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.021,
+    "多頭"
+   ],
+   "2014": [
+    -0.028,
+    "多頭"
+   ],
+   "2015": [
+    -0.036,
+    "盤整"
+   ],
+   "2016": [
+    0.002,
+    "多頭"
+   ],
+   "2017": [
+    -0.029,
+    "多頭"
+   ],
+   "2018": [
+    -0.013,
+    "盤整"
+   ],
+   "2019": [
+    -0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.013,
+   "down_months": -0.034
+  },
+  "industry_icir": {
+   "電子": -0.1,
+   "生技": -0.26,
+   "半導體": -0.04,
+   "金融": -0.24
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "假設宣稱方向為pos(連續確認→未來報酬正)，但實測全樣本年份、全部四個產業ICIR皆為負，且sub-train與validation符號一致(icir -0.39 / -0.22)，並非雜訊而是穩定的反向關係。這代表「連續營收年增為正」在台股更可能對應動能衰竭/過度延伸而非低估延遲修正，假設的因果方向被證偽，但底層變數本身具備穩定預測力。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "streak(sign(rev_yoy))在全產業、全樣本期都穩定為負，顯示原始「連續確認→修正低估」的因果敘事方向錯誤；但變數本身訊號穩定，適合以相反方向(動能衰竭/過熱)重新提出假設，而非直接判整個變數死刑。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0953",
+ "ts": "2026-08-27T21:24:50"
+}

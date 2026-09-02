@@ -1,0 +1,90 @@
+{
+ "round": 6,
+ "category": "margin_trend_underreaction",
+ "hypothesis": "毛利率趨勢反映公司產品定價權與成本控制能力的中期變化，投資人對此類需跨季度累積觀察的緩慢訊號存在系統性反應不足；延長觀察窗口至12個月可降低單季雜訊干擾，同時以產業內排名濾除產業級原物料成本循環的共同影響。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；validation期衰減幅度應<40%，且與C-2(op_margin,6)之截面相關度|ρ|<0.7(驗證兩者非完全重複訊號)。",
+ "formula": "cs_rank(ts_slope(gross_margin,12))",
+ "name_zh": "毛利率長期趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(gross_margin,12))",
+  "fhash": "35006a6795dcdd2e",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.19,
+   "decay_pct": 64.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.012,
+    "盤整"
+   ],
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.031,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.025,
+    "多頭"
+   ],
+   "2018": [
+    -0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.24,
+   "半導體": 0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.027,
+   "short_excess_ann": 0.074
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.3
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.19 < 0.3; validation 衰減 64% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45確實達成(0.52)，但validation ICIR驟降至0.19、decay高達64%，嚴重過擬合，衰減預測完全失準；產業內排名並未如C-1一樣穩住樣本外表現，顯示同樣的『產業內cs_rank+ts_slope』模板在營收成長與毛利率兩種底層資料上表現截然不同。",
+ "failure_type": "expression_bad",
+ "lesson": "毛利率/營益率類ts_slope因子即使做了產業內排名，樣本外穩定性仍明顯劣於營收類trend因子(對照C-1)，很可能是毛利率趨勢更易受單季雜訊或已被F-001(ROE趨勢,ρ0.3)部分吸收；同一種構造法不能無差別套用到所有財務比率，須逐一驗證穩定性。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0106",
+ "ts": "2026-07-19T17:47:42"
+}

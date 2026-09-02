@@ -1,0 +1,86 @@
+{
+ "round": 6,
+ "category": "margin_turnaround_recovery",
+ "hypothesis": "分析師與投資人易受近因偏誤影響，過度錨定於近期低谷的毛利率水準，低估毛利率從谷底回升的速度與幅度，尤其在原物料成本循環反轉或去化庫存後的電子/半導體產業更明顯；當前毛利率相對自身12個月低點的回升幅度，是市場尚未完全定價的『轉機』訊號。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；此因子在半導體/電子產業(景氣循環特徵明顯)之industry_icir應為四產業中最高，金融產業應最低。",
+ "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,12)))",
+ "name_zh": "毛利谷底回升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,12)))",
+  "fhash": "2c1724358309766b",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.12,
+   "decay_pct": 136.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.031,
+    "盤整"
+   ],
+   "2013": [
+    0.001,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": 0.11,
+   "生技": 0.07,
+   "半導體": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.061
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.33低於預測門檻，validation ICIR轉負(-0.12，decay136%代表方向反轉)，『毛利率谷底回升=市場低估轉機』假說未獲支持；產業預測也落空——預期半導體/電子icir最高、金融最低，實際三產業(電子0.11、生技0.07、半導體0.12)相近且金融無可用樣本，無法驗證循環股假說。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "毛利率相對自身12個月低點的回升幅度在validation期方向直接反轉，顯示這不是單純樣本外雜訊，而是機制本身在不同景氣階段表現不一致（谷底回升可能同時對應『真轉機』與『假反彈後續探底』兩種相反結局，訊號缺乏區分力）；結合C-8、C-14同屬毛利率/營益率衍生因子的普遍不穩定，此方向證據漸趨一致地弱。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0110",
+ "ts": "2026-07-19T17:47:43"
+}

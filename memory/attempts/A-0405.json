@@ -1,0 +1,90 @@
+{
+ "round": 26,
+ "category": "biotech_cash_burn_transition",
+ "hypothesis": "生技股在藥證核准/授權等里程碑後，現金流燒錢速度趨緩（OCF比率半年改善）與營收開始成長會同時出現，代表公司從純研發燒錢階段轉向商轉獲利；此現金流拐點確認比單純營收×毛利(F-011)更能捕捉體質實質好轉，且生技股法人研究覆蓋不足，市場反應遲緩，此機制只在燒錢型生技股成立。",
+ "prediction": "全市場sub-train ICIR>0.35；生技產業industry_icir需為四大產業中最高(>0.5)；多頭腿超額報酬>0；與F-011相關係數<0.5。",
+ "formula": "mul(cs_rank(delta(ocf_ratio,6)), cs_rank(rev_yoy))",
+ "name_zh": "生技燒錢轉骨",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(ocf_ratio,6)), cs_rank(rev_yoy))",
+  "fhash": "cc37eb462a99230e",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.34
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.46,
+   "decay_pct": -35.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.046,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.048,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.1,
+   "半導體": 0.2,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.043,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.45,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.53,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.53 > 0.5"
+ },
+ "diagnosis": "穩健性預測部分正確：sub-train ICIR 0.34僅微幅未達自訂0.35門檻，但validation反升至0.46（decay -35%，非過擬合）。然而「生技燒錢轉骨」的產業專屬敘事再次被推翻：預測生技industry_icir應最高，實際生技最低(0.10)、電子最高(0.47)，且與C-3幾乎同一失敗模式；stage2撞上同一顆F-011（ρ=0.53，剛好壓線）。",
+ "failure_type": "duplicate",
+ "lesson": "第二次出現「用產業故事包裝的成長×品質/現金流複合因子，實際由電子股主導、且與F-011撞相關」的模式（C-3、C-7獨立案例）。此類敘事型複合因子提交前應先檢查industry_icir形狀，並直接對F-011算相關係數。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0405",
+ "ts": "2026-07-28T18:54:35"
+}

@@ -1,0 +1,91 @@
+{
+ "round": 8,
+ "category": "momentum_continuation",
+ "hypothesis": "一年期動能反映法人資金緩慢建倉與資訊在長線投資人間的擴散延遲；不同於短期動能容易被當沖與反轉污染，240日動能經一年沉澱後仍延續的部分代表基本面趨勢已確立，市場對此類長期趨勢存在系統性低估。",
+ "prediction": "sub-train ICIR > 0.45；上漲月與下跌月IC同向（排除純beta代理可能性）；與F-005相關係數 < 0.5。",
+ "formula": "cs_rank(mom_240)",
+ "name_zh": "長期動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_240)",
+  "fhash": "30124ce2fa791c47",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.047,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.23,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.28
+  },
+  "verdict": "rejected_stage3",
+  "reason": "與同批 C-6 |ρ|=0.86，保留 ICIR 較高者"
+ },
+ "diagnosis": "sub-train ICIR 0.20、validation 0.09，decay 54%已超過overfitting門檻，且與同批C-6(rho 0.86)高度重疊被stage3淘汰、保留ICIR較高者。預測ICIR>0.45落空幅度很大，長期動能在validation期大幅衰退，屬自身表現不足而非受F-008等庫內因子牽連。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "純240日動能水準值在2018-2019驗證窗口表現遠弱於訓練期，衰減達54%已達overfitting門檻；下次測試長期動能建議直接從C-6式的『扣短窗動能』差分結構起跳，而非重測原始mom_240水準值。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage3",
+ "id": "A-0133",
+ "ts": "2026-07-19T21:42:48"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 48,
+ "category": "short_term_overreaction_reversal",
+ "hypothesis": "台股散戶佔比高，20日內的劇烈價格變動多由情緒性追殺造成而非新資訊；當這類短期弱動能伴隨成交金額急速放大(delta(amt_21,3))，代表非理性拋售強度更高，未來一個月內更容易出現修正式反彈。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(急跌放量端)年化超額>0；此效應在下跌月應比上漲月更顯著。",
+ "formula": "mul(cs_rank(neg(mom_20)), cs_rank(delta(amt_21,3)))",
+ "name_zh": "放量急跌反彈股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(mom_20)), cs_rank(delta(amt_21,3)))",
+  "fhash": "3df0c2c96091f293",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.045,
+   "icir": 0.6,
+   "decay_pct": -204.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.046,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.063,
+    "盤整"
+   ],
+   "2019": [
+    0.026,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.28,
+   "生技": 0.18,
+   "半導體": 0.19,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": -0.001,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.76,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測下跌月效果應強於上漲月且多頭腿為正，實測 cond_ic 上漲下跌完全相同(0.023 vs 0.023)、多頭腿趨近於零(-0.001)、且2015、2017年轉負，訊號方向與強度都不穩定，短期急跌放量反彈機制未獲支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "20日動能配合成交金額急升的『情緒性錯殺反彈』敘事，在此表達下沒有展現出下跌月優勢也沒有可交易多頭腿，短線反轉型假說要更謹慎，需有更強差異化條件才值得再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0731",
+ "ts": "2026-08-14T00:25:09"
+}

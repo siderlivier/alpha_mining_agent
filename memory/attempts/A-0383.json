@@ -1,0 +1,83 @@
+{
+ "round": 24,
+ "category": "institutional_flow_contrarian",
+ "hypothesis": "投信基金操作常受季底作帳、申購贖回壓力與相對排名競賽驅動，買賣行為具有順勢、非資訊性的特徵；投信近期淨買超越多的股票，往往是短期籌碼堆疊而非基本面訊號，隨後易面臨獲利了結賣壓，故投信買超反而是反向指標。",
+ "prediction": "sub-train ICIR > 0.4；上漲月IC應與下跌月IC方向一致（非regime依賴）；月換手率<0.4。",
+ "formula": "cs_rank(neg(trust_net_21))",
+ "name_zh": "投信反向指標",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(trust_net_21))",
+  "fhash": "5b1202e4dbb03ae6",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.32,
+   "decay_pct": -18.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.044,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.01,
+   "半導體": 0.29,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『上漲月IC應與下跌月IC方向一致』命中（up 0.018、down 0.023皆為正），顯示投信反向操作的邏輯不是regime依賴的。但sub-train ICIR預測>0.4，實際僅0.27；預測turnover<0.4，實際0.48超標，反映21日投信淨買超本身換手率偏高、訊號較為短期雜訊化。與C-1對照：C-1把trust_net拿去和frgn_net相減後訊號更差（icir 0.13），此處trust_net單腳反向雖然通過方向一致性檢驗但強度仍不足以達標。",
+ "failure_type": "expression_bad",
+ "lesson": "投信單腳反向訊號（neg(trust_net_21)）方向正確且跨regime穩定，但21日窗口換手率過高（0.48），訊號雜訊比不足；應嘗試更長平滑窗（如ts_mean(trust_net,60)）來降低換手率同時保留反向訊號方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0383",
+ "ts": "2026-07-28T18:28:36"
+}

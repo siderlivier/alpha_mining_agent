@@ -1,0 +1,83 @@
+{
+ "round": 46,
+ "category": "biotech_cashflow_inflection",
+ "hypothesis": "生技公司在缺乏穩定產品線收入時，現金流量表比損益表更誠實反映經營實況；當營業現金流/稅後淨利比率(ocf_ratio)呈現12個月的趨勢性改善，往往對應授權金入帳、里程碑款項到位等具體事件。生技財報結構複雜、分析師覆蓋稀薄，市場消化這類『轉骨』訊號的速度緩慢，使改善趨勢初期存在定價落後。",
+ "prediction": "生技產業限定：industry_icir(生技)>0.55且為四產業最高；生技子樣本內多頭腿年化超額>0；validation decay<40%。",
+ "formula": "cs_rank(delta(ocf_ratio,12))",
+ "name_zh": "生技現金流轉骨",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,12))",
+  "fhash": "d3aa3559d6c6e7ce",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.17,
+   "半導體": 0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技industry_icir>0.55為四產業最高，實際生技icir為-0.17（方向完全相反，四產業中最負），sub-train整體也是-0.13。delta(ocf_ratio,12)在生技公司常見的虧損/淨利趨零情境下，ocf/net_income分母不穩定，容易正負劇烈翻轉，構造出的12個月變化量近乎雜訊。",
+ "failure_type": "expression_bad",
+ "lesson": "以淨利為分母的比率型指標，在虧損或接近損益兩平的公司會極度不穩定；此類假設應改用不受分母趨零影響的絕對量測(如ocf年增率或ocf/營收)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0703",
+ "ts": "2026-08-12T14:41:10"
+}

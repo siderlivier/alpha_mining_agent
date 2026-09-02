@@ -1,0 +1,90 @@
+{
+ "round": 19,
+ "category": "margin_cycle_persistence",
+ "hypothesis": "半導體產業資本支出週期長、產能調整緩慢，當毛利率處於自身過去12個月相對高檔（產業處於漲價/稼動率高峰），因供給端擴產滯後，高檔期往往比市場預期更持久，形成高檔動能延續而非均值回歸。",
+ "prediction": "半導體產業sub-train ICIR>0.4且高於其他產業；與F-004相關係數<0.5。",
+ "formula": "cs_rank(ts_rank(gross_margin, 12))",
+ "name_zh": "毛利高檔延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(gross_margin, 12))",
+  "fhash": "e8cb26f89756b153",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.73
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.19,
+   "decay_pct": 74.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.019,
+    "盤整"
+   ],
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.046,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.053,
+    "多頭"
+   ],
+   "2017": [
+    0.043,
+    "多頭"
+   ],
+   "2018": [
+    -0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.025
+  },
+  "industry_icir": {
+   "電子": 0.58,
+   "生技": 0.35,
+   "半導體": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.067,
+   "short_excess_ann": 0.068
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.4
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.19 < 0.3; validation 衰減 74% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測半導體產業ICIR應最高，但實際電子(0.58)遠高於半導體(0.16，三產業中最低)，直接反駁「半導體特有產能剛性」敘事；sub-train ICIR雖高達0.73，但validation暴跌至0.19(衰減74%)，逐年來看2016-2017(晶片超級週期)表現極強、2018轉負，顯示訊號很可能overfit到特定景氣週期，而非半導體產業結構性特徵。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「半導體資本支出剛性導致毛利高檔延續」的產業專屬敘事未獲支持——效果實際更集中在電子(非半導體子產業)且高度集中在特定景氣週期(2016-17)；毛利率動能類因子若重新嘗試，不應預先綁定特定產業敘事，應先看全樣本+全產業分布再歸因。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0306",
+ "ts": "2026-07-21T13:13:10"
+}

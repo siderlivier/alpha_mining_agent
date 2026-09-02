@@ -1,0 +1,90 @@
+{
+ "round": 31,
+ "category": "revenue_divergence_reversion",
+ "hypothesis": "當月營收月增率(rev_mom)短期低於年增率(rev_yoy)隱含的長期趨勢時，屬單月雜訊造成的短期利空過度反應，法人容易錯殺；隔月股價應向長期趨勢均值回歸而非延續下跌。此為對經驗庫中同公式『延續版本』的方向對照測試，驗證均值回歸方向是否成立。",
+ "prediction": "sub-train ICIR > 0.45；下跌月IC不顯著高於上漲月（排除純風險規避型訊號）；多頭腿年化超額報酬 > 0。",
+ "formula": "cs_rank(neg(sub(rev_mom,rev_yoy)))",
+ "name_zh": "營收雜訊回歸",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(rev_mom,rev_yoy)))",
+  "fhash": "a18f92a6b4136f9c",
+  "sub_train": {
+   "mean_ic": 0.04,
+   "icir": 0.58
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.34,
+   "decay_pct": 42.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.048,
+    "多頭"
+   ],
+   "2017": [
+    0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.69,
+   "生技": 0.42,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.065,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.45,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.52,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.58達標，但validation衰減42%（低於50%門檻，尚未判定過擬合），下跌月與上漲月IC相近（0.036 vs 0.034，符合預測『非純避險型』）。方向假設本身統計上站得住腳，但因與F-011 rho=0.52（邊緣）被stage2剔除，屬於rev_mom/rev_yoy衍生欄位與庫內成長類因子的常見重疊，而非均值回歸機制被證偽。",
+ "failure_type": "duplicate",
+ "lesson": "rev_mom與rev_yoy的組合衍生指標，容易與任何『營收成長+品質確認』類庫內因子在0.5臨界值附近相關，即使構造邏輯（單月雜訊回歸 vs 毛利率轉骨）看似不同；此類欄位重複使用的因子應優先檢查與F-009/F-011/F-013等既有營收系因子的相關性再投入全流程評估。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0478",
+ "ts": "2026-07-29T23:46:18"
+}

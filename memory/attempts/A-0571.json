@@ -1,0 +1,88 @@
+{
+ "round": 37,
+ "category": "leveraged_retail_deleveraging_value",
+ "hypothesis": "便宜股票(高bp)若同時融資餘額長期呈現下降趨勢，代表散戶籌碼的潛在賣壓已大幅去化，未來被融資斷頭強迫賣壓干擾的機率降低，價值回歸的路徑更乾淨；反之便宜股若仍有高融資餘額堆積，代表隱性賣壓尚未出清，此為傳統bp因子未考慮到的槓桿結構風險。",
+ "prediction": "sub-train ICIR>0.45；電子/半導體(散戶熱度高)industry_icir應高於金融；多頭腿年化超額報酬>0；與F-002、F-021相關性|ρ|<0.5。",
+ "formula": "sub(cs_rank(bp), cs_rank(ts_mean(margin_d21,6)))",
+ "name_zh": "乾淨便宜股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp",
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(bp), cs_rank(ts_mean(margin_d21,6)))",
+  "fhash": "63b56849dc790045",
+  "sub_train": {
+   "mean_ic": 0.041,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.032,
+   "icir": 0.29,
+   "decay_pct": 27.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.032,
+    "多頭"
+   ],
+   "2014": [
+    0.057,
+    "多頭"
+   ],
+   "2015": [
+    0.005,
+    "盤整"
+   ],
+   "2016": [
+    0.061,
+    "多頭"
+   ],
+   "2017": [
+    0.049,
+    "多頭"
+   ],
+   "2018": [
+    0.045,
+    "盤整"
+   ],
+   "2019": [
+    0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.046,
+   "down_months": 0.022
+  },
+  "industry_icir": {
+   "電子": 0.35,
+   "生技": 0.26,
+   "半導體": 0.08,
+   "金融": 0.26
+  },
+  "legs": {
+   "long_excess_ann": 0.045,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.56,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.5
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.4 < 0.45; validation ICIR 0.29 < 0.3; 覆蓋率 0.56 < 0.6"
+ },
+ "diagnosis": "預測電子/半導體industry_icir應高於金融，僅電子(0.35>0.26)符合，半導體(0.08)反而遠低於金融，預測只對了一半；同時sub-train ICIR 0.4、驗證期0.29、覆蓋率0.56三項門檻皆未達標，且與F-021相關性恰好落在0.5邊界，顯示bp與融資餘額趨勢兩個獨立排序相減的組合方式，稀釋了原本想要的『確認』效果而非放大。",
+ "failure_type": "expression_bad",
+ "lesson": "將兩個獨立排序的訊號直接相減(便宜度、去槓桿趨勢)，效果比預期弱；當設計意圖是『A訊號在B確認下更可信』時，應優先使用相乘或條件式(僅當B成立時)的構造，而非簡單排序相減。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0571",
+ "ts": "2026-07-30T01:03:36"
+}

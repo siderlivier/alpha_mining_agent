@@ -1,0 +1,92 @@
+{
+ "round": 57,
+ "category": "foreign_ownership_trend_confirmation",
+ "hypothesis": "外資持股比率的緩步變化較單日大額買賣超更能反映外資研究部門經基本面盡職調查後的中期建倉行為,而非程式交易或指數調整雜訊。當此緩步增持與本業獲利能力同時存在,代表外資基於基本面選股佈局,因變化幅度小、媒體不報導,市場散戶難以察覺,存在資訊擴散延遲。",
+ "prediction": "sub-train ICIR>0.4;多頭腿年化超額報酬>0;需與F-017相關性<0.5。",
+ "formula": "mul(cs_rank(ts_mean(frgn_ratio_d63,3)), cs_rank(op_margin))",
+ "name_zh": "外資悄佈局股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio_d63",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_mean(frgn_ratio_d63,3)), cs_rank(op_margin))",
+  "fhash": "37ec3e0bba239bf9",
+  "sub_train": {
+   "mean_ic": 0.041,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": 0.073,
+   "icir": 0.83,
+   "decay_pct": -148.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.032,
+    "盤整"
+   ],
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.06,
+    "多頭"
+   ],
+   "2015": [
+    0.044,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.043,
+    "多頭"
+   ],
+   "2018": [
+    0.035,
+    "盤整"
+   ],
+   "2019": [
+    0.111,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.065,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.58,
+   "生技": 0.41,
+   "半導體": 0.33,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.04,
+   "short_excess_ann": 0.069
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.5
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.33 < 0.45"
+ },
+ "diagnosis": "預測ICIR>0.4且方向正確：validation表現極佳(0.83, decay -148%大幅改善)，多空腿皆正，四產業ICIR普遍偏高(電子0.58最佳)。唯sub-train 0.33差門檻0.45，且與F-002相關性剛好卡在0.50邊界(勉強通過stage2)，訊號健康但訓練期強度與重複性風險並存。",
+ "failure_type": "expression_bad",
+ "lesson": "訊號本身健康只是sub-train強度不足，且與F-002邊緣重疊需留意；未來若同類『法人流量x基本面』因子再現，應先與F-002/F-017預檢相關性(本輪C-15即因此重疊被stage2淘汰)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0870",
+ "ts": "2026-08-19T00:11:01"
+}

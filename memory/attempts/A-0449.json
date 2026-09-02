@@ -1,0 +1,79 @@
+{
+ "round": 29,
+ "category": "revenue_history_percentile_reversal",
+ "hypothesis": "台股月營收具高頻雜訊與明顯訂單/庫存週期性，當個股當前營收年增率相對自身過去24個月歷史處於低分位（景氣循環相對低檔），市場與分析師傾向對近期弱勢做線性外推、過度下修未來預期（代表性捷思），一旦景氣循環自然回升或基期效應消退，容易產生正向意外。此為對「均值回歸」與「基期效應」的系統性低估，用歷史分位衡量比單純ts_min/ts_max距離更平滑穩健。",
+ "prediction": "sub-train ICIR > 0.45；validation期decay百分比 < 50%（避免單一景氣循環過擬合）。",
+ "formula": "cs_rank(neg(ts_rank(rev_yoy,24)))",
+ "name_zh": "營收谷底位階",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_rank(rev_yoy,24)))",
+  "fhash": "e331407cbd76ea52",
+  "sub_train": {
+   "mean_ic": -0.035,
+   "icir": -0.52
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.26,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2014": [
+    -0.01,
+    "多頭"
+   ],
+   "2015": [
+    -0.05,
+    "盤整"
+   ],
+   "2016": [
+    -0.047,
+    "多頭"
+   ],
+   "2017": [
+    -0.028,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    -0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.035,
+   "down_months": -0.015
+  },
+  "industry_icir": {
+   "電子": -0.55,
+   "生技": -0.28,
+   "半導體": -0.35,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.078,
+   "short_excess_ann": -0.062
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.54,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測ICIR>0.45且decay<50%，實際sub-train ICIR為-0.52（強效果但方向與假設完全相反）——逐年IC全部為負且相對穩定(2015年-0.05、2019年-0.012)，產業別上電子-0.55、生技-0.28全面為負。這不是雜訊，是穩定的『動能延續』而非『均值回歸』：營收年增率長期低分位的公司持續弱勢，而非觸底反彈。原假說對散戶/分析師『過度下修』的判斷方向搞反了。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "營收年增率的24月歷史分位在台股呈現的是動能延續而非均值回歸——分位低者持續弱勢。若要利用此訊號，應以反向(neg)方向重新提交作為新假說驗證，而非視為同一假說的失敗延伸。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0449",
+ "ts": "2026-07-29T23:14:31"
+}

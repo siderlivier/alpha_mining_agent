@@ -1,0 +1,90 @@
+{
+ "round": 24,
+ "category": "momentum_growth_confirmation",
+ "hypothesis": "股價接近52週高點且營收年增率同時轉正的公司，代表基本面成長正在確認價格創新高的合理性，而非純粹籌碼推升；市場對「價量與基本面同步轉強」的訊號存在確認延遲，因投資人習慣對創新高股保持懷疑態度，需要營收數據多次驗證才願意追價。",
+ "prediction": "sub-train ICIR > 0.4；通過閘門子集內多頭腿超額報酬須>0；與F-003相關係數需<0.5。",
+ "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, 0))",
+ "name_zh": "營收確認創高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, 0))",
+  "fhash": "ad3dd563ea4ccbc4",
+  "sub_train": {
+   "mean_ic": 0.049,
+   "icir": 0.53
+  },
+  "validation": {
+   "mean_ic": 0.056,
+   "icir": 0.82,
+   "decay_pct": -55.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.059,
+    "盤整"
+   ],
+   "2016": [
+    0.071,
+    "多頭"
+   ],
+   "2017": [
+    0.066,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.062,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.82,
+   "生技": 0.42,
+   "半導體": 0.31,
+   "金融": 0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.115,
+   "short_excess_ann": 0.041
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.42,
+  "stage2_culprit": {
+   "factor": "F-003",
+   "rho": 0.72,
+   "factor_name": "風格孤兒股",
+   "factor_desc": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-003 |ρ|=0.72 > 0.5"
+ },
+ "diagnosis": "自身指標全面超預期：sub-train ICIR預測>0.4，實際0.53；閘門子集內多頭腿超額報酬預測>0，實際0.115（本輪最強多頭腿）；驗證期更強（icir 0.82，decay -55%）。唯獨『與F-003相關係數<0.5』的預測完全失守，實際rho=0.72，顯示『價格創高+營收年增轉正』與F-003的『S/P便宜+營收成長』在經濟含義上高度重疊——兩者本質都是『營收成長確認』類訊號，只是價格端表達不同。",
+ "failure_type": "duplicate",
+ "lesson": "用rev_yoy>0作為閘門的動量/價格類構造，與F-003家族（同樣以rev_yoy>0驅動的風格孤兒股）重疊度遠高於用rev_yoy做估值類構造（C-10僅0.35）；下次若想用『營收轉正確認』機制，應避免再用rev_yoy>0作二元閘門，改用連續強度（如rev_yoy本身的分位數）以降低與F-003家族的結構重複。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0379",
+ "ts": "2026-07-28T18:28:36"
+}

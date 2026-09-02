@@ -1,0 +1,93 @@
+{
+ "round": 33,
+ "category": "semiconductor_margin_cycle_inflection",
+ "hypothesis": "半導體業受晶圓代工/記憶體報價的產業週期驅動，營益率斜率轉正常領先財報公告與法人調升評等，因訂價權變化需一至兩季才完整反映在單季財報，市場對半導體特有的產業週期認知存在系統性滯後，機制不同於電子代工的緩慢淨利率漂移。",
+ "prediction": "半導體 industry_icir > 0.5（門檻較嚴以與F-001/F-011區隔）；與F-001相關性 |ρ| < 0.5；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(ts_slope(op_margin,6))",
+ "name_zh": "半導體利潤轉折",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(op_margin,6))",
+  "fhash": "931de0aefdb52c6c",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.02,
+   "decay_pct": 106.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.007,
+    "盤整"
+   ],
+   "2013": [
+    0.051,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.072,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    0.036,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": 0.022
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.18,
+   "半導體": 0.33,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.035,
+   "short_excess_ann": 0.084
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.28,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.51,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR(0.37)未達預測門檻(0.45)，且validation完全崩潰並翻負(icir -0.02，衰減106%)——半導體利潤轉折假說在樣本外站不住腳，很可能只是捕捉到2013-2017特定的記憶體/晶圓代工上升週期，在2018-2019反轉。stage2另標記與F-001(ROE趨勢)相關度0.51(僅微幅超標)，但即使無此相關性問題，樣本外翻負已足以判定此表達不穩健。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "訓練期與驗證期IC符號直接翻轉(而非單純衰減)是比ICIR衰減幅度更強的過擬合警訊，應在triage時優先權重；固定6月窗口的op_margin斜率在半導體很可能是抓到特定歷史週期而非持續性認知滯後。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0509",
+ "ts": "2026-07-30T00:08:12"
+}

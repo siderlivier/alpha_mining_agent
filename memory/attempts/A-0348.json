@@ -1,0 +1,92 @@
+{
+ "round": 22,
+ "category": "volatility_term_structure_compression",
+ "hypothesis": "短期波動度(vol_21)相對長期波動度(vol_126)比值下降代表市場對該股不確定性正在消退，理論上應伴隨較低必要報酬率折現而推升股價；但多數投資人使用固定期間波動度評估風險、忽略波動度結構變化隱含的風險溢酬下降，重新評價因此滯後發生。",
+ "prediction": "sub-train ICIR>0.45；與F-005相關係數<0.5；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+ "name_zh": "波動收斂溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 月換手 0.67 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.36低於門檻，validation ICIR 0.08、decay 78%顯示明顯過擬合，多頭腿超額僅0.003接近零(技術上為正但不具經濟意義)，換手率0.67遠超0.4門檻。與F-008相關係數僅0.27，通過stage2，代表死因是訊號強度不足+換手過高的組合，而非產業機制或重疊問題。電子(0.43)、生技(0.34)產業別尚可，金融為負(-0.07)。",
+ "failure_type": "expression_bad",
+ "lesson": "短/長波動度比值變化太快(月換手0.67)，訊號雜訊大於訊息含量；同類波動結構因子若要保留機制假設，應改用比值的平滑/去噪版本以降低換手率並提升訊噪比。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0348",
+ "ts": "2026-07-21T13:51:27"
+}

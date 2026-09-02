@@ -1,0 +1,83 @@
+{
+ "round": 61,
+ "category": "sustained_high_proximity_strength",
+ "hypothesis": "用ts_rank衡量股價貼近52週高點的狀態在過去24個月中的相對排名，捕捉的是「長期持續貼近高點」的結構性強勢，而非單一時點的價格位置；投資人傾向追逐近期噴出強度，卻低估長期穩定貼近高點所代表的競爭優勢持續性，屬於全新的持續性強度類別。",
+ "prediction": "sub-train ICIR > 0.4；與F-008/F-016(px_hi252相關版)截面相關 |ρ| < 0.5",
+ "formula": "cs_rank(ts_rank(px_hi252,24))",
+ "name_zh": "長期貼近新高股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(px_hi252,24))",
+  "fhash": "d9960cd8850e85a5",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.019,
+   "icir": 0.18,
+   "decay_pct": -33.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    -0.024,
+    "多頭"
+   ],
+   "2015": [
+    0.034,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.029,
+    "多頭"
+   ],
+   "2018": [
+    -0.0,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.027,
+   "down_months": -0.015
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.14,
+   "半導體": 0.02,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.074,
+   "short_excess_ann": 0.051
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.45,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4，實際sub-train僅0.13（雖validation略升至0.18、decay -33%不算過擬合）。cond_ic呈現典型順勢特徵（上漲月0.027、下跌月-0.015），但長腳超額報酬達0.074、高於短腳0.051，代表這個「長期貼近高點」的多頭腿本身是可交易且有alpha的，只是ts_rank(px_hi252,24)把過去24個月的相對位置壓成排名，丟失了「貼近程度」的幅度資訊，導致整體rank IC被稀釋到門檻以下。",
+ "failure_type": "expression_bad",
+ "lesson": "ts_rank這種二次排名容易把原始訊號的幅度資訊壓扁，當長短腳報酬本身已有效但整體rank IC偏弱時，優先懷疑是聚合方式（rank of rank）稀釋了訊號，而非機制不成立。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0936",
+ "ts": "2026-08-27T10:25:20"
+}

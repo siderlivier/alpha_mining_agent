@@ -1,0 +1,94 @@
+{
+ "round": 29,
+ "category": "low_risk_growth_mismatch",
+ "hypothesis": "投資人普遍存在「低波動=低成長/防禦股」、「高成長=高波動」的心智捷徑，導致市場低估了「成長性佳但股價波動異常低」的個股——這類公司可能因法人尚未大規模進場、籌碼未被投機資金炒作，呈現「成長但平靜」的罕見組合，一旦市場意識到其成長性，容易出現重新評價的資金行為溢酬。與F-005(單純低波動)不同之處在於必須搭配營收成長confirm，篩選的是被錯誤定價為「無趣股」的真成長股，而非單純防禦型股票。",
+ "prediction": "sub-train ICIR > 0.45；與F-005、F-013相關係數皆 |ρ| < 0.5。",
+ "formula": "mul(cs_rank(neg(vol_21)),cs_rank(rev_yoy))",
+ "name_zh": "低波動隱藏成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(vol_21)),cs_rank(rev_yoy))",
+  "fhash": "332cdc589440ee71",
+  "sub_train": {
+   "mean_ic": 0.084,
+   "icir": 0.88
+  },
+  "validation": {
+   "mean_ic": 0.088,
+   "icir": 0.89,
+   "decay_pct": -1.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.068,
+    "多頭"
+   ],
+   "2014": [
+    0.066,
+    "多頭"
+   ],
+   "2015": [
+    0.091,
+    "盤整"
+   ],
+   "2016": [
+    0.097,
+    "多頭"
+   ],
+   "2017": [
+    0.097,
+    "多頭"
+   ],
+   "2018": [
+    0.101,
+    "盤整"
+   ],
+   "2019": [
+    0.075,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.097,
+   "down_months": 0.055
+  },
+  "industry_icir": {
+   "電子": 1.2,
+   "生技": 0.71,
+   "半導體": 0.62,
+   "金融": 0.32
+  },
+  "legs": {
+   "long_excess_ann": 0.067,
+   "short_excess_ann": 0.08
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.54,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.5
+  },
+  "industry_scope": "電子",
+  "industry_metrics": {
+   "train_icir": 1.26,
+   "valid_icir": 1.09,
+   "decay_pct": 14
+  },
+  "verdict": "passed_industry",
+  "reason": "整體未達標（月換手 0.54 > 0.4），但於「電子」產業內達到專屬門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train 0.88、validation 0.89（decay僅-1%）遠超預期，是本輪最強候選；與F-005相關性0.50恰好壓線通過，驗證了假說文本『需搭配營收成長confirm，非單純低波動』的差異化主張基本成立。唯一絆倒的是全市場月換手0.54>0.4，但在電子產業範圍內（train 1.26/valid 1.09/decay 14%）輕鬆passed_industry。",
+ "failure_type": "none",
+ "lesson": "『低波動+營收成長confirm』組合是目前驗證最穩健的訊號，全市場層級只因換手率超標而卡關；這類高ICIR、低decay但換手率超標的因子，值得優先嘗試時序平滑降頻而非放棄。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed_industry",
+ "id": "A-0458",
+ "ts": "2026-07-29T23:14:31"
+}

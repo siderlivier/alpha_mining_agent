@@ -1,0 +1,83 @@
+{
+ "round": 38,
+ "category": "earnings_surprise_underreaction",
+ "hypothesis": "市場對財報盈餘驚喜存在錨定效應，投資人習慣用歷史平均獲利水準評價公司，EPS年增率大幅超越自身兩年中位數時定價調整緩慢，訊息分批反映在後續數月股價中；此機制聚焦盈餘意外幅度而非ROE水準改善。",
+ "prediction": "sub-train ICIR > 0.45；與F-001、F-012相關性須<0.5方視為獨立訊號；財報公布後三個月IC應維持穩定不衰減。",
+ "formula": "cs_rank(sub(eps_yoy, ts_med(eps_yoy,12)))",
+ "name_zh": "EPS動能低估股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(eps_yoy, ts_med(eps_yoy,12)))",
+  "fhash": "869072d636430723",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": 0.037,
+   "icir": 0.65,
+   "decay_pct": -155.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.094,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.008,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.043,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.027,
+   "down_months": 0.007
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.13,
+   "半導體": 0.08,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.026,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.26不達標；但validation達0.65（decay為-155%，即驗證期比訓練期更強）。逐年IC顯示2013年爆量後2014-2017偏弱、2018-2019回升，型態較像早期EPS資料品質/覆蓋率(0.7)拖累訓練期均值，而非機制不存在。",
+ "failure_type": "expression_bad",
+ "lesson": "財報型因子若sub-train均值被早期年份雜訊/覆蓋率拖累，應先看ic_by_year趨勢而非只看均值門檻；此因子驗證期轉強，值得限制在資料品質較佳年份重新表達再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0582",
+ "ts": "2026-07-30T01:16:47"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 13,
+ "category": "earnings_quality_divergence",
+ "hypothesis": "當EPS年增率遠高於營業利益年增率時，代表獲利成長主要來自業外收益（處分利益、匯兌損益等一次性項目）而非本業競爭力，此類盈餘品質差，市場初期常對總EPS成長過度反應，隨後隨本業真相浮現而修正抵消超額報酬；此為聚焦損益表結構、有別於資產負債表應計項(F-006)的獨立品質訊號。",
+ "prediction": "sub-train ICIR>0.45；EPS與營業利益成長差距最大的十分位未來報酬顯著低於差距最小的十分位；與F-006相關係數|ρ|<0.5。",
+ "formula": "cs_rank(neg(sub(eps_yoy, op_income_yoy)))",
+ "name_zh": "業外墊高盈餘折價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(eps_yoy, op_income_yoy)))",
+  "fhash": "63869bce533b668f",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.55,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向是EPS與營業利益成長差距大代表盈餘品質差，應被負向排序後有正報酬；實際sub-train IC接近零且為負，validation更負(-0.55)，且多頭腿超額+0.007 vs空頭腿-0.014暗示若有訊號可能反向。訊號連年份間符號都不穩定(2015+0.022, 2017+0.008 vs其他年份負)，證據不足以強烈判定機制對錯，更接近純雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "eps_yoy與op_income_yoy兩個成長率相減的簡單表達雜訊過大（分母小、對低基期敏感），連方向都不穩定；不建議再用「兩個yoy成長率相減」這種簡單表達方式測試盈餘品質類假說。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0213",
+ "ts": "2026-07-21T11:59:28"
+}

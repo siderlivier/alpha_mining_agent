@@ -1,0 +1,83 @@
+{
+ "round": 38,
+ "category": "biotech_cash_flow_inflection",
+ "hypothesis": "生技投資人多聚焦臨床試驗與法規里程碑等敘事，較少細究現金流量表，導致公司從燒錢階段轉為自主造血（營業現金流持續改善）的財務體質轉變被市場低估、反應滯後；此機制僅在生技產業成立，其他產業投資人本就高度依賴現金流分析。",
+ "prediction": "sub-train ICIR整體或生技產業industry_icir > 0.5；生技產業industry_icir應明顯高於電子/半導體/金融；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(delta(ocf_ratio,12))",
+ "name_zh": "生技現金轉正股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,12))",
+  "fhash": "d3aa3559d6c6e7ce",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.17,
+   "半導體": 0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技industry_icir應顯著為正，實際生技反而是四產業中最負(-0.17)，直接證偽「生技投資人忽略現金流」的假設；sub-train全樣本為負(-0.13)，僅2018-2019轉正。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "產業獨有的資訊忽略假設必須先檢查該產業industry_icir是否真的優於其他產業；此案生技反而最差，顯示現金流轉正可能已被市場提前甚至過度反應，而非被忽略。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0584",
+ "ts": "2026-07-30T01:16:47"
+}

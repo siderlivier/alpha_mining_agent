@@ -1,0 +1,87 @@
+{
+ "round": 29,
+ "category": "trend_deviation_surprise",
+ "hypothesis": "投資人習慣以近期趨勢線性外推月營收表現，當本月營收月增率相對其過去12個月線性趨勢線出現顯著正向偏離(residual)，代表訂單或需求出現非趨勢性、跳躍式的意外加速。這種偏離線性外推常態的驚奇訊號因不符合投資人「順趨勢推算」的心理模型而被系統性低估，與單純比較兩時點的delta不同，ts_resi捕捉的是相對整段趨勢配適值的異常程度，訊噪比理論上更高。",
+ "prediction": "sub-train ICIR > 0.45；下跌月IC與上漲月IC同號（非regime依賴）；月換手率 < 0.45。",
+ "formula": "cs_rank(ts_resi(rev_mom,12))",
+ "name_zh": "營收趨勢偏離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_resi(rev_mom,12))",
+  "fhash": "d89cabae36ea90a1",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.19
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.2,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.008,
+    "盤整"
+   ],
+   "2013": [
+    -0.028,
+    "多頭"
+   ],
+   "2014": [
+    -0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.018,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": -0.015
+  },
+  "industry_icir": {
+   "電子": -0.08,
+   "生技": -0.23,
+   "半導體": -0.07,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.025,
+   "short_excess_ann": 0.002
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.83,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train ICIR為-0.19（弱且方向相反），validation翻正但僅0.2，逐年正負交錯無規律。基礎變數rev_mom(月增率)本身在台股是季節性極強、雜訊極高的序列，對其做12月線性趨勢殘差(ts_resi)很可能是把季節雜訊當成了『驚奇』，稀釋了真正的訂單意外訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "以rev_mom(月增率，季節性強)作為ts_resi的輸入基礎雜訊過大；若假說核心是『偏離線性外推的營收意外』，應改用rev_yoy(年增率，已消除季節性)作為輸入重新構造殘差指標。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0451",
+ "ts": "2026-07-29T23:14:31"
+}

@@ -1,0 +1,89 @@
+{
+ "round": 11,
+ "category": "biotech_milestone_revenue_shock",
+ "hypothesis": "生技股營收常來自里程碑金/授權金等一次性大額認列,這是重大事件驅動的收入。市場對這類事件後續影響(更多里程碑或版稅收入預期)的評估需要時間消化,因為法人須重新建模動態現金流預估,故生技股單月營收年增率大幅超越自身歷史波動時,後續有機構重新評價帶來的持續超額報酬,此機制在營收敘事主導估值的生技業特別成立。",
+ "prediction": "生技產業industry_icir>0.5(產業限定門檻);全池sub-train ICIR可能<0.3(機制不適用其他產業)",
+ "formula": "cs_rank(sdiv(rev_yoy, ts_std(rev_yoy,12)))",
+ "name_zh": "生技里程碑驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(rev_yoy, ts_std(rev_yoy,12)))",
+  "fhash": "cba729696d114832",
+  "sub_train": {
+   "mean_ic": 0.048,
+   "icir": 0.6
+  },
+  "validation": {
+   "mean_ic": 0.037,
+   "icir": 0.66,
+   "decay_pct": -10.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.035,
+    "多頭"
+   ],
+   "2015": [
+    0.063,
+    "盤整"
+   ],
+   "2016": [
+    0.055,
+    "多頭"
+   ],
+   "2017": [
+    0.063,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.052,
+   "down_months": 0.028
+  },
+  "industry_icir": {
+   "電子": 0.62,
+   "生技": 0.36,
+   "半導體": 0.36,
+   "金融": 0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.082,
+   "short_excess_ann": 0.07
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.47,
+  "stage2_culprit": {
+   "factor": "F-003",
+   "rho": 0.7,
+   "factor_name": "風格孤兒股",
+   "factor_desc": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-003 |ρ|=0.70 > 0.5"
+ },
+ "diagnosis": "預測生技產業industry_icir>0.5、全池sub-train ICIR可能<0.3，實際生技icir僅0.36(低於預測門檻)，電子反而最強(0.62)；全池sub-train ICIR高達0.6，遠超『可能<0.3』的預期，說明這不是生技特有的『里程碑收入』機制，而是一般性營收驚奇因子，與C-7同樣是『產業限定假設但公式無產業篩選』的問題，因全市場強效果與庫內F-003(風格孤兒股)高相關(ρ=0.70)被判重複。",
+ "failure_type": "duplicate",
+ "lesson": "與C-7同一教訓：營收年增率相對自身波動度的驚奇打分是強力的全市場成長因子，不需要生技敘事包裝；要驗證生技特有機制需先用產業遮罩鎖定生技樣本，或改用生技特有變數(如授權金認列科目)而非通用營收年增率。",
+ "lesson_confidence": "cross_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0181",
+ "ts": "2026-07-21T11:33:49"
+}

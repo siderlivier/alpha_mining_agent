@@ -1,0 +1,83 @@
+{
+ "round": 16,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "分析師對台股月營收公告的預估修正天生落後（月頻資料量大、覆蓋人力有限），當rev_yoy出現短窗（3個月）加速轉強時，訊息要花數月才完全反映到股價，形成可預測的延續報酬；用短窗ts_slope捕捉的是「轉折點」而非長期趨勢，理論上比F-009(6個月MA3斜率)更敏感、更早進場。",
+ "prediction": "sub-train ICIR>0.45；與F-009相關係數|ρ|<0.5（因窗口與base series不同）；電子/半導體產業industry_icir應顯著高於生技/金融（供應鏈月頻揭露資訊密度差異）；月換手率<0.4（短窗需搭配後續平滑檢查）。",
+ "formula": "cs_rank(ts_slope(rev_yoy,3))",
+ "name_zh": "短窗營收加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_yoy,3))",
+  "fhash": "3697d9e61e0f94e6",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.04,
+   "decay_pct": 83.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.027,
+    "多頭"
+   ],
+   "2017": [
+    0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.011,
+    "盤整"
+   ],
+   "2019": [
+    -0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.011,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": 0.27,
+   "生技": 0.08,
+   "半導體": 0.07,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.011,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.65,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測短窗(3月)ts_slope會比F-009(6月MA3)更敏感、更早捕捉轉折，但sub-train ICIR僅0.25(不到門檻0.45的一半)，換手率0.65也高於預測<0.4的目標，顯示短窗放大了月營收本身的季節性/量測雜訊而非提升靈敏度。產業別上電子確實最高(0.27)，但半導體(0.07)未如預期優於生技(0.08)，「供應鏈月頻揭露密度」的產業預測未獲支持；validation ICIR再衰減到0.04(decay 83%)，2019年IC轉負，訊號不穩定。",
+ "failure_type": "expression_bad",
+ "lesson": "月營收類因子的窗口愈短，愈可能被單季雜訊/淡旺季效應主導而非提升靈敏度；下次要在短窗因子上先做一次平滑(如ts_mean(3))再排名，並直接與同base_series的既有因子(F-009)比較IC而非只比較相關係數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0249",
+ "ts": "2026-07-21T12:37:07"
+}

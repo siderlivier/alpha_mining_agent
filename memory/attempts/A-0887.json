@@ -1,0 +1,95 @@
+{
+ "round": 58,
+ "category": "growth_skepticism_confirmation",
+ "hypothesis": "券資比反映市場空方對個股基本面的疑慮程度；當一家公司現金流品質高(營運現金流對淨利比率高，代表獲利含金量真實)同時空方沒有大舉押空，代表knowledgeable空方投資人也認可其獲利真實性，這是比單純財報數字更強的第三方驗證訊號，尤其能過濾財報作帳嫌疑股。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；與F-024(eps_yoy+neg空方)相關性 < 0.5，證明現金流驗證與成長驗證是不同的資訊維度。",
+ "formula": "mul(cs_rank(neg(short_margin_ratio)), cs_rank(ocf_ratio))",
+ "name_zh": "空方無疑慮現金股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(short_margin_ratio)), cs_rank(ocf_ratio))",
+  "fhash": "ee41dd23063e22e2",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.46,
+   "decay_pct": -8.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.043,
+    "盤整"
+   ],
+   "2013": [
+    0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.046,
+    "多頭"
+   ],
+   "2015": [
+    0.044,
+    "盤整"
+   ],
+   "2016": [
+    0.042,
+    "多頭"
+   ],
+   "2017": [
+    0.032,
+    "多頭"
+   ],
+   "2018": [
+    0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.026,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.05,
+   "down_months": 0.002
+  },
+  "industry_icir": {
+   "電子": 0.54,
+   "生技": 0.35,
+   "半導體": 0.24,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.039
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.32,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.59,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.59 > 0.5"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "distill_failed": true,
+ "id": "A-0887",
+ "ts": "2026-08-19T00:25:17"
+}

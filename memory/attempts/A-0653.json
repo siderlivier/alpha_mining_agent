@@ -1,0 +1,90 @@
+{
+ "round": 42,
+ "category": "gross_margin_percentile_recovery",
+ "hypothesis": "電子業毛利率受零組件價格與產能利用率循環驅動，用delta或ts_min/max易被離群月份或切分點干擾；改用近12月百分位排名能穩健捕捉相對谷底回升程度，市場對此相對位置訊號反應仍落後分析師模型更新速度。",
+ "prediction": "sub-train ICIR>0.45；industry_icir於電子應高於其他三產業；多頭腿年化超額報酬>0；與F-001/F-004相關性|ρ|<0.5；對切分點敏感度應低於先前ts_min/max版本(decay<50%)。",
+ "formula": "cs_rank(ts_rank(gross_margin,12))",
+ "name_zh": "毛利率位階回升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(gross_margin,12))",
+  "fhash": "e8cb26f89756b153",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.73
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.19,
+   "decay_pct": 74.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.019,
+    "盤整"
+   ],
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.046,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.053,
+    "多頭"
+   ],
+   "2017": [
+    0.043,
+    "多頭"
+   ],
+   "2018": [
+    -0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.025
+  },
+  "industry_icir": {
+   "電子": 0.58,
+   "生技": 0.35,
+   "半導體": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.067,
+   "short_excess_ann": 0.068
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.4
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.19 < 0.3; validation 衰減 74% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測用百分位排名應比delta/min-max更穩健（decay應<50%）且電子業industry_icir最高；產業預測成立（電子0.58最高），但穩健性預測落空：sub-train ICIR 0.73崩至validation 0.19（decay 74%，觸發stage4過擬合門檻）。改用ts_rank百分位並未解決衰減問題，顯示毛利率循環訊號本身可能是regime依賴（2012-2017電子業循環期強，2018-2019弱），而非單純切分點雜訊造成。",
+ "failure_type": "expression_bad",
+ "lesson": "把delta/min-max換成ts_rank百分位不足以修復毛利率循環類因子的衰減問題——下次應嘗試產業內去均值化或明確的循環階段條件化，而非只調整平滑/排名變換方式。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0653",
+ "ts": "2026-08-12T09:45:44"
+}

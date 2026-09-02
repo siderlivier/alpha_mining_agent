@@ -1,0 +1,87 @@
+{
+ "round": 8,
+ "category": "cash_flow_quality_level",
+ "hypothesis": "營業現金流/稅後淨利水準高代表獲利有真實現金支撐，而非應收帳款、存貨認列墊高的帳面盈餘；此為水準值而非趨勢化構造（避開已知的ocf_ratio趨勢化紅海），市場對現金流品質定價效率低於對盈餘成長的定價效率。",
+ "prediction": "sub-train ICIR > 0.45；與F-006相關係數 < 0.5；下跌月IC > 上漲月IC（現金流品質在景氣下行期更具防禦性）。",
+ "formula": "cs_rank(ocf_ratio)",
+ "name_zh": "現金流含金量",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ocf_ratio)",
+  "fhash": "7f8b156d07772ed2",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.02,
+   "icir": 0.44,
+   "decay_pct": -210.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.018,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.041,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.13,
+   "生技": 0.06,
+   "半導體": 0.17,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.007,
+   "short_excess_ann": 0.003
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.14，遠低於預測0.45；validation ICIR跳升到0.44但decay_pct因分母極小而失真，此類前後不一致的跳升應保持懷疑而非視為佐證。cond_ic上漲0.014、下跌0.006，未如預測般下跌月更強。多頭腿超額報酬為負(-0.007)，與C-8同樣不可交易，OCF比率作為水準值跨產業比較，同樣可能被產業基準差異稀釋。",
+ "failure_type": "expression_bad",
+ "lesson": "與C-8同類教訓：現金流品質水準值因子應優先嘗試產業中立化，或改用相對自身歷史的變化量而非全市場水準值排名。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0138",
+ "ts": "2026-07-19T21:42:48"
+}

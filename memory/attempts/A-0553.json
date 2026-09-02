@@ -1,0 +1,91 @@
+{
+ "round": 36,
+ "category": "margin_debt_overhang_release",
+ "hypothesis": "融資餘額持續下降代表散戶去槓桿已近尾聲，強制斷頭賣壓消化完畢；市場多只關注融資餘額絕對水位而非變化率隱含的賣壓消化程度，形成「賣壓真空期」的低估機會。融資餘額持續攀升者則仍有潛在斷頭風險未反映。",
+ "prediction": "sub-train ICIR > 0.45；月換手率 < 0.4；下跌月IC應顯著高於上漲月IC，差距 > 0.1。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+ "name_zh": "融資去槓桿出清",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+  "fhash": "8dcb62747ea222cf",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.21,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.041,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.22,
+   "半導體": 0.11,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.001
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45; validation ICIR 0.21 < 0.3"
+ },
+ "diagnosis": "預測下跌月IC應顯著高於上漲月（差距>0.1）以驗證去槓桿出清=賣壓消化機制，但實際上漲月（0.025）與下跌月（0.021）幾乎無差異，機制未展現預測中的條件不對稱性；sub-train ICIR 0.39與validation 0.21皆低於門檻，訊號本身偏弱。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "融資餘額變化率代表去槓桿壓力消化的因果鏈在條件IC上未獲驗證（下跌月無超額訊號），此類直接使用融資量變化的簡單假設可能需要更精細的斷頭壓力代理（如個股融資維持率距離斷頭線）才能顯現效果。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0553",
+ "ts": "2026-07-30T00:46:50"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 39,
+ "category": "turnover_momentum_breakout",
+ "hypothesis": "周轉率的上升『趨勢』(而非水準)反映主力/法人悄悄進場布局，若同時伴隨中期價格動能為正，代表資金正真實推升行情而非雜訊；多數投資人只看價格動能、忽略量能趨勢這個二階訊號，導致市場對此反應遲緩。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；下跌月IC不應轉為顯著正向(訊號應在多頭環境中更強)；月換手率<0.4",
+ "formula": "mul(cs_rank(ts_slope(turn_21,6)),cs_rank(mom_60))",
+ "name_zh": "量增動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_60",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_slope(turn_21,6)),cs_rank(mom_60))",
+  "fhash": "2535962282b05d43",
+  "sub_train": {
+   "mean_ic": -0.014,
+   "icir": -0.11
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.16,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.032,
+    "多頭"
+   ],
+   "2014": [
+    -0.03,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    -0.018,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.003,
+   "down_months": -0.025
+  },
+  "industry_icir": {
+   "電子": 0.06,
+   "生技": 0.0,
+   "半導體": -0.22,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.38,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測周轉率趨勢x動能能捕捉悄悄進場資金，但sub-train IC為負(-0.014)，逐年正負交替(2013/14/17負、16/18/19正)，無穩定方向性；下跌月IC反而更負(-0.025)而非預測的「多頭環境更強」，二階量能趨勢訊號未展現制度性優勢。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「周轉率斜率x價格動能」二階訊號組合本身未展現優勢，年度符號不穩定意味機制可能是噪音而非被低估的資訊。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0596",
+ "ts": "2026-08-12T09:06:34"
+}

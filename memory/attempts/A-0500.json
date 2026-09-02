@@ -1,0 +1,93 @@
+{
+ "round": 32,
+ "category": "opex_efficiency_underappreciation",
+ "hypothesis": "市場分析師普遍聚焦毛利率作為產品競爭力指標，較少關注「營業利益率相對毛利率的比例」所反映的費用管理效率（SG&A/研發紀律）。當公司能將毛利更高比例地轉化為營業利益，代表其組織執行力優於同業，這種內部效率優勢不易被外部觀察者立即察覺，需數季財報才會被市場正確定價。",
+ "prediction": "sub-train ICIR>0.45；與F-004(毛利穩定度)及F-001/F-002/F-011相關性|ρ|<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(sdiv(op_margin,gross_margin))",
+ "name_zh": "費用紀律效率",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_margin,gross_margin))",
+  "fhash": "211bd4d63bae5865",
+  "sub_train": {
+   "mean_ic": 0.043,
+   "icir": 0.49
+  },
+  "validation": {
+   "mean_ic": 0.029,
+   "icir": 0.38,
+   "decay_pct": 24.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.026,
+    "盤整"
+   ],
+   "2013": [
+    0.001,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.09,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.076,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.049,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.042,
+   "down_months": 0.033
+  },
+  "industry_icir": {
+   "電子": 0.4,
+   "生技": 0.36,
+   "半導體": 0.28
+  },
+  "legs": {
+   "long_excess_ann": -0.003,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.1,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.54,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.49剛好達標，validation 0.38（decay 24%，屬可接受範圍），統計面基本符合預測。相關性預測『<0.5 vs F-004/F-001/F-002/F-011』僅在F-002上以0.54驚險超標，其餘應該都在門檻內（未列出即代表通過）。值得注意的是多頭腿超額報酬為負(-0.003)，即使該因子未被stage2淘汰，也已違反『多頭腿必須為正才可交易』的台股放空限制規則，代表此因子即使脫鉤F-002也未必可實際交易——這是獨立於相關性淘汰之外的第二個問題。",
+ "failure_type": "duplicate",
+ "lesson": "『費用紀律效率比(op_margin/gross_margin)』與金融品質價值因子(F-002)有中度重疊，且即使通過相關性檢查，其多頭腿本身是負超額，凸顯了未來設計此類『相對效率比』因子時應同時檢查多頭腿可交易性，而不只看整體IC。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0500",
+ "ts": "2026-07-29T23:57:20"
+}

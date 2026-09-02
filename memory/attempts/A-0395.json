@@ -1,0 +1,87 @@
+{
+ "round": 25,
+ "category": "earnings_noise_discount",
+ "hypothesis": "投資人存在樂透偏好，偏愛獲利爆發力強但不穩定的故事股，忽略EPS年增率長期穩定、波動度低的公司；此類穩定成長股因缺乏話題性被系統性低估，需較長時間才被重新定價。",
+ "prediction": "sub-train ICIR > 0.45；與F-004(毛利穩定溢價)、F-007(營收穩健溢價)相關係數皆 < 0.5。",
+ "formula": "cs_rank(neg(ts_std(eps_yoy,12)))",
+ "name_zh": "獲利穩定溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(eps_yoy,12)))",
+  "fhash": "9e137cf0e864dd54",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.069,
+   "icir": 0.92,
+   "decay_pct": -207.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.065,
+    "盤整"
+   ],
+   "2016": [
+    0.038,
+    "多頭"
+   ],
+   "2017": [
+    0.018,
+    "多頭"
+   ],
+   "2018": [
+    0.079,
+    "盤整"
+   ],
+   "2019": [
+    0.059,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.038
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.24,
+   "半導體": 0.25,
+   "金融": 0.34
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": -0.009
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.12,
+  "stage2_max_rho": {
+   "factor": "F-010",
+   "rho": 0.37
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.3 < 0.45; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "sub-train ICIR預測>0.45，實際0.30未達，但validation達0.92；相關性預測(<0.5)命中(最高rho僅0.37，未被stage2淘汰)。真正死因是stage4：多頭腿超額報酬為負(-0.005)且空頭腿也為負(-0.009)，rank IC雖正但無法轉為可交易的正報酬，台股不可放空限制下的硬傷。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "第三個獨立證據支持C-9所提的多案例全域規則：『獲利穩定=被低估』假說在多頭腿變現上系統性失靈。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0395",
+ "ts": "2026-07-28T18:41:52"
+}

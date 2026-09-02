@@ -1,0 +1,87 @@
+{
+ "round": 61,
+ "category": "revenue_momentum_streak_persistence",
+ "hypothesis": "用sign()修正先前streak(cond,n)型別衝突，月增營收連續為正的期數代表業務動能持續累積，但投資人受近期記憶偏誤影響，仍用舊印象（尚未意識到已連續多月轉強）定價，導致對持續性動能的系統性低估。",
+ "prediction": "sub-train ICIR > 0.4；訊號需疊加ts_mean或本身6月窗口以確保換手率 < 0.4",
+ "formula": "cs_rank(streak(sign(rev_mom),6))",
+ "name_zh": "營收連續轉強",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(streak(sign(rev_mom),6))",
+  "fhash": "a839a61a2a010e8d",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.25,
+   "decay_pct": 8.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.007,
+    "盤整"
+   ],
+   "2013": [
+    0.021,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.0,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.038,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.21,
+   "生技": 0.13,
+   "半導體": 0.19,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.001
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.67,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4且換手率<0.4，實際ICIR僅0.27（換手率0.67還超標）。但IC逐年穩定在0.01-0.02區間、decay僅8%，代表這不是雜訊或過擬合問題，而是sign()把rev_mom的連續期數壓成純計數，丟失了動能強弱資訊，訊號強度天生偏弱且需要頻繁換手才能維持排名，長短腳報酬都趨近於零(0.003/0.001)顯示這個表達方式抓到的是很淺的訊息。",
+ "failure_type": "expression_bad",
+ "lesson": "streak(sign(x))這種純計數型持續性因子雖然穩定不過擬合，但丟失了幅度資訊，訊號強度通常太弱且換手率偏高，不建議在沒有幅度加權的情況下直接使用。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0928",
+ "ts": "2026-08-27T10:25:20"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 2,
+ "category": "operating_leverage_underreaction",
+ "hypothesis": "營業槓桿改善（營益率年變動超過毛利率年變動，代表費用控管或規模經濟發揮）需跨季比較才完整顯現，市場對長窗口的結構性改善反應不足，尤其在資本密集的半導體/電子產業更明顯。",
+ "prediction": "sub-train ICIR>0.35；半導體/電子產業ICIR應高於生技/金融產業（資本密集度假說）。",
+ "formula": "cs_rank(sub(delta(op_margin,12), delta(gross_margin,12)))",
+ "name_zh": "營業槓桿改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(delta(op_margin,12), delta(gross_margin,12)))",
+  "fhash": "b3c61c050b7ff014",
+  "sub_train": {
+   "mean_ic": 0.012,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": -0.009,
+   "icir": -0.15,
+   "decay_pct": 171.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.046,
+    "盤整"
+   ],
+   "2016": [
+    -0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    -0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": -0.0,
+   "半導體": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.046
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.35且半導體/電子優於生技/金融；實際sub-train僅0.21未達標，且validation翻負(-0.15，decay 171%即方向翻轉)顯示訓練期表現可能只是雜訊。產業別上半導體(0.04)反而接近生技(-0.0)、低於電子(0.24)，資本密集度子假說未獲支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "毛利率與營益率年變動差分在train/validation出現方向翻轉、且產業別未按資本密集度排序，顯示此差分指標可能主要捕捉雜訊而非真實結構性改善訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0044",
+ "ts": "2026-07-19T09:53:03"
+}

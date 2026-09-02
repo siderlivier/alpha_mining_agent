@@ -1,0 +1,84 @@
+{
+ "round": 51,
+ "category": "biotech_turnaround_confirmation",
+ "hypothesis": "生技股股價常因臨床試驗失敗、法規延遲或資金疑慮遭受長期重挫(mom_240極低)；當這類超跌股之後出現營收年增率轉正，代表商業化產品線開始實質貢獻營收，是真正基本面翻轉訊號，不同於單純技術面反彈。生技股分析師覆蓋率低、資訊擴散慢，市場需要較長時間定價。",
+ "prediction": "sub-train ICIR > 0.45；生技產業industry_icir應為四產業最高；多頭腿(超跌+營收轉正組)年化超額報酬>0。",
+ "formula": "mul(cs_z(neg(mom_240)),cs_z(rev_yoy))",
+ "name_zh": "生技谷底翻轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_240",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_z(neg(mom_240)),cs_z(rev_yoy))",
+  "fhash": "71df8c4bf8621dea",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.19,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.015,
+    "多頭"
+   ],
+   "2015": [
+    0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.17,
+   "半導體": 0.06,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.001,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.49,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.21，且兩項關鍵預測均落空：預測生技產業ICIR應最高，實際電子(0.26)高於生技(0.17)；預測多頭腿應為正，實際多頭腿超額為-0.001。顯示『超跌生技股+營收轉正』組合並未展現生技特有的資訊擴散延遲優勢，效果若存在也更像跨產業通用的超跌反轉，而非生技低覆蓋率帶來的特殊阿爾法。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技股『分析師覆蓋率低、資訊擴散慢』的敘事未獲此因子驗證支持(產業別ICIR反而電子最高)；若要測試低覆蓋率溢酬，應直接用分析師覆蓋數/法人持股比等變數做產業中性化控制，而非假設某產業整體具有此特性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0778",
+ "ts": "2026-08-14T01:05:54"
+}

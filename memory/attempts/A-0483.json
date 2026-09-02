@@ -1,0 +1,84 @@
+{
+ "round": 31,
+ "category": "institutional_flow_divergence",
+ "hypothesis": "外資研究驅動、進出更具紀律性，投信則偏向動能追價與作帳導向；兩者資金流向出現分歧時，代表法人間對基本面看法尚未收斂。外資淨買超超越投信時應優先採信外資方向作為多頭訊號，反之投信的相對強勢買超則視為法人追價過熱的反向訊號。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；與F-008相關性 |ρ| < 0.5（因法人流量與F-008流動性代理機制不同）。",
+ "formula": "if_else(greater(frgn_net_21,trust_net_21), cs_rank(frgn_net_21), cs_rank(neg(trust_net_21)))",
+ "name_zh": "法人分歧訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "if_else(greater(frgn_net_21,trust_net_21), cs_rank(frgn_net_21), cs_rank(neg(trust_net_21)))",
+  "fhash": "312f44f08a5b81ff",
+  "sub_train": {
+   "mean_ic": 0.006,
+   "icir": 0.09
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.16,
+   "decay_pct": -69.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.019,
+    "盤整"
+   ],
+   "2016": [
+    -0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    0.011,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.01,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.0,
+   "生技": -0.03,
+   "半導體": 0.11,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": -0.023,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.53,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測完全落空：sub-train ICIR僅0.09，遠低於0.45門檻，rejected_stage1。用if_else做外資/投信條件切換的邏輯本身可能引入了過多雜訊——條件式判斷把樣本切成兩群後分別用不同方向排名，破壞了訊號的橫截面連續性，且各產業ICIR幾乎全部貼近0，顯示『法人分歧代表方向不確定』這個敘事在數據上找不到立足點。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用if_else對法人流量做條件切換以捕捉『分歧』的想法，實測顯示訊號幾乎消失（各產業ICIR趨近0），推測條件式排名破壞了橫截面連續性；法人流量類因子若要用複雜邏輯合成，優先驗證『無條件版本』(如單純外資或投信淨買超)是否本身就有效，再考慮是否值得疊加條件判斷，而非直接設計切換邏輯。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0483",
+ "ts": "2026-07-29T23:46:18"
+}

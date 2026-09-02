@@ -1,0 +1,88 @@
+{
+ "round": 64,
+ "category": "biotech_short_covering_catalyst_confirmation",
+ "hypothesis": "生技股空方部位常源于对临床试验/药证结果不确定性的押注；若券资比半年内明显下降（空方主动减码）同时营收持续成长（代表商转顺利而非单纯题材炒作），显示知情空方正提前撤退以规避即将公布的正向催化剂事件，而市场对空方撤退讯号的反应通常落后于股价，此机制专属生技业事件驱动特性，与F-024全市场融券确认逻辑不同。",
+ "prediction": "生技产业子样本sub-train ICIR>0.4（产业限定）；与F-024截面相关性|ρ|<0.5；多头腿年化超额报酬>0",
+ "formula": "mul(neg(delta(short_margin_ratio,6)), cs_rank(rev_yoy))",
+ "name_zh": "生技空方撤退",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(neg(delta(short_margin_ratio,6)), cs_rank(rev_yoy))",
+  "fhash": "f01c806962f559fe",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.023,
+   "icir": 0.31,
+   "decay_pct": -1.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.03,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.027,
+    "多頭"
+   ],
+   "2017": [
+    0.036,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": 0.043
+  },
+  "industry_icir": {
+   "電子": 0.01,
+   "生技": 0.1,
+   "半導體": 0.11,
+   "金融": 0.3
+  },
+  "legs": {
+   "long_excess_ann": -0.027,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.44,
+  "stage2_max_rho": {
+   "factor": "F-024",
+   "rho": 0.23
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.3 < 0.45; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.44 > 0.4"
+ },
+ "diagnosis": "預測生技ICIR>0.4，實際僅0.3被stage4擋下，多頭腿超額為負、換手率略超標；更關鍵的是industry_icir顯示生技僅0.1為最弱，金融業反而0.3最強，與「生技臨床催化劑撤退」敘事完全不符。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "產業限定假說在提交前應先用industry_icir分布做初篩；本輪C-10、C-11皆出現宣稱產業與實際最強產業不符的錯配，顯示目前對產業機制的因果推測缺乏資料佐證習慣。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0979",
+ "ts": "2026-08-27T21:49:57"
+}

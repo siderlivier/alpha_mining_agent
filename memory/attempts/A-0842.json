@@ -1,0 +1,90 @@
+{
+ "round": 55,
+ "category": "value_growth_confirmation/半導體限定",
+ "hypothesis": "半導體屬高度景氣循環產業，市場在下行週期恐慌時會過度懲罰便宜的股票（ep高）而忽略營業利益已經開始成長（op_income_yoy轉佳）的早期復甦訊號，因分析師修正循環股評價乘數的速度慢於基本面實際好轉的速度。",
+ "prediction": "半導體限定industry_icir>0.45；多頭腿年化超額報酬>0；下跌月與上漲月皆需同向IC（驗證非純景氣beta代理）。",
+ "formula": "mul(cs_rank(ep), cs_rank(op_income_yoy))",
+ "name_zh": "半導體谷底反轉股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ep",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ep), cs_rank(op_income_yoy))",
+  "fhash": "0352f30ef67772a1",
+  "sub_train": {
+   "mean_ic": 0.069,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.053,
+   "icir": 0.69,
+   "decay_pct": -27.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.059,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.106,
+    "盤整"
+   ],
+   "2016": [
+    0.072,
+    "多頭"
+   ],
+   "2017": [
+    0.066,
+    "多頭"
+   ],
+   "2018": [
+    0.038,
+    "盤整"
+   ],
+   "2019": [
+    0.068,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.064,
+   "down_months": 0.066
+  },
+  "industry_icir": {
+   "電子": 0.7,
+   "生技": 0.72,
+   "半導體": 0.22,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.071,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.21,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.77,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.77 > 0.5"
+ },
+ "diagnosis": "半導體限定ICIR預測>0.45，實際僅0.22（四組最低），與C-7同樣的產業敘事失準模式；上漲/下跌月同向的預測成立(0.064 vs 0.066)。死因是與F-002（bp×ROE改善）相關0.77——ep×op_income_yoy和bp×ROE改善本質都是「便宜+獲利轉佳」的通用構造，只是套用在不同財務比率。",
+ "failure_type": "duplicate",
+ "lesson": "「cheap value × improving profitability」骨幹已被F-002佔用，不論用ep/bp或op_income_yoy/ROE皆同；未來景氣循環股訊號應疊加真正產業特有變數（如稼動率、庫存週轉）才能差異化。",
+ "lesson_confidence": "cross_validated",
+ "verdict": "rejected_stage2",
+ "id": "A-0842",
+ "ts": "2026-08-18T23:46:33"
+}

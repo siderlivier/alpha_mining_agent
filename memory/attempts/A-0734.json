@@ -1,0 +1,90 @@
+{
+ "round": 48,
+ "category": "leveraged_growth_deleveraging",
+ "hypothesis": "融資餘額變化率(margin_d21)代表散戶槓桿熱度；EPS高成長但「沒有」伴隨融資餘額同步暴增的公司，代表成長由基本面驅動而非融資堆疊的投機性行情，訊號品質更純淨、更可能延續，市場尚未區分兩種成長來源。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；訊號應優於單獨eps_yoy因子。",
+ "formula": "mul(cs_rank(eps_yoy), cs_rank(neg(margin_d21)))",
+ "name_zh": "無槓桿真成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(eps_yoy), cs_rank(neg(margin_d21)))",
+  "fhash": "5e976769bf53f8a9",
+  "sub_train": {
+   "mean_ic": 0.046,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.044,
+   "icir": 0.71,
+   "decay_pct": -30.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.071,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.041,
+    "盤整"
+   ],
+   "2016": [
+    0.042,
+    "多頭"
+   ],
+   "2017": [
+    0.047,
+    "多頭"
+   ],
+   "2018": [
+    0.047,
+    "盤整"
+   ],
+   "2019": [
+    0.042,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.045,
+   "down_months": 0.047
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.39,
+   "半導體": 0.17,
+   "金融": 0.36
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.007
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.61,
+  "stage2_culprit": {
+   "factor": "F-022",
+   "rho": 0.54,
+   "factor_name": "生技穩健成長",
+   "factor_desc": "生技股EPS成長相對自身波動穩定，代表已脫離燒錢賭博期、進入穩定收成階段。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-022 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "各項預測全部命中(sub-train ICIR 0.55、validation 0.71、多頭腿+0.021)，統計上是本輪表現最佳之一。但被F-022(生技穩健成長)以ρ=0.54攔下，顯示『EPS成長無槓桿堆疊』訊號很大成分是被生技子樣本的成長穩定性驅動，並非全市場獨立訊號。",
+ "failure_type": "duplicate",
+ "lesson": "EPS成長×去槓桿代理變數的複合訊號，其邊際訊息可能主要來自單一產業(生技)子樣本，而非設計預期的全市場機制。下次測試全市場成長類因子時，建議先看各產業ICIR分布是否過度集中單一產業，若是則優先與該產業既有因子比對。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0734",
+ "ts": "2026-08-14T00:25:09"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 30,
+ "category": "illiquidity_premium",
+ "hypothesis": "報酬波動度相對成交金額偏高的股票(近似Amihud非流動性衡量)，代表交易此股票的價格衝擊成本較高；台灣機構法人偏好大型流動股，使中小型缺乏流動性股票長期被低估，市場要求的流動性風險溢酬需數月才逐步反映到股價。",
+ "prediction": "sub-train ICIR>0.45；此訊號與F-008(sdiv(px_hi252,turn_21))相關係數需<0.5；多頭腿(高非流動性)年化超額報酬需為正。",
+ "formula": "cs_rank(sdiv(vol_21, amt_21))",
+ "name_zh": "流動性溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(vol_21, amt_21))",
+  "fhash": "886fd2b6a0e08637",
+  "sub_train": {
+   "mean_ic": -0.006,
+   "icir": -0.05
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.16,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.022,
+    "盤整"
+   ],
+   "2013": [
+    0.018,
+    "多頭"
+   ],
+   "2014": [
+    0.009,
+    "多頭"
+   ],
+   "2015": [
+    -0.026,
+    "盤整"
+   ],
+   "2016": [
+    -0.027,
+    "多頭"
+   ],
+   "2017": [
+    -0.03,
+    "多頭"
+   ],
+   "2018": [
+    0.01,
+    "盤整"
+   ],
+   "2019": [
+    -0.052,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.003,
+   "down_months": -0.05
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.2,
+   "半導體": -0.1,
+   "金融": -0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.034
+  },
+  "coverage": 1.0,
+  "turnover_m": 0.16,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測看多(pos)，但實際IC由早期正值(2012:0.022, 2013:0.018, 2014:0.009)逐漸轉負且幅度擴大(2017:-0.03, 2019:-0.052)，與C-2類似的時間趨勢反轉。sdiv(vol_21, amt_21)並非標準Amihud非流動性(|日報酬|/成交量)，可能量到的是「高波動、低量的投機小型股」而非流動性風險溢酬，這類股票近年報酬轉差反映的可能是風險而非低估。",
+ "failure_type": "expression_bad",
+ "lesson": "用報酬波動度(vol_21)取代標準Amihud illiquidity(|日報酬|/成交量)的簡化公式，量到的可能是高波動投機股而非流動性風險，且此代理指標的方向已隨時間反轉；若要驗證流動性溢酬假設，應採用更貼近Amihud定義的日頻公式重測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0470",
+ "ts": "2026-07-29T23:26:46"
+}

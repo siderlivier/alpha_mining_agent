@@ -1,0 +1,88 @@
+{
+ "round": 59,
+ "category": "price_term_structure_efficiency",
+ "hypothesis": "台股短期(20日)動能常受被動資金/隔日沖等雜訊交易放大，脫離基本面；半年期(120日)動能較能反映真實資訊擴散。當短期動能明顯落後中期趨勢時，代表雜訊已消退、股價將回歸中期趨勢延續上漲；反之短期暴衝超前中期趨勢者屬雜訊推升，隨後易回落。",
+ "prediction": "sub-train ICIR > 0.4；formula最高分位(中期動能強於短期)之後一個月報酬顯著高於最低分位；多頭腿年化超額>0；下跌月與上漲月IC同號。",
+ "formula": "neg(sub(mom_20,mom_120))",
+ "name_zh": "動能期限背離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_120",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "neg(sub(mom_20,mom_120))",
+  "fhash": "65f5c242ad345fc0",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.28,
+   "decay_pct": -153.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.003,
+    "盤整"
+   ],
+   "2013": [
+    0.016,
+    "多頭"
+   ],
+   "2014": [
+    -0.005,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.048,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.3,
+   "半導體": 0.07,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.054,
+   "short_excess_ann": 0.064
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際僅0.11，方向大體正確（多數年份IC為正、cond_ic同號、電子/生技industry_icir尚可）但強度遠不足門檻；反常的是validation ICIR(0.28)優於sub-train，顯示效果存在但太弱且分年極不穩定（2014、2018轉負），不是典型過擬合，更像訊號本身偏弱。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "簡單的『短期動能減中期動能』二階差分捕捉到的期限背離效果在台股偏弱，若要驗證這類期限結構假設，應先用更長樣本或更平滑的窗口做初篩，避免因單一sub-train切分的雜訊就否決。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0894",
+ "ts": "2026-08-19T10:08:40"
+}

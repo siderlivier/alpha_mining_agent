@@ -1,0 +1,90 @@
+{
+ "round": 13,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "52週高點錨定效應疊加營收基本面確認：僅在月營收年增為正的子集中，接近前高才代表動能有基本面支撐而非投機炒作；營收轉負的股票即使接近高點也不具此訊號，直接歸零排序墊底，避免無基本面支撐的價格錨定誤判。",
+ "prediction": "sub-train ICIR>0.4；營收年增為正子集內的多頭腿年化超額報酬需>0；與F-008相關係數|ρ|<0.5。",
+ "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, 0))",
+ "name_zh": "營收確認新高動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, 0))",
+  "fhash": "ad3dd563ea4ccbc4",
+  "sub_train": {
+   "mean_ic": 0.049,
+   "icir": 0.53
+  },
+  "validation": {
+   "mean_ic": 0.056,
+   "icir": 0.82,
+   "decay_pct": -55.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.059,
+    "盤整"
+   ],
+   "2016": [
+    0.071,
+    "多頭"
+   ],
+   "2017": [
+    0.066,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.062,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.82,
+   "生技": 0.42,
+   "半導體": 0.31,
+   "金融": 0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.115,
+   "short_excess_ann": 0.041
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.42,
+  "stage2_culprit": {
+   "factor": "F-003",
+   "rho": 0.72,
+   "factor_name": "風格孤兒股",
+   "factor_desc": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-003 |ρ|=0.72 > 0.5"
+ },
+ "diagnosis": "本輪訊號品質最強的候選（sub-train ICIR 0.53, validation 0.82, 多頭腿超額11.5%），「52週高點需搭配營收年增為正」假說得到強烈支持，電子industry_icir達0.82為四產業最高，與預測方向一致。但在stage2被F-003「風格孤兒股」以rho=0.72攔截——用rev_yoy作為確認閘門去加持px_hi252，與F-003「營收成長+估值」的核心邏輯本質重疊。",
+ "failure_type": "duplicate",
+ "lesson": "用rev_yoy作為「確認腿」去加持任何價格/估值類主訊號，都容易與F-003產生高相關，因為F-003核心正是rev_yoy這個確認維度；未來想再用營收成長做確認機制，必須換一個不同於「成長confirm」敘事的獨立訊息來源，否則幾乎必然撞見F-003。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0214",
+ "ts": "2026-07-21T11:59:28"
+}

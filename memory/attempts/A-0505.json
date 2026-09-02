@@ -1,0 +1,90 @@
+{
+ "round": 33,
+ "category": "anchoring_profit_confirmation",
+ "hypothesis": "電子業投資人對股價創新高存在錨定效應，但單月股價位置雜訊大；用3月移動平均降噪後「持續處於相對高檔」的訊號，結合本業獲利成長，能更準確捕捉基本面驅動而非短線噴出的創高，市場對此重新定價存在滯後。",
+ "prediction": "電子 industry_icir > 0.5；多頭腿年化超額 > 0；月換手率 < 0.4（相較原始px_hi252單月版本應改善）。",
+ "formula": "mul(cs_rank(ts_mean(px_hi252,3)), cs_rank(op_income_yoy))",
+ "name_zh": "電子業穩健創高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_mean(px_hi252,3)), cs_rank(op_income_yoy))",
+  "fhash": "db4fbe8fe687ffb2",
+  "sub_train": {
+   "mean_ic": 0.054,
+   "icir": 0.41
+  },
+  "validation": {
+   "mean_ic": 0.06,
+   "icir": 0.69,
+   "decay_pct": -69.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.046,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.088,
+    "盤整"
+   ],
+   "2016": [
+    0.06,
+    "多頭"
+   ],
+   "2017": [
+    0.044,
+    "多頭"
+   ],
+   "2018": [
+    0.049,
+    "盤整"
+   ],
+   "2019": [
+    0.07,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.061,
+   "down_months": 0.043
+  },
+  "industry_icir": {
+   "電子": 0.67,
+   "生技": 0.6,
+   "半導體": 0.14,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.089,
+   "short_excess_ann": 0.03
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.21,
+  "stage2_culprit": {
+   "factor": "F-016",
+   "rho": 0.97,
+   "factor_name": "本業獲利創高股",
+   "factor_desc": "股價近高點且本業獲利成長佳，勝過單純營收確認。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-016 |ρ|=0.97 > 0.5"
+ },
+ "diagnosis": "預測的電子icir(>0.5)與換手率(<0.4)皆達標(0.67/0.21)，且平滑後validation icir反而提升(0.69)。但rho=0.97與F-016幾乎完全重疊——對px_hi252做3月均線平滑並未改變其橫斷面排序，因為排序本就由價格相對高低點的整體水位主導，月度雜訊平滑對rank correlation影響極小。",
+ "failure_type": "duplicate",
+ "lesson": "對既有價格位置/獲利類因子做ts_mean降噪，通常無法降低與庫內同輸入因子的相關度，因為rank correlation取決於橫斷面水位而非月度雜訊；这类'降噪'包裝不構成真正的差異化。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0505",
+ "ts": "2026-07-30T00:08:12"
+}

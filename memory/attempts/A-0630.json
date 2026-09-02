@@ -1,0 +1,87 @@
+{
+ "round": 41,
+ "category": "retail_leverage_reversal",
+ "hypothesis": "融資餘額持續增加代表散戶槓桿堆積，屬於資訊含量低的追價行為；台股經驗顯示摩擦性堆積（軋空、追價槓桿）多以均值回歸收場而非延續（見經驗庫全域規則），融資餘額變化率經12個月平滑後若持續偏低，代表籌碼結構乾淨、無散戶追價堆積風險，未來較不易面臨去槓桿式賣壓。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；月換手率<0.4（12月平滑已處理rule 4換手率問題）；下跌月IC應高於上漲月IC（防禦性質）。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,12)))",
+ "name_zh": "融資降溫優選",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,12)))",
+  "fhash": "cf84b95b51d349b5",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.37,
+   "decay_pct": -89.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.021,
+    "盤整"
+   ],
+   "2013": [
+    0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    -0.007,
+    "多頭"
+   ],
+   "2018": [
+    0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.08,
+   "半導體": 0.05,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.2，未達預測的0.4門檻，於stage1即被拒；驗證期反而變好至0.37（衰減-89%）。但核心『防禦性』機制預測被推翻：預測下跌月IC應高於上漲月，實際上漲月0.023、下跌月0.0，完全相反——融資降溫並非在下跌時提供保護，反而在上漲時較有效，更像是動能延續訊號而非避險訊號。12個月平滑換手率壓到0.19，訊號可能被過度平滑稀釋。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『融資餘額降溫=防禦性避險』的敘事在本地資料未獲支持（cond_ic方向相反）；若要重試，應拿掉『避險』框架，改以『籌碼乾淨度=順勢確認訊號』的角度重新假設，並嘗試縮短平滑窗口（如6個月）避免訊號被12個月窗口稀釋。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0630",
+ "ts": "2026-08-12T09:31:55"
+}

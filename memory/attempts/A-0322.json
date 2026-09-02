@@ -1,0 +1,83 @@
+{
+ "round": 20,
+ "category": "electronics_inventory_cycle_proxy",
+ "hypothesis": "電子/半導體產業具典型的存貨與價格週期：當毛利率改善速度超過營收成長速度，代表產業正處於去化庫存後的漲價/稼動率回升階段（供給吃緊而非以價換量）。此量價背離訊號需交叉比對兩個財報項目的變化速度，市場消化較慢，尤其半導體業存貨週期長達2-3季，定價落後更明顯。",
+ "prediction": "sub-train ICIR > 0.45；半導體/電子產業industry_icir > 0.4 且高於生技/金融兩產業；與C-2相關係數 < 0.6以確認非重複。",
+ "formula": "sub(cs_rank(ts_slope(gross_margin,6)), cs_rank(ts_slope(rev_yoy,6)))",
+ "name_zh": "電子庫存拐點",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(gross_margin,6)), cs_rank(ts_slope(rev_yoy,6)))",
+  "fhash": "0fb043a836447cfd",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.09
+  },
+  "validation": {
+   "mean_ic": -0.014,
+   "icir": -0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.018,
+    "多頭"
+   ],
+   "2014": [
+    0.009,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    -0.013,
+    "多頭"
+   ],
+   "2017": [
+    -0.005,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    -0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": -0.19,
+   "生技": 0.08,
+   "半導體": -0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.03,
+   "short_excess_ann": 0.005
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.4,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測電子/半導體industry_icir>0.4，實際兩者皆為-0.19，方向與強度全數反向；sub-train整體也是負值(-0.09)。庫存週期『毛利率斜率超過營收斜率=供給吃緊』的假說在目標產業本身即被推翻。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "與C-2、C-11同屬財務指標差分/相關型構造，三案例皆失敗或反號，構造方式本身可能是死路(見C-11所記全域規則)，之後同類假說應優先換一種表達方式(如改用季頻原生指標而非月頻ffill後的斜率差)才值得再試。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0322",
+ "ts": "2026-07-21T13:24:55"
+}

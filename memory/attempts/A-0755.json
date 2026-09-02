@@ -1,0 +1,90 @@
+{
+ "round": 49,
+ "category": "quality_profitability_confirmation",
+ "hypothesis": "應計項偏低代表盈餘含金量高、無盈餘管理疑慮；本業營益率高代表獲利來自核心業務而非業外或一次性收益。兩者同時成立的公司，其獲利「品質」與「來源」皆通過檢驗，但市場的財報分析多半只單獨檢視其中一項指標，雙重確認的交集訊號因此被低估。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；與F-002、F-006、F-021、F-020相關係數皆|ρ|<0.5",
+ "formula": "mul(cs_rank(neg(accruals)), cs_rank(op_margin))",
+ "name_zh": "低應計高本業雙優",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(accruals)), cs_rank(op_margin))",
+  "fhash": "7783bd99534f43d5",
+  "sub_train": {
+   "mean_ic": 0.058,
+   "icir": 0.46
+  },
+  "validation": {
+   "mean_ic": 0.069,
+   "icir": 0.69,
+   "decay_pct": -51.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.091,
+    "多頭"
+   ],
+   "2015": [
+    0.075,
+    "盤整"
+   ],
+   "2016": [
+    0.052,
+    "多頭"
+   ],
+   "2017": [
+    0.064,
+    "多頭"
+   ],
+   "2018": [
+    0.045,
+    "盤整"
+   ],
+   "2019": [
+    0.094,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.07,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.44,
+   "半導體": 0.34,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": 0.02,
+   "short_excess_ann": 0.041
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.13,
+  "stage2_culprit": {
+   "factor": "F-012",
+   "rho": 0.59,
+   "factor_name": "淨化ROE動能",
+   "factor_desc": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-012 |ρ|=0.59 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.45(實際0.46剛好達標)，validation更強(0.69, decay -51%表示穩健)，各產業ICIR全正且電子最高(0.55)，多空腿也都有正超額，表現完全符合預期。唯獨stage2與F-012「淨化ROE動能」相關係數0.59被判重疊——F-012同樣是剔除應計雜訊後看獲利品質，只是用ROE動能替代營益率水準，屬同一概念家族的不同度量方式。",
+ "failure_type": "duplicate",
+ "lesson": "見C-10教訓：低應計×獲利品質軸線已被F-012佔據，即使換一個獲利品質代理變數（op_margin替代ROE動能）仍高度重疊，說明「去雜訊獲利品質」概念層級已飽和，需換完全不同品質維度（如現金流、資產效率）才可能正交。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0755",
+ "ts": "2026-08-14T00:36:43"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 31,
+ "category": "semiconductor_margin_cycle_recovery",
+ "hypothesis": "半導體產業具強烈景氣循環特性，毛利率觸底回升初期常被法人視為『循環性、不可持續』而給予較低評價倍數；但半年內毛利率斜率轉正往往領先於財報全面確認的獲利回升，市場修正評價的速度慢於基本面實際改善速度，此機制僅在循環性強的半導體業顯著。",
+ "prediction": "半導體產業限定 industry_icir > 0.5，decay < 20%；與F-001/F-011相關性 |ρ| < 0.5；多頭腿年化超額報酬 > 0。",
+ "formula": "cs_rank(ts_slope(gross_margin,6))",
+ "name_zh": "半導體毛利回升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(gross_margin,6))",
+  "fhash": "0bc21e9676bc55ea",
+  "sub_train": {
+   "mean_ic": 0.032,
+   "icir": 0.57
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.22,
+   "decay_pct": 62.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.034,
+    "盤整"
+   ],
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.041,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.027,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.32,
+   "半導體": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.072
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.38
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.22 < 0.3; validation 衰減 62% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR 0.57達標，但validation衰減62%（超過50%過擬合門檻），觸發rejected_stage4。更關鍵的是，預測『機制僅半導體顯著』與實際industry_icir矛盾：半導體僅0.19，反而電子(0.44)與生技(0.32)更高，顯示毛利率斜率轉正的訊號其實是跨產業普遍現象，並非半導體特有的循環修正機制，原始『半導體評價修正慢』的敘事未獲產業別數據支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "凡宣稱『機制僅在特定產業顯著』的假設，送測前應先用小樣本檢查該產業的ICIR是否確實高於其他產業對照組；本案與C-12、C-13、C-14三個案例一致顯示，主觀認定的產業專屬敘事常與實際industry_icir分佈不符，應把『目標產業ICIR最高』列為送測前的必要檢查項，而非事後才發現。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0481",
+ "ts": "2026-07-29T23:46:18"
+}

@@ -1,0 +1,93 @@
+{
+ "round": 37,
+ "category": "short_interest_information_deterioration",
+ "hypothesis": "券資比長期偏高反映的是知情空頭對基本面惡化的持續看法，而非軋空前兆；此訊號在台股IC穩定為負(高券資比預示未來報酬較差)，將訊號反向使用(低券資比=正面)應能穩定捕捉此資訊落差，因融資融券綜合行為的資訊含量常被市場系統性低估或誤讀。",
+ "prediction": "sub-train ICIR>0.45；全期間(含多空月)IC應穩定同向；多頭腿年化超額報酬>0；與F-008相關性|ρ|<0.5(已知風險須驗證)。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "券資比降溫",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "預測『全期間IC應穩定同向』，但實際上漲月0.049、下跌月-0.017方向翻轉，反駁了『穩定知情空頭訊號』的重新詮釋，反而說明這個反向券資比訊號其實是搭乘價格動能，這也解釋了為何它與既有『低調接近新高』因子相關性達0.57——預測中已標註的已知風險確實發生。",
+ "failure_type": "duplicate",
+ "lesson": "反向使用的券資比訊號若只在多頭月有效、空頭月失效，很可能是偽裝成基本面訊號的價格動能因子；當cond_ic在多空月出現正負翻轉時，應優先懷疑是動能/beta因子，並先查與既有動能相關因子的相關性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0569",
+ "ts": "2026-07-30T01:03:36"
+}

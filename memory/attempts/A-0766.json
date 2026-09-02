@@ -1,0 +1,87 @@
+{
+ "round": 50,
+ "category": "cash_flow_quality_improvement_trend",
+ "hypothesis": "現金流對淨利比（ocf_ratio）的持續改善趨勢代表公司從『帳面獲利』逐步轉向『真實現金獲利』，這種盈餘含金量提升的動態過程比靜態的應計項水準（F-006）更早捕捉到市場尚未定價的品質改善訊號。",
+ "prediction": "sub-train ICIR>0.45；與F-006、F-012相關係數應<0.5（需先做正交化預檢，對應全域規則5的告誡）。",
+ "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+ "name_zh": "現金含金量提升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+  "fhash": "df7f6e9bc413f841",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.25
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.029,
+    "盤整"
+   ],
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    -0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.12,
+   "半導體": -0.06,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45並先與F-006/F-012做正交化預檢，但實際sub-train ICIR -0.25即在stage1被拒，未進入相關性檢驗；符號在train期(多為負)與validation期(轉正0.14但仍低)不一致，顯示ocf_ratio的12個月斜率本身是雜訊，「現金流品質改善動態」比「靜態應計項水準」更早捕捉品質改善的假設未獲證據支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金流比率的長期斜率(12個月)訊息量低於預期，可能因ocf_ratio已是比率資料，其斜率對雜訊高度敏感；若仍想追蹤現金流品質「改善動態」，應優先嘗試較短窗口(2-4季)的delta而非12個月斜率，避免長窗口把訊號平滑到消失。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0766",
+ "ts": "2026-08-14T00:51:32"
+}

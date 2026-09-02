@@ -1,0 +1,92 @@
+{
+ "round": 55,
+ "category": "leverage_cooling_price_resilience",
+ "hypothesis": "當散戶融資餘額降溫（margin_d21下降）但股價仍維持相對高檔（px_hi252高）時，代表這波股價強勢並非由散戶槓桿堆疊出來的投機泡沫，而是有耐心的資金在承接籌碼，屬於健康換手而非出貨訊號，此結構性強勢常被誤判為即將回檔而遭錯殺。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；空頭腿（融資仍狂熱且價格才剛創高組）年化報酬應顯著低於多頭腿。",
+ "formula": "sub(cs_rank(px_hi252), cs_rank(margin_d21))",
+ "name_zh": "籌碼健康創高股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "margin_d21",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(px_hi252), cs_rank(margin_d21))",
+  "fhash": "5662388c9f0c9557",
+  "sub_train": {
+   "mean_ic": 0.052,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.052,
+   "icir": 0.45,
+   "decay_pct": -16.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.026,
+    "盤整"
+   ],
+   "2013": [
+    0.086,
+    "多頭"
+   ],
+   "2014": [
+    0.056,
+    "多頭"
+   ],
+   "2015": [
+    0.074,
+    "盤整"
+   ],
+   "2016": [
+    0.036,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.046,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.068,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.48,
+   "生技": 0.34,
+   "半導體": 0.21,
+   "金融": 0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.05
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.59,
+  "stage2_max_rho": {
+   "factor": "F-016",
+   "rho": 0.49
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45; 月換手 0.59 > 0.4"
+ },
+ "diagnosis": "訓練期ICIR 0.39與候選自訂>0.4的預測基本吻合，但系統門檻0.45與月換手0.59>0.4雙雙不過關；「空頭腿應顯著低於多頭腿」的預測未成立，兩腿報酬幾乎相等(0.05 vs 0.049)。px_hi252與margin_d21相減並未篩出「籌碼健康vs出貨」的真實差異，高換手也暗示margin_d21日頻雜訊過大。",
+ "failure_type": "expression_bad",
+ "lesson": "margin_d21等日頻籌碼變數直接排序易導致高換手；若要保留概念但降低雜訊與換手成本，應先做時間平滑（如移動平均）再排序，可能連帶改善ICIR是否過閾值。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0847",
+ "ts": "2026-08-18T23:46:33"
+}

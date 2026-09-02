@@ -1,0 +1,88 @@
+{
+ "round": 63,
+ "category": "institutional_retail_short_divergence",
+ "hypothesis": "借券量(法人放空代理)偏高但融券水位(散戶放空代理)偏低，代表較知情的機構空方已提前佈局而散戶尚未跟上，兩者分歧本身即是資訊不對稱訊號，比單一空方指標更能篩出「聰明錢先行」的放空壓力。",
+ "prediction": "direction=neg，sub-train ICIR>0.4；與F-024(eps_yoy×neg(short_margin_ratio))截面相關|ρ|<0.5(field組合不同預期可區隔)。",
+ "formula": "mul(cs_rank(lend_vol_21), cs_rank(neg(short_margin_ratio)))",
+ "name_zh": "法人搶先放空",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(lend_vol_21), cs_rank(neg(short_margin_ratio)))",
+  "fhash": "99f038d8332e1f11",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.34
+  },
+  "validation": {
+   "mean_ic": 0.039,
+   "icir": 0.31,
+   "decay_pct": 7.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.044,
+    "盤整"
+   ],
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.03,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.04,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.055,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.046,
+   "down_months": 0.001
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.29,
+   "半導體": 0.13,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.51,
+  "turnover_m": 0.34,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(+)與假設宣稱(neg)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "sub-train ICIR 0.34接近預測門檻，但關鍵是方向：預測direction=neg（借券多+融券少→未來報酬偏弱），實際全期間IC穩定為正（icir 0.31，decay僅7%，電子產業ICIR達0.5），機制方向與資料完全相反。這組合本身訊號其實相當穩健（低衰減、多產業一致），只是因果解讀反了。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『機構借券多+散戶融券少』預測未來報酬為正而非負，可能代表借券主要用於ETF/避險套利而非方向性放空，或法人借券後仍看好個股基本面；訊號本身穩健值得以direction=pos重新測試，而非直接視為假設死亡。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0962",
+ "ts": "2026-08-27T21:36:00"
+}

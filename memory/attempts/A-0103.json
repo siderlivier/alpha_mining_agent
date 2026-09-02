@@ -1,0 +1,83 @@
+{
+ "round": 6,
+ "category": "post_earnings_drift",
+ "hypothesis": "根據PEAD(Post-Earnings-Announcement Drift)文獻，市場對財報盈餘意外的反應具持續性延遲，尤其台灣中小型股法人研究覆蓋度低，EPS年增率的邊際加速(delta)訊息需數月才被逐步消化並反映在股價；此為全新探索類別，聚焦EPS而非月營收的高頻驚奇。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；且此訊號在法人覆蓋密集但財報資訊量大的半導體/電子產業之industry_icir應顯著高於金融產業(金融業EPS變化較平滑、驚奇效果較弱)。",
+ "formula": "cs_rank(delta(eps_yoy,3))",
+ "name_zh": "盈餘驚奇延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(eps_yoy,3))",
+  "fhash": "e49904361c8eb508",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.29
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.36,
+   "decay_pct": -26.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.046,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.11,
+   "半導體": 0.17,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.02,
+   "short_excess_ann": 0.02
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.37,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.29低於0.45門檻於stage1即淘汰，但validation不降反升至0.36(decay -26%)，顯示訊號穩定但強度不足；產業預測方向大致正確但差距不明顯(半導體0.17僅略高於金融0.15，未達『顯著高於』的預期)。",
+ "failure_type": "expression_bad",
+ "lesson": "EPS年增率3個月差分(delta)訊號方向正確且穩定不衰減，但強度不足以過門檻；PEAD文獻基礎扎實，建議下次改用SUE式標準化驚奇(以歷史波動度做scale)取代原始delta，或拉長觀察窗口以降低雜訊。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0103",
+ "ts": "2026-07-19T17:47:42"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 33,
+ "category": "earnings_growth_quality_composition",
+ "hypothesis": "當營業利益年增率超過EPS年增率時，代表獲利成長主要來自本業營運（訂價權、成本控制、規模效應），而非業外損益、稅率變動或股本膨脹稀釋等會計性因素；市場尤其散戶與短線交易者容易只關注EPS這個headline數字，忽略成長品質來源差異，導致本業驅動型成長股的重新定價存在延遲。",
+ "prediction": "sub-train ICIR > 0.45；與F-006(應計項品質)相關性 |ρ| < 0.5（機制不同：獲利成長來源而非現金/應計品質）；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(sub(op_income_yoy,eps_yoy))",
+ "name_zh": "本業成長品質",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(op_income_yoy,eps_yoy))",
+  "fhash": "86a2e9a15c39d304",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.55,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向(正)完全錯誤：sub-train IC為負(-0.06)，validation更是強烈負向(icir -0.55)，且幾乎所有產業皆為負。'本業獲利成長優於EPS成長=品質更高'的假說方向似乎反了——op_income成長超過EPS成長更可能反映股本膨脹/一次性業外拖累，市場正確地給予負向評價，而非因忽略headline數字而低估。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "op_income_yoy減eps_yoy的正缺口在台股不是品質訊號，反而被市場負向定價，很可能與股本稀釋相關；此方向不應再以'正向被低估'角度測試，若要延續此觀察可測試反向(視為警示/放空訊號)並直接對照股本變化。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0518",
+ "ts": "2026-07-30T00:08:12"
+}

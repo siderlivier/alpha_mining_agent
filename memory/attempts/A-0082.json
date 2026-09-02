@@ -1,0 +1,88 @@
+{
+ "round": 4,
+ "category": "revenue_margin_leverage_interaction",
+ "hypothesis": "短期營收動能(rev_mom)對高淨利率公司的獲利槓桿效果更大，因為邊際收入有更高比例轉為淨利（營運槓桿）；分析師多半只看營收成長率本身，未依產業/公司的獲利結構加權，導致高margin公司的營收beat被系統性低估其對獲利的放大效果。",
+ "prediction": "sub-train ICIR>0.45；且電子/半導體(高營運槓桿)產業內ICIR應顯著高於金融業（金融業獲利與營收成長的非線性關係較弱）",
+ "formula": "cs_rank(mul(rev_mom, net_margin))",
+ "name_zh": "營收槓桿放大",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(rev_mom, net_margin))",
+  "fhash": "b4c50c8b8ff623ba",
+  "sub_train": {
+   "mean_ic": 0.001,
+   "icir": 0.01
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.18,
+   "decay_pct": -1771.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.014,
+    "盤整"
+   ],
+   "2013": [
+    0.005,
+    "多頭"
+   ],
+   "2014": [
+    -0.031,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.019,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": -0.2,
+   "生技": -0.02,
+   "半導體": 0.07,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.02,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.89,
+  "turnover_m": 0.78,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『電子/半導體產業內ICIR應顯著高於金融業(營運槓桿效應更明顯)』被直接推翻——電子產業ICIR是四個產業中最負的(-0.20)，反而金融業最高(0.08)，與假設方向完全相反；整體sub-train ICIR僅0.01基本無訊號，且turnover高達0.78(本輪最高)，顯示這個交乘構造(rev_mom × net_margin)主要在捕捉短期雜訊而非真實的營運槓桿放大效果。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『高margin公司的營收beat會被放大』這個具體敘事在產業別上被證據推翻(電子業反而最差)，且與C-3/C-4/C-13同屬mul()交乘表達模式失敗，兩個失因疊加；判定為hypothesis_wrong是因為關鍵的產業別驗證測試方向完全相反，不只是雜訊問題。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0082",
+ "ts": "2026-07-19T17:21:03"
+}

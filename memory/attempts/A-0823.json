@@ -1,0 +1,88 @@
+{
+ "round": 54,
+ "category": "dividend_quality_premium",
+ "hypothesis": "現金殖利率相對於EPS年增率波動度的比值，代表配息背後獲利的穩定程度；多數投資人只看殖利率高低、不校正獲利穩定性，使「風險調整後殖利率」高的公司被低估，金融股受法規要求穩定配息文化下此機制應更顯著。",
+ "prediction": "sub-train ICIR>0.45；金融產業industry_icir為四產業中最高；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(div_yield, ts_std(eps_yoy,12)))",
+ "name_zh": "風險調整殖利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(div_yield, ts_std(eps_yoy,12)))",
+  "fhash": "ab8b2cc7f5c6287b",
+  "sub_train": {
+   "mean_ic": 0.065,
+   "icir": 0.45
+  },
+  "validation": {
+   "mean_ic": 0.11,
+   "icir": 1.14,
+   "decay_pct": -153.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.114,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.097,
+    "盤整"
+   ],
+   "2016": [
+    0.086,
+    "多頭"
+   ],
+   "2017": [
+    0.053,
+    "多頭"
+   ],
+   "2018": [
+    0.109,
+    "盤整"
+   ],
+   "2019": [
+    0.11,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.081,
+   "down_months": 0.075
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.57,
+   "半導體": 0.41,
+   "金融": 0.36
+  },
+  "legs": {
+   "long_excess_ann": -0.002,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.1,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.49
+  },
+  "verdict": "rejected_stage4",
+  "reason": "多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.45達標，且validation ICIR高達1.14，遠超預期。但多頭腿與空頭腿超額報酬雙雙接近零甚至為負（0.049/-0.002... 實際-0.002/-0.007），顯示強IC並非來自頭尾單調報酬，而可能是ts_std(eps_yoy,12)分母在低波動股上趨近0，造成sdiv比值極端化、扭曲排名但不產生可交易的尾端價差。這與『風險調整殖利率』假說本身無關，是公式結構的副作用。",
+ "failure_type": "expression_bad",
+ "lesson": "sdiv類『指標/自身波動度』公式在分母可能趨近0時會爆出極端值，即使rank IC很漂亮，也要先看多空腿報酬是否單調；下次應對分母做截尾(clip)或改用加法而非除法組合風險調整。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0823",
+ "ts": "2026-08-18T21:21:48"
+}

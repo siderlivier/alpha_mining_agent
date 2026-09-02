@@ -1,0 +1,87 @@
+{
+ "round": 3,
+ "category": "illiquidity_premium",
+ "hypothesis": "低成交金額（關注度低、法人難以建倉退出）的股票因流動性風險溢酬（Amihud 2002）及基金最低成交量門檻篩選排除，長期需要額外報酬補償流動性風險與退出成本，形成經典流動性溢酬；此為因子庫與經驗庫皆未出現過的新機制類別。",
+ "prediction": "sub-train ICIR>0.40；生技/電子中小型股占比高的產業ICIR應高於機構持股集中、流動性佳的金融產業。",
+ "formula": "cs_rank(neg(amt_21))",
+ "name_zh": "低關注流動性溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(amt_21))",
+  "fhash": "ea7db6fa5fca037c",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": 94.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    -0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.4,
+   "半導體": -0.04,
+   "金融": -0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 1.0,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.40且生技/電子中小型股ICIR高於金融』。實際sub-train ICIR僅0.11，驗證期崩至0.01（decay 94%）。產業方向部分成立(生技0.40>金融-0.17)，但下跌月IC為-0.035，與『流動性風險溢酬應在壓力時期更明顯為正』的邏輯相反，說明簡單的成交金額排名並未捕捉到真實的流動性風險溢酬。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "未經市值或其他控制變數調整的原始流動性排名(neg(amt_21))在台股全樣本上未顯示穩定溢酬，且下跌月方向與風險溢酬敘事相反。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0064",
+ "ts": "2026-07-19T17:08:22"
+}

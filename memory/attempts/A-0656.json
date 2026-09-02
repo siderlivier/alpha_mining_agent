@@ -1,0 +1,83 @@
+{
+ "round": 43,
+ "category": "dividend_commitment_signal",
+ "hypothesis": "現金股利政策的調升具有成本高昂的信號屬性（相對盈餘guidance更難造假），管理層敢於調升股息代表對未來現金流的真實信心；但市場對股利政策變化的反應速度慢於對盈餘數字本身的反應，因此存在系統性低估。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC應與上漲月相近甚至更穩定（防禦性特質，區別於單純殖利率水準因子）；與F-021、F-023相關度<0.5。",
+ "formula": "cs_rank(delta(div_yield,12))",
+ "name_zh": "股利調升股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(div_yield,12))",
+  "fhash": "67ee0fe11bf501aa",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": -0.01,
+   "icir": -0.15,
+   "decay_pct": 159.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.002,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.04,
+   "生技": 0.21,
+   "半導體": 0.02,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.014,
+   "short_excess_ann": -0.009
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.17,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.25未達門檻，validation翻負(-0.15)，decay 159%明顯不穩。條件IC方向雖對(down 0.021>up 0.002)但整體太弱太不穩定。根本問題在於div_yield=股利/股價，delta(div_yield,12)無法區分「股利真調升」與「純粹股價下跌推高殖利率」，混入了與你假設完全不同的價值反轉機制。",
+ "failure_type": "expression_bad",
+ "lesson": "用div_yield的變化量代理「股利政策調升信號」會被股價變動污染；應直接用股利發放金額或股利成長率的變化，避免與價值/反轉類機制混淆。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0656",
+ "ts": "2026-08-12T14:04:06"
+}

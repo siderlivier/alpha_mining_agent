@@ -1,0 +1,88 @@
+{
+ "round": 59,
+ "category": "risk_adjusted_yield",
+ "hypothesis": "市場對現金殖利率的定價僅看數字高低，未區分其背後盈餘的穩定性；殖利率相同的兩檔股票，若一家EPS成長波動度低（配息可持續性高）、另一家EPS成長大起大落（配息隨時可能被砍），前者被系統性低估，因為投資人尚未將「配息品質」而非僅「配息水準」納入定價。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿(高殖利率低EPS波動)年化超額>0；空頭腿(高殖利率高EPS波動)報酬顯著較低。",
+ "formula": "sub(cs_rank(div_yield),cs_rank(ts_std(eps_yoy,12)))",
+ "name_zh": "穩定配息減波動",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(div_yield),cs_rank(ts_std(eps_yoy,12)))",
+  "fhash": "fd3f75be58e84398",
+  "sub_train": {
+   "mean_ic": 0.06,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.1,
+   "icir": 1.03,
+   "decay_pct": -140.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.042,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.088,
+    "盤整"
+   ],
+   "2016": [
+    0.083,
+    "多頭"
+   ],
+   "2017": [
+    0.056,
+    "多頭"
+   ],
+   "2018": [
+    0.105,
+    "盤整"
+   ],
+   "2019": [
+    0.094,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.076,
+   "down_months": 0.066
+  },
+  "industry_icir": {
+   "電子": 0.6,
+   "生技": 0.55,
+   "半導體": 0.34,
+   "金融": 0.34
+  },
+  "legs": {
+   "long_excess_ann": 0.004,
+   "short_excess_ann": 0.016
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.1,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.48
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.43 < 0.45"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際0.43幾乎命中卻卡在0.45嚴格門檻；validation ICIR高達1.03，顯示訊號可能真實而穩健。但多頭腿年化超額僅0.004、空頭腿0.016，說明IC強度主要來自對低分位股的區分力而非多頭腿本身alpha——這在台股難放空的限制下是致命傷，屬於典型『IC強但多頭腿弱』的表達問題，而非機制不成立。",
+ "failure_type": "expression_bad",
+ "lesson": "cs_rank相減的形式會把訊號強度平均分散到兩腿，若假設本身偏『避開配息隨時被砍的股票』這種下檔保護邏輯，應改用能集中多頭腿alpha的表達（如先篩高殖利率子集，再依EPS波動度排序），而非全市場rank相減。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0901",
+ "ts": "2026-08-19T10:08:40"
+}

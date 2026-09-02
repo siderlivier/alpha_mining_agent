@@ -1,0 +1,87 @@
+{
+ "round": 1,
+ "category": "illiquidity_premium",
+ "hypothesis": "成交金額低的股票代表法人研究覆蓋不足、資訊不對稱程度高，且流動性風險使投資人要求額外風險溢酬補償無法迅速退出的成本（Amihud illiquidity premium）；台股中小型半導體與生技股尤其明顯，因法人資金集中於權值股。",
+ "prediction": "產業內rank IC為正（低流動性=高預期報酬），sub-train ICIR>0.3；效應在生技/電子中小型股顯著強於金融（大型權值股、覆蓋充分）。",
+ "formula": "cs_rank(neg(amt_21))",
+ "name_zh": "低流動性溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(amt_21))",
+  "fhash": "ea7db6fa5fca037c",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": 94.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    -0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.4,
+   "半導體": -0.04,
+   "金融": -0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 1.0,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "僅生技產業符合預測(ICIR 0.4)；預測強的半導體實際轉負(-0.04)，預測弱的金融實際更負(-0.17)，方向對但程度失控。整體sub-train ICIR僅0.11在stage1被拒，上漲/下跌月IC反號(0.025 vs -0.035)，decay高達94%，顯示流動性溢酬在台股極不穩定，可能受少數極端年度主導。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "簡單成交金額倒數作為流動性代理噪音過大且不穩定，若要重測流動性溢酬應改用更穩健度量(如Amihud比率)並限縮於生技等小型股集中產業。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0029",
+ "ts": "2026-07-18T21:37:41"
+}

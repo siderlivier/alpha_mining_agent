@@ -1,0 +1,88 @@
+{
+ "round": 51,
+ "category": "risk_adjusted_momentum_quality",
+ "hypothesis": "相同幅度的價格動能，若在較低波動環境下產生(風險調整後報酬較高)，代表趨勢是由基本面穩定買盤驅動，而非投機性急漲急跌；這種高品質動能比單純高報酬動能更可能延續，因市場對報酬「品質」的定價效率低於對報酬「幅度」的定價效率，投資人容易被絕對報酬吸引而忽略波動成本。",
+ "prediction": "sub-train ICIR > 0.45；此訊號與F-005相關係數應<0.5；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(mom_60,vol_63))",
+ "name_zh": "風險調整動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_60",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(mom_60,vol_63))",
+  "fhash": "5bc8a319ed7f62e9",
+  "sub_train": {
+   "mean_ic": -0.002,
+   "icir": -0.02
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.18,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.05,
+    "盤整"
+   ],
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.017,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.036,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.022,
+   "down_months": -0.044
+  },
+  "industry_icir": {
+   "電子": 0.1,
+   "生技": 0.01,
+   "半導體": -0.07,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.057,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.44,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR幾乎為0(-0.02)，但多頭腿超額報酬達5.7%(全批數一數二高)，IC(全樣本單調性)與尾端腿報酬出現背離——訊號在極端分組上有效，中段排序雜訊大導致整體rank IC疲弱。逐年IC顯示2012年-0.05為離群值，且condicional IC在下跌月轉負(-0.044)，暗示風險調整動能在市場下跌時反而失效(擁擠交易反轉風險)。",
+ "failure_type": "expression_bad",
+ "lesson": "當rank IC疲弱但多頭腿超額報酬顯著為正時，代表訊號可能非線性/僅在尾端有效；值得改用decile價差或極端分組式表達重新設計，而非直接以cs_rank線性排序評分，同時應檢查是否有單一異常年度扭曲整體IC。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0785",
+ "ts": "2026-08-14T01:05:54"
+}

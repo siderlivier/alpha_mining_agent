@@ -1,0 +1,90 @@
+{
+ "round": 7,
+ "category": "cross_style_screen_gap",
+ "hypothesis": "價值型基金多只篩選ep/bp低估標的，成長型基金多只篩選rev_yoy/eps成長標的；同時在兩個維度都排名前段的股票因不符任一單一風格標籤的主要篩選條件，落在兩種基金覆蓋的空隙中，形成持續性的雙重低估。",
+ "prediction": "sub-train 產業內 ICIR>0.45；且與F-002(bp×roe)、F-003(sp×sign rev_yoy)截面相關係數|ρ|<0.5，確認非既有價值/成長因子的重新表達。",
+ "formula": "add(cs_rank(ep),cs_rank(rev_yoy))",
+ "name_zh": "風格夾縫股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ep",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_rank(ep),cs_rank(rev_yoy))",
+  "fhash": "048dee47e687eaf9",
+  "sub_train": {
+   "mean_ic": 0.076,
+   "icir": 0.73
+  },
+  "validation": {
+   "mean_ic": 0.064,
+   "icir": 1.09,
+   "decay_pct": -49.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.051,
+    "多頭"
+   ],
+   "2015": [
+    0.102,
+    "盤整"
+   ],
+   "2016": [
+    0.104,
+    "多頭"
+   ],
+   "2017": [
+    0.086,
+    "多頭"
+   ],
+   "2018": [
+    0.053,
+    "盤整"
+   ],
+   "2019": [
+    0.075,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.081,
+   "down_months": 0.051
+  },
+  "industry_icir": {
+   "電子": 0.83,
+   "生技": 0.63,
+   "半導體": 0.48,
+   "金融": 0.29
+  },
+  "legs": {
+   "long_excess_ann": 0.101,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.37,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.72,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.72 > 0.5"
+ },
+ "diagnosis": "預測與F-002/F-003相關<0.5以確認非重複表達；實際表現優異(sub-train0.73、validation1.09)但與F-002相關高達0.72，遠超預測，證明'價值+成長夾縫'假說實際上並未跳脫既有'便宜+高獲利效率'因子空間。",
+ "failure_type": "duplicate",
+ "lesson": "學術上獨立的價值(ep)與成長(rev_yoy)風格因子，簡單rank相加後在台股仍高度收斂到既有價值-品質複合因子(F-002)子空間；組合前應先檢查各自與庫內因子的相關性，不能假設不同風格標籤必然低相關。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0125",
+ "ts": "2026-07-19T17:59:13"
+}

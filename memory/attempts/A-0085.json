@@ -1,0 +1,91 @@
+{
+ "round": 5,
+ "category": "margin_trend_underreaction",
+ "hypothesis": "營業利益率的長期改善趨勢反映公司營運槓桿正在發揮效果（規模經濟、成本控制見效），但市場通常只關注單季op_margin是否優於預期，忽略連續12個月的趨勢方向，導致營運槓桿改善的訊息需要多個季度才被完全定價。",
+ "prediction": "sub-train ICIR > 0.45；訊號在固定成本占比高的電子/半導體產業ICIR應顯著高於金融業（金融業營運槓桿概念較弱）。",
+ "formula": "cs_rank(ts_slope(op_margin,12))",
+ "name_zh": "營益率趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(op_margin,12))",
+  "fhash": "8c877016a084face",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.14,
+   "decay_pct": 63.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.019,
+    "多頭"
+   ],
+   "2015": [
+    0.069,
+    "盤整"
+   ],
+   "2016": [
+    0.023,
+    "多頭"
+   ],
+   "2017": [
+    0.061,
+    "多頭"
+   ],
+   "2018": [
+    -0.01,
+    "盤整"
+   ],
+   "2019": [
+    0.037,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.04,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.4,
+   "生技": 0.23,
+   "半導體": 0.18,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.023,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.39
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.38 < 0.45; validation ICIR 0.14 < 0.3; validation 衰減 63% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測的電子/半導體>金融產業梯度只弱弱成立（0.4 vs 0.18 vs 0.15，半導體幾乎沒贏金融），sub-train ICIR 0.38未達標，且validation衰減63%、down_months IC趨近於0(0.006)而up_months 0.04——訓練期的edge集中在特定多頭年份，未能外推。與C-12（另一個毛利率趨勢因子）呈現幾乎相同的『強sub-train、弱validation』模式。",
+ "failure_type": "expression_bad",
+ "lesson": "見C-12合併教訓：ts_slope型利潤率趨勢因子疑似系統性過擬合特定歷史利潤率擴張期。",
+ "lesson_confidence": "cross_validated",
+ "verdict": "rejected_stage4",
+ "id": "A-0085",
+ "ts": "2026-07-19T17:32:31"
+}

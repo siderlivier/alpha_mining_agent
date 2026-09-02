@@ -1,0 +1,87 @@
+{
+ "round": 65,
+ "category": "biotech_rd_commercialization_transition",
+ "hypothesis": "生技股毛利率已達高檔（代表核准商品或授權收入已具備高毛利結構），但營業利益率仍偏低，代表公司仍在建置銷售與行政體系、尚未達到規模經濟；市場對生技股普遍套用燒錢等於風險的刻板印象，忽略毛利結構已驗證商業模式可行，此為產業限定的商轉初期錯殺機會。",
+ "prediction": "限生技產業，industry_icir(生技) > 0.4且顯著優於全池及F-011/F-022；多頭腿年化超額 > 0。",
+ "formula": "mul(cs_rank(gross_margin), cs_rank(neg(op_margin)))",
+ "name_zh": "生技轉商轉早期股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(gross_margin), cs_rank(neg(op_margin)))",
+  "fhash": "f0591969e3e46936",
+  "sub_train": {
+   "mean_ic": -0.018,
+   "icir": -0.22
+  },
+  "validation": {
+   "mean_ic": -0.003,
+   "icir": -0.04,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.004,
+    "盤整"
+   ],
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    -0.05,
+    "盤整"
+   ],
+   "2016": [
+    -0.017,
+    "多頭"
+   ],
+   "2017": [
+    -0.048,
+    "多頭"
+   ],
+   "2018": [
+    0.02,
+    "盤整"
+   ],
+   "2019": [
+    -0.026,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.02,
+   "down_months": 0.002
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.15,
+   "半導體": -0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.032,
+   "short_excess_ann": 0.03
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.11,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技 industry_icir>0.4、多頭腿>0；實際 industry_icir(生技)=-0.15、全期 ICIR -0.22、多頭腿-3.2%、逐年多數為負——因子顯著反向。『高毛利已驗證商業模式+低營益率是規模化前錯殺』被證偽：高毛利×高營益率(正常品質)才是對的方向。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "跨 C-3/C-8/C-9 三個獨立案：把低獲利率(毛利/營益/淨利)當『將向上重定價』的正向代理一律失敗甚至反向。margin 水準是正向品質訊號，禁止押其均值回歸。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0992",
+ "ts": "2026-09-02T00:32:52"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 15,
+ "category": "electronics_inventory_margin_squeeze",
+ "hypothesis": "電子/半導體供應鏈具有明顯的存貨周期特性；當個股營收年增率相對其毛利率水準（產業內排名）呈現「營收成長排名遠高於毛利率排名」的背離時，往往代表公司正透過降價、拉長付款條件等方式衝量去化過剩庫存（旺季拉貨透支或砍價搶單），而非真實需求驅動的健康成長；這種以價換量的成長品質較差，市場初期容易誤判為成長動能而追捧，隨後因毛利持續承壓而修正，此機制在存貨密集、周期性強的電子硬體業尤其顯著。",
+ "prediction": "sub-train ICIR絕對值 > 0.4（direction neg）；電子/半導體產業industry_icir絕對值 > 0.5；四產業cond_ic方向與電子產業一致者至少2個；validation衰減 < 40%。",
+ "formula": "sub(cs_rank(rev_yoy), cs_rank(gross_margin))",
+ "name_zh": "以價換量警訊",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(rev_yoy), cs_rank(gross_margin))",
+  "fhash": "b747036ec171d688",
+  "sub_train": {
+   "mean_ic": 0.031,
+   "icir": 0.47
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.04,
+   "decay_pct": 109.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.002,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.038,
+    "多頭"
+   ],
+   "2017": [
+    0.059,
+    "多頭"
+   ],
+   "2018": [
+    -0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": 0.31,
+   "生技": 0.16,
+   "半導體": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.05,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(+)與假設宣稱(neg)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "sub-train ICIR達0.47達標，但實際IC方向為正，與假設宣稱「以價換量=未來報酬應為負」完全相反；即使承認方向標錯、改用正向解讀，validation期IC仍幾乎歸零(-0.002, icir -0.04)，顯示此訊號本質是train期限定的巧合而非可反向使用的真實訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "下方向判斷前務必先核對IC實際正負號，本案宣稱neg但數據為pos；且此案即使翻正號驗證，樣本外訊號仍消失，代表不是單純標錯方向可救回的案例，存貨去化/以價換量機制在此specification下不成立。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0246",
+ "ts": "2026-07-21T12:24:47"
+}

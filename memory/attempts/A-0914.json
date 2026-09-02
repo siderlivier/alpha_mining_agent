@@ -1,0 +1,91 @@
+{
+ "round": 60,
+ "category": "industry_relative_margin_momentum",
+ "hypothesis": "分析師與機構評價常以產業平均為錨點，重新評價存在滯後；當個股毛利率半年變化顯著超越自身產業的平均變化(扣除產業共同因子後仍為正)，代表真正的競爭優勢而非產業景氣循環，此訊號因需產業中性化處理而較少被一般選股流程納入，形成定價滯後。",
+ "prediction": "全市場sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-001/F-011等未產業中性化因子相關度|ρ|<0.5。",
+ "formula": "cs_rank_all(industry_demean(delta(op_margin,6)))",
+ "name_zh": "產業相對毛利躍升股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank_all(industry_demean(delta(op_margin,6)))",
+  "fhash": "0265f951afac340a",
+  "sub_train": {
+   "mean_ic": 0.034,
+   "icir": 0.35
+  },
+  "validation": {
+   "mean_ic": 0.008,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.037,
+    "盤整"
+   ],
+   "2013": [
+    0.036,
+    "多頭"
+   ],
+   "2014": [
+    0.055,
+    "多頭"
+   ],
+   "2015": [
+    0.064,
+    "盤整"
+   ],
+   "2016": [
+    0.006,
+    "多頭"
+   ],
+   "2017": [
+    0.022,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.24,
+   "半導體": 0.48,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.24,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.41
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.35 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測全市場ICIR>0.4，實際sub-train僅0.35未達標，validation ICIR僅0.08、衰減78%(過擬合徵兆)。逐年IC正負震盪劇烈(2012:-0.037，2018:-0.022)，金融產業ICIR趨近0。產業中性化毛利躍升的「分析師錨定滯後」機制未展現穩健、可跨期複製的效果，較像是train期噪音被擬合。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「產業中性化後的短中期基本面變化」類假設，若逐年IC正負震盪劇烈且validation衰減超過50%，應優先懷疑是train期噪音而非真實訊號，即使industry_icir在部分產業(電子0.53、半導體0.48)看似不錯，也可能是特定年份驅動而非結構性效應。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0914",
+ "ts": "2026-08-20T08:30:15"
+}

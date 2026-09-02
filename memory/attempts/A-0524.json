@@ -1,0 +1,90 @@
+{
+ "round": 34,
+ "category": "biotech_cash_burn_transition",
+ "hypothesis": "生技股長期被貼上『燒錢』標籤，投資人對其估值錨定於歷史虧損狀態，反應遲緩。當公司同時出現現金流含金量提升（ocf_ratio走高，代表獲利非僅來自一次性授權金等應計項目）與營收年增加速，代表真正邁入商轉獲利階段，但市場仍以舊有燒錢認知定價，形成系統性低估直到財報陸續確認。",
+ "prediction": "生技產業內industry_icir>0.5（產業限定門檻），全市場ICIR可低於一般門檻仍可以產業限定身份入庫；多頭腿(生技子樣本內)年化超額報酬>0。",
+ "formula": "mul(cs_rank(ocf_ratio), cs_rank(rev_yoy))",
+ "name_zh": "生技現金轉骨",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio), cs_rank(rev_yoy))",
+  "fhash": "409d4f9ba8bab34e",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.5
+  },
+  "validation": {
+   "mean_ic": 0.038,
+   "icir": 0.65,
+   "decay_pct": -30.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.003,
+    "多頭"
+   ],
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.052,
+    "盤整"
+   ],
+   "2016": [
+    0.051,
+    "多頭"
+   ],
+   "2017": [
+    0.046,
+    "多頭"
+   ],
+   "2018": [
+    0.03,
+    "盤整"
+   ],
+   "2019": [
+    0.045,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.042,
+   "down_months": 0.029
+  },
+  "industry_icir": {
+   "電子": 0.6,
+   "生技": 0.27,
+   "半導體": 0.34,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.41,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.57,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "預測「生技產業icir>0.5」未達成(實際僅0.27)，反而電子產業icir最高(0.6)，顯示「現金流品質x營收成長」機制其實是電子業更適用的通則，生技產業限定敘事的產業歸屬判斷有誤。真正死因是Stage2與庫內F-011「生技轉骨訊號」高相關(ρ=0.57)，兩者都在講「生技燒錢轉商轉獲利」的同一敘事。",
+ "failure_type": "duplicate",
+ "lesson": "「現金流品質x成長」組合因子的真正優勢產業可能是電子而非生技，未來主打產業限定生技因子前應先確認電子產業icir沒有更高，避免誤判產業歸屬；生技轉骨敘事在庫內已有F-011佔據，屬紅海。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0524",
+ "ts": "2026-07-30T00:21:47"
+}

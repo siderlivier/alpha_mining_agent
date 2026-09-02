@@ -1,0 +1,84 @@
+{
+ "round": 37,
+ "category": "earnings_surprise_cash_confirmation",
+ "hypothesis": "EPS年增率相對自身過去一年出現加速，若同時伴隨現金流對淨利比率(ocf_ratio)偏高，代表這次獲利成長是真實現金創造而非會計操作或一次性業外收益，市場容易只看EPS數字本身而忽略現金流確認，導致此類高品質獲利驚喜被低估。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC應與上漲月相近或更高；多頭腿年化超額報酬>0；與F-006、F-012相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(delta(eps_yoy,12)), cs_rank(ocf_ratio))",
+ "name_zh": "現金確認驚喜",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(eps_yoy,12)), cs_rank(ocf_ratio))",
+  "fhash": "0d2a05adc5684c88",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.032,
+   "icir": 0.65,
+   "decay_pct": -78.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.019,
+    "多頭"
+   ],
+   "2015": [
+    0.055,
+    "盤整"
+   ],
+   "2016": [
+    0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.011,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.2,
+   "生技": 0.21,
+   "半導體": 0.16,
+   "金融": 0.3
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.007
+  },
+  "coverage": 0.63,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-019",
+   "rho": 0.49
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45"
+ },
+ "diagnosis": "sub-train ICIR 0.36未達門檻，但驗證期升至0.65；上漲/下跌月IC大致持平(0.028/0.026)，粗略符合『品質確認訊號不應隨大盤方向消失』的預測。但多空腿報酬幅度都很薄(0.012/0.007)，顯示統計顯著性未能轉化為足夠的可交易價差，且與F-019相關性0.49已逼近重複邊界。",
+ "failure_type": "expression_bad",
+ "lesson": "兩個基本面比率相乘排序的組合因子，可能在驗證期通過ICIR門檻，但sub-train多空腿價差很薄；應同時檢視經濟幅度與ICIR，並考慮先單獨測試子項再合成。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0568",
+ "ts": "2026-07-30T01:03:36"
+}

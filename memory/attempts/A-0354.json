@@ -1,0 +1,94 @@
+{
+ "round": 23,
+ "category": "short_squeeze_supply_demand",
+ "hypothesis": "借券量相對融券餘額的比例高，代表借券主要來自可轉債避險、ETF成分股借出、期現套利等非方向性需求，而非空頭放空押注；市場容易把高借券量誤讀為空頭壓力大而過度折價，一旦借券活動趨緩或到期回補，錯誤定價會被修正。",
+ "prediction": "sub-train ICIR>0.45；因lend_vol_21覆蓋率約0.5，需在coverage>0.4子樣本仍成立；多頭腿超額報酬>0；下跌月與上漲月IC同向。",
+ "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+ "name_zh": "借券空頭錯置",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+  "fhash": "ec7f5f8e3d40146e",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.26,
+   "decay_pct": 19.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.069,
+    "盤整"
+   ],
+   "2013": [
+    0.04,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.039,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.2,
+   "半導體": 0.18,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.43,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.62,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.32 未達預測的>0.45；但down/up同向(0.039 vs 0.015)、coverage 0.43>0.4、多頭腿0.042為正皆命中預測。真正死因是預測之外的相關性檢查：與F-008(低調接近新高)ρ=0.62。表示lend_vol/short_margin_ratio這個比例最終捕捉到的是「悄悄接近高點」的機構吸籌訊號，而非借券空頭錯置的獨立機制。",
+ "failure_type": "duplicate",
+ "lesson": "借券量除以券資比的正規化方式無法與F-008脫鉤；要證明借券供需錯置是獨立機制，需改用借券量相對自身歷史的時序變化，而非單純的cross-sectional比例。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0354",
+ "ts": "2026-07-21T14:03:28"
+}

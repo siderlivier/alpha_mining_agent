@@ -1,0 +1,92 @@
+{
+ "round": 17,
+ "category": "volatility_term_structure",
+ "hypothesis": "當短期波動(vol_21)相對長期波動(vol_126)顯著偏低，代表近期不確定性已消退、恐慌情緒解除；投資人對近期高波動存在recency bias，即使波動已回落仍給予風險折價，導致噪音消退後股價修正回升。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC與上漲月IC同向為正；與F-005相關係數<0.5（比值而非水準，捕捉狀態轉換）",
+ "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+ "name_zh": "波動降溫比率",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 月換手 0.67 > 0.4"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且下跌/上漲月同向為正。實際sub-train ICIR僅0.36未達標，validation暴跌至0.08(衰減78%)。IC_by_year呈近乎單調遞減(2013年0.039一路降到2019年0.003)，顯示這不是隨機過擬合而是效應逐年淡化，可能只反映2012-2017特定波動壓縮窗口。下跌/上漲月同向為正的方向預測正確，但下跌月遠弱於上漲月(0.009 vs 0.024)，屬順勢型而非避險型；多頭腿超額僅0.003接近零，換手0.67過高，即使統計上顯著也難交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "波動降溫類因子的年度IC若在sub-train樣本內就已呈單調遞減，應視為效應淡化警訊，優先做「年度單調性」檢查再談sub-train/validation切分。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0264",
+ "ts": "2026-07-21T12:47:40"
+}

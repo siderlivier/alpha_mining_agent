@@ -1,0 +1,93 @@
+{
+ "round": 15,
+ "category": "financial_margin_efficiency",
+ "hypothesis": "金融業（銀行/保險/證券）的淨利率水準反映其資本運用效率與利差管理能力，是比毛利率或營益率更適用於金融業的獲利品質指標；由於金融股會計結構特殊（無傳統營業成本科目），一般投資人與部分量化模型常忽略淨利率此一關鍵指標，改用不適用的通用獲利能力指標評估金融股，導致淨利率結構性偏高、資本效率佳的金融股被系統性低估。",
+ "prediction": "sub-train ICIR > 0.4；金融產業industry_icir > 0.5且顯著高於其他三產業；validation衰減 < 40%。",
+ "formula": "cs_rank(ts_mean(net_margin,6))",
+ "name_zh": "金融淨利效率",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(net_margin,6))",
+  "fhash": "dd292ff4a7729516",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": 0.078,
+   "icir": 0.69,
+   "decay_pct": -86.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.03,
+    "盤整"
+   ],
+   "2013": [
+    0.029,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.071,
+    "盤整"
+   ],
+   "2016": [
+    0.049,
+    "多頭"
+   ],
+   "2017": [
+    0.039,
+    "多頭"
+   ],
+   "2018": [
+    0.052,
+    "盤整"
+   ],
+   "2019": [
+    0.105,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.053,
+   "down_months": 0.056
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.41,
+   "半導體": 0.21,
+   "金融": 0.27
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": 0.012
+  },
+  "coverage": 0.86,
+  "turnover_m": 0.07,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.62,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "預測金融industry_icir應顯著最高，實際僅0.27，生技(0.41)才是最高；核心「金融股適用淨利率」的產業專屬故事未獲支持——訊號本質是通用獲利能力代理，因此與庫內F-002(金融品質價值)相關係數達0.62被判重複。",
+ "failure_type": "duplicate",
+ "lesson": "淨利率作為獲利品質代理，即便用金融產業敘事包裝，本質仍與既有品質價值類因子(F-002)高度重疊；結合C-1(ROE動能與F-001 rho=0.49已逼近重複)，獲利能力水準/趨勢型因子的紅海邊界很寬，新提案需先做相關性預檢。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0247",
+ "ts": "2026-07-21T12:24:47"
+}

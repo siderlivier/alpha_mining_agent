@@ -1,0 +1,87 @@
+{
+ "round": 64,
+ "category": "semiconductor_destocking_rebound",
+ "hypothesis": "半导体产业库存去化尾声时，客户拉货动能率先反映在营收月增率转强，但代工/IC设计厂因产能利用率仍低、价格折让尚未完全收回，毛利率仍处低档；分析师习惯以毛利率数字确认复苏才敢上修评价，导致营收领先讯号相对毛利率落后期存在系统性反应不足，此落差在去化循环转折点最明显。",
+ "prediction": "半导体产业子样本sub-train ICIR>0.4；且该组合多头腿年化超额报酬>0；rev_mom半年内转强月份的IC应显著高于转弱月份",
+ "formula": "mul(cs_rank(delta(rev_mom,6)), cs_rank(neg(gross_margin)))",
+ "name_zh": "半导体去化反弹",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(rev_mom,6)), cs_rank(neg(gross_margin)))",
+  "fhash": "d1fb79c432c21d16",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.07
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.05,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.023,
+    "盤整"
+   ],
+   "2013": [
+    -0.042,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    -0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.034,
+    "多頭"
+   ],
+   "2018": [
+    -0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.003,
+   "down_months": -0.025
+  },
+  "industry_icir": {
+   "電子": -0.07,
+   "生技": -0.01,
+   "半導體": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.026,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.65,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際為-0.07，完全無訊號；逐年IC正負不一致(僅2016-2017轉正)，去化拐點「營收領先、毛利落後」的反應不足假說未獲驗證。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "半導體去化循環「營收領先-毛利落後」反應不足假說目前無實證支持，delta(rev_mom,6)未能捕捉去化拐點，可能需要更精確的谷底辨識而非單純營收動能變化量。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0969",
+ "ts": "2026-08-27T21:49:57"
+}

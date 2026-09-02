@@ -1,0 +1,90 @@
+{
+ "round": 36,
+ "category": "verified_earnings_growth_quality",
+ "hypothesis": "EPS年增率高但應計項偏低，代表獲利成長有現金流佐證、非一次性會計調整撐出的數字；市場多只看EPS成長率headline，對成長品質辨識不足，尤其季報公布初期反應更明顯。",
+ "prediction": "sub-train ICIR > 0.45；與F-006、F-012相關性 |ρ| < 0.5；下跌月與上漲月IC差距 < 0.15。",
+ "formula": "mul(cs_rank(eps_yoy), cs_rank(neg(accruals)))",
+ "name_zh": "EPS真實成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(eps_yoy), cs_rank(neg(accruals)))",
+  "fhash": "0c1b7473315c984b",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.62
+  },
+  "validation": {
+   "mean_ic": 0.048,
+   "icir": 0.86,
+   "decay_pct": -39.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.033,
+    "多頭"
+   ],
+   "2014": [
+    0.046,
+    "多頭"
+   ],
+   "2015": [
+    0.071,
+    "盤整"
+   ],
+   "2016": [
+    0.043,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.044,
+    "盤整"
+   ],
+   "2019": [
+    0.051,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.046,
+   "down_months": 0.043
+  },
+  "industry_icir": {
+   "電子": 0.49,
+   "生技": 0.4,
+   "半導體": 0.17,
+   "金融": 0.43
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.014
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.2,
+  "stage2_culprit": {
+   "factor": "F-012",
+   "rho": 0.6,
+   "factor_name": "淨化ROE動能",
+   "factor_desc": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-012 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.62超標，validation更強（0.86，decay -39%即改善），方向與強度預測皆準確；但與F-012（淨化ROE動能）ρ=0.60重複，顯示EPS成長+低應計與ROE動能去雜訊本質上是同一構念的不同財務比率包裝。",
+ "failure_type": "duplicate",
+ "lesson": "呼應C-8的教訓——獲利指標×neg(accruals)這個組合模板本輪兩次（C-8, C-11）都與庫內品質類因子撞車，顯示accruals作為品質過濾器的應用空間已接近飽和，需要更差異化的品質代理（如治理/審計品質變數）才能突圍。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0559",
+ "ts": "2026-07-30T00:46:50"
+}

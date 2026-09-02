@@ -1,0 +1,84 @@
+{
+ "round": 34,
+ "category": "shareholder_dilution_drag",
+ "hypothesis": "當營業利益年增率明顯高於EPS年增率時，代表獲利成長被股本膨脹（現增、可轉債轉換、庫藏股減少等稀釋事件）大幅侵蝕，但市場分析多聚焦營收/營益等『本業』數字，容易忽略稀釋對每股權益的實質傷害，導致這類公司被錯誤定價為成長股。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(稀釋落差最小端，即EPS成長貼近或超過營益成長)年化超額報酬>0；此效果在生技與電子產業(增資/可轉債頻繁)industry_icir應顯著高於金融產業。",
+ "formula": "cs_rank(neg(sub(op_income_yoy,eps_yoy)))",
+ "name_zh": "獲利稀釋落差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(op_income_yoy,eps_yoy)))",
+  "fhash": "ebbb8c0d487f8574",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.06
+  },
+  "validation": {
+   "mean_ic": 0.04,
+   "icir": 0.55,
+   "decay_pct": -749.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    -0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    -0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.06,
+   "半導體": 0.03,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.06完全無效，但validation ICIR異常跳升至0.55(decay -749%)，這種訓練期無效、驗證期突然大幅有效的型態通常是樣本外雜訊而非真實訊號穩定性。且預測「電子/生技icir應顯著高於金融」被推翻——實際金融(0.19)最高，電子(0.09)、生技(0.06)反而最低，與假設敘事完全相反。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用op_income_yoy-eps_yoy衡量股本稀釋落差沒有捕捉到機制：一是yoy指標在虧損或獲利近零公司會產生極端雜訊(電子/生技新創常見)，二是落差最大的產業實證上是金融而非電子/生技，顯示此代理指標可能主要捕捉金融業特別股/可轉債會計效果而非成長股稀釋故事，因果敘事需重新檢視。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0522",
+ "ts": "2026-07-30T00:21:47"
+}

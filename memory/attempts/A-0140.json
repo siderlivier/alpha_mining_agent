@@ -1,0 +1,87 @@
+{
+ "round": 8,
+ "category": "post_earnings_drift",
+ "hypothesis": "以自身EPS年增率波動度標準化的盈餘驚奇（SUE概念）衡量意外程度，驚奇幅度越大代表市場預期偏離越多，資訊擴散與法人調整預期需要更長時間，未來股價反應會更緩慢完成，此為C-2平滑drift因子的標準化強度版本。",
+ "prediction": "sub-train ICIR > 0.45；月換手率 < 0.4（若超標需加ts_mean平滑）；高驚奇組別未來累積報酬應顯著高於低驚奇組。",
+ "formula": "cs_rank(sdiv(delta(eps_yoy,3), ts_std(eps_yoy,6)))",
+ "name_zh": "標準化盈餘驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(eps_yoy,3), ts_std(eps_yoy,6)))",
+  "fhash": "97191f259f0f784a",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.27,
+   "decay_pct": 28.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.07,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.025,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.027,
+   "down_months": 0.007
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": 0.2,
+   "半導體": 0.13,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.017,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.58,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.17
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.37 < 0.45; validation ICIR 0.27 < 0.3; 月換手 0.58 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.37、validation 0.27，decay 28%在可接受範圍(<50%)，但雙門檻(0.45/0.3)都些微不足，且月換手率0.58超出預測<0.4。相較C-2(雙重平滑，sub-train ICIR僅0.01)，C-12僅單層delta並以自身波動度標準化，訊號明顯保留較多，證實『雙重平滑會殺死訊號』的判斷。cond_ic上漲0.027、下跌0.007顯示訊號偏順勢，是本輪同族異表達最接近過關的版本。",
+ "failure_type": "expression_bad",
+ "lesson": "SUE式標準化盈餘驚奇有真實訊號基礎(sub-train ICIR 0.37遠高於同族C-2的0.01)，主要卡在換手率過高；下次應嘗試以排名平滑(如ts_mean(cs_rank(...)))取代原始值平滑，兼顧降低換手與保留訊號，避免重蹈C-2雙重平滑殺訊號的覆轍。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0140",
+ "ts": "2026-07-19T21:42:48"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 24,
+ "category": "financial_provisioning_discretion",
+ "hypothesis": "金融業獲利常透過備抵呆帳/準備金提列與迴轉進行盈餘平滑，此為業內特有的會計裁量空間；應計項波動度長期偏高的金融股，代表管理層頻繁運用提存裁量操縱盈餘節奏（機會主義式盈餘管理），市場對此裁量行為的持續性風險反應不足，直到財報意外爆雷才重新定價。",
+ "prediction": "sub-train ICIR > 0.4；金融產業industry_icir應為四產業最高，明顯高於電子/半導體/生技。",
+ "formula": "cs_rank(neg(ts_std(accruals,12)))",
+ "name_zh": "金融提存穩定度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(accruals,12)))",
+  "fhash": "8b79ea0ac3daafc6",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": 0.042,
+   "icir": 0.69,
+   "decay_pct": -89.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.052,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.039
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.29,
+   "半導體": -0.04,
+   "金融": 0.41
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.02
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.13,
+  "stage2_max_rho": {
+   "factor": "F-010",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.37 < 0.45"
+ },
+ "diagnosis": "預測金融產業industry_icir應為四產業最高，完全命中（金融0.41 > 生技0.29 > 電子0.26 > 半導體-0.04），證實了『金融業提存裁量』的產業專屬機制假設是對的。但預測sub-train ICIR>0.4，實際0.37些微未達（差距很小），被stage4門檻卡住；驗證期表現反而強勁（icir 0.69，decay -89%，非常穩健）。核心問題是：這是一個產業專屬假設，卻用全樣本（含表現拖累的半導體-0.04）去算整體ICIR，導致被稀釋到剛好卡在門檻邊緣。",
+ "failure_type": "expression_bad",
+ "lesson": "產業專屬型假設若用全市場cs_rank去算整體ICIR，容易被無關產業的雜訊稀釋到門檻邊緣；此案例中金融業本身的訊號其實很強且驗證期穩健，下次應考慮用industry-gated或僅在目標產業內做cs_rank，避免被其他產業拖累整體指標。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0377",
+ "ts": "2026-07-28T18:28:36"
+}

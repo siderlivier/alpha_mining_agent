@@ -1,0 +1,87 @@
+{
+ "round": 6,
+ "category": "volume_attention_leading_indicator",
+ "hypothesis": "成交金額持續放大代表資金與法人關注度正在提升，是機構逐步建倉、進行資訊發掘與價格發現的早期訊號(量先價行)；多數投資人只關注價格變化而非成交量趨勢的變化率，因此這類早期資金流入訊號常被低估，直到價格明顯反應後才被追價。此為全新探索類別，聚焦成交金額的『變化率』而非C-4的『水準』。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；且與C-4(neg ts_mean(turn_21,6)水準因子)之截面相關度|ρ|<0.5(變化量與水準訊號應可區隔)。",
+ "formula": "cs_rank(delta(amt_21,6))",
+ "name_zh": "資金關注度上升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(amt_21,6))",
+  "fhash": "c3dadc3a4505e3c5",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.03
+  },
+  "validation": {
+   "mean_ic": -0.014,
+   "icir": -0.16,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.021,
+    "盤整"
+   ],
+   "2013": [
+    -0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.009,
+    "多頭"
+   ],
+   "2015": [
+    0.018,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.006,
+    "盤整"
+   ],
+   "2019": [
+    -0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.001,
+   "down_months": -0.018
+  },
+  "industry_icir": {
+   "電子": -0.07,
+   "生技": -0.11,
+   "半導體": -0.01,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.06
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.4,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR -0.03、validation -0.16，方向與『量先價行、資金流入是早期關注度訊號』的預測相反，成交金額上升(delta amt_21)反而略微預示較差的後續報酬，與C-4(低週轉率正向)方向相互矛盾，顯示週轉率『水準』與成交金額『變化率』可能捕捉不同甚至相反的市場心理(關注度提升可能代表追高／過熱而非早期布局)。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "成交金額變化率(delta amt_21)作為早期資金流入代理不成立，方向反而略偏向『量增即過熱』的反向解讀；此為單一案例，暫不宜擴大為『所有量能變化率因子皆反向』的通則，但下次若再測量能變化率類因子，應同時預設『可能是反向(過熱)訊號』並雙向檢驗。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0113",
+ "ts": "2026-07-19T17:47:43"
+}

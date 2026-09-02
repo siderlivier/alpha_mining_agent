@@ -1,0 +1,84 @@
+{
+ "round": 4,
+ "category": "neglected_stock_quality",
+ "hypothesis": "低成交金額（低分析師覆蓋、低法人關注）但ROE高的公司，其優質獲利能力因缺乏賣方報告推廣而未被充分定價；資訊需更長時間才能反映到股價，形成價值實現的延遲溢酬，覆蓋率越稀疏的產業（生技、金融次族群）此效果應越明顯。",
+ "prediction": "sub-train ICIR>0.45；且生技/金融產業內ICIR的離散度應高於電子/半導體（覆蓋率分布差異大，符合『覆蓋率越稀疏訊號越強』的敘事）",
+ "formula": "cs_rank(mul(roe, neg(amt_21)))",
+ "name_zh": "冷門高ROE股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(roe, neg(amt_21)))",
+  "fhash": "7a73af706de11026",
+  "sub_train": {
+   "mean_ic": -0.042,
+   "icir": -0.35
+  },
+  "validation": {
+   "mean_ic": -0.057,
+   "icir": -0.53,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    -0.028,
+    "多頭"
+   ],
+   "2015": [
+    -0.077,
+    "盤整"
+   ],
+   "2016": [
+    -0.066,
+    "多頭"
+   ],
+   "2017": [
+    -0.044,
+    "多頭"
+   ],
+   "2018": [
+    -0.019,
+    "盤整"
+   ],
+   "2019": [
+    -0.095,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.039,
+   "down_months": -0.064
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.38,
+   "半導體": -0.14,
+   "金融": -0.29
+  },
+  "legs": {
+   "long_excess_ann": -0.061,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.16,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測方向(pos)完全被推翻——sub-train ICIR -0.35、validation -0.53，且四個產業ICIR全部為負(電子-0.22、生技-0.38、半導體-0.14、金融-0.29)，方向一致且穩定，不是雜訊而是清楚的反向訊號。『冷門高ROE股因缺乏推廣而被低估』的敘事在台股不成立，反而可能是『低成交金額+高ROE』組合代理了流動性風險溢酬或財報品質疑慮，導致這類股票長期跑輸。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『低關注度=延遲定價的正面機會』這個敘事本身值得存疑，至少在roe×流動性這個組合上，市場給的折價可能是理性風險溢酬而非錯價；若要重試可考慮反向假設，但需注意台股放空限制。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0077",
+ "ts": "2026-07-19T17:21:03"
+}

@@ -1,0 +1,91 @@
+{
+ "round": 19,
+ "category": "cash_flow_trend_underreaction",
+ "hypothesis": "生技公司長期處於燒錢階段，一旦產品獲批上市或授權金入帳，營運現金流對淨利比會出現趨勢性改善，這是比損益表更難被操縱、也更少被分析師追蹤的燒錢趨緩訊號，市場重新評價存在時間落差。",
+ "prediction": "生技產業sub-train ICIR>0.4且industry_icir高於其他三產業；月換手率<0.4。",
+ "formula": "cs_rank(ts_mean(ocf_ratio, 12))",
+ "name_zh": "燒錢趨緩訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(ocf_ratio, 12))",
+  "fhash": "ac0e5f66d284442e",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.35
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.2,
+   "decay_pct": 44.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.037,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    -0.0,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.2,
+   "半導體": 0.2,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.0,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.09,
+  "stage2_max_rho": {
+   "factor": "F-006",
+   "rho": 0.4
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.35 < 0.45; validation ICIR 0.2 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "生技產業industry_icir(0.20)與半導體(0.20)並列，並非四產業最高(預測要求生技最高)，且多頭腿超額報酬為0.0%，訊號幾乎完全不可交易。深層原因可能是formula用ts_mean(ocf_ratio,12)衡量水準值，而假設文字強調的是「趨勢性改善」，兩者概念不match：水準高的公司不一定是正在改善的公司。",
+ "failure_type": "expression_bad",
+ "lesson": "假設強調「趨勢改善」(斜率)，但formula用水準的移動平均，兩者概念不同；驗證「改善/轉折」類敘事時應用delta/斜率類運算子而非單純水準平滑，否則會測到不同的東西並產生不可交易的結果。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0301",
+ "ts": "2026-07-21T13:13:10"
+}

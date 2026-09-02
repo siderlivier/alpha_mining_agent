@@ -1,0 +1,88 @@
+{
+ "round": 35,
+ "category": "dual_leverage_unwind_signal",
+ "hypothesis": "融資餘額與借券量同時同步收縮，代表市場上多空雙方的槓桿部位都在去化、籌碼趨於乾淨；這種『雙向去槓桿』狀態罕見且往往先於股價方向性突破，但因缺乏單邊明確的多方或空方敘事（不像單純融資減少或單純借券減少各自有故事），市場對這種中性籌碼淨化訊號系統性忽略。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(neg(margin_d21)), cs_rank(neg(lend_vol_21)))",
+ "name_zh": "雙重去槓桿股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21",
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(margin_d21)), cs_rank(neg(lend_vol_21)))",
+  "fhash": "a3bdfeb11f115f25",
+  "sub_train": {
+   "mean_ic": -0.012,
+   "icir": -0.14
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.17,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.041,
+    "盤整"
+   ],
+   "2013": [
+    0.001,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    -0.031,
+    "盤整"
+   ],
+   "2016": [
+    -0.008,
+    "多頭"
+   ],
+   "2017": [
+    0.013,
+    "多頭"
+   ],
+   "2018": [
+    -0.017,
+    "盤整"
+   ],
+   "2019": [
+    -0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.024,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": -0.32,
+   "生技": -0.32,
+   "半導體": -0.0,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": -0.027
+  },
+  "coverage": 0.51,
+  "turnover_m": 0.64,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR -0.14，方向與預測(正值)相反，validation更負(-0.17)。coverage僅0.51且turnover高達0.64(遠超預測<0.4門檻)，顯示雙向去槓桿這種需要兩個資料源同時滿足條件的組合訊號覆蓋率低、換手率反而偏高，可能因兩個獨立雜訊源的排序不穩定導致頻繁換倉。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "將兩個原始訊號皆偏弱的籌碼指標(融資變化、借券量)相乘尋找中性籌碼淨化訊號，實務上因雙重資料稀疏(coverage 0.51)與相乘後排序不穩定(turnover 0.64)而失敗；雙重稀疏資料源相乘的因子設計應先檢查交集覆蓋率是否足夠，再評估假設本身。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0548",
+ "ts": "2026-07-30T00:34:10"
+}

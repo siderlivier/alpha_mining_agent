@@ -1,0 +1,84 @@
+{
+ "round": 1,
+ "category": "cheap_growth_reappraisal",
+ "hypothesis": "低股價營收比（高sp，即便宜）且營收動能已轉強的公司，代表基本面已好轉但因分析師覆蓋率低、市場對「便宜股」關注不足，重新評價存在時間落差；相對地便宜但營收動能仍弱的股票可能是價值陷阱，不應等同對待。",
+ "prediction": "產業內rank IC為正，sub-train ICIR>0.35；「便宜+營收轉強」組別十分位多空價差應顯著大於單純低sp組別；效應在電子（低覆蓋中小型股多）強於金融。",
+ "formula": "if_else(greater(rev_yoy, ts_med(rev_yoy,12)), sp, neg(sp))",
+ "name_zh": "便宜且轉強",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "if_else(greater(rev_yoy, ts_med(rev_yoy,12)), sp, neg(sp))",
+  "fhash": "de470a67a241ed30",
+  "sub_train": {
+   "mean_ic": 0.034,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.28,
+   "decay_pct": 15.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.09,
+    "多頭"
+   ],
+   "2014": [
+    0.024,
+    "多頭"
+   ],
+   "2015": [
+    0.01,
+    "盤整"
+   ],
+   "2016": [
+    0.065,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.01,
+    "盤整"
+   ],
+   "2019": [
+    0.046,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.034
+  },
+  "industry_icir": {
+   "電子": 0.66,
+   "生技": 0.22,
+   "半導體": 0.39,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.106,
+   "short_excess_ann": 0.008
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.41,
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.33 < 0.45; validation ICIR 0.28 < 0.3; 月換手 0.41 > 0.4"
+ },
+ "diagnosis": "產業異質性預測精準命中且優於預期：電子ICIR達0.66(遠超預測)，金融最弱(0.07)符合預測；多頭腿超額10.6%出色可交易，validation decay僅15%穩健。僅因sub-train ICIR 0.33與月換手0.41些微超標(門檻0.45/0.4)在stage4被拒，屬邊緣未過，非機制問題。",
+ "failure_type": "expression_bad",
+ "lesson": "「便宜+動能轉強」交乘表達式的多頭腿報酬與產業分布皆驗證假設成立，只需降低換手率或提高ICIR即可過關，不應視為機制證偽。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0032",
+ "ts": "2026-07-18T21:37:41"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 42,
+ "category": "risk_adjusted_earnings_surprise",
+ "hypothesis": "淨利率變動的市場反應含金量應與整體風險水準成反比，同幅度改善發生在低波動穩定股上比高波動投機股更具資訊含量；用半年波動度標準化淨利率變動，能篩掉雜訊驅動的假訊號保留真正驚奇。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；IC應高於未標準化的cs_rank(delta(net_margin,6))；與F-005/F-018相關性|ρ|<0.5。",
+ "formula": "cs_rank(sdiv(delta(net_margin,6), vol_126))",
+ "name_zh": "風險調整淨利驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin",
+   "vol_126"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(net_margin,6), vol_126))",
+  "fhash": "d6da4503b0077308",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.19
+  },
+  "validation": {
+   "mean_ic": 0.029,
+   "icir": 0.57,
+   "decay_pct": -192.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.04,
+    "盤整"
+   ],
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    -0.029,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.035,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.14,
+   "半導體": 0.26,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.045,
+   "short_excess_ann": 0.061
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45；sub-train僅0.19被stage1淘汰，但validation達0.57（decay -192%），電子業ICIR最強(0.53)。本輪第四例train弱、validation強模式（同C-2、C-5、C-8）。",
+ "failure_type": "expression_bad",
+ "lesson": "與C-2/C-5/C-8共同構成train弱validation強的可重複模式，見全域規則記錄。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0649",
+ "ts": "2026-08-12T09:45:44"
+}

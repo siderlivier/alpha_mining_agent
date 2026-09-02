@@ -1,0 +1,84 @@
+{
+ "round": 25,
+ "category": "cash_flow_quality_composite",
+ "hypothesis": "分析師與散戶主要關注損益表頭條數字，對現金流量表關注度低且解讀成本高；當營業現金流相對淨利持續改善且應計項偏低，代表獲利提升有現金支撐而非會計操作，此訊號因分析複雜度高被市場低估。",
+ "prediction": "sub-train ICIR > 0.45；與F-012(淨化ROE動能)截面相關係數 < 0.5；多頭腿超額報酬 > 0。",
+ "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)), cs_rank(accruals))",
+ "name_zh": "現金流淨化動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)), cs_rank(accruals))",
+  "fhash": "0b87a30806b49a14",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.37,
+   "decay_pct": -182.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.013,
+    "多頭"
+   ],
+   "2015": [
+    0.024,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": 0.13,
+   "半導體": 0.11,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.006,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR預測>0.45，實際僅0.13。逐年IC正負交錯無清晰模式，產業別也無一致方向。與C-1同為sub(cs_rank(A),cs_rank(B))結構，兩者皆出現異常疲弱ICIR(~0.1)，懷疑構造本身系統性稀釋訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "rank相減構造系統性弱化訊號(詳見全域規則新增)。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0389",
+ "ts": "2026-07-28T18:41:52"
+}

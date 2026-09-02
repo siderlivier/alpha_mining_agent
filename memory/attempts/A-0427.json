@@ -1,0 +1,85 @@
+{
+ "round": 27,
+ "category": "biotech_milestone_event_surprise",
+ "hypothesis": "生技公司營收具高度事件驅動特性（授權金入帳、藥證核准帶來的一次性訂單、里程碑款項），不同於製造業穩定成長的營收型態；用24個月自身波動度標準化營收年增率，可偵測出相對自身歷史異常巨大的營收驚奇，這類驚奇通常對應真實的價值創造事件。市場對生技股慣用穩態成長模型定價，初期容易低估事件驅動驚奇的重要性，導致重新評價需要時間擴散。",
+ "prediction": "sub-train ICIR>0.4；生技產業industry_icir應為四產業最高（>0.5）；驚奇發生後2個月內多頭腿累積超額報酬應持續為正。",
+ "formula": "cs_rank(sdiv(rev_yoy, ts_std(rev_yoy,24)))",
+ "name_zh": "生技里程碑驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(rev_yoy, ts_std(rev_yoy,24)))",
+  "fhash": "619ded124767bb2c",
+  "sub_train": {
+   "mean_ic": 0.051,
+   "icir": 0.63
+  },
+  "validation": {
+   "mean_ic": 0.038,
+   "icir": 0.67,
+   "decay_pct": -6.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    0.055,
+    "多頭"
+   ],
+   "2017": [
+    0.056,
+    "多頭"
+   ],
+   "2018": [
+    0.04,
+    "盤整"
+   ],
+   "2019": [
+    0.035,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.054,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.59,
+   "生技": 0.34,
+   "半導體": 0.41,
+   "金融": 0.29
+  },
+  "legs": {
+   "long_excess_ann": 0.08,
+   "short_excess_ann": 0.069
+  },
+  "coverage": 0.65,
+  "turnover_m": 0.46,
+  "stage2_culprit": {
+   "factor": "F-003",
+   "rho": 0.71,
+   "factor_name": "風格孤兒股",
+   "factor_desc": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-003 |ρ|=0.71 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.4、生技icir應最高(>0.5)；實際sub-train icir達0.63、validation 0.67(decay -6%，非常穩定)，強度預測命中甚至超標。但產業預測落空：生技icir僅0.34排第三，電子反而最高(0.59)，暗示這不是生技限定機制，而是通用的「營收年增相對自身歷史波動標準化」訊號，最終確認與庫內F-003(風格孤兒股，同樣結合營收成長與被忽略特質)高度重疊(rho=0.71)。",
+ "failure_type": "duplicate",
+ "lesson": "用ts_std做「相對自身歷史波動」標準化的營收驚奇訊號，即使以產業事件故事包裝，實際抓到的常是通用的「顯著成長但未被定價」訊號，容易與既有成長+忽略類因子重疊；構造事件驚奇因子前應先檢查是否落入既有「成長+忽略」因子空間。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0427",
+ "ts": "2026-07-28T19:08:22"
+}

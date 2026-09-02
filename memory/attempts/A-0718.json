@@ -1,0 +1,90 @@
+{
+ "round": 47,
+ "category": "margin_cycle_inflection_electronics",
+ "hypothesis": "電子業處於庫存/報價循環中，毛利率從谷底回升往往領先市場共識調升獲利預期；財報揭露落後且分析師模型多用落後指標校準，毛利率斜率轉正的早期訊號在電子供應鏈個股中常被低估。",
+ "prediction": "電子產業industry_icir > 0.5 且高於半導體/生技/金融；sub-train全市場ICIR > 0.35；電子子集多頭腿年化超額報酬 > 0。",
+ "formula": "cs_rank(ts_slope(gross_margin,6))",
+ "name_zh": "毛利率翻揚",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(gross_margin,6))",
+  "fhash": "0bc21e9676bc55ea",
+  "sub_train": {
+   "mean_ic": 0.032,
+   "icir": 0.57
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.22,
+   "decay_pct": 62.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.034,
+    "盤整"
+   ],
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.041,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.027,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.32,
+   "半導體": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.072
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.38
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.22 < 0.3; validation 衰減 62% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測電子產業ICIR>0.5且為四產業最高、全市場sub-train ICIR>0.35，實際sub-train ICIR 0.57達標，電子產業0.44確為最高但未達0.5；validation ICIR驟降至0.22、衰減62%，是典型過擬合徵兆(而非機制方向錯誤，8年中7年為正)。",
+ "failure_type": "expression_bad",
+ "lesson": "6個月毛利率斜率在sub-train期(2012-2017電子景氣循環明顯)訊號強，但外樣本期不穩定，可能是窗口長度過度貼合特定產業週期。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0718",
+ "ts": "2026-08-12T14:54:09"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 16,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "ROE改善若伴隨低應計項（獲利含金量高），代表獲利提升來自真實現金流而非會計操作，是比單純ROE動能(F-001)更純粹的品質訊號；市場對「ROE趨勢」與「應計品質」兩個維度分別已有一定程度定價，但同時具備兩者的公司仍被低估，因兩訊號需分別排名後才能避免尺度失衡（吸取先前mul()直接相乘失敗的教訓）。",
+ "prediction": "sub-train ICIR>0.45；與F-001、F-006單獨相關係數各自可能>0.3，但因交互效應設計，預期複合後與兩者的|ρ|<0.5；多頭腿年化超額報酬>0。",
+ "formula": "sub(cs_rank(delta(roe,12)), cs_rank(accruals))",
+ "name_zh": "淨化ROE動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(delta(roe,12)), cs_rank(accruals))",
+  "fhash": "0caed507a967b7b1",
+  "sub_train": {
+   "mean_ic": 0.048,
+   "icir": 0.72
+  },
+  "validation": {
+   "mean_ic": 0.038,
+   "icir": 0.56,
+   "decay_pct": 23.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.04,
+    "多頭"
+   ],
+   "2015": [
+    0.066,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.05,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.057,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.05,
+   "down_months": 0.031
+  },
+  "industry_icir": {
+   "電子": 0.59,
+   "生技": 0.56,
+   "半導體": 0.26,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": 0.075,
+   "short_excess_ann": 0.073
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.19,
+  "stage2_max_rho": {
+   "factor": "F-006",
+   "rho": 0.39
+  },
+  "verdict": "passed"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45、且分別排名ROE動能與accruals後能降低與F-001/F-006的相關性，兩項皆獲驗證：sub-train ICIR 0.72遠超預測，與F-006相關性僅0.39(<0.5安全邊際)，validation decay 23%屬健康範圍，多空兩腿超額報酬均為正(7.5%/7.3%)，可交易性良好。分別cs_rank再相減的設計確實避免了先前mul()直接相乘的尺度失衡問題。",
+ "failure_type": "none",
+ "lesson": "「分別cs_rank兩個異質維度再相減」是有效降低交互項與既有單因子共線性、同時避免尺度失衡的設計模式，值得在未來的「品質x動能」類交互因子中重複使用。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed",
+ "id": "A-0253",
+ "ts": "2026-07-21T12:37:07"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 54,
+ "category": "financial_foreign_reappraisal",
+ "hypothesis": "金融股因流動性與指數權重限制長期被外資低配；當外資持股比率出現趨勢性回升，且同時淨利率（利差代理）較去年同期實質改善，代表這是基於基本面重新評價而非被動資金流動，屬金融業資本結構限制下特有的再評價機會。",
+ "prediction": "金融產業industry_icir>0.4；與F-002/F-010/F-021/F-023相關係數|ρ|<0.5；多頭腿年化超額報酬>0（產業限定候選）。",
+ "formula": "mul(cs_rank(frgn_ratio_d63), cs_rank(delta(net_margin,12)))",
+ "name_zh": "金融外資回補股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio_d63",
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_ratio_d63), cs_rank(delta(net_margin,12)))",
+  "fhash": "c19a1fcca71d1a35",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.044,
+   "icir": 0.61,
+   "decay_pct": -53.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.041,
+    "盤整"
+   ],
+   "2016": [
+    0.039,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.073,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.041,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.58,
+   "生技": 0.32,
+   "半導體": 0.06,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.064
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.36,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.42
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.4 < 0.45"
+ },
+ "diagnosis": "預測金融industry_icir>0.4，實際僅0.25，且四產業中金融並非最高（電子0.58最高），『金融股資本結構限制下特有的再評價』假說的核心產業專屬性被推翻——這個外資回補x獲利改善的組合訊號在電子業反而更強，顯示其本質更接近通用的『資金流確認基本面改善』訊號，而非金融股特有現象。sub-train ICIR 0.4也未達0.45門檻。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『產業特有資本結構限制』類的敘事需要用industry_icir實際排序驗證，不能只驗證目標產業是否>某門檻；本次目標產業金融反而不是四者中最強，顯示這類『特定產業限制解除』故事容易被更通用的資金流x基本面確認機制蓋過。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0829",
+ "ts": "2026-08-18T21:21:48"
+}

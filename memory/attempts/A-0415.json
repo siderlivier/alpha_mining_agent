@@ -1,0 +1,92 @@
+{
+ "round": 27,
+ "category": "volatility_term_structure",
+ "hypothesis": "短窗波動率相對長窗波動率異常放大（vol_21/vol_126高），反映近期出現吸引注意力的事件性交易（消息衝擊、停損連鎖、社群討論發酵），在台股散戶主導、注意力驅動交易明顯的市場中，此類短期噪音交易會使股價偏離基本面，隨後注意力消退、成交冷卻後價格向均值修正；不同於長期波動水準(F-005)代表的靜態風險偏好，這是動態的短期波動結構訊號。",
+ "prediction": "sub-train ICIR>0.45；比值最低（平穩）分組多頭超額報酬>0，最高（噴出）分組報酬顯著更差；效應應在四大產業普遍一致。",
+ "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+ "name_zh": "波動噴出反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 月換手 0.67 > 0.4"
+ },
+ "diagnosis": "預測ICIR>0.45，實際0.36接近但未達，驗證期衰退到0.08(decay 78%)。逐年IC同樣單調遞減(2013:0.039→2019:0.003)，訊號結構性減弱。產業上電子/生技如預期較強但金融為負，「四產業一致」預測不成立。長腿超額僅0.003近零，短腿0.022才是主要貢獻，實際是空頭訊號而非多頭均值回歸。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "短期波動噴出反轉的可交易alpha集中在空頭腿而非多頭平穩腿，測此類假設應直接檢視多頭腿超額是否為正，而非只看整體ICIR。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0415",
+ "ts": "2026-07-28T19:08:22"
+}

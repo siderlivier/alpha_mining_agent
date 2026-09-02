@@ -1,0 +1,84 @@
+{
+ "round": 18,
+ "category": "dual_institutional_consensus",
+ "hypothesis": "外資與投信是台股兩種異質資訊來源(外資重總經與國際比較、投信重基本面訪查)，當兩者近月同步淨買超時，代表兩條獨立資訊管道得出一致結論，可信度遠高於單一法人買超(可能只是被動調整或單一產業輪動)；市場對單一法人買超已有一定程度定價，但對『兩者同步』這種額外確認訊息反應不足。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC不應顯著低於上漲月(資訊性訊號非僅牛市有效)；與現有因子庫相關係數|ρ|<0.5",
+ "formula": "cs_rank(add(cs_rank(frgn_net_21), cs_rank(trust_net_21)))",
+ "name_zh": "法人同步買超",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(add(cs_rank(frgn_net_21), cs_rank(trust_net_21)))",
+  "fhash": "eeb22404a033cdb6",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.16
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.007,
+    "多頭"
+   ],
+   "2014": [
+    -0.023,
+    "多頭"
+   ],
+   "2015": [
+    -0.01,
+    "盤整"
+   ],
+   "2016": [
+    -0.008,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    -0.016,
+    "盤整"
+   ],
+   "2019": [
+    -0.026,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.007,
+   "down_months": -0.03
+  },
+  "industry_icir": {
+   "電子": 0.02,
+   "生技": 0.07,
+   "半導體": -0.23,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.013,
+   "short_excess_ann": 0.023
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測下跌月IC不應顯著低於上漲月(暗示為資訊性訊號)，實際下跌月IC(-0.03)反而比上漲月(-0.007)更負，且整體方向從假設的正向直接翻成負向(-0.16)。這與『兩條獨立資訊管道確認』的敘事矛盾，更像是法人資金在下跌時同步撤出前的追高買盤，事後反轉。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『外資+投信同步淨買超』不必然代表雙重資訊確認；在下跌月訊號惡化，暗示這更接近趨勢追高的落後指標而非領先資訊，法人同步性本身不足以構成alpha來源。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0282",
+ "ts": "2026-07-21T12:59:43"
+}

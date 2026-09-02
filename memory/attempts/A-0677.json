@@ -1,0 +1,83 @@
+{
+ "round": 44,
+ "category": "biotech_cash_runway_inflection",
+ "hypothesis": "生技公司從『燒錢研發』轉向『自主現金流』的過程中，營運現金流對淨利比率(ocf_ratio)會出現關鍵改善，代表產品進入商轉期或關鍵里程碑（藥證核准、授權金入帳）已兌現；但市場對生技股估值仍錨定於燒錢階段的高風險折價，對現金流轉折的重新評價存在滯後，此機制僅在生技產業成立，因其他產業現金流轉折已被分析師持續追蹤、無資訊落差。",
+ "prediction": "全市場sub-train ICIR可能不足門檻，但生技產業限定industry_icir > 0.5、decay < 30%；pos方向；多頭腿monotonicity需成立。",
+ "formula": "cs_rank(delta(ocf_ratio, 12))",
+ "name_zh": "生技現金轉骨股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio, 12))",
+  "fhash": "d3aa3559d6c6e7ce",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.17,
+   "半導體": 0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測全市場可能不達門檻但生技產業限定industry_icir>0.5。實際生技industry_icir為-0.17，比全市場的-0.13更差，方向與假設完全相反——生技股ocf_ratio改善並未被市場滯後定價，反而呈現負相關。『現金流轉骨』機制在生技子集本身就不成立，並非樣本不足的問題。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技股現金流改善(delta ocf_ratio)不是被低估的訊號，可能反映的是財報認列時點雜訊或一次性授權金入帳的噪音而非持續性商轉訊號；未來若再測『生技轉骨』類假設，應先用個股層級檢查現金流改善是否伴隨營收/毛利同步驗證，而非單獨用ocf_ratio的delta。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0677",
+ "ts": "2026-08-12T14:15:12"
+}

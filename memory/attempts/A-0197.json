@@ -1,0 +1,80 @@
+{
+ "round": 12,
+ "category": "financial_capital_return_signal",
+ "hypothesis": "金融業(銀行/壽險)受資本適足率監理限制，只有在ROE與資本水位確實改善時，管理層才敢調升配息；因此殖利率與ROE同步上升(而非殖利率因股價下跌被動墊高)是受監理背書、可信度高的資本報酬訊號，此邏輯因無資本監理限制而不適用於其他產業。",
+ "prediction": "sub-train ICIR > 0.45；金融產業industry_icir應為四產業最高且明顯優於其他三產業；下跌月IC不應顯著劣於上漲月",
+ "formula": "cs_rank(mul(delta(div_yield,12), delta(roe,12)))",
+ "name_zh": "金融加薪配息",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(delta(div_yield,12), delta(roe,12)))",
+  "fhash": "33c93808990572fd",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.15
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.04,
+   "decay_pct": 128.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.017,
+    "盤整"
+   ],
+   "2016": [
+    0.033,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    -0.01,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.003,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.01,
+   "生技": 0.22,
+   "半導體": -0.05,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融業因資本監理限制應有最高industry_icir,實際金融僅0.03接近零,反而生技業最高(0.22)——與監理敘事無關的產業表現最好,顯示「資本適足率背書配息可信度」機制未獲資料支持;coverage僅0.62也偏低。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "金融業特定監理敘事類假設,務必先用industry_icir交叉驗證預測產業是否真的最強;本次殖利率×ROE同步變化在金融業無效,顯示該監理背書效應可能早已price-in或機制不存在。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0197",
+ "ts": "2026-07-21T11:46:43"
+}

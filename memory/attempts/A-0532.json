@@ -1,0 +1,83 @@
+{
+ "round": 34,
+ "category": "abnormal_foreign_flow_detrended",
+ "hypothesis": "經驗庫顯示外資原始買賣超訊號普遍偏弱，但過往嘗試多為平滑或簡單反轉，未使用時序去趨勢技術。本假設改用ts_resi萃取外資買超相對其自身近期線性趨勢的『異常偏離量』，代表外資出現非例行性的積極表態（如策略性調倉、對重大訊息的即時反應），市場對這種脫離常態的異常偏離反應不足，而非趨勢性、持續性的買超已被充分定價。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-017等既有frgn_net_21組合因子相關性須<0.5，證明ts_resi去趨勢技法確實萃取增量資訊而非重複既有訊號。",
+ "formula": "cs_rank(ts_resi(frgn_net_21,12))",
+ "name_zh": "外資異常偏離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_resi(frgn_net_21,12))",
+  "fhash": "90a3259731d64c07",
+  "sub_train": {
+   "mean_ic": -0.002,
+   "icir": -0.04
+  },
+  "validation": {
+   "mean_ic": -0.012,
+   "icir": -0.17,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.046,
+    "多頭"
+   ],
+   "2014": [
+    0.013,
+    "多頭"
+   ],
+   "2015": [
+    -0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.009,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    -0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.004,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": -0.33,
+   "生技": -0.16,
+   "半導體": -0.28,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": -0.032,
+   "short_excess_ann": -0.016
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.53,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR -0.04且多數年度、多數產業(電子-0.33、半導體-0.28)為負，「外資買超相對自身趨勢的異常偏離被低估」假設不僅未獲支持，反而呈弱負相關，顯示ts_resi去趨勢後的外資流量異常量可能捕捉到已被市場正確定價甚至過度定價的雜訊，而非未被定價的資訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "對外資買超做ts_resi去趨勢萃取「異常偏離量」在本次測試中沒有產生正向訊號，反而全面負向，顯示外資流量的『非趨勢性突增』本身不具前瞻資訊價值，可能與短期反轉雜訊更相關；未來外資流量類因子不應預設去趨勢/detrend是正向優化技法。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0532",
+ "ts": "2026-07-30T00:21:47"
+}

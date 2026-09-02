@@ -1,0 +1,88 @@
+{
+ "round": 60,
+ "category": "dividend_quality_stability",
+ "hypothesis": "高殖利率股常被質疑是否為價值陷阱；若同時EPS成長波動度低，代表配息能力有穩健盈餘支撐而非一次性獲利，市場對「殖利率+穩定度」複合訊號反應遲緩，因多數投資人僅看殖利率單一指標而忽略其波動品質。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；相較單純cs_rank(div_yield)(規則16已知偏弱)應有明顯改善。",
+ "formula": "cs_rank(sdiv(div_yield, ts_std(eps_yoy,12)))",
+ "name_zh": "穩定配息品質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(div_yield, ts_std(eps_yoy,12)))",
+  "fhash": "ab8b2cc7f5c6287b",
+  "sub_train": {
+   "mean_ic": 0.065,
+   "icir": 0.45
+  },
+  "validation": {
+   "mean_ic": 0.11,
+   "icir": 1.14,
+   "decay_pct": -153.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.114,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.097,
+    "盤整"
+   ],
+   "2016": [
+    0.086,
+    "多頭"
+   ],
+   "2017": [
+    0.053,
+    "多頭"
+   ],
+   "2018": [
+    0.109,
+    "盤整"
+   ],
+   "2019": [
+    0.11,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.081,
+   "down_months": 0.075
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.57,
+   "半導體": 0.41,
+   "金融": 0.36
+  },
+  "legs": {
+   "long_excess_ann": -0.002,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.1,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.49
+  },
+  "verdict": "rejected_stage4",
+  "reason": "多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "sub-train ICIR 0.45達標，validation ICIR達1.14(遠優於train，非過擬合而是驗證期表現更強)，但多頭腿年化超額-0.2%、空頭腿-0.7%，兩腿均趨近於零，代表IC訊號主要來自排序中段而非兩端單調分離，無法轉化為可交易的多頭部位。這與預測「多頭腿超額報酬>0」直接矛盾，IC/ICIR強不代表legs可交易。",
+ "failure_type": "expression_bad",
+ "lesson": "sdiv(A, ts_std(B))這類比值型複合公式，容易在rank IC上表現優異，但因分母(波動度)在極端排序端可能主導排序、造成非單調的legs，最終不可交易。同一假設可改用mul(cs_rank(A), cs_rank(neg(ts_std(B))))的乘法排序組合方式重試，避免除法造成的極端值扭曲。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0911",
+ "ts": "2026-08-20T08:30:15"
+}

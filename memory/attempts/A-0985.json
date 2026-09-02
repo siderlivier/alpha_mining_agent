@@ -1,0 +1,84 @@
+{
+ "round": 65,
+ "category": "revenue_streak_exhaustion_reversal",
+ "hypothesis": "營收年增連續為正的月數過長，代表成長動能已被市場充分定價甚至過度追捧，這類股票容易因基期墊高、庫存回補循環結束而動能衰竭；投資人常見的趨勢外推偏誤使其在連續高成長末端仍追價，隨後隨財報轉弱而反轉下跌。",
+ "prediction": "streak_true(rev_yoy>0,6)越高未來報酬越低；sub-train ICIR > 0.4；下跌月(景氣轉弱期)IC強度應高於上漲月，驗證成長透支假說而非純雜訊。",
+ "formula": "cs_rank(streak_true(greater(rev_yoy,0),6))",
+ "name_zh": "營收過熱反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(streak_true(greater(rev_yoy,0),6))",
+  "fhash": "7e9118bf6a7b6539",
+  "sub_train": {
+   "mean_ic": 0.045,
+   "icir": 0.61
+  },
+  "validation": {
+   "mean_ic": 0.038,
+   "icir": 0.55,
+   "decay_pct": 9.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.016,
+    "多頭"
+   ],
+   "2014": [
+    0.031,
+    "多頭"
+   ],
+   "2015": [
+    0.055,
+    "盤整"
+   ],
+   "2016": [
+    0.057,
+    "多頭"
+   ],
+   "2017": [
+    0.059,
+    "多頭"
+   ],
+   "2018": [
+    0.042,
+    "盤整"
+   ],
+   "2019": [
+    0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.046,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.6,
+   "生技": 0.37,
+   "半導體": 0.23,
+   "金融": 0.34
+  },
+  "legs": {
+   "long_excess_ann": 0.051,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.17,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(+)與假設宣稱(neg)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測方向 neg 完全錯：實證 IC 穩定為正(sub-train ICIR 0.61、validation 0.55、decay 僅 9%、逐年一致)。『連續高成長→動能衰竭反轉』在月頻截面上不成立；相反地營收年增連續為正是一個乾淨的持續性訊號。趨勢外推偏誤導致反轉的假設在此時間尺度被證偽。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "營收動能類訊號在月頻截面預設應假設『持續』而非『反轉』；反轉要成立通常需要更極端的過熱條件或更短持有期。本候選的反向(pos)版本表現優異，值得換去重表達後重試而非入禁忌。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-027",
+ "id": "A-0985",
+ "ts": "2026-09-02T00:32:52"
+}

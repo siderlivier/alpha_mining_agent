@@ -1,0 +1,87 @@
+{
+ "round": 40,
+ "category": "retail_margin_deleveraging",
+ "hypothesis": "融資餘額代表散戶槓桿部位；融資餘額以緩和、非崩跌式速度持續去化超過一年，反映浮額逐漸沉澱到長期持有者手中，未來股價對利多消息反應會因浮動籌碼減少而放大，此機制與斷頭式恐慌出貨不同。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；月換手率<0.4(已用12月平滑)；作為與C-1互補的獨立增量訊號驗證。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,12)))",
+ "name_zh": "融資緩降訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,12)))",
+  "fhash": "cf84b95b51d349b5",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.37,
+   "decay_pct": -89.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.021,
+    "盤整"
+   ],
+   "2013": [
+    0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    -0.007,
+    "多頭"
+   ],
+   "2018": [
+    0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.08,
+   "半導體": 0.05,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.20，未達標，被stage1擋下。但validation ICIR反而升到0.37（decay為負，代表穩健不過擬合），且電子industry_icir達0.47，遠高於生技(0.08)/半導體(0.05)/金融(0.08)——訊號其實是真實存在的，但高度集中在電子業，被全市場平均後稀釋到門檻以下。這與最初『與C-1互補的獨立增量訊號』的預測部分吻合（機制可能成立），只是全市場表達方式掩蓋了產業集中的真相。",
+ "failure_type": "expression_bad",
+ "lesson": "融資餘額緩降訊號的alpha高度集中在電子業，全市場cs_rank會被其他產業的雜訊稀釋到低於門檻；重試時應改為電子業內排序或加入產業交互項，而非全市場統一排序。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0615",
+ "ts": "2026-08-12T09:17:43"
+}

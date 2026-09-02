@@ -1,0 +1,89 @@
+{
+ "round": 26,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "月營收年增率的短窗（3個月）斜率經過3個月移動平均，能捕捉真正的加速拐點而非單月雜訊放大的短期斜率；市場對高頻營收數據反應不足，尤其在加速度剛形成、尚未被多數分析師模型捕捉到的階段。",
+ "prediction": "sub-train ICIR>0.45；與F-009相關係數<0.5（窗口與平滑方式不同，更即時捕捉短期加速度）；validation衰減<40%。",
+ "formula": "cs_rank(ts_mean(ts_slope(rev_yoy,3),3))",
+ "name_zh": "營收加速平滑",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(ts_slope(rev_yoy,3),3))",
+  "fhash": "51a06ee6cbfa5d4a",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.032,
+   "icir": 0.6,
+   "decay_pct": -36.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.026,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.059,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.041
+  },
+  "industry_icir": {
+   "電子": 0.66,
+   "生技": 0.22,
+   "半導體": 0.4,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.42,
+  "stage2_culprit": {
+   "factor": "F-009",
+   "rho": 0.51,
+   "factor_name": "營收加速趨勢",
+   "factor_desc": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-009 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "表現不錯（ICIR 0.44/0.60，decay -36%），但與F-009相關係數0.51剛好壓線判定重複——雙重移動平均平滑（先3月斜率再3月均線）不足以與F-009既有的3月均線營收加速趨勢做出實質區隔。",
+ "failure_type": "duplicate",
+ "lesson": "營收加速度這個因子空間已被F-009佔據，僅調整平滑窗口/順序的變體很難把相關係數壓到0.5以下；要在此空間找到新因子，需要換一個結構性不同的確認變數（如跨股離散度、或結合非營收類指標），而非單純換平滑方式。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0412",
+ "ts": "2026-07-28T18:54:36"
+}

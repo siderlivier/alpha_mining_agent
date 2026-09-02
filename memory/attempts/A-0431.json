@@ -1,0 +1,87 @@
+{
+ "round": 28,
+ "category": "cross_scope_rank_divergence",
+ "hypothesis": "台股資金常以產業/題材為單位輪動配置(ETF、主題基金)，投資人習慣把個股拿來跟同產業同儕比較而非全市場比較；一檔股票在自己產業內動能排名極強、但全市場排名普通，代表其強勢尚未擴散到跨產業資金的視野中，資訊仍在產業內部醞釀。",
+ "prediction": "sub-train ICIR>0.4；此訊號在生技/金融(產業關注度低、易被市場忽略)industry_icir應高於電子/半導體(已高度受市場關注)；多頭腿年化超額報酬>0。",
+ "formula": "sub(cs_rank(mom_120), cs_rank_all(mom_120))",
+ "name_zh": "產業內動能失衡",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(mom_120), cs_rank_all(mom_120))",
+  "fhash": "bb3a517569c983c3",
+  "sub_train": {
+   "mean_ic": -0.02,
+   "icir": -0.3
+  },
+  "validation": {
+   "mean_ic": 0.027,
+   "icir": 0.37,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.03,
+    "盤整"
+   ],
+   "2013": [
+    -0.026,
+    "多頭"
+   ],
+   "2014": [
+    -0.035,
+    "多頭"
+   ],
+   "2015": [
+    -0.014,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    -0.019,
+    "多頭"
+   ],
+   "2018": [
+    0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": -0.023
+  },
+  "industry_icir": {
+   "電子": -0.17,
+   "生技": 0.21,
+   "半導體": -0.18,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.048,
+   "short_excess_ann": -0.027
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.35,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測方向為pos，但sub-train IC實際為負(icir -0.30)，validation才轉正(0.37)，方向在兩期之間不一致，直接觸發stage1方向反查。值得注意的是，唯一支持原始假設(產業內動能失衡在低關注度產業被忽略)的證據落在生技industry_icir(0.21)，是四產業中唯一正值，其餘三產業(電子/半導體/金融)全為負，顯示機制若存在，範圍遠比預測的'生技/金融'窄，只在生技成立。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "cross_scope_rank_divergence(產業內排名減全市場排名)類因子的正向訊號目前只在生技產業觀察到一致方向，電子/半導體/金融方向為負；同類另案C-14也顯示生技industry_icir最高，兩個獨立的cross-scope因子(動能版、淨值股價比版)都指向生技，值得列為此category的產業限定線索。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0431",
+ "ts": "2026-07-28T19:19:09"
+}

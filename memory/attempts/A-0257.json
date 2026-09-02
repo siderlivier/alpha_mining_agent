@@ -1,0 +1,90 @@
+{
+ "round": 16,
+ "category": "revenue_overextension_warning",
+ "hypothesis": "先前實證已確認「月增率rev_mom>年增率rev_yoy」在電子供應鏈中代表短期透支/追高警訊（industry ICIR達-0.69），本次將此已驗證方向正式化為反向排名因子：rev_yoy相對rev_mom更高的公司代表成長是結構性、非急單堆積造成的短期失真，屬於更健康的動能訊號，市場對此健康度的辨識存在延遲。",
+ "prediction": "sub-train ICIR>0.45（延續已證實方向，門檻應可達成）；電子/半導體industry_icir應為負相關驗證的鏡像正值且最強；validation decay<30%（因機制已有前期驗證基礎）。",
+ "formula": "cs_rank(neg(sub(rev_mom,rev_yoy)))",
+ "name_zh": "營收健康成長",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(rev_mom,rev_yoy)))",
+  "fhash": "a18f92a6b4136f9c",
+  "sub_train": {
+   "mean_ic": 0.04,
+   "icir": 0.58
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.34,
+   "decay_pct": 42.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.048,
+    "多頭"
+   ],
+   "2017": [
+    0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.69,
+   "生技": 0.42,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.065,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.45,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.52,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "預測本次是「已驗證方向」的正式化，sub-train ICIR應可達0.45門檻——實際0.58超越預期，產業別電子0.69、生技0.42、半導體0.35均符合預測的鏡像驗證，核心假說(營收健康度)本身站得住腳；但validation decay 42%略高於預測的<30%，最終在stage2被F-011(生技轉骨訊號)以0.52相關性判定重複，顯示本次通用跨產業表達法在生技子集上與既有產業別品質因子重疊過高。",
+ "failure_type": "duplicate",
+ "lesson": "營收「健康度/品質」類因子(區分急單堆積vs結構性成長)容易與庫內已有的產業別營收品質因子(如F-011的生技毛利率確認)在生技子集上高度重疊；未來若要再表達此機制，應考慮排除生技產業或改用產業中立化後的殘差版本降低與既有產業專屬因子的相關性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0257",
+ "ts": "2026-07-21T12:37:07"
+}

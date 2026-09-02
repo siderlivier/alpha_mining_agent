@@ -1,0 +1,88 @@
+{
+ "round": 47,
+ "category": "deep_value_turnaround_reversal",
+ "hypothesis": "股價遠低於52週高點的股票常被貼上「弱勢股」標籤而遭忽略，但若近期營收月增率轉強，代表基本面已出現拐點，市場受錨定效應影響仍停留在過去弱勢價格印象，尚未跟上基本面反轉速度。",
+ "prediction": "sub-train ICIR > 0.45；此因子與F-016相關係數應 < 0.5；多頭腿年化超額報酬 > 0。",
+ "formula": "mul(cs_rank(neg(px_hi252)), cs_rank(rev_mom))",
+ "name_zh": "落難反轉股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(px_hi252)), cs_rank(rev_mom))",
+  "fhash": "fee684bca44f1381",
+  "sub_train": {
+   "mean_ic": -0.027,
+   "icir": -0.29
+  },
+  "validation": {
+   "mean_ic": -0.026,
+   "icir": -0.31,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.05,
+    "盤整"
+   ],
+   "2013": [
+    -0.037,
+    "多頭"
+   ],
+   "2014": [
+    -0.034,
+    "多頭"
+   ],
+   "2015": [
+    -0.054,
+    "盤整"
+   ],
+   "2016": [
+    -0.025,
+    "多頭"
+   ],
+   "2017": [
+    -0.032,
+    "多頭"
+   ],
+   "2018": [
+    -0.012,
+    "盤整"
+   ],
+   "2019": [
+    -0.04,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.035,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.41,
+   "生技": -0.45,
+   "半導體": -0.1,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.033,
+   "short_excess_ann": -0.06
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.69,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測多頭腿為正、方向pos，實際IC在8年中6年穩定為負(sub-train ICIR -0.29、validation -0.31，decay極低顯示穩定)，診斷明確指出方向與假設相反。這是穩定的反向關係而非隨機雜訊——遠低於52週高點且營收動能轉強的組合持續跑輸，較可能反映仍是價值陷阱訊號而非反轉確認。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "見learnings_additions：此類stage1方向相反且穩定(低衰減)的案例，應優先考慮翻轉方向重新提交而非直接判死。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0723",
+ "ts": "2026-08-12T14:54:09"
+}

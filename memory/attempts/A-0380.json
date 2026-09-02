@@ -1,0 +1,83 @@
+{
+ "round": 24,
+ "category": "earnings_surprise_persistence",
+ "hypothesis": "EPS年增率相對其自身歷史波動標準化後的短窗變化，代表相對於該公司normal波動範圍而言「意外程度」較大的盈餘驚奇；市場對財報公布後的盈餘驚奇存在post-earnings-announcement drift式的反應不足，標準化後的訊號能排除天生高波動公司的雜訊干擾，讓真正的意外訊號更突出。",
+ "prediction": "sub-train ICIR > 0.4；EPS覆蓋率>0.7的子樣本內表現應優於全樣本。",
+ "formula": "cs_rank(sdiv(delta(eps_yoy,3), ts_std(eps_yoy,12)))",
+ "name_zh": "標準化盈餘驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(eps_yoy,3), ts_std(eps_yoy,12)))",
+  "fhash": "422be603e02136d6",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": 0.023,
+   "icir": 0.45,
+   "decay_pct": -73.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.076,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.22,
+   "生技": 0.14,
+   "半導體": 0.09,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.43,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際僅0.26，rejected_stage1；但驗證期表現遠優於訓練期（icir 0.45，decay -73%），逐年IC也不穩定（2013暴衝0.076，2015轉負-0.007）。coverage 0.69剛好低於預測要求的>0.7子樣本，無法驗證『高覆蓋子樣本應更強』的假設。訊號本身可能存在，但被低覆蓋率股票（EPS歷史不足、標準化分母不穩定）引入的雜訊拖累了訓練期表現。",
+ "failure_type": "expression_bad",
+ "lesson": "用ts_std(eps_yoy,12)做標準化分母時，若該股EPS歷史不足12期或波動度接近零，標準化結果會失真放大雜訊；下次應對coverage設下限（如要求至少X期有效歷史）再计算，而不是對全樣本一律標準化。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0380",
+ "ts": "2026-07-28T18:28:36"
+}

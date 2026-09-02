@@ -1,0 +1,90 @@
+{
+ "round": 33,
+ "category": "revenue_overheat_reversal",
+ "hypothesis": "當月營收月增率大幅超越年增率趨勢時，往往是季節性拉貨或一次性出貨提前造成的短暫過熱，市場容易將單月驚喜過度線性外推；隨後基期效應消退，成長回歸中期趨勢，形成短期超漲後的價格修正。",
+ "prediction": "sub-train ICIR > 0.45；此為對「月增-年增價差延續」假設的反向測試，空頭腿(過熱組)未來報酬應顯著低於多頭腿；下跌月IC不弱於上漲月。",
+ "formula": "cs_rank(neg(sub(rev_mom,rev_yoy)))",
+ "name_zh": "營收過熱回落",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(rev_mom,rev_yoy)))",
+  "fhash": "a18f92a6b4136f9c",
+  "sub_train": {
+   "mean_ic": 0.04,
+   "icir": 0.58
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.34,
+   "decay_pct": 42.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.048,
+    "多頭"
+   ],
+   "2017": [
+    0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.69,
+   "生技": 0.42,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.065,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.45,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.52,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR(0.58)超越預測，反轉方向也部分驗證(下跌月IC 0.036不弱於上漲月0.034)。但validation衰減42%(icir降至0.34)，且stage2與F-011(生技毛利成長)相關度0.52——兩者概念幾乎無關(過熱回落 vs 生技轉骨)，重疊極可能只是共用rev_yoy衍生項所致，而非真正同一機制。",
+ "failure_type": "expression_bad",
+ "lesson": "與概念上完全不相關的因子出現中等相關度，是相關度檢查抓到'輸入變數重疊'而非'機制重疊'的訊號；應對sub(rev_mom,rev_yoy)直接針對rev_yoy做殘差化，分離出真正的'過熱'訊號後再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0508",
+ "ts": "2026-07-30T00:08:12"
+}

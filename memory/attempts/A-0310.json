@@ -1,0 +1,87 @@
+{
+ "round": 20,
+ "category": "cost_structure_leverage",
+ "hypothesis": "當營業利益率的改善速度超過毛利率改善速度，代表獲利提升來自費用管控/規模經濟等內生營運槓桿，而非單純受惠原物料或產品價格帶動的毛利擴張。市場參與者多聚焦毛利率這個直覺指標，對『費用效率』這類需要跨科目比較才能察覺的訊號反應較慢，形成系統性低估。",
+ "prediction": "sub-train ICIR > 0.45；與F-001、F-004相關係數 < 0.5；多頭腿年化超額報酬 > 0。",
+ "formula": "sub(cs_rank(ts_slope(op_margin,6)), cs_rank(ts_slope(gross_margin,6)))",
+ "name_zh": "營運槓桿超車",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(op_margin,6)), cs_rank(ts_slope(gross_margin,6)))",
+  "fhash": "31523b7b986cacfc",
+  "sub_train": {
+   "mean_ic": 0.004,
+   "icir": 0.07
+  },
+  "validation": {
+   "mean_ic": -0.005,
+   "icir": -0.11,
+   "decay_pct": 266.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.01,
+    "盤整"
+   ],
+   "2013": [
+    0.021,
+    "多頭"
+   ],
+   "2014": [
+    -0.015,
+    "多頭"
+   ],
+   "2015": [
+    0.045,
+    "盤整"
+   ],
+   "2016": [
+    -0.031,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.011,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": -0.07,
+   "生技": -0.09,
+   "半導體": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.014
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.34,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train僅0.07、validation轉負(-0.11)且decay266%，嚴重過擬合。多空兩腿報酬同向為正(0.019/0.014)代表因子幾乎沒有跨組別區分力，只是搭上市場整體beta。營運槓桿(op_margin斜率減gross_margin斜率)這類雙季頻指標的斜率差分，訊噪比似乎太低。",
+ "failure_type": "expression_bad",
+ "lesson": "雙財務指標的長窗口斜率相減(slope-vs-slope)在季頻資料下噪音蓋過訊號；與C-11、C-14同構型因子均失敗，此構造方式本身可能是死路，需徹底換一種表達方式才值得再試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0310",
+ "ts": "2026-07-21T13:24:55"
+}

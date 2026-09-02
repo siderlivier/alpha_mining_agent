@@ -1,0 +1,84 @@
+{
+ "round": 2,
+ "category": "revenue_announcement_drift_low_attention",
+ "hypothesis": "台灣企業每月10日前公布上月營收，是高頻基本面揭露制度；市場對單月營收月增(rev_mom)的初始反應在低周轉率（低關注度）股票中往往不足，訊息會在後續數週持續擴散，形成營收公告後漂移(PEAD)。",
+ "prediction": "sub-train ICIR>0.35；低turn_21子樣本中rev_mom訊號未來1個月IC應高於高turn_21子樣本。",
+ "formula": "cs_rank(mul(neg(turn_21), sign(rev_mom)))",
+ "name_zh": "冷門營收動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(neg(turn_21), sign(rev_mom)))",
+  "fhash": "24bc7da08a243a5a",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": -0.004,
+   "icir": -0.06,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    -0.002,
+    "多頭"
+   ],
+   "2015": [
+    -0.014,
+    "盤整"
+   ],
+   "2016": [
+    -0.019,
+    "多頭"
+   ],
+   "2017": [
+    -0.033,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.003
+  },
+  "industry_icir": {
+   "電子": -0.08,
+   "生技": 0.05,
+   "半導體": -0.12,
+   "金融": -0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.047,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.73,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測低關注度(低周轉率)股票對營收月增反應不足、IC應為正；實際sub-train為-0.18方向相反，多數年份為負，與C-7的周轉率交乘營收訊號呈現一致的失敗模式。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "見禁忌方向：周轉率交乘營收方向組合，與C-7共同構成multi_case證據。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0051",
+ "ts": "2026-07-19T09:53:03"
+}

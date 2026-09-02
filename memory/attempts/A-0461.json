@@ -1,0 +1,88 @@
+{
+ "round": 30,
+ "category": "short_term_panic_reversal",
+ "hypothesis": "短期價格重挫(mom_20為負)若伴隨波動率(vol_21)同步飆升，反映流動性提供者要求的恐慌性拋售溢價而非基本面惡化；台股散戶為主市場中，超賣後流動性回補帶來短期反彈，屬短期反轉的行為金融機制。",
+ "prediction": "sub-train ICIR>0.45；下跌且高波動月份IC應高於平穩上漲月份；多頭腿(近期急跌+高波動)年化超額報酬需為正，否則視為不可交易。",
+ "formula": "mul(cs_rank(neg(mom_20)), cs_rank(vol_21))",
+ "name_zh": "恐慌超跌反彈",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_20",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(mom_20)), cs_rank(vol_21))",
+  "fhash": "6b3943262d864c61",
+  "sub_train": {
+   "mean_ic": -0.029,
+   "icir": -0.23
+  },
+  "validation": {
+   "mean_ic": -0.03,
+   "icir": -0.22,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.004,
+    "盤整"
+   ],
+   "2013": [
+    -0.026,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    -0.074,
+    "盤整"
+   ],
+   "2016": [
+    -0.034,
+    "多頭"
+   ],
+   "2017": [
+    -0.033,
+    "多頭"
+   ],
+   "2018": [
+    -0.039,
+    "盤整"
+   ],
+   "2019": [
+    -0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.05,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": -0.37,
+   "生技": -0.21,
+   "半導體": -0.07,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": -0.037
+  },
+  "coverage": 0.99,
+  "turnover_m": 0.67,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測看多(pos)，實際整體IC顯著為負(sub-train -0.23，validation -0.22)，方向與假設相反。但cond_ic顯示下跌月IC為+0.023(支持恐慌反轉)，上漲月為-0.05(動能延續)，說明假設只在下跌月成立，卻被樣本中多頭月份的反向效應(動能延續)完全蓋過方向。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "急跌+高波動在下跌月確實顯現微弱反轉跡象(cond_ic down=+0.023)，但同樣訊號在上漲月其實是動能延續(cond_ic up=-0.05)且權重更大，導致unconditional版本方向被多頭月主導翻轉——純價格反轉類假設不做狀態條件化很容易被樣本內多頭月份主導而判斷方向錯誤。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0461",
+ "ts": "2026-07-29T23:26:46"
+}

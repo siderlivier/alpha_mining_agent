@@ -1,0 +1,83 @@
+{
+ "round": 25,
+ "category": "trust_flow_window_dressing_reversal",
+ "hypothesis": "投信基金經理人面臨季度績效排名壓力，常在季底前集中買超特定股票美化淨值(window dressing)，此買盤非基於基本面；買超力道消退後缺乏支撐，價格容易回吐，形成6個月平滑後仍可觀察的均值回歸。",
+ "prediction": "sub-train ICIR > 0.45；買超最強分組未來3個月報酬顯著低於買超最弱分組；月換手率 < 0.4。",
+ "formula": "cs_rank(ts_mean(trust_net_21,6))",
+ "name_zh": "投信作帳反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(trust_net_21,6))",
+  "fhash": "769c59b569999fdb",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.14
+  },
+  "validation": {
+   "mean_ic": -0.006,
+   "icir": -0.09,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.028,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    -0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.015,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.15,
+   "生技": -0.13,
+   "半導體": 0.03,
+   "金融": -0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.03,
+   "short_excess_ann": 0.039
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "方向預測(neg)正確且sub-train IC符號為負(-0.008)，但強度(ICIR -0.14)遠低於預期。多空兩端腿報酬(long 0.03, short 0.039)皆為正，顯示因子與報酬呈非單調(U型)關係而非乾淨線性反轉，投信作帳均值回歸敘事未獲資料支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信6個月平滑買超力道與後續報酬非線性反轉關係，兩極端報酬皆略優於中段，暗示投信買賣超與其他選股能力混雜；單一個案，直接的『作帳消退回吐』表達已被證偽，但不足以完全排除投信流量類因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0390",
+ "ts": "2026-07-28T18:41:52"
+}

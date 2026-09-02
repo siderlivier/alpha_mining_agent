@@ -1,0 +1,89 @@
+{
+ "round": 58,
+ "category": "financial_smart_money_capital_recognition",
+ "hypothesis": "金融股的價值通常錨定於淨值(資產品質)而非盈餘(盈餘易受提存與一次性項目干擾)，外資持股比率的持續變化代表外部專業投資人對資本適足與資產品質的長期研判；當淨值便宜的金控股同時外資持續加碼，代表這是經過專業盡職調查後的價值認可，而非單純便宜陷阱。",
+ "prediction": "金融子樣本 sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；與F-002(bp×roe)相關性 < 0.5，證明外資流向提供了ROE未能捕捉的資本品質資訊。",
+ "formula": "mul(cs_rank(bp), cs_rank(frgn_ratio_d63))",
+ "name_zh": "外資認可便宜金控",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(frgn_ratio_d63))",
+  "fhash": "69bdb38d39d8e540",
+  "sub_train": {
+   "mean_ic": 0.029,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.18,
+   "decay_pct": 42.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    -0.008,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.047,
+    "盤整"
+   ],
+   "2019": [
+    -0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.036,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.39,
+   "半導體": 0.03,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.3,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.47
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.31 < 0.45; validation ICIR 0.18 < 0.3"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "distill_failed": true,
+ "id": "A-0888",
+ "ts": "2026-08-19T00:25:17"
+}

@@ -1,0 +1,92 @@
+{
+ "round": 5,
+ "category": "volatility_term_structure_stabilization",
+ "hypothesis": "當近一個月波動度(vol_21)相對於半年波動度(vol_126)明顯下降，代表股票近期不確定性正在消退（消息面平靜、事件性波動已過去），這種波動率「降溫」訊號代表風險溢酬應下修、合理估值上修，但市場對波動率結構變化的重新定價存在滯後；此機制與F-005靜態低波動水準不同，這裡捕捉的是波動率的動態變化而非水準本身。",
+ "prediction": "sub-train ICIR > 0.45；此因子與F-005(neg vol_126)相關係數 < 0.5(驗證動態比值與靜態水準是不同訊號)；下跌月IC應不劣於上漲月IC。",
+ "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+ "name_zh": "波動降溫效應",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": -0.02
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 月換手 0.67 > 0.4"
+ },
+ "diagnosis": "與F-005相關係數確實很低(-0.02)，證實這是動態波動結構而非靜態水準的獨立訊號，這部分預測正確。但down_months IC(0.009)反而低於up_months(0.024)，與『下跌月不遜於上漲月』的預測相反；且validation衰減78%、換手率0.67偏高，vol_21比值本身月度雜訊過大，『波動降溫→重新評價』機制站不住腳。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "短/長波動度比值類『降溫』訊號在月頻上雜訊過大，難以產生穩定報酬訊號，除非搭配更強的平滑，否則應降低優先度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0093",
+ "ts": "2026-07-19T17:32:32"
+}

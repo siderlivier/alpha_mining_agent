@@ -1,0 +1,88 @@
+{
+ "round": 5,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "52週新高錨定效應（投資人對前波高點有心理錨定、賣壓集中在新高附近，突破後賣壓消化需要時間）在低關注度（低成交金額）股票中更顯著，因為套利者與法人研究覆蓋不足，資訊消化與價格發現速度較慢，使錨定效應與後續動能延續的時間更長。",
+ "prediction": "sub-train ICIR > 0.45；且應與F-003(sp×sign(rev_yoy))、F-002(bp×roe)相關係數 < 0.5(通過相關性快篩，避免重蹈因高相關被淘汰的覆轍)。",
+ "formula": "cs_rank(sdiv(px_hi252, amt_21))",
+ "name_zh": "冷門股新高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(px_hi252, amt_21))",
+  "fhash": "f6ec1c15a0ed562b",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.12
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.04,
+   "decay_pct": 63.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.006,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    0.039,
+    "盤整"
+   ],
+   "2019": [
+    -0.026,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": -0.039
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.41,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.048,
+   "short_excess_ann": 0.043
+  },
+  "coverage": 0.93,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.12，遠低於預測，且cond_ic呈現強烈順週期(up 0.03 vs down -0.039)，與『冷門股緩慢價格發現』故事所暗示的持續性/落後效應相反；半導體、金融產業ICIR甚至為負。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "低關注度股票的52週新高錨定效應沒有顯現預期的慢速擴散特徵，比值行為更像普通動能曝險。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0088",
+ "ts": "2026-07-19T17:32:31"
+}

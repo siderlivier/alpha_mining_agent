@@ -1,0 +1,84 @@
+{
+ "round": 12,
+ "category": "earnings_congruence_quality",
+ "hypothesis": "當EPS年增率大幅超越營業利益年增率，代表帳面獲利成長主要來自業外一次性損益(匯兌、處分利益、稅務優惠)而非本業經營改善；市場常對EPS數字反應過度而未細究組成，本業成長跟得上或超前EPS成長(無業外墊高)的公司才是真正值得信任、可延續的品質訊號。",
+ "prediction": "sub-train ICIR > 0.45；與F-001相關係數應<0.5；四產業cond_ic方向應一致為正",
+ "formula": "cs_rank(sub(op_income_yoy, eps_yoy))",
+ "name_zh": "本業帳面一致",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(op_income_yoy, eps_yoy))",
+  "fhash": "86a2e9a15c39d304",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.55,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "完全反向——預測本業成長跟上EPS成長時應正向預測報酬,但sub-train為負(-0.06)且validation大幅轉負(-0.55),cond_ic上漲下跌月皆負,四產業ICIR全部為負。顯示op_income_yoy超越eps_yoy時,市場給予更低評價而非品質溢價,可能因為此時EPS落後代表業外認列虧損或稅務負擔侵蝕獲利。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「業外墊高EPS=品質差」的假設方向與資料相反;更可能的解釋是本業優於EPS代表業外一次性損失拖累獲利,是短期利空而非可信賴的品質訊號,此構造若要用宜考慮反向測試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0200",
+ "ts": "2026-07-21T11:46:43"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 42,
+ "category": "biotech_profitability_stereotype_discount",
+ "hypothesis": "多數生技公司仍處燒錢研發階段，投資人對整個板塊套用高風險/難獲利刻板印象；即使少數生技公司已達成真實且盈餘品質乾淨的獲利，市場仍給予類股風險折價而非重新歸類，此類股標籤黏著性造成系統性低估。",
+ "prediction": "sub-train ICIR>0.45；industry_icir於生技應為四產業最高；多頭腿年化超額報酬>0；與F-021相關性|ρ|<0.5(產業與估值欄位皆不同)。",
+ "formula": "mul(cs_rank(ep), cs_rank(neg(accruals)))",
+ "name_zh": "生技獲利偏見折價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ep"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ep), cs_rank(neg(accruals)))",
+  "fhash": "0cf454d4edd9091c",
+  "sub_train": {
+   "mean_ic": 0.057,
+   "icir": 0.64
+  },
+  "validation": {
+   "mean_ic": 0.068,
+   "icir": 1.06,
+   "decay_pct": -67.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    0.062,
+    "多頭"
+   ],
+   "2015": [
+    0.095,
+    "盤整"
+   ],
+   "2016": [
+    0.071,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    0.05,
+    "盤整"
+   ],
+   "2019": [
+    0.087,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.066,
+   "down_months": 0.046
+  },
+  "industry_icir": {
+   "電子": 0.67,
+   "生技": 0.58,
+   "半導體": 0.31,
+   "金融": 0.32
+  },
+  "legs": {
+   "long_excess_ann": 0.037,
+   "short_excess_ann": 0.04
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.19,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.65,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.65 > 0.5"
+ },
+ "diagnosis": "預測生技業industry_icir應最高(>0.5)；實際電子(0.67)高於生技(0.58)，產業專屬假設未獲支持——原因是公式ep×neg(accruals)完全沒有生技產業條件化，只是套用全市場的通用品質價值因子，事後看industry_icir無法驗證『生技刻板印象折價』機制。整體表現優異(sub-train 0.64/validation 1.06)，但死於stage2：與F-002（金融品質價值）相關性0.65，同樣是通用品質價值因子撞車。",
+ "failure_type": "expression_bad",
+ "lesson": "要真正檢驗『某產業被系統性低估』的假設，公式需要對目標產業做顯式mask或interaction，而非套用通用公式後看industry_icir——否則因子表現越好，越容易撞上庫內既有的通用品質價值因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0652",
+ "ts": "2026-08-12T09:45:44"
+}

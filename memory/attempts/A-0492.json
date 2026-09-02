@@ -1,0 +1,84 @@
+{
+ "round": 32,
+ "category": "revenue_signal_divergence_continuation",
+ "hypothesis": "當月營收月增率(rev_mom)明顯超越其年增率(rev_yoy)隱含的正常季節性水準，代表營收出現非季節性的額外加速。台灣月營收公告後，法人通常要等到季報或法說會才會系統性上修預估，因此此正向意外訊號在短期內具延續性而非均值回歸。",
+ "prediction": "sub-train ICIR>0.45；上漲月與下跌月IC同號（驗證延續特性，區別於既有均值回歸假設）；多頭腿年化超額>0。",
+ "formula": "cs_rank(sub(rev_mom,rev_yoy))",
+ "name_zh": "營收超季節加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_mom,rev_yoy))",
+  "fhash": "af2e63ea4168dcb8",
+  "sub_train": {
+   "mean_ic": -0.04,
+   "icir": -0.58
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.34,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.037,
+    "多頭"
+   ],
+   "2015": [
+    -0.048,
+    "盤整"
+   ],
+   "2016": [
+    -0.048,
+    "多頭"
+   ],
+   "2017": [
+    -0.042,
+    "多頭"
+   ],
+   "2018": [
+    -0.026,
+    "盤整"
+   ],
+   "2019": [
+    -0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.034,
+   "down_months": -0.036
+  },
+  "industry_icir": {
+   "電子": -0.69,
+   "生技": -0.42,
+   "半導體": -0.35,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.079,
+   "short_excess_ann": -0.067
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.55,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測方向(pos)與實際完全相反：sub-train與validation IC皆為負，且在7個年度、多空月、四大產業中全部同號為負，訊號一致性極高。這代表『非季節性營收加速具延續性』的假設被證偽，反而更像均值回歸——營收月增大幅超越年增隱含水準後，短期內容易修正回落，可能反映季節性/一次性認列被錯誤解讀為加速。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "rev_mom顯著超越rev_yoy隱含水準的『超季節加速』在台股短期是均值回歸訊號，不是延續訊號；未來若再測試營收月增v.s.年增的差異項，應預設負向（去追高）而非正向（追價）方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0492",
+ "ts": "2026-07-29T23:57:20"
+}

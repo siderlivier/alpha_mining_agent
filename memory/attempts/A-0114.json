@@ -1,0 +1,87 @@
+{
+ "round": 7,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "月營收年增率的短期加速度反映公司基本面轉折點，但台股法人研究多依賴季報更新，月營收轉強的訊息要等到下一季財報才會被完整定價，導致產業內對加速轉強公司的評價存在系統性滯後。",
+ "prediction": "sub-train 產業內 ICIR>0.45；且訊號在下一次季報公布前1-2個月的IC應顯著高於財報公布後，驗證是滯後定價而非季報公布當下反應。",
+ "formula": "cs_rank(delta(rev_yoy,3))",
+ "name_zh": "營收加速轉強",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(rev_yoy,3))",
+  "fhash": "458d807b62e6b7e6",
+  "sub_train": {
+   "mean_ic": 0.02,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.26,
+   "decay_pct": 4.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.005,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.0,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.024,
+    "盤整"
+   ],
+   "2019": [
+    0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.62,
+   "生技": -0.1,
+   "半導體": 0.29,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.041,
+   "short_excess_ann": 0.054
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.61,
+  "stage2_max_rho": {
+   "factor": "F-003",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.27 < 0.45; validation ICIR 0.26 < 0.3; 月換手 0.61 > 0.4"
+ },
+ "diagnosis": "預測sub-train產業內ICIR>0.45；實際整體ICIR僅0.27，但分產業拆解顯示電子產業ICIR高達0.62遠超門檻，代表訊號在電子股確實存在，只是被生技(-0.1)、金融(0.09)稀釋。滯後定價的分段檢驗(季報前後IC對比)未被納入診斷欄位，無法驗證。真正致命傷是月換手0.61超過0.4門檻，短窗口delta(rev_yoy,3)訊號本身翻轉過快。",
+ "failure_type": "expression_bad",
+ "lesson": "全市場cs_rank會稀釋產業專屬效應，應改用產業內rank或限定電子股單獨建模；同時short-window delta類公式換手率偏高，建議疊加ts_mean平滑降低換手。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0114",
+ "ts": "2026-07-19T17:59:13"
+}

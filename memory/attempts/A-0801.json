@@ -1,0 +1,87 @@
+{
+ "round": 52,
+ "category": "opex_investment_intensity/生技限定",
+ "hypothesis": "全市場毛利-營益缺口擴大已驗證代表費用侵蝕獲利、市場正確定價為負向；但生技股的高研發費用是為推進臨床試驗、建立新藥管線的有意識長期投資，缺口擴大反映的是燒錢换取未來里程碑價值，而非管理失控，此機制僅在生技產業成立、與全市場方向相反。",
+ "prediction": "sub-train ICIR>0.45(生技產業子樣本,正向)；industry_icir(生技)顯著為正且高於全市場基準(全市場已知為負)；多頭腿年化超額>0",
+ "formula": "cs_rank(sub(gross_margin, op_margin))",
+ "name_zh": "生技研發燒錢股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(gross_margin, op_margin))",
+  "fhash": "b0b751fa87931268",
+  "sub_train": {
+   "mean_ic": -0.04,
+   "icir": -0.41
+  },
+  "validation": {
+   "mean_ic": -0.038,
+   "icir": -0.51,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.01,
+    "多頭"
+   ],
+   "2014": [
+    -0.029,
+    "多頭"
+   ],
+   "2015": [
+    -0.053,
+    "盤整"
+   ],
+   "2016": [
+    -0.069,
+    "多頭"
+   ],
+   "2017": [
+    -0.103,
+    "多頭"
+   ],
+   "2018": [
+    -0.008,
+    "盤整"
+   ],
+   "2019": [
+    -0.068,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.049,
+   "down_months": -0.015
+  },
+  "industry_icir": {
+   "電子": -0.33,
+   "生技": -0.34,
+   "半導體": -0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.026,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.06,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "假設宣稱生技產業會對已知全市場負向的『毛利-營益缺口』出現反轉(正向)，實測完全推翻：整體IC為-0.41(icir)，生技產業別ICIR為-0.34，與電子(-0.33)幾乎一致，未見任何反轉跡象，方向與假設宣稱相反。結合C-5(同樣是生技特例反轉假說，同樣方向失敗)，本輪兩個獨立的『生技特例反轉』測試都以相同模式落敗。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『生技燒錢/財報波動其實是好事、應反轉解讀既有負向因子』類假說本輪兩次獨立測試(C-5、C-13)皆失敗，生技子樣本方向與全市場一致為負，未見反轉。此類生技例外假設未來需要更具體機制(如實際藥證/授權里程碑事件資料)佐證，而非僅用財務波動或費用率代理變數推論。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0801",
+ "ts": "2026-08-14T01:18:09"
+}

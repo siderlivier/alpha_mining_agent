@@ -1,0 +1,84 @@
+{
+ "round": 2,
+ "category": "earnings_quality_momentum",
+ "hypothesis": "現金流含金量(ocf_ratio)短窗口(3個月)改善同時本業獲利成長(op_income_yoy)為正，代表獲利品質與成長雙重確認；此訊號需同時處理不同頻率資料，多數投資人僅看單一指標，形成短期反應不足。",
+ "prediction": "sub-train ICIR>0.35；短窗口版本ICIR應高於12個月長窗口版本(驗證加速度優於水準值)。",
+ "formula": "cs_rank(mul(delta(ocf_ratio,3), sign(op_income_yoy)))",
+ "name_zh": "現金流品質轉強",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(delta(ocf_ratio,3), sign(op_income_yoy)))",
+  "fhash": "1b2ec5ebf7ffa332",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.04
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.07,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.032,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.025,
+    "盤整"
+   ],
+   "2016": [
+    0.026,
+    "多頭"
+   ],
+   "2017": [
+    -0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.005,
+   "down_months": 0.007
+  },
+  "industry_icir": {
+   "電子": -0.12,
+   "生技": 0.01,
+   "半導體": -0.08,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": -0.002
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.35,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.35，實際sub-train為-0.04接近零、驗證期僅0.07，逐年正負交錯(2013 -0.032、2016 +0.026、2017 -0.04)無穩定方向，顯示「短窗口現金流轉強+本業成長方向」雙重確認機制未獲支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "以sign()對兩個本身IC基礎薄弱的品質指標做交乘確認，交乘後仍是雜訊；雙重確認型訊號應先驗證單一底層指標本身有基礎IC，再談交乘增強。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0041",
+ "ts": "2026-07-19T09:53:03"
+}

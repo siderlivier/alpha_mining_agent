@@ -1,0 +1,83 @@
+{
+ "round": 38,
+ "category": "attention_awakening_liquidity_shock",
+ "hypothesis": "依據有限注意力理論，個股長期乏人問津後成交金額相對自身波動突然放大，代表新資訊或事件正被少數敏銳投資人發現，但因多數法人與散戶監控頻率低，訊息擴散需要數月才能完全反映到股價，形成延續性超額報酬。",
+ "prediction": "sub-train ICIR > 0.45；訊號在過去24個月成交金額基期偏低的股票中應更明顯；多頭腿年化超額報酬須>0。",
+ "formula": "cs_rank(sdiv(delta(amt_21,6), ts_std(amt_21,24)))",
+ "name_zh": "流動性覺醒訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(amt_21,6), ts_std(amt_21,24)))",
+  "fhash": "177817610ab0de3c",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.12
+  },
+  "validation": {
+   "mean_ic": -0.014,
+   "icir": -0.24,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.047,
+    "多頭"
+   ],
+   "2014": [
+    -0.005,
+    "多頭"
+   ],
+   "2015": [
+    0.018,
+    "盤整"
+   ],
+   "2016": [
+    -0.008,
+    "多頭"
+   ],
+   "2017": [
+    -0.02,
+    "多頭"
+   ],
+   "2018": [
+    -0.009,
+    "盤整"
+   ],
+   "2019": [
+    -0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.009,
+   "down_months": -0.019
+  },
+  "industry_icir": {
+   "電子": -0.01,
+   "生技": -0.15,
+   "半導體": -0.2,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.035
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.45,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際為-0.12（validation -0.24），方向與預期完全相反，且橫跨2013-2019多數年份與四大產業（半導體-0.20、生技-0.15最負）皆為負，不是單一年份雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "冷門股放量後續延續性上漲的假設在stage1即全面轉負，顯示台股「基期偏低放量」更可能對應出貨/利空而非資訊優勢建倉；下次測此機制應先驗證下跌情境下的反向效果，而非預設正向延續。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0579",
+ "ts": "2026-07-30T01:16:47"
+}

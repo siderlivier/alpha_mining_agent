@@ -1,0 +1,84 @@
+{
+ "round": 26,
+ "category": "institutional_divergence",
+ "hypothesis": "外資近月淨買超與半年動能同時強勁，代表外資買盤是價格趨勢的主要驅動力而非雜訊；此「量價確認」訊號比單純動能或單純外資流量更可信，因外資交易多基於基本面研究、具持續性，市場對此同步確認訊號反應不足。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；多頭腿超額報酬>0；與C-8及既有動能類相關係數<0.5。",
+ "formula": "mul(cs_rank(frgn_net_21), cs_rank(mom_120))",
+ "name_zh": "外資動能確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_net_21), cs_rank(mom_120))",
+  "fhash": "47ef9b34f3daad53",
+  "sub_train": {
+   "mean_ic": 0.002,
+   "icir": 0.02
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": -42.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.006,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.002,
+    "多頭"
+   ],
+   "2018": [
+    -0.0,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": -0.031
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": 0.19,
+   "半導體": -0.16,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.035,
+   "short_excess_ann": 0.02
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.5,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "ICIR幾近於零(0.02)，遠低於預測>0.45。上漲月/下跌月IC呈現明顯不對稱(0.016 vs -0.031)，顯示這個「外資動能確認」組合更像是在承接動能崩跌時的beta風險，而非法人買盤的持續性訊號；兩個各自偏弱的訊號相乘放大了雜訊而非確認彼此。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "將兩個獨立偏弱訊號相乘（外資淨買超×動能）並不會產生「確認」效果，反而可能放大下跌月的risk暴露；「量價確認」類假說要成立，兩個輸入訊號本身都需要有一定獨立解釋力，而非寄望乘積產生綜效。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0407",
+ "ts": "2026-07-28T18:54:36"
+}

@@ -1,0 +1,92 @@
+{
+ "round": 25,
+ "category": "momentum_continuation_institutional_accumulation",
+ "hypothesis": "法人為避免price impact需數月才能建置大額部位；股價過去一年上漲但近半年漲幅相對收斂(長期動能強於中期動能)，代表法人仍在緩步加碼尚未完成，價格慣性因建倉行為的時間分散而延續。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；下跌月與上漲月IC同號。",
+ "formula": "cs_rank(sub(mom_240, mom_120))",
+ "name_zh": "法人建倉延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_120",
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_120))",
+  "fhash": "a5ba578eec8426d0",
+  "sub_train": {
+   "mean_ic": 0.034,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.11,
+   "decay_pct": 68.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.138,
+    "盤整"
+   ],
+   "2013": [
+    0.042,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.064,
+    "盤整"
+   ],
+   "2016": [
+    -0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.06,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.058,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.32,
+   "半導體": 0.13,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.025
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.26,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.2
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.11 < 0.3; validation 衰減 68% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR預測>0.45，實際0.36且validation暴跌至0.11(衰減68%)。up/down月同號的預測成立，但逐年IC不穩定，2012年異常值(0.138)拉高均值，2016/2018轉負，效果由單一年份雜訊主導而非穩定持續。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "長短期動能價差(mom_240-mom_120)代理『法人緩步建倉』在台股呈現高年度變異、無單調趨勢，機構分批建倉假說未獲跨年一致證據；單一個案，不足以完全排除同類價差構造，但需更直接的法人買賣超資料才能重新驗證。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0387",
+ "ts": "2026-07-28T18:41:52"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 61,
+ "category": "dividend_increase_signaling",
+ "hypothesis": "殖利率的近期上升(delta)反映管理層調升配息的具體政策動作，依股利信號理論，這是管理層對未來現金流可持續性的成本高昂承諾，屬於離散事件型訊號，與先前已測試4次失敗的「殖利率水準/穩定度」靜態篩選機制角度完全不同，市場對配息政策變動的反應存在滯後。",
+ "prediction": "sub-train ICIR > 0.4；需與規則14既有失敗版本(殖利率水準+獲利穩定度)明確區分，若ICIR仍<0.2則確認股利類機制全數失效",
+ "formula": "cs_rank(delta(div_yield,12))",
+ "name_zh": "股利調升訊號股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(div_yield,12))",
+  "fhash": "67ee0fe11bf501aa",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": -0.01,
+   "icir": -0.15,
+   "decay_pct": 159.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.002,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.04,
+   "生技": 0.21,
+   "半導體": 0.02,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.014,
+   "short_excess_ann": -0.009
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.17,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "提案本身已註明這是第5次嘗試不同角度的股利類因子（前4次為殖利率水準/穩定度失敗），這次改用delta(div_yield,12)捕捉配息政策的離散調升動作。sub-train ICIR 0.25雖略高於候選自訂的0.2確認線，但仍遠低於0.4門檻，且validation轉負(-0.15，decay 159%即符號反轉)，長短腳雙雙為負，五次不同角度的股利因子全數失敗，已足夠構成該類別的通則性證據，而非單一個案的表達或運氣問題。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "股利相關因子（殖利率水準、穩定度、變動量）在此資料/期間上已連續5次獨立嘗試全數失敗，應視為該類別機制性不成立，暫停再投入新的股利角度變體，除非有本質不同的資料來源（如宣告日事件、法說會語氣等）。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0938",
+ "ts": "2026-08-27T10:25:20"
+}

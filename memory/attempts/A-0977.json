@@ -1,0 +1,90 @@
+{
+ "round": 64,
+ "category": "quality_backed_revenue_growth",
+ "hypothesis": "营收成长强劲同时应计项维持低位，代表这段成长是真实现金流驱动而非透过激进认列营收/延后费用等会计操作粉饰出来的；市场常将「营收数字好看」一律视为利多，未细分成长品质，导致真正干净的成长股与灌水式成长股被同等定价，形成系统性低估的子群体。",
+ "prediction": "sub-train ICIR>0.4；与F-006、F-012截面相关性|ρ|<0.5；营收成长前20%且应计项后20%组的多头腿年化超额报酬应显著为正",
+ "formula": "mul(cs_rank(rev_yoy), cs_rank(neg(accruals)))",
+ "name_zh": "真实营收品质",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(rev_yoy), cs_rank(neg(accruals)))",
+  "fhash": "d583176cbe9df433",
+  "sub_train": {
+   "mean_ic": 0.047,
+   "icir": 0.57
+  },
+  "validation": {
+   "mean_ic": 0.043,
+   "icir": 0.68,
+   "decay_pct": -20.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.079,
+    "盤整"
+   ],
+   "2016": [
+    0.045,
+    "多頭"
+   ],
+   "2017": [
+    0.047,
+    "多頭"
+   ],
+   "2018": [
+    0.039,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.05,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.62,
+   "生技": 0.35,
+   "半導體": 0.37,
+   "金融": 0.26
+  },
+  "legs": {
+   "long_excess_ann": 0.058,
+   "short_excess_ann": 0.038
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.39,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.52,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "統計預測全部命中甚至更好(sub-train0.57/validation0.68/decay-20%/多頭腿正)，唯獨相關性檢查栽在未預期的F-011(ρ=0.52)而非預測中列出的F-006/F-012，顯示紅海中心判斷錯誤。",
+ "failure_type": "duplicate",
+ "lesson": "「營收成長×應計項/品質過濾」因子空間持續撞上F-011(本輪C-4、C-9均中鏢)，F-011已是此方向紅海中心，提交前應優先對照F-011。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0977",
+ "ts": "2026-08-27T21:49:57"
+}

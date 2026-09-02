@@ -1,0 +1,91 @@
+{
+ "round": 17,
+ "category": "retail_leverage_unwind",
+ "hypothesis": "融資餘額變化率持續下降(去槓桿速度趨緩後轉穩)代表散戶恐慌性斷頭賣壓已釋放完畢，籌碼結構轉為健康；斷頭壓力測試多發生在股價下跌初期，市場對「去槓桿已結束」的反應滯後於實際籌碼壓力解除，形成築底後修正性上漲。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC顯著高於上漲月IC；月換手率<0.4",
+ "formula": "cs_rank(neg(ts_slope(margin_d21,6)))",
+ "name_zh": "融資去槓桿趨緩",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_slope(margin_d21,6)))",
+  "fhash": "d0342bfe8b0fd686",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.06,
+   "decay_pct": 85.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.041,
+    "盤整"
+   ],
+   "2013": [
+    0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.044,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.041,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.0,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.1,
+   "生技": 0.04,
+   "半導體": 0.23,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.47,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": -0.08
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.38 < 0.45; validation ICIR 0.06 < 0.3; validation 衰減 85% > 50%（過擬合徵兆）; 月換手 0.47 > 0.4"
+ },
+ "diagnosis": "預測ICIR>0.45且下跌月IC顯著高於上漲月。實際sub-train ICIR 0.38接近門檻但未達標，validation僅0.06(衰減85%)。cond_ic下跌月0.024僅略高於上漲月0.018，並未「顯著」領先。逐年IC在2012-2017多為正且不小(0.025-0.044)，但2018-2019驟降至0.008、0.000，與C-1(78%衰減)、C-7(145%衰減)、C-10(61%衰減)呈現同樣模式：技術性「壓力後回穩」類敘事在2012-2017窗口表現良好，之後系統性失效。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "融資去槓桿趨緩→修正性上漲的機制在validation期基本消失，且下跌月優勢不如預期顯著，此為「壓力後回穩」類敘事第三次出現同樣衰減模式(見全域規則)。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0272",
+ "ts": "2026-07-21T12:47:40"
+}

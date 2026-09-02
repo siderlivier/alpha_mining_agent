@@ -1,0 +1,90 @@
+{
+ "round": 55,
+ "category": "quality_dividend_confirmation",
+ "hypothesis": "高股利殖利率常被市場貼上「無成長/價值陷阱」標籤而遭系統性折價，但若同時檢視應計項偏低（顯示盈餘含金量高、配息能力真實可持續），則能篩選出真正具備永續配息能力而非虛胖獲利支撐配息的公司，此為股利標籤偏誤下的錯誤定價。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-006、F-021、F-002相關性均需|ρ|<0.5。",
+ "formula": "mul(cs_rank(div_yield), cs_rank(neg(accruals)))",
+ "name_zh": "真金流高股息股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(div_yield), cs_rank(neg(accruals)))",
+  "fhash": "135e43c916b00047",
+  "sub_train": {
+   "mean_ic": 0.047,
+   "icir": 0.51
+  },
+  "validation": {
+   "mean_ic": 0.073,
+   "icir": 1.01,
+   "decay_pct": -97.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.087,
+    "盤整"
+   ],
+   "2016": [
+    0.066,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.07,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.057,
+   "down_months": 0.051
+  },
+  "industry_icir": {
+   "電子": 0.57,
+   "生技": 0.52,
+   "半導體": 0.4,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": -0.007,
+   "short_excess_ann": 0.008
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.16,
+  "stage2_culprit": {
+   "factor": "F-006",
+   "rho": 0.52,
+   "factor_name": "低應計品質股",
+   "factor_desc": "應計項長期偏低的公司盈餘含金量高，市場常高估高應計公司獲利的持續性。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-006 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "訓練期ICIR 0.51達標，驗證期大幅提升至1.01，上漲/下跌月同向(0.057 vs 0.051)，多項預測方向正確；唯多頭腿報酬為負(-0.007)，IC強但多頭端未貨幣化，與C-2/C-8觀察到的模式一致。死因是與F-006（低應計品質股）相關0.52，accruals作為品質確認變數幾乎必然與F-006重疊。",
+ "failure_type": "duplicate",
+ "lesson": "accruals只要作為任一候選的次要確認變數，幾乎必定與F-006產生中高相關；下次引入盈餘品質視角應避開直接用accruals，改用其他品質代理。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0846",
+ "ts": "2026-08-18T23:46:33"
+}

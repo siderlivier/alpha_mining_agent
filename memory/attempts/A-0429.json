@@ -1,0 +1,92 @@
+{
+ "round": 28,
+ "category": "momentum_term_structure_underreaction",
+ "hypothesis": "長期(12個月)動能扣除短期(3個月)動能後仍為正，代表法人建倉的長期趨勢仍在，只是短期出現停頓；投資人常對短期停滯過度解讀為趨勢結束而提前獲利了結，造成對真正延續中趨勢的低估。",
+ "prediction": "sub-train ICIR>0.45；validation衰減<50%；多頭腿年化超額報酬>0；此訊號應在半導體/電子產業(法人集中度高)ICIR相對更強。",
+ "formula": "cs_rank(sub(mom_240, mom_60))",
+ "name_zh": "長短動能剪刀差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.25
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "sub-train ICIR 0.36不僅未達0.45門檻，且用來檢驗機制('法人建倉集中度')的兩個輔助預測都落空：半導體industry_icir(0.10)是四產業最低而非最高，生技(0.35)反而最高；多頭腿(0.022)遠弱於空頭腿(0.042)，顯示殘存的弱訊號主要來自空頭端，不是機制所稱的'多頭趨勢延續被低估'。decay 47%本身接近及格邊緣，真正的殺手是機制敘事被數據反證，而非單純過擬合。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用『法人集中度』類敘事去預測 industry_icir 分佈前，先確認有無獨立證據支持該產業法人持股比例與訊號強度的關聯，不要只靠常識推論；長短動能剪刀差的殘餘訊號似乎更集中在空頭端，若要保留此方向，應直接以空頭腿表現為核心重新設計檢驗指標而非多頭腿。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0429",
+ "ts": "2026-07-28T19:19:09"
+}

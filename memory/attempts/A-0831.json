@@ -1,0 +1,94 @@
+{
+ "round": 54,
+ "category": "cash_backed_value_orphan",
+ "hypothesis": "盈餘殖利率便宜（ep高）但現金流品質差的公司常是「會計便宜陷阱」；搭配ocf_ratio篩選出獲利真的能轉換成現金的便宜股，此組合換掉F-019用的sp（營收基準），測試用最常見的盈餘殖利率版本能否跳脫電子限定、在全市場成立。",
+ "prediction": "sub-train ICIR>0.45（全市場）；與F-019相關係數|ρ|<0.5；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_rank(ocf_ratio), cs_rank(ep))",
+ "name_zh": "現金含金盈餘股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ep",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio), cs_rank(ep))",
+  "fhash": "bb00b5df3267387e",
+  "sub_train": {
+   "mean_ic": 0.057,
+   "icir": 0.6
+  },
+  "validation": {
+   "mean_ic": 0.06,
+   "icir": 0.97,
+   "decay_pct": -60.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.087,
+    "盤整"
+   ],
+   "2013": [
+    0.001,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.081,
+    "盤整"
+   ],
+   "2016": [
+    0.077,
+    "多頭"
+   ],
+   "2017": [
+    0.05,
+    "多頭"
+   ],
+   "2018": [
+    0.03,
+    "盤整"
+   ],
+   "2019": [
+    0.089,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.064,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.65,
+   "生技": 0.5,
+   "半導體": 0.34,
+   "金融": 0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.045,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.19,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.7,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.70 > 0.5"
+ },
+ "diagnosis": "預測與F-019 ρ<0.5，實際culprit卻是完全未預期的F-002（金融品質價值，ρ=0.70），而非預測鎖定的F-019。顯示ocf_ratio x ep這個組合的重疊來源被錯判——ocf_ratio與ROE-like的品質指標在覆蓋率0.91（含大量金融股）的樣本下高度相關，重複風險其實來自品質維度而非估值維度。",
+ "failure_type": "duplicate",
+ "lesson": "做相關性風險預判時不能只鎖定『看起來最像』的單一庫內因子（如本例的F-019），ocf_ratio這類現金流品質指標本身可能與其他『品質x估值』因子（如F-002）在金融股高覆蓋樣本下產生意外的高相關，應在假設階段對ocf_ratio的既有重複來源做更廣的掃描。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0831",
+ "ts": "2026-08-18T21:21:48"
+}

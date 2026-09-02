@@ -1,0 +1,87 @@
+{
+ "round": 53,
+ "category": "quality_confirmed_momentum",
+ "hypothesis": "季線動能(mom_60)疊加毛利率水準的雙重確認，篩選出『價格上漲且具備產品定價權』的股票，區隔純資金推升的動能陷阱；毛利率水準代表定價權護城河，此為市場對動能真偽判斷不足的機制。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬顯著>0；與F-016(px_hi252×op_income_yoy)相關係數應<0.5。",
+ "formula": "cs_rank(mul(cs_rank(mom_60), cs_rank(gross_margin)))",
+ "name_zh": "動能毛利雙確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(cs_rank(mom_60), cs_rank(gross_margin)))",
+  "fhash": "b44f64e7e068c59e",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.12
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 21.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.027,
+    "盤整"
+   ],
+   "2013": [
+    0.017,
+    "多頭"
+   ],
+   "2014": [
+    -0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.037,
+    "盤整"
+   ],
+   "2016": [
+    -0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    -0.015,
+    "盤整"
+   ],
+   "2019": [
+    0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": -0.0
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": -0.01,
+   "半導體": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.043,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.86,
+  "turnover_m": 0.33,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train/validation ICIR均低(0.12/0.09)，多空腿超額報酬雖同為正但差異極小(4.3% vs 3.7%)，顯示動能與毛利率兩個排序相乘後互相稀釋而非強化，「毛利率確認動能真偽」假設未獲數據支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "兩個中等強度因子用cs_rank相乘的『確認式』構造，容易讓邊際訊息互相稀釋成接近雜訊；確認型構造更適合用一個強因子做門檻篩選、另一個弱因子加分，而非等權相乘。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0811",
+ "ts": "2026-08-15T11:33:03"
+}

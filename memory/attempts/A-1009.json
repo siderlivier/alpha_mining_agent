@@ -1,0 +1,84 @@
+{
+ "round": 66,
+ "category": "earnings_price_lag_underreaction",
+ "hypothesis": "EPS 年增率高、但股價過去一季不漲反跌的股票，存在典型的財報後漂移（PEAD）未定價空間——負動能吸引賣壓與稅損賣出，掩蓋基本面改善訊號，套利者因擔心接刀而不願及時進場。當市場情緒轉向，被壓抑的盈餘動能會補漲。rank_nz 確保只在有 EPS 資料的樣本內排名。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿（高 EPS 成長+弱股價）年化超額 > 0（關鍵，避免淪為避雷濾網）；財報公布後 2 月內 IC 最強；與 F-024、C-2 之 |ρ| < 0.5。",
+ "formula": "rank_nz(if_else(less(mom_60,0), eps_yoy, 0))",
+ "name_zh": "落後補漲",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "rank_nz(if_else(less(mom_60,0), eps_yoy, 0))",
+  "fhash": "2dbc88cb359a0843",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.1
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.2,
+   "decay_pct": -99.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.008,
+    "盤整"
+   ],
+   "2016": [
+    -0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.029,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.01,
+   "down_months": 0.019
+  },
+  "industry_icir": {
+   "電子": 0.17,
+   "生技": 0.04,
+   "半導體": 0.01,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.37,
+  "turnover_m": 0.51,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測部分命中:多頭腿(高 EPS 成長+弱股價)年化 +3.1% > 空頭腿 -1.4%(確實是『該買』而非避雷濾網),validation IC 0.016、ICIR 0.20 且相對 sub-train 上升。預測失準:sub-train IC 僅 0.011(<0.4 ICIR 門檻)。病因在表達:less(mom_60,0) 硬 gate + rank_nz 使覆蓋率僅 0.37,standalone IC 在全樣本被稀釋。PEAD 未反應假說有支持,只是表達覆蓋率太低。",
+ "failure_type": "expression_bad",
+ "lesson": "PEAD『落後補漲』方向有真實多頭腿超額,但硬性動能門檻把可交易範圍砍到 37%,稀釋 standalone IC。下次:把 less(mom_60,0) 改為連續的負動能權重,或改測 eps_yoy 對 mom_60 殘差化後的排名,保留全樣本覆蓋率。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1009",
+ "ts": "2026-09-02T00:51:50"
+}

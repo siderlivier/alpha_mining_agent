@@ -1,0 +1,84 @@
+{
+ "round": 2,
+ "category": "earnings_quality_divergence",
+ "hypothesis": "當營業利益年增率(本業成長)明顯高於EPS年增率(含業外損益)，代表公司核心競爭力增強但財報淨利被一次性費損干擾；市場存在「標題數字錨定」偏誤，過度關注EPS年增率而低估本業改善的持續性，待業外干擾消失後本業成長會重新反映到EPS。",
+ "prediction": "sub-train ICIR>0.35；訊號最高分位組未來一季eps_yoy改善幅度應顯著大於最低分位組（驗證業外干擾消退機制）。",
+ "formula": "cs_rank(sub(op_income_yoy, eps_yoy))",
+ "name_zh": "本業優於帳面",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(op_income_yoy, eps_yoy))",
+  "fhash": "86a2e9a15c39d304",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.55,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測本業成長優於EPS成長應為正向低估訊號；實際sub-train接近零、validation強烈轉負(-0.55)且比sub-train更負(非典型過擬合衰退)，逐年多數為負，顯示機制方向可能相反——本業與帳面獲利分歧可能反映業外風險或財報品質疑慮，市場定價是正確的而非低估。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「本業優於帳面」型分歧指標方向與假設相反且相當穩定(validation比train更負)，可列入待驗證的反向假設，但需另一獨立證據才能升級為通則。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0046",
+ "ts": "2026-07-19T09:53:03"
+}

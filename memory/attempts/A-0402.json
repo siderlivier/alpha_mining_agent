@@ -1,0 +1,92 @@
+{
+ "round": 26,
+ "category": "smart_money_retail_divergence",
+ "hypothesis": "外資持股比率上升（法人逐步布局）同時融資餘額（散戶槓桿）下降，代表聰明資金正在買進但散戶尚未跟風甚至去槓桿，價格尚未充分反映法人買盤；散戶追價行為滯後於法人動向，此分歧可預測後續超額報酬。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬>0；月換手率<0.4（若過高需加ts_mean平滑重試）。",
+ "formula": "cs_rank(sub(cs_z(frgn_ratio_d63), cs_z(margin_d21)))",
+ "name_zh": "法人散戶背離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio_d63",
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(cs_z(frgn_ratio_d63), cs_z(margin_d21)))",
+  "fhash": "000bc615ae05dcd2",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.28
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.27,
+   "decay_pct": 2.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.009,
+    "盤整"
+   ],
+   "2013": [
+    0.076,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.013,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.032,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.027,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.14,
+   "半導體": 0.12,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.52,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.11
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.28 < 0.45; validation ICIR 0.27 < 0.3; 月換手 0.52 > 0.4"
+ },
+ "diagnosis": "ICIR未達標（0.28 vs 預測>0.45），月換手0.52超過候選自己設的0.4上限。候選假設本身已預見此風險（prediction中註明「若過高需加ts_mean平滑重試」），代表失敗模式在提交前已被正確預期，只是這版公式尚未加平滑。",
+ "failure_type": "expression_bad",
+ "lesson": "外資比率日頻(d63)與融資日頻(d21)直接相減換手率偏高；下次同機制應先加ts_mean平滑再送diagnostic，而非先跑一版驗證換手率問題。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0402",
+ "ts": "2026-07-28T18:54:35"
+}

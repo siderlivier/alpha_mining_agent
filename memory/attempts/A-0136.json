@@ -1,0 +1,86 @@
+{
+ "round": 8,
+ "category": "profitability_moat_quality",
+ "hypothesis": "毛利率絕對水準長期偏高代表公司具備定價權或技術門檻護城河；市場過度關注營收成長故事，而低估穩定高毛利本身的競爭優勢價值，尤其分析師覆蓋較少的中小型電子零組件廠，此為水準值而非已知紅海的趨勢化構造。",
+ "prediction": "sub-train ICIR > 0.45；與F-004(毛利波動度因子)相關係數 < 0.5；下跌月IC不弱於上漲月（護城河股防禦性）。",
+ "formula": "cs_rank(gross_margin)",
+ "name_zh": "毛利護城河",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(gross_margin)",
+  "fhash": "3f4a5eef7669d62f",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.18,
+   "decay_pct": -60.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.066,
+    "盤整"
+   ],
+   "2013": [
+    0.036,
+    "多頭"
+   ],
+   "2014": [
+    -0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.049,
+    "盤整"
+   ],
+   "2016": [
+    -0.027,
+    "多頭"
+   ],
+   "2017": [
+    -0.043,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.27,
+   "生技": -0.07,
+   "半導體": 0.12
+  },
+  "legs": {
+   "long_excess_ann": -0.004,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.05,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.11，validation 0.18仍低，預測ICIR>0.45落空。cond_ic下跌月(0.030)確實強於上漲月(0.001)，護城河防禦性方向被部分驗證，但多頭腿超額報酬為負(-0.004)，代表照此因子做多實際上不賺錢、不可交易。industry_icir在電子0.27、生技-0.07方向不一致，顯示毛利率水準值橫跨產業直接比較，可能被產業結構性差異(半導體天生高毛利、代工天生低毛利)淹沒訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "毛利率這類產業間基準差異極大的水準值指標，直接做全市場cs_rank會混雜產業效應而非公司內部的護城河強弱；應先做產業中立化排名再合併，而非跨產業直接比較絕對水準。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0136",
+ "ts": "2026-07-19T21:42:48"
+}

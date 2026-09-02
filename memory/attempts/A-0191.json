@@ -1,0 +1,83 @@
+{
+ "round": 12,
+ "category": "institutional_flow_reversal",
+ "hypothesis": "投信法人常有月底/季底作帳與績效排名壓力，買超行為偏向短期動能追價而非基本面研究；這類買盤在作帳動機消退後容易退潮，導致近期投信買超越重的股票次月報酬反而越弱，形成可預測的反轉。",
+ "prediction": "sub-train ICIR > 0.45；反轉效應應在作帳週期後(次月初)最明顯；全年多數月份cond_ic為正(即neg(trust_net_21)與報酬正相關)",
+ "formula": "cs_rank(neg(trust_net_21))",
+ "name_zh": "投信作帳反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(trust_net_21))",
+  "fhash": "5b1202e4dbb03ae6",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.32,
+   "decay_pct": -18.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.044,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.01,
+   "半導體": 0.29,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "方向與cond_ic大致符合預測(全年多數月份正、上漲/下跌月皆正),但強度不足,sub-train ICIR僅0.27低於門檻。公式只用粗略21日流量反轉,並未針對「月底/季底作帳週期後」做時間條件過濾,可能把事件期與非事件期訊號混在一起而稀釋。",
+ "failure_type": "expression_bad",
+ "lesson": "假設核心若是特定時間窗口的事件效應(如月底作帳反轉),用連續滾動窗口表達會稀釋訊號;應嘗試限定在季底後N個交易日開倉,或用流量相對自身波動的異常度(z-score)取代單純排名。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0191",
+ "ts": "2026-07-21T11:46:42"
+}

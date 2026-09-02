@@ -1,0 +1,87 @@
+{
+ "round": 47,
+ "category": "attention_initiation_drift",
+ "hypothesis": "依漸進資訊擴散假說，原本乏人問津的股票成交金額開始持續放大，代表新資訊正被市場逐步發現與消化，價格尚未完全反映，後續仍有正向漂移空間；此與「持續低關注度」(F-008/F-020)是相反機制。",
+ "prediction": "sub-train ICIR > 0.45；此因子與F-008、F-020相關係數應 < 0.5；多頭腿年化超額報酬 > 0。",
+ "formula": "cs_rank(ts_slope(amt_21,6))",
+ "name_zh": "關注度起漲股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(amt_21,6))",
+  "fhash": "6f21c24e840c4a42",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": 44.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.045,
+    "盤整"
+   ],
+   "2013": [
+    -0.005,
+    "多頭"
+   ],
+   "2014": [
+    0.029,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.017,
+    "多頭"
+   ],
+   "2017": [
+    -0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": -0.011
+  },
+  "industry_icir": {
+   "電子": -0.02,
+   "生技": -0.09,
+   "半導體": -0.02,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.055
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.03幾乎無訊號，多頭腿亦為負(-0.008)。'關注度起漲'的漸進擴散假說在全市場層級完全未展現，可能是因假設隱含'原本乏人問津'的前提未被公式篩選出來，全市場平均稀釋了效果。",
+ "failure_type": "expression_bad",
+ "lesson": "全市場無條件測試'關注度起漲'稀釋了訊號，因多數股票並非'原本乏人問津'——需要先做低基期篩選才能測到該效果。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0722",
+ "ts": "2026-08-12T14:54:09"
+}

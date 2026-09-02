@@ -1,0 +1,94 @@
+{
+ "round": 60,
+ "category": "value_margin_stability_composite",
+ "hypothesis": "純粹的低本益比(高ep)因價值陷阱疑慮在台股長期偏弱；但若進一步要求該公司淨利率波動度低(獲利穩定)，可篩選出真正被錯殺的便宜股而非基本面持續惡化者。市場對「便宜」的一階反應快，但對「便宜+穩定」的二階組合資訊處理較慢，因需交叉比對估值與獲利穩定度兩個不同維度的資料。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；相較單純cs_rank(ep)應有顯著改善(呼應ep已知偏弱之基準)。",
+ "formula": "cs_rank(sdiv(ep, ts_std(net_margin,12)))",
+ "name_zh": "便宜穩健雙確認股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ep",
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(ep, ts_std(net_margin,12)))",
+  "fhash": "141181b24bce42e5",
+  "sub_train": {
+   "mean_ic": 0.063,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.051,
+   "icir": 0.59,
+   "decay_pct": -7.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.192,
+    "盤整"
+   ],
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.065,
+    "多頭"
+   ],
+   "2015": [
+    0.092,
+    "盤整"
+   ],
+   "2016": [
+    0.102,
+    "多頭"
+   ],
+   "2017": [
+    0.054,
+    "多頭"
+   ],
+   "2018": [
+    0.031,
+    "盤整"
+   ],
+   "2019": [
+    0.072,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.062,
+   "down_months": 0.052
+  },
+  "industry_icir": {
+   "電子": 0.75,
+   "生技": 0.63,
+   "半導體": 0.27,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.04
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.14,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.81,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.81 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.55、validation 0.59皆達標，multi頭腿超額報酬達4.9%亦為正，各階段指標都優於預期，唯獨在stage2遭F-002以|ρ|=0.81淘汰，屬於「表現優異但撞庫存」的案例，並非機制失敗。「便宜(ep)+穩定(net_margin波動度)」的複合角度容易收斂到既有的cheap-quality軸(F-002: bp×roe)。",
+ "failure_type": "duplicate",
+ "lesson": "任何「估值指標(ep/bp/sp) × 穩定度/品質指標(std、roe等)」的乘法排序組合，都很可能收斂到F-002所代表的「cheap+quality」通用軸，即使基礎欄位不同(ep vs bp、net_margin波動 vs roe)。這是本輪最強的cheap+quality紅海邊界證據(搭配C-2/F-019、C-9/F-022、C-13/F-002，共6/15死於stage2)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0923",
+ "ts": "2026-08-20T08:30:15"
+}

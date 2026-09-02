@@ -1,0 +1,88 @@
+{
+ "round": 65,
+ "category": "semiconductor_destocking_rebound",
+ "hypothesis": "半導體產業具強烈庫存循環，毛利率仍低（尚未回升）但營收動能半年內已明顯加速回升，代表去化已近尾聲、訂單提前回溫但財報毛利尚未反映；市場慣性以毛利率判斷景氣仍看空，對此領先訊號反應遲鈍。",
+ "prediction": "限半導體產業，industry_icir(半導體) > 0.4且優於全池；多頭腿年化超額 > 0；訊號應在營收公布後1-2個月內IC達峰後緩慢衰減。",
+ "formula": "mul(cs_rank(delta(rev_mom,6)), cs_rank(neg(gross_margin)))",
+ "name_zh": "半導體回溫早鳥",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(rev_mom,6)), cs_rank(neg(gross_margin)))",
+  "fhash": "d1fb79c432c21d16",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.07
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.05,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.023,
+    "盤整"
+   ],
+   "2013": [
+    -0.042,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    -0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.034,
+    "多頭"
+   ],
+   "2018": [
+    -0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.003,
+   "down_months": -0.025
+  },
+  "industry_icir": {
+   "電子": -0.07,
+   "生技": -0.01,
+   "半導體": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.026,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.65,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測半導體 industry_icir>0.4 且多頭腿>0，實際 industry_icir(半導體)=-0.06、多頭腿-2.6%、全池 ICIR -0.07，早年顯著為負。『毛利率低估景氣、營收動能領先』的錯殺假設無任何支持；neg(gross_margin) 這條腿實際上只是選到弱勢低質股。證據足以判為機制不成立，惟無法完全排除 delta(rev_mom,6) 表達太雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "不要用 neg(margin) 當『景氣落後指標、市場過度看空』的代理——低毛利率在橫斷面上就是負向訊號。半導體庫存循環若要做，應直接用存貨/出貨或營收加速度本身，不要疊一條做空低毛利的腿。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-028",
+ "id": "A-0986",
+ "ts": "2026-09-02T00:32:52"
+}

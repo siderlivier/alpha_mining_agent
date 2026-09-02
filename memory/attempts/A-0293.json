@@ -1,0 +1,87 @@
+{
+ "round": 18,
+ "category": "momentum_consistency_persistence",
+ "hypothesis": "傳統動能因子只看當下報酬水準，容易受單月雜訊干擾；若改用『過去12個月動能排名的時序穩定度』衡量該股是否持續性地維持中高動能排名(而非單次噴出)，則能篩選出法人趨勢型建倉而非消息面單次跳空的股票。市場對『持續性動能』與『單次噴出動能』未加以區分定價，導致持續動能股的後續延續性被低估。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4(12個月時序排名應降低換手)；多頭腿超額報酬需為正",
+ "formula": "cs_rank(ts_rank(mom_60,12))",
+ "name_zh": "動能排名穩定度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(mom_60,12))",
+  "fhash": "d6ccee1ceeec3463",
+  "sub_train": {
+   "mean_ic": -0.019,
+   "icir": -0.22
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.02,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.107,
+    "盤整"
+   ],
+   "2013": [
+    -0.041,
+    "多頭"
+   ],
+   "2014": [
+    -0.011,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.0,
+   "down_months": -0.05
+  },
+  "industry_icir": {
+   "電子": -0.08,
+   "生技": -0.17,
+   "半導體": -0.23,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.013,
+   "short_excess_ann": 0.017
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.5,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45(正向)、多頭腿超額為正，實際sub-train icir為-0.22(方向直接相反)，且2012年單一極端值(-0.107)主導了均值。但關鍵線索是多頭腿與空頭腿超額報酬雙雙為正(0.013/0.017)，這與線性rank IC為負矛盾——暗示ts_rank(mom_60,12)持續度與報酬可能是非單調(U型)關係：排名穩定度太高或太低都可能跑贏中段，而線性rank IC無法捕捉這種形狀，才被誤判為負向訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "當多空兩端超額報酬同號而rank IC卻與假設方向相反時，很可能是非單調(U型)關係被線性IC掩蓋，而非機制本身無效；此時應改用分位數超額報酬圖或非線性分箱檢驗，而非只看rank IC來判斷因子生死。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0293",
+ "ts": "2026-07-21T12:59:43"
+}

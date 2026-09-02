@@ -1,0 +1,90 @@
+{
+ "round": 45,
+ "category": "quality_pullback_dip_buying",
+ "hypothesis": "高ROE公司若近一個月股價短期回檔(mom_20為負)，多源於大盤/類股系統性情緒波動而非基本面惡化；優質股基本面變化通常緩慢，但散戶對短期下跌過度反應停損，造成暫時性錯價，隨後隨基本面重新確認而修復。",
+ "prediction": "sub-train ICIR>0.45；多頭腿（高ROE+近期回檔）年化超額報酬>0；下跌月IC應更顯著；與F-001/F-012相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(roe), cs_rank(neg(mom_20)))",
+ "name_zh": "優質股逢回買點",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_20",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(roe), cs_rank(neg(mom_20)))",
+  "fhash": "3338ccadb7dfd395",
+  "sub_train": {
+   "mean_ic": 0.051,
+   "icir": 0.64
+  },
+  "validation": {
+   "mean_ic": 0.072,
+   "icir": 0.68,
+   "decay_pct": -5.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.049,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.078,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.097,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.052,
+   "down_months": 0.069
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.72,
+   "半導體": 0.4,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": -0.003,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.6,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.59,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.59 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR預測>0.45，實際0.64超標，驗證期decay僅-5%非常穩定，指標面看似最強候選之一。但預測『多頭腿年化超額報酬>0』實際落空——長腿-0.003為負、短腿反而0.032為正，若非相關性問題，此因子本身也未通過台股不易放空的可交易性要求。最終死因是與F-002（金控bp×roe）相關0.59>0.5，顯示ROE這一單一變數即是相關性主因，即便另一條腿換成動能而非淨值也難脫鉤。",
+ "failure_type": "duplicate",
+ "lesson": "含ROE的雙變數組合很容易與F-002（金融品質價值）撞相關，即使搭配的第二變數（動能而非估值）完全不同；未來含roe的新因子提案應先自行對F-002做相關性預檢。此外此因子多頭腿為負，即便通過相關性也會在可交易性上被拒，是雙重失敗案例。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0693",
+ "ts": "2026-08-12T14:25:46"
+}

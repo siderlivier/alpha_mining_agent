@@ -1,0 +1,94 @@
+{
+ "round": 2,
+ "category": "margin_trend_earnings_yield_gate",
+ "hypothesis": "金融股獲利品質改善（淨利率相對近12月處於高檔）但因產業普遍被視為無成長故事的成熟產業，市場對其獲利結構改善的重新定價速度慢；搭配正的盈餘殖利率(相對便宜)時，估值修正的時間落差更明顯。",
+ "prediction": "sub-train ICIR>0.3；此因子應主要在金融產業展現最高ICIR，且與F-002（bp×roe）截面相關度|ρ|<0.5。",
+ "formula": "cs_rank(mul(ts_rank(net_margin,12), sign(ep)))",
+ "name_zh": "淨利率轉強估值",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ep",
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(ts_rank(net_margin,12), sign(ep)))",
+  "fhash": "c35fbc72188b83a7",
+  "sub_train": {
+   "mean_ic": 0.052,
+   "icir": 0.59
+  },
+  "validation": {
+   "mean_ic": 0.055,
+   "icir": 0.82,
+   "decay_pct": -39.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.053,
+    "盤整"
+   ],
+   "2013": [
+    0.029,
+    "多頭"
+   ],
+   "2014": [
+    0.064,
+    "多頭"
+   ],
+   "2015": [
+    0.083,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.085,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.056,
+   "down_months": 0.044
+  },
+  "industry_icir": {
+   "電子": 0.71,
+   "生技": 0.58,
+   "半導體": 0.2,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.065,
+   "short_excess_ann": 0.026
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.28,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.72,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.72 > 0.5"
+ },
+ "diagnosis": "訊號本身表現優異(ICIR 0.59→0.82，驗證期更強)，證實淨利率轉強+便宜估值的機制成立，但與庫內F-002(淨值便宜×高ROE)相關度達0.72，遠超預測的<0.5，顯示『品質趨勢×估值』與『品質水準×估值』在因子空間高度重疊。",
+ "failure_type": "duplicate",
+ "lesson": "用ts_rank(獲利指標,12)這類『品質趨勢』取代『品質水準』與既有value×quality因子的相關性不能只靠直覺判斷；淨利率動能與ROE水準在台股價值型公司中高度共線，屬紅海邊界，同類value×quality-trend交乘應先與F-002做相關性預檢。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0052",
+ "ts": "2026-07-19T09:53:03"
+}

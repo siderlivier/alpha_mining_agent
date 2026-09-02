@@ -1,0 +1,87 @@
+{
+ "round": 46,
+ "category": "accruals_consistency_quality",
+ "hypothesis": "應計項的『水準』高低（Sloan 1996經典因子）只反映單期盈餘品質，但企業若長期應計項忽高忽低，代表其盈餘認列政策不穩定、可能存在裁量性會計操作的空間；相對地，應計項波動度長期偏低的公司代表其會計認列一致、内部控制紀律嚴謹，這種『穩定性』本身是水準高低之外的獨立品質訊號，尚未被F-006等水準型因子完全捕捉。",
+ "prediction": "sub-train ICIR>0.45；與F-006相關性<0.5；validation decay<40%；多頭腿年化超額>0。",
+ "formula": "cs_rank(neg(ts_std(accruals,12)))",
+ "name_zh": "應計項穩定品質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(accruals,12)))",
+  "fhash": "8b79ea0ac3daafc6",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": 0.042,
+   "icir": 0.69,
+   "decay_pct": -89.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.052,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.039
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.29,
+   "半導體": -0.04,
+   "金融": 0.41
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.02
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.13,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.37 < 0.45"
+ },
+ "diagnosis": "sub-train ICIR 0.37些微未達0.45門檻，但validation ICIR 0.69、decay為-89%（逆衰減），與F-021相關性僅0.24。核心弱點是多頭腿超額僅0.007幾乎無法交易，訊號主要來自空頭腿(0.02)，屬於邊界案例。",
+ "failure_type": "expression_bad",
+ "lesson": "應計項穩定度因子IC達標邊緣但多頭腿貢獻極弱，顯示訊號主要來自篩掉最差公司而非選出最佳品質股；台股不易放空下，這類迴避型訊號即便IC尚可，實際交易價值有限。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0706",
+ "ts": "2026-08-12T14:41:10"
+}

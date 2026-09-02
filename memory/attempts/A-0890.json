@@ -1,0 +1,85 @@
+{
+ "round": 58,
+ "category": "biotech_cash_reality_divergence",
+ "hypothesis": "生技公司常因研發資本化認列方式差異、授權收入認列時點等會計選擇空間較大，導致應計項與現金流常出現分歧；當一家生技股的營運現金流相對排名明顯高於應計項排名，代表其獲利認列相對保守而現金真實到位，這類公司較不易在後續財報被下修，因此中長期報酬應優於帳面數字亮眼但現金流薄弱的同業。",
+ "prediction": "生技子樣本 sub-train ICIR > 0.4；多頭腿年化超額報酬 > 0；與F-022(eps_yoy/std)相關性 < 0.5。",
+ "formula": "sub(cs_rank(ocf_ratio), cs_rank(accruals))",
+ "name_zh": "生技現金真實股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ocf_ratio), cs_rank(accruals))",
+  "fhash": "60c7b35307ab1793",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.4,
+   "decay_pct": -62.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.03,
+    "多頭"
+   ],
+   "2015": [
+    0.035,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.019,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": 0.11,
+   "生技": 0.19,
+   "半導體": 0.24,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.006,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "distill_failed": true,
+ "id": "A-0890",
+ "ts": "2026-08-19T00:25:17"
+}

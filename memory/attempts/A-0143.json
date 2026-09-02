@@ -1,0 +1,84 @@
+{
+ "round": 8,
+ "category": "fundamental_confirmed_momentum",
+ "hypothesis": "動能訊號在有基本面（營收年增為正）支撐時才具持續性，單純價格動能常摻雜籌碼面過度反應雜訊；當營收成長確認後，動能反映的是真實盈餘動能尚未完成的價格發現過程，多數純動能投資人不篩選基本面，因此存在滯後反應空間。",
+ "prediction": "sub-train ICIR > 0.45；月換手率 < 0.4（若超標需再加ts_mean平滑）；與F-003相關係數 < 0.5。",
+ "formula": "cs_rank(if_else(greater(rev_yoy,0), mom_120, 0))",
+ "name_zh": "基本面確認動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(rev_yoy,0), mom_120, 0))",
+  "fhash": "6192b097da404468",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.027,
+   "icir": 0.35,
+   "decay_pct": -92.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.007,
+    "多頭"
+   ],
+   "2014": [
+    -0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.038,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.004,
+    "盤整"
+   ],
+   "2019": [
+    0.05,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": 0.28,
+   "生技": 0.29,
+   "半導體": 0.04,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.086,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.37,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.18遠低於預測的0.45，看似機制失敗，但多頭腿年化超額報酬高達0.086，是全批15個候選中最強的多頭腿表現，空頭腿僅0.013。這強烈暗示問題出在IC計算方式而非機制本身：if_else把未過篩(rev_yoy≤0)的股票直接設為常數0，造成cs_rank出現大量並列(tie)，稀釋了全樣本IC，即便真正被篩選出的動能股報酬非常好。",
+ "failure_type": "expression_bad",
+ "lesson": "用if_else將未過篩樣本設為常數再做cs_rank的『條件式因子』，常數並列會系統性拖累全樣本IC指標，即使實際可交易的多頭腿表現優異；這類gated因子應該用『通過子集內的排名/報酬』而非全市場IC來評估，否則會冤枉殺掉真正有效的機制。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0143",
+ "ts": "2026-07-19T21:42:48"
+}

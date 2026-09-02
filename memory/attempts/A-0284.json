@@ -1,0 +1,93 @@
+{
+ "round": 18,
+ "category": "financial_nim_rerating_lag",
+ "hypothesis": "金融業net_margin主要反映淨利差(NIM)與資產品質，而非傳統本業毛利/營運槓桿概念；當金融股net_margin較自身兩年中位數顯著改善時，代表利差擴大或提存減少，但金融股法人估值多以股利殖利率與淨值倍數為錨點，對利潤率結構性改善的重新定價存在滯後。此機制僅在金融業成立，因其獲利驅動邏輯(利差/資本適足)與其他產業本質不同。",
+ "prediction": "全市場sub-train ICIR可能不達0.45，但金融產業industry_icir>0.5且為四產業最高；金融子樣本多頭腿超額報酬需為正",
+ "formula": "cs_rank(sub(net_margin, ts_med(net_margin,12)))",
+ "name_zh": "金融利差重評價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(net_margin, ts_med(net_margin,12)))",
+  "fhash": "bc069d80c4f69c7c",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.03,
+   "icir": 0.54,
+   "decay_pct": -22.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.114,
+    "盤整"
+   ],
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.048,
+    "多頭"
+   ],
+   "2015": [
+    0.052,
+    "盤整"
+   ],
+   "2016": [
+    0.044,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.0,
+    "盤整"
+   ],
+   "2019": [
+    0.059,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.63,
+   "生技": 0.29,
+   "半導體": 0.17,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.048,
+   "short_excess_ann": 0.093
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.26,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.84,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.84 > 0.5"
+ },
+ "diagnosis": "預測金融產業ICIR應為四產業最高且>0.5，實際金融僅0.16(四產業最低)，反而電子產業最高(0.63)——產業專屬敘事完全落空。整體sub-train(0.44)/validation(0.54)其實達標，但stage2揪出與庫內F-001(ROE趨勢改善)|ρ|=0.84，證實這不是金融特有的NIM訊號，而是『任何獲利指標相對自身歷史中位數的偏離』這個通用建構的又一次重現。",
+ "failure_type": "duplicate",
+ "lesson": "net_margin的ts_med偏離度與ROE趨勢改善本質同源；用不同財務指標包裝『相對自身歷史改善』的敘事，很容易在stage2撞見既有的獲利趨勢因子家族，且產業限定的故事並不保證訊號來源真的是產業特有機制。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0284",
+ "ts": "2026-07-21T12:59:43"
+}

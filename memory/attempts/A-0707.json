@@ -1,0 +1,93 @@
+{
+ "round": 46,
+ "category": "margin_consistency_sharpe_semiconductor",
+ "hypothesis": "半導體業獲利具高度循環性，單純用營益率水準或其波動度，難以區分『真正競爭優勢造就的穩定高獲利』與『景氣循環中的短暫獲利高峰』。用營業利益率相對其自身12個月波動度標準化（類似獲利品質的夏普比率），可篩選出獲利水準高且相對穩定的公司；市場普遍以景氣循環股的估值邏輯一概對待半導體公司，使真正具結構性優勢的公司被低估。",
+ "prediction": "半導體產業限定：industry_icir>0.55且為四產業最高；sub-train全市場ICIR>0.4；與F-004相關性<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(sdiv(op_margin, ts_std(op_margin,12)))",
+ "name_zh": "獲利穩定夏普比",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_margin, ts_std(op_margin,12)))",
+  "fhash": "1f1e08e095e55a81",
+  "sub_train": {
+   "mean_ic": 0.064,
+   "icir": 0.5
+  },
+  "validation": {
+   "mean_ic": 0.088,
+   "icir": 0.92,
+   "decay_pct": -85.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.029,
+    "盤整"
+   ],
+   "2013": [
+    0.053,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.084,
+    "盤整"
+   ],
+   "2016": [
+    0.077,
+    "多頭"
+   ],
+   "2017": [
+    0.078,
+    "多頭"
+   ],
+   "2018": [
+    0.075,
+    "盤整"
+   ],
+   "2019": [
+    0.1,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.072,
+   "down_months": 0.069
+  },
+  "industry_icir": {
+   "電子": 0.63,
+   "生技": 0.53,
+   "半導體": 0.3,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.056
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.12,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.7,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.70 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.50、validation 0.92遠超預測，但與F-002『金融品質價值』相關性0.70於stage2陣亡；半導體industry_icir僅0.30，遠低於電子(0.63)、生技(0.53)，顯示此構造本質是跨產業通用品質因子而非半導體特定訊號。",
+ "failure_type": "duplicate",
+ "lesson": "sdiv(獲利指標, ts_std(獲利指標,12))這類獲利穩定度夏普比構造，無論鎖定哪個產業敘事，抓到的都是與F-002高度重疊的通用品質維度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0707",
+ "ts": "2026-08-12T14:41:10"
+}

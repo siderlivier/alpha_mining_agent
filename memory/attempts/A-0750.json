@@ -1,0 +1,84 @@
+{
+ "round": 49,
+ "category": "institutional_divergence_signal",
+ "hypothesis": "外資研究資源與跨市場資訊優勢通常優於以國內散戶申購/贖回為主要資金來源、績效評比週期較短的投信基金。當外資買超、投信賣超同時出現，代表雙方對同一股票資訊解讀分歧；由於外資資訊生產能力較強，市場最終傾向朝外資判斷方向修正，形成可預測的分歧收斂報酬。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；訊號強度應顯著優於frgn_net_21或trust_net_21單獨使用(icir<0.3基準)；月換手率<0.4",
+ "formula": "cs_rank(sub(frgn_net_21,trust_net_21))",
+ "name_zh": "法人籌碼分歧",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(frgn_net_21,trust_net_21))",
+  "fhash": "9818946cc9465001",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": -0.0,
+   "icir": -0.0,
+   "decay_pct": 102.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.008,
+    "多頭"
+   ],
+   "2017": [
+    -0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.015,
+    "盤整"
+   ],
+   "2019": [
+    -0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": 0.04,
+   "生技": 0.04,
+   "半導體": 0.06,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.54,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且應優於單獨使用外資或投信買超，實際sub-train僅0.13，validation幾乎歸零(-0.0)且decay高達102%（樣本外完全消失甚至微幅反轉）。下跌月IC轉負(-0.012)、上漲月正(0.014)，顯示更像是大盤氣氛的伴生效應，而非法人資訊分歧收斂的獨立訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「外資-投信買超分歧」相減構造的訊號在樣本外完全消失，顯示分歧可能只是同時反映大盤氣氛（漲時同向、跌時才分歧），並非可預測的資訊收斂機制；再測法人分歧類假設需先控制大盤動能後看殘差分歧是否仍有效。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0750",
+ "ts": "2026-08-14T00:36:43"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 27,
+ "category": "financial_credit_risk_signal",
+ "hypothesis": "銀行/壽險等金融股獲利對利率與信用循環高度敏感，但IFRS9採用已發生損失認列模型，備抵呆帳/資產減損的入帳通常落後實際信用品質惡化1-2季；股價的已實現波動度(vol_63)作為市場即時定價風險的載體，往往比財報更早反映信用疑慮升溫。金融股波動度異常上升（相對自身6個月前）是信用風險的早期市場訊號，先於會計數字劣化。",
+ "prediction": "sub-train ICIR>0.4；金融產業industry_icir應為四產業最高；多頭腿（波動度平穩/下降組）超額報酬>0。",
+ "formula": "cs_rank(neg(delta(vol_63,6)))",
+ "name_zh": "金融信用預警",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(vol_63,6)))",
+  "fhash": "741caae27faa7aa5",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.19
+  },
+  "validation": {
+   "mean_ic": 0.027,
+   "icir": 0.34,
+   "decay_pct": -81.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.009,
+    "盤整"
+   ],
+   "2013": [
+    0.06,
+    "多頭"
+   ],
+   "2014": [
+    0.005,
+    "多頭"
+   ],
+   "2015": [
+    -0.025,
+    "盤整"
+   ],
+   "2016": [
+    -0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.075,
+    "多頭"
+   ],
+   "2018": [
+    0.035,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.022,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.07,
+   "生技": 0.21,
+   "半導體": 0.09,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": -0.0
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.36,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4，實際僅0.19，stage1擋下。驗證期反而更強(0.34, decay -81%)，暗示機制可能存在但整體偏弱。多頭腿超額為負(-0.022)，短腿也接近零(-0.0)——訊號幾乎沒有可交易的多頭邊際，即使強度夠也難放入台股多頭組合。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "金融信用風險類避險訊號即使統計上驗證期轉強，多頭腿仍無明顯超額，缺乏實際多頭可交易性，此為避開地雷型因子的通病(見全域禁忌方向)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0424",
+ "ts": "2026-07-28T19:08:22"
+}

@@ -1,0 +1,92 @@
+{
+ "round": 8,
+ "category": "momentum_continuation",
+ "hypothesis": "一年期動能減去近一季動能，捕捉長期趨勢仍強但近期回檔的『中繼』股票；短期雜訊造成的回檔容易誤導追價/停損的短線資金離場，晚一步反應的資金會在趨勢確認後回補，形成延續買盤。",
+ "prediction": "sub-train ICIR > 0.45；與C-5(mom_240)相關係數 < 0.5；下跌月IC不弱於上漲月。",
+ "formula": "cs_rank(sub(mom_240, mom_60))",
+ "name_zh": "動能中繼訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "作為C-5/C-6中保留的較優版本，sub-train ICIR 0.36、validation 0.19，decay 47%接近門檻邊緣，仍未達0.45/0.3雙門檻。cond_ic上漲0.035、下跌0.023同向為正，符合『排除純beta代理』的預測方向；但2012年IC高達0.132，此後逐年下滑，顯示訊號在樣本前段最強、後段持續衰退，較像動能溢酬本身隨時間淡化而非構造錯誤。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「長期動能扣短期動能」的中繼訊號方向與防禦性預測(下跌月不弱於上漲月)成立，但強度逐年衰退到不足以達標；長期動能類因子在近年台股的可用alpha可能持續縮小，未來測試應調降期待值或結合其他機制(如基本面確認)找增量。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0134",
+ "ts": "2026-07-19T21:42:48"
+}

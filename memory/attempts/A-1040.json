@@ -1,0 +1,91 @@
+{
+ "round": 68,
+ "category": "fundamental_price_divergence",
+ "hypothesis": "當營收年增率（3月平滑）強勁但半年價格動能疲弱，代表基本面利多尚未反映在股價——可能因為該股不在法人研究覆蓋範圍、或市場仍被舊敘事錨定。資訊終將擴散，價格向基本面收斂；在台股2012–2019中期價格動能本身偏反轉，弱動能與強營收的組合是雙重有利。",
+ "prediction": "sub-train ICIR > 0.35；多頭腿年化超額 > 0（不可僅靠空頭腿）；覆蓋率 > 0.9；與F-009、F-013相關 |ρ| < 0.5。",
+ "formula": "mul(cs_rank(rev_yoy_ma3), cs_rank(neg(mom_120)))",
+ "name_zh": "基本面領先價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120",
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(rev_yoy_ma3), cs_rank(neg(mom_120)))",
+  "fhash": "7064dc27f2d587fd",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.51
+  },
+  "validation": {
+   "mean_ic": 0.043,
+   "icir": 0.58,
+   "decay_pct": -14.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.029,
+    "盤整"
+   ],
+   "2016": [
+    0.026,
+    "多頭"
+   ],
+   "2017": [
+    0.044,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.033,
+   "down_months": 0.048
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.14,
+   "半導體": 0.34,
+   "金融": 0.31
+  },
+  "legs": {
+   "long_excess_ann": 0.004,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.33,
+  "stage2_culprit": {
+   "factor": "F-018",
+   "rho": 0.52,
+   "factor_name": "低波動隱藏成長股",
+   "factor_desc": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-018 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "distill_failed": true,
+ "id": "A-1040",
+ "ts": "2026-09-02T01:25:25"
+}

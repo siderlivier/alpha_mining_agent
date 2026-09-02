@@ -1,0 +1,91 @@
+{
+ "round": 62,
+ "category": "retail_leverage_contrarian",
+ "hypothesis": "融資餘額21日變化率大幅上升代表散戶槓桿追高行為集中，此類部位缺乏基本面支撐且面臨斷頭風險；散戶為雜訊交易者，其激進加碼往往發生在短期頭部附近。formula已用neg()將方向轉正，先驗證原始欄位獨立效果(規則11)，不加任何交乘複合。",
+ "prediction": "sub-train ICIR>0.4；下跌月|IC|應高於上漲月(斷頭壓力放大)；若獨立效果不顯著則不建議後續疊加基本面複合。",
+ "formula": "cs_rank(neg(margin_d21))",
+ "name_zh": "散戶追高反向",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(margin_d21))",
+  "fhash": "bc1c0bd9e57225b6",
+  "sub_train": {
+   "mean_ic": 0.031,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.15,
+   "decay_pct": 64.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.021,
+    "盤整"
+   ],
+   "2013": [
+    0.073,
+    "多頭"
+   ],
+   "2014": [
+    0.045,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.032,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.026,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.33,
+   "生技": 0.24,
+   "半導體": 0.17,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.7,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.18
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.43 < 0.45; validation ICIR 0.15 < 0.3; validation 衰減 64% > 50%（過擬合徵兆）; 月換手 0.7 > 0.4"
+ },
+ "diagnosis": "預測ICIR>0.4，sub-train幾乎達標(0.43)，故事本身(散戶槓桿追高反轉)有一定支撐，但validation衰減64%(0.15)且月換手0.7遠超0.4門檻——margin_d21是21日高頻變化量，天生雜訊大、換手率高，這是原始未平滑訊號常見的表達缺陷而非機制證偽。",
+ "failure_type": "expression_bad",
+ "lesson": "高頻原始變化量(如21日融資變化率)直接排名容易換手過高且驗證期不穩定，適合做時序平滑後再測試，而非直接單獨驗證。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0950",
+ "ts": "2026-08-27T21:24:50"
+}

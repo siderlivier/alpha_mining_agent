@@ -1,0 +1,84 @@
+{
+ "round": 23,
+ "category": "financial_capital_stability",
+ "hypothesis": "金融股淨利率排名相對ROE排名更高，代表獲利品質來自核心利差管理與成本控制，而非財務槓桿放大出的ROE數字；市場容易把高ROE金控股一概而論，忽略真正靠核心利差穩健獲利的公司，此機制僅金融業成立，因其ROE高度依賴槓桿倍數，其他產業關聯較弱。",
+ "prediction": "金融產業industry_icir>0.45；全市場sub-train ICIR可能<0.3但不影響產業限定入庫；多頭腿超額報酬>0。",
+ "formula": "sub(cs_rank(net_margin), cs_rank(roe))",
+ "name_zh": "金融核心利差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(net_margin), cs_rank(roe))",
+  "fhash": "c55714ac9d13b980",
+  "sub_train": {
+   "mean_ic": -0.007,
+   "icir": -0.09
+  },
+  "validation": {
+   "mean_ic": 0.037,
+   "icir": 0.4,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.005,
+    "多頭"
+   ],
+   "2014": [
+    -0.002,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    -0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.007,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": 0.025
+  },
+  "industry_icir": {
+   "電子": -0.12,
+   "生技": -0.21,
+   "半導體": 0.14,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": -0.022
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.12,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR為負(-0.09)，直接違反「即使<0.3仍可產業限定入庫」的預測前提；金融業industry_icir僅0.13，與半導體(0.14)相近，無金融特有性。down/up月IC符號相反(0.025 vs -0.002)顯示不穩定而非乾淨的狀態依賴。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "淨利率排名減ROE排名不足以捕捉金融業「核心利差品質」，通用獲利比率相減缺乏金融業結構特異性；若要驗證此類假說需用NIM、備抵覆蓋率等金融業專屬變數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0360",
+ "ts": "2026-07-21T14:03:28"
+}

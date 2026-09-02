@@ -1,0 +1,83 @@
+{
+ "round": 10,
+ "category": "financial_interest_spread",
+ "hypothesis": "金控股股利政策受主管機關資本適足審查限制，配息能力提升到股利/股價實際反映之間存在監理審批延遲；殖利率相對自身兩年歷史處於高檔時，代表資本韌性已改善但市場尚未重新評價。",
+ "prediction": "金融產業限定sub-train ICIR>0.4；與F-010、F-002之ρ<0.5；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(ts_rank(div_yield,24))",
+ "name_zh": "金控殖利率磁吸",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(div_yield,24))",
+  "fhash": "4dec0e5d7ea48b0f",
+  "sub_train": {
+   "mean_ic": -0.016,
+   "icir": -0.17
+  },
+  "validation": {
+   "mean_ic": -0.064,
+   "icir": -0.92,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.005,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.029,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.054,
+    "多頭"
+   ],
+   "2018": [
+    -0.065,
+    "盤整"
+   ],
+   "2019": [
+    -0.062,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.037,
+   "down_months": -0.013
+  },
+  "industry_icir": {
+   "電子": -0.4,
+   "生技": -0.27,
+   "半導體": -0.19,
+   "金融": -0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.001,
+   "short_excess_ann": -0.026
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金控高殖利率=資本韌性改善(pos)，實測方向完全相反：sub-train IC -0.016，validation -0.064，且2017年後持續轉負惡化。高殖利率更可能是股價下跌被動推升殖利率的價值陷阱訊號，而非監理審批延遲的正面訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "金融股高殖利率排名應視為風險/價值陷阱訊號而非低估訊號，尤其2017年後IC持續轉負顯示這是股價下跌驅動的殖利率上升；未來設計金控類因子應先控制『是否為衰退期高殖利率』再談監理延遲假說。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0162",
+ "ts": "2026-07-21T11:22:51"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 19,
+ "category": "biotech_growth_inflection",
+ "hypothesis": "生技公司營收長期低迷，一旦出現顯著高於自身過去12個月低點的營收跳升（首次商轉出貨或授權金入帳），代表公司從純研發燒錢階段轉入商業化階段，這種結構性轉折點因基期效應與法人覆蓋不足而被低估。",
+ "prediction": "生技產業sub-train ICIR>0.4且為四產業最高；訊號子集(觸底反彈者)多頭腿年化超額報酬>5%。",
+ "formula": "cs_rank(sub(rev_yoy, ts_min(rev_yoy, 12)))",
+ "name_zh": "生技商轉拐點",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_yoy, ts_min(rev_yoy, 12)))",
+  "fhash": "27125562036f3c20",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.28,
+   "decay_pct": 256.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.034,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    -0.029,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": -0.16,
+   "半導體": 0.36,
+   "金融": -0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.041,
+   "short_excess_ann": 0.076
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.39,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業ICIR應最高，但實際生技industry_icir為-0.16(四產業中最差之一)，電子(0.32)與半導體(0.36)反而明顯更高，直接與「生技商轉拐點」敘事相反；validation期整體轉負(-0.28，decay 256%)，顯示sub-train期偶然正訊號在樣本外不穩健。此formula捕捉到的更像是電子/半導體產業的觸底反彈動能，而非生技特有的商業化轉折敘事。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「生技從研發燒錢轉商業化」的觸底反彈敘事未在生技產業本身獲得支持，反而是電子/半導體對「營收脫離12個月低點」訊號反應更好；產業專屬敘事類假設應先用industry_icir交叉驗證是否真的集中在敘事指定產業，再決定是否保留該敘事框架。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0307",
+ "ts": "2026-07-21T13:13:10"
+}

@@ -1,0 +1,89 @@
+{
+ "round": 30,
+ "category": "turnover_stability_discount",
+ "hypothesis": "週轉率長期波動小的股票代表投資人結構穩定、缺乏投機炒作熱度，這類「無聊股」因缺乏話題性而長期被市場低估；隨時間市場終將認可其穩定投資人基礎帶來的較低風險溢酬。",
+ "prediction": "sub-train ICIR>0.45；與F-008(週轉率相關)相關係數需<0.5；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(neg(ts_std(turn_21,12)))",
+ "name_zh": "週轉率穩定折價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(turn_21,12)))",
+  "fhash": "b3144bd4e42aad36",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.058,
+   "icir": 0.36,
+   "decay_pct": -22.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.055,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.11,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.064,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.39,
+   "生技": 0.34,
+   "半導體": 0.24,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.09,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.77,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.77 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR(0.30)未達門檻但validation回穩(0.36)，mean_ic與legs表現皆不錯(long 4.6%, short 7.7%)，本應是有競爭力的候選，但與F-008(低調接近新高)相關係數高達0.77(本輪最高)，判定重複。",
+ "failure_type": "duplicate",
+ "lesson": "週轉率穩定性類因子與F-008(低調接近新高)的重疊是本輪最強紅海訊號(rho 0.77)，與C-7(rho 0.62)同型態，顯示「低週轉/低炒作」維度已被F-008覆蓋。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0472",
+ "ts": "2026-07-29T23:26:46"
+}

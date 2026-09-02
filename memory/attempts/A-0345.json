@@ -1,0 +1,92 @@
+{
+ "round": 22,
+ "category": "long_term_momentum_underreaction",
+ "hypothesis": "法人建立大部位需數月分批進場，加上散戶對長期趨勢存在錨定效應、過度關注近期消息而低估長期動能的資訊含量；控制掉近3個月短期反轉雜訊(mom_60)後，過去一年動能(mom_240)中剩餘部分更純粹反映法人建倉的持續性資訊。",
+ "prediction": "sub-train ICIR>0.45；與F-008相關係數<0.5；多頭腿年化超額報酬>0。",
+ "formula": "sub(cs_rank(mom_240), cs_rank(mom_60))",
+ "name_zh": "長期動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(mom_240), cs_rank(mom_60))",
+  "fhash": "928f32bae96dc483",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.09,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.177,
+    "盤整"
+   ],
+   "2013": [
+    0.052,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.035,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    -0.025,
+    "盤整"
+   ],
+   "2019": [
+    0.043,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.028
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": 0.26,
+   "半導體": 0.18,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.41,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.12
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.4 < 0.45; validation ICIR 0.09 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.41 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.4接近但未達0.45門檻，且明顯被2012年單一年度離群值(IC 0.177，遠高於其他年份0.02~0.05)拉高，validation ICIR僅0.09、decay 78%顯示樣本外站不住腳。更關鍵的是多頭腿超額為負(-0.016)而空頭腿超額為正(0.027)，代表alpha真正集中在放空端而非做多端，與「法人建倉帶動長期動能延續、做多可獲利」的假設不符(台股放空不易，此結構不可交易)。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "長期動能減短期動能的殘差雖有正向rank IC，但alpha結構集中在空頭腿而非多頭腿，且訓練期表現高度依賴單一年份(2012)離群值；未來測試長期動能類因子時應檢查逐年IC是否被單一年份主導，並優先關注多頭腿而非整體IC是否顯著。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0345",
+ "ts": "2026-07-21T13:51:27"
+}

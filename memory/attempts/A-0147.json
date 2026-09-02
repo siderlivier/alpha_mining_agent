@@ -1,0 +1,87 @@
+{
+ "round": 9,
+ "category": "institutional_ownership_trend",
+ "hypothesis": "外資是台股資訊優勢最大、交易量體最大的法人；持股比率63日變化反映其基於基本面研究的緩步加減碼，受流動性與內部風控限制無法一次到位，此持股結構變化訊號滯後於價格本身數月才完全反映。",
+ "prediction": "sub-train ICIR > 0.45；validation衰減 < 40%；半導體/電子產業內ICIR應為四產業最高。",
+ "formula": "cs_rank(frgn_ratio_d63)",
+ "name_zh": "外資加碼趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(frgn_ratio_d63)",
+  "fhash": "4fc89c8705f36992",
+  "sub_train": {
+   "mean_ic": 0.001,
+   "icir": 0.01
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.07,
+   "decay_pct": -542.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.03,
+   "半導體": -0.01,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.004,
+   "short_excess_ann": 0.025
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測嚴重落空：sub-train ICIR僅0.01，接近零訊號，四個產業ICIR全部趨近於0（電子0.09、半導體-0.01、金融-0.01），完全沒有預測中「半導體/電子應為四產業最高」的分化。63日外資持股比率變化本身幾乎不帶方向性資訊，說明外資緩步加減碼的假說在這個訊號設計下站不住腳——可能是外資部位變化本來就已被價格快速吸收，或63日窗口太長把訊號平滑掉了。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資持股比率的「水準變化」本身在63日窗口下幾乎無alpha；若仍相信外資資訊優勢假說，下次應改測「意外的」外資買賣超（相對自身歷史的標準化驚奇量），而非單純的比率趨勢，因為趨勢型態太容易被市場即時定價。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0147",
+ "ts": "2026-07-20T17:18:53"
+}

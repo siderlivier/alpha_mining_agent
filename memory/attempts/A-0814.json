@@ -1,0 +1,87 @@
+{
+ "round": 53,
+ "category": "margin_deleveraging_completion",
+ "hypothesis": "融資餘額12個月平均變化率持續為負，代表散戶投機性槓桿部位持續退場，籌碼結構轉為法人/長期資金主導，未來斷頭賣壓與追繳風險降低；長窗平滑用以區隔真正去槓桿趨勢與短期雜訊。",
+ "prediction": "sub-train ICIR>0.45，方向為負(高融資成長率預示低報酬)；電子產業industry_icir應為四產業最高(電子股散戶參與度高，訊噪比較好)。",
+ "formula": "cs_rank(ts_mean(margin_d21, 12))",
+ "name_zh": "融資去化完成",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(margin_d21, 12))",
+  "fhash": "9d631994191e5412",
+  "sub_train": {
+   "mean_ic": -0.014,
+   "icir": -0.2
+  },
+  "validation": {
+   "mean_ic": -0.024,
+   "icir": -0.37,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.021,
+    "盤整"
+   ],
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.018,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    -0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.007,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    -0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.023,
+   "down_months": -0.0
+  },
+  "industry_icir": {
+   "電子": -0.47,
+   "生技": -0.08,
+   "半導體": -0.05,
+   "金融": -0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.019,
+   "short_excess_ann": -0.022
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.17,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "方向預測正確(neg，ICIR -0.20/-0.37)，且電子業ICIR確實為四產業最負(最強)完全命中預測，機制部分獲得驗證，但整體強度未達0.45門檻；多空腿超額報酬同為負，長腿並未跑贏，訊號可能主要來自空頭端而非長腿優勢。",
+ "failure_type": "expression_bad",
+ "lesson": "融資去化訊號存在(尤其電子股)，但12個月超長平滑可能讓訊號強度打折且未能讓長腿轉正；可嘗試縮短窗口或改用去槓桿加速度而非水準均值，捕捉更即時的籌碼轉換。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0814",
+ "ts": "2026-08-15T11:33:03"
+}

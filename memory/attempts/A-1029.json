@@ -1,0 +1,85 @@
+{
+ "round": 68,
+ "category": "earnings_acceleration_underreaction",
+ "hypothesis": "季報公布後市場會定價EPS年增率的『水準』（PEAD已知），但對年增率的『二階變化（加速度）』反應不足：多數賣方模型用線性外推，無法捕捉成長率斜率轉陡所隱含的營運拐點；散戶關注的是頭條年增數字而非它比上季加速。盈餘加速代表基本面動能剛轉向，重定價需額外1–2個月。",
+ "prediction": "sub-train ICIR > 0.35；財報公布後首月IC高於次月；多頭腿年化超額 > 0；下跌月IC不弱於上漲月（基本面訊號的防禦性）；與R-013相關 |ρ| < 0.5。",
+ "formula": "cs_rank(delta(eps_yoy, 6))",
+ "name_zh": "盈餘加速度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(eps_yoy, 6))",
+  "fhash": "e280ccf7e0267745",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.032,
+   "icir": 0.56,
+   "decay_pct": -310.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.083,
+    "多頭"
+   ],
+   "2014": [
+    -0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": 0.002
+  },
+  "industry_icir": {
+   "電子": 0.36,
+   "生技": 0.02,
+   "半導體": 0.07,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-036",
+ "distill_failed": true,
+ "id": "A-1029",
+ "ts": "2026-09-02T01:25:25"
+}

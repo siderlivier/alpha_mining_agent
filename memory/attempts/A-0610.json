@@ -1,0 +1,84 @@
+{
+ "round": 40,
+ "category": "earnings_quality_divergence",
+ "hypothesis": "當EPS年增率大幅超越營業利益年增率時，代表當期EPS成長主要來自業外收益、股本變動或一次性項目而非本業競爭力提升；市場對財報頭條EPS數字反應快於對其品質的判讀，存在系統性事後修正機會。",
+ "prediction": "sub-train ICIR>0.45；formula最低分位(業外灌水嚴重)未來報酬顯著低於最高分位；多頭腿年化超額>0；月換手率<0.4。",
+ "formula": "cs_rank(neg(sub(eps_yoy, op_income_yoy)))",
+ "name_zh": "業外灌水偵測",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(eps_yoy, op_income_yoy)))",
+  "fhash": "63869bce533b668f",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.55,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際-0.06，幾乎無訊號，方向判斷已失準。validation ICIR進一步惡化至-0.55且符號與『高分位=業外灌水少=未來報酬應較高』的假設相反（分數越高、未來報酬越差），代表EPS-營業利益成長率的差值本身不構成市場定價滯後的可預測來源，而更接近雜訊或反向關係。多頭/空頭腿超額分別僅0.007/-0.014，幾乎無法交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『EPS年增-營業利益年增』的簡單差值不足以捕捉『業外灌水』，市場可能已充分定價此類頭條與本業成長的落差，或該差值同時混雜太多正常業務波動（如業外投資收益本身也是合理獲利來源），使訊噪比過低；此類會計科目差分假設若要重試，需先用財報附註/科目明細做更精確的『非經常性損益』篩選，而非用年增率相減這種粗糙代理變數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0610",
+ "ts": "2026-08-12T09:17:43"
+}

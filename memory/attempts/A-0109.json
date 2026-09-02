@@ -1,0 +1,88 @@
+{
+ "round": 6,
+ "category": "illiquid_momentum_diffusion",
+ "hypothesis": "根據Hong-Stein漸進資訊擴散假說，資訊在流動性差、法人研究覆蓋度低的股票中傳遞較慢，套利力量介入速度也較慢，因此這類股票的價格動能更難被立即消除、延續性更強；動能強度與流動性稀缺程度的交互作用應比單純動能因子更能捕捉台股中小型股的持續性報酬。此為全新探索類別，結合動能與流動性稀缺兩個維度。",
+ "prediction": "sub-train產業內rank ICIR > 0.45，且應顯著高於單獨mom_120因子(假設單獨動能ICIR<0.3，因未篩選流動性)；與F-005(neg vol_126)之截面相關度|ρ|<0.5。",
+ "formula": "mul(cs_rank(mom_120), neg(cs_rank(amt_21)))",
+ "name_zh": "冷門動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(mom_120), neg(cs_rank(amt_21)))",
+  "fhash": "0c26474fb796cdc4",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.0
+  },
+  "validation": {
+   "mean_ic": -0.016,
+   "icir": -0.16,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.023,
+    "盤整"
+   ],
+   "2013": [
+    0.012,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    -0.013,
+    "盤整"
+   ],
+   "2016": [
+    -0.017,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.059,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.0,
+   "down_months": -0.016
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": 0.14,
+   "半導體": -0.06,
+   "金融": -0.1
+  },
+  "legs": {
+   "long_excess_ann": -0.002,
+   "short_excess_ann": -0.016
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR幾乎為零(-0.0)，並非樣本外衰減而是從一開始就無訊號；validation更轉負(-0.16)。動能與流動性稀缺的交乘假說(mul(cs_rank(mom_120), neg(cs_rank(amt_21))))未產生比單一動能更強的訊號，反而可能兩個rank相乘後訊息互相稀釋或引入非線性雜訊。",
+ "failure_type": "expression_bad",
+ "lesson": "以mul()直接相乘兩個cs_rank後的因子構造交乘訊號，在sub-train階段就沒有訊號(非過擬合而是根本缺乏訊號)，顯示這種交乘構造法本身可能有系統性問題；下次若要測動能×流動性交互作用，建議改用條件式分組(先按流動性分位分組再各組內測動能)而非直接相乘rank。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0109",
+ "ts": "2026-07-19T17:47:43"
+}

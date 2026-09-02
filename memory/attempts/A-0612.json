@@ -1,0 +1,92 @@
+{
+ "round": 40,
+ "category": "institutional_short_pressure_absence",
+ "hypothesis": "借券量代表機構透過借券放空/避險的壓力來源；當個股借券量占成交量比偏低、且同時具高本業營業利益率，代表機構無系統性看空觀點且體質確實優異，雙訊號同時成立比單一訊號更能排除純冷門雜訊股。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；下跌月IC不弱於上漲月(排除純避險型訊號特徵)；月換手率<0.4。",
+ "formula": "mul(cs_rank(neg(lend_vol_21)), cs_rank(op_margin))",
+ "name_zh": "無壓力優質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(lend_vol_21)), cs_rank(op_margin))",
+  "fhash": "9f4a6f990f8e43d1",
+  "sub_train": {
+   "mean_ic": 0.02,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": -0.004,
+   "icir": -0.03,
+   "decay_pct": 120.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.046,
+    "盤整"
+   ],
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.059,
+    "多頭"
+   ],
+   "2015": [
+    0.061,
+    "盤整"
+   ],
+   "2016": [
+    -0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.022,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.025,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.007,
+   "down_months": 0.031
+  },
+  "industry_icir": {
+   "電子": 0.1,
+   "生技": 0.05,
+   "半導體": 0.09,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.011,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.48,
+  "turnover_m": 0.32,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.44
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.17 < 0.45; validation ICIR -0.03 < 0.3; validation 衰減 120% > 50%（過擬合徵兆）; 覆蓋率 0.48 < 0.6"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45、下跌月IC不弱於上漲月（排除純避險特徵）。下跌月IC實際上確實強於上漲月（0.031 vs 0.007），這部分符合預期方向；但sub-train ICIR僅0.17、validation衰減120%，且coverage僅0.48（低於0.6門檻），是四項失敗中最直接的死因——lend_vol_21借券量資料本身覆蓋率有限，加上兩個rank相乘進一步稀釋了樣本與訊號強度，機制尚未被證偽就先在統計效力上出局。",
+ "failure_type": "expression_bad",
+ "lesson": "借券量類資料覆蓋率天生偏低（僅限可借券標的），與另一個全市場覆蓋的rank相乘會讓覆蓋率交集更小、樣本更稀薄；此類雙訊號合成因子應檢查各腳位覆蓋率下限，必要時先用有覆蓋率的因子做主排序、借券量僅做篩選層（filter）而非同權重相乘，或改用加法而非乘法合成以保留較多樣本。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0612",
+ "ts": "2026-08-12T09:17:43"
+}

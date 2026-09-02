@@ -1,0 +1,90 @@
+{
+ "round": 36,
+ "category": "low_risk_growth_mismatch",
+ "hypothesis": "台灣散戶偏好高波動、故事性強的個股（樂透型偏好），導致長期低波動但基本面成長穩健的公司被系統性忽略；此偏誤不限電子股，全市場皆可能存在，先前僅在電子限定版本驗證。改用季波動率(vol_63)取代月波動率並對rev_yoy做3月平滑，降低月度換手率。",
+ "prediction": "全市場sub-train ICIR > 0.45；月換手率 < 0.4；下跌月與上漲月IC差距 < 0.1，顯示為結構性錯價而非純防禦性因子。",
+ "formula": "mul(cs_rank(neg(vol_63)), cs_rank(ts_mean(rev_yoy,3)))",
+ "name_zh": "穩健低波成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(vol_63)), cs_rank(ts_mean(rev_yoy,3)))",
+  "fhash": "5359caa0fa40a7aa",
+  "sub_train": {
+   "mean_ic": 0.082,
+   "icir": 0.81
+  },
+  "validation": {
+   "mean_ic": 0.107,
+   "icir": 0.98,
+   "decay_pct": -22.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.082,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.09,
+    "盤整"
+   ],
+   "2016": [
+    0.091,
+    "多頭"
+   ],
+   "2017": [
+    0.092,
+    "多頭"
+   ],
+   "2018": [
+    0.125,
+    "盤整"
+   ],
+   "2019": [
+    0.089,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.1,
+   "down_months": 0.062
+  },
+  "industry_icir": {
+   "電子": 1.02,
+   "生技": 0.82,
+   "半導體": 0.54,
+   "金融": 0.39
+  },
+  "legs": {
+   "long_excess_ann": 0.068,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.27,
+  "stage2_culprit": {
+   "factor": "F-018",
+   "rho": 0.81,
+   "factor_name": "低波動隱藏成長股",
+   "factor_desc": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-018 |ρ|=0.81 > 0.5"
+ },
+ "diagnosis": "預測全部達標甚至超標（sub-train ICIR 0.81>0.45、turnover 0.27<0.4、漲跌月IC差距0.038<0.1），機制在統計上完全站得住腳。但問題在於：把電子限定版的低波動隱藏成長股（F-018）去產業限定＋換季波動率/3月平滑，本質上只是同一構念的變體，與F-018 ρ=0.81高度重疊，證明全市場化＋換指標平滑不足以構成新因子。",
+ "failure_type": "duplicate",
+ "lesson": "當假設是把庫內因子從產業限定推廣到全市場時，即使技術指標換了（月波動→季波動），也要先估算與原因子的預期相關性，而非等stage2撞牆；此類推廣性改寫的獨立信息含量通常很低。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0549",
+ "ts": "2026-07-30T00:46:50"
+}

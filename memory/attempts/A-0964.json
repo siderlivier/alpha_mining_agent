@@ -1,0 +1,90 @@
+{
+ "round": 63,
+ "category": "financial_rate_cycle_reacceleration",
+ "hypothesis": "金融股淨利率(net_margin)與ROE同步在短窗口(6個月)內加速改善，代表利差擴張正轉化為實際獲利效率提升而非一次性提列或匯兌影響；金融股因財報複雜、機構多以指數化持有，主動資金對此短窗雙重確認訊號反應遲緩（金融限定）。",
+ "prediction": "金融限定ICIR>0.45；與F-023、F-002、F-010截面相關|ρ|<0.5。",
+ "formula": "mul(cs_rank(delta(net_margin,6)), cs_rank(delta(roe,6)))",
+ "name_zh": "金融利差再加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(net_margin,6)), cs_rank(delta(roe,6)))",
+  "fhash": "1ccd4470631a8f7a",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.28
+  },
+  "validation": {
+   "mean_ic": 0.03,
+   "icir": 0.56,
+   "decay_pct": -97.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.018,
+    "多頭"
+   ],
+   "2014": [
+    0.045,
+    "多頭"
+   ],
+   "2015": [
+    0.038,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.04,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.022,
+   "down_months": 0.029
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.29,
+   "半導體": 0.24,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.041,
+   "short_excess_ann": 0.086
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.28,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.8,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.80 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.28遠低於預測>0.45（金融限定）。更關鍵的是：industry_icir顯示金融產業自身ICIR僅0.02，訊號其實主要來自電子(0.53)/生技(0.29)/半導體(0.24)——『金融限定』的核心宣稱在目標產業本身就不成立，整體正ICIR是其他產業貢獻的假象。相關性檢查也被完全未在預測名單內的F-001點名(ρ=0.80)，預測只防了F-023/F-002/F-010三個因子，漏掉了真正的高相關對象。",
+ "failure_type": "duplicate",
+ "lesson": "『金融限定』類假設要先確認industry_icir在金融產業本身是否真的顯著，不能只看全樣本ICIR；另外任何用到delta(roe,n)或delta(net_margin,n)的因子都該優先對照F-001（ROE趨勢改善），因為level-trend與短窗delta在ROE類欄位上相關性可能高達0.8。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0964",
+ "ts": "2026-08-27T21:36:00"
+}

@@ -1,0 +1,82 @@
+{
+ "round": 1,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "季頻ROE公布後，市場常以簡單滾動平均評估獲利能力，較少辨識「趨勢改善」本身的訊號；當本期ROE明顯高於近兩年中位數，代表獲利能力結構性提升，此類趨勢訊息需多期驗證才能充分定價，形成延遲反應。",
+ "prediction": "產業內rank IC為正，sub-train ICIR>0.35；效應在資本支出週期長的半導體最明顯，在受監理限制、ROE均值回歸較快的金融最弱。",
+ "formula": "cs_rank(sub(roe, ts_med(roe,12)))",
+ "name_zh": "ROE趨勢改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(roe, ts_med(roe,12)))",
+  "fhash": "9108712666fe336d",
+  "sub_train": {
+   "mean_ic": 0.043,
+   "icir": 0.63
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.4,
+   "decay_pct": 36.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.005,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.049,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.042,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.043,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.57,
+   "生技": 0.41,
+   "半導體": 0.16,
+   "金融": 0.26
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.085
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.27,
+  "verdict": "passed"
+ },
+ "diagnosis": "整體強度預測保守，實際表現超標：sub-train ICIR 0.63(>預測0.35)，validation 0.40通過。但產業排序預測完全錯置：預測半導體最強、金融最弱，實際電子最強(0.57)、半導體反而最弱(0.16)，金融居中(0.26)。「資本支出週期長=延遲反應更明顯」的產業敘事不成立，真正驅動因素可能是電子業分析師覆蓋率或財報頻率差異。",
+ "failure_type": "none",
+ "lesson": "ROE趨勢改善因子本身穩健可通過，但產業異質性敘事(資本支出週期)證據不支持，未來寫產業預測時應把敘事當作待驗證假說而非既定事實。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed",
+ "id": "A-0027",
+ "ts": "2026-07-18T21:37:41"
+}

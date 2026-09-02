@@ -1,0 +1,84 @@
+{
+ "round": 51,
+ "category": "smart_money_contrarian_accumulation",
+ "hypothesis": "投信法人在超跌股(長期股價低檔)進場買超，面臨較高的績效壓力與同業比較壓力，只有真正看好基本面反轉才會逆勢操作；相較於追高買盤，這種逆勢承接蘊含更高資訊含量，因為經理人承擔了短期看錯的職業風險，比單純法人買超或單純價格反轉更具預測力。",
+ "prediction": "sub-train ICIR > 0.45；此訊號應優於單獨使用mom_240或trust_net_21的ICIR(交乘後有增量資訊)；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_z(neg(mom_240)),cs_z(trust_net_21))",
+ "name_zh": "投信抄底確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_240",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_z(neg(mom_240)),cs_z(trust_net_21))",
+  "fhash": "48a8a8dd6e26d04f",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.04
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.15,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.007,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    -0.017,
+    "多頭"
+   ],
+   "2017": [
+    -0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    -0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": -0.1,
+   "半導體": 0.11,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.002,
+   "short_excess_ann": -0.003
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.59,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR接近0(-0.04)，多空兩腿皆接近零，condicional IC在上漲/下跌月也都幾乎是0，屬於全面無訊號的案例——投信買超與超跌交乘後訊號被完全稀釋，而非機制方向錯誤。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "法人買超與價格超跌的乘積交互作用未能放大資訊含量，可能因兩個cs_z變數在雙邊都接近常態分布時容易相互抵銷雜訊而非疊加訊號；若要測『法人逆勢承接』概念，建議改用條件篩選子集報酬(如僅看trust_net_21>0且mom_240後20%的股票組報酬)，而非連續乘積，以避免交乘稀釋效應。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0783",
+ "ts": "2026-08-14T01:05:54"
+}

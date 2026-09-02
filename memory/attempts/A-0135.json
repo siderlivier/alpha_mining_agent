@@ -1,0 +1,84 @@
+{
+ "round": 8,
+ "category": "momentum_conviction",
+ "hypothesis": "短期價格上漲若未伴隨周轉率放大，代表買盤來自掌握基本面的理性投資人而非散戶追價；此類『安靜的動能』較不會因獲利了結賣壓而反轉，機制類比F-008『接近新高但周轉不高』延伸到一般短期動能。",
+ "prediction": "sub-train ICIR > 0.45；與F-008相關係數 < 0.5；月換手率 < 0.4。",
+ "formula": "cs_rank(sdiv(mom_20, turn_21))",
+ "name_zh": "安靜動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_20",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(mom_20, turn_21))",
+  "fhash": "a280634a254ecc92",
+  "sub_train": {
+   "mean_ic": 0.0,
+   "icir": 0.0
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.17,
+   "decay_pct": -264837.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.045,
+    "多頭"
+   ],
+   "2014": [
+    -0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.044,
+    "盤整"
+   ],
+   "2016": [
+    -0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    -0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": -0.007
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": -0.08,
+   "半導體": -0.1,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.055,
+   "short_excess_ann": 0.023
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.7,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR為0，validation雖有0.17但decay_pct因分母趨近0而失真。月換手率0.7遠高於預測<0.4，代表mom_20/turn_21此比值排名極不穩定(turn_21接近0時比值易爆量、造成排名劇烈跳動)。安靜動能類比F-008的機制在改用短窗一般動能(去掉「接近新高」條件)後完全失效。",
+ "failure_type": "expression_bad",
+ "lesson": "sdiv(短窗價格動能, 週轉率)這種比值構造在分母可能接近0時會放大雜訊、造成排名不穩定(高換手佐證)；F-008式的『量價背離』機制似乎依賴其原始『接近新高』條件篩選，直接套用到泛用動能上會失去意義，不能單靠除法轉換複製。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0135",
+ "ts": "2026-07-19T21:42:48"
+}

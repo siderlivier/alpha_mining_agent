@@ -1,0 +1,83 @@
+{
+ "round": 38,
+ "category": "financial_book_value_compounding",
+ "hypothesis": "台股投資人評價金融股高度依賴現金殖利率，較少關注每股淨值長期成長軌跡；淨值穩定成長代表留存盈餘持續複利、資本累積紮實，但缺乏即時滿足感而被忽略，此效果需較長時間反映在評價中；金融業淨值直接對應資本適足與清算價值，資訊含金量高於其他產業。",
+ "prediction": "sub-train ICIR整體或金融產業industry_icir > 0.5；金融產業industry_icir應為四產業最高或次高；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(ts_slope(bp,12))",
+ "name_zh": "金控淨值複利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(bp,12))",
+  "fhash": "dc692d57acb69428",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.04
+  },
+  "validation": {
+   "mean_ic": -0.012,
+   "icir": -0.09,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.055,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    -0.008,
+    "盤整"
+   ],
+   "2016": [
+    -0.011,
+    "多頭"
+   ],
+   "2017": [
+    -0.054,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.014,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.18,
+   "半導體": -0.05,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.024,
+   "short_excess_ann": -0.059
+  },
+  "coverage": 0.65,
+  "turnover_m": 0.15,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融產業應最強(>0.5)，實際金融icir僅0.03（雖為四產業最高但遠低於預期），且多空兩腿報酬皆為負(-0.024/-0.059)。逐年IC呈現2013-14正、2015-17轉負的斷裂走勢，非單調延續的複利效應。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "長週期複利敘事若逐年IC正負對半甚至趨勢反轉（而非單調延續），代表機制本身可能不存在或已隨利率/殖利率邏輯改變而消失，不建議只換參數窗口重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0585",
+ "ts": "2026-07-30T01:16:47"
+}

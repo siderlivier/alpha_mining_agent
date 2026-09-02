@@ -1,0 +1,90 @@
+{
+ "round": 47,
+ "category": "value_signal_congruence",
+ "hypothesis": "單一估值指標便宜可能是財報操縱或產業結構性衰退造成的假象；當盈餘殖利率(ep)與淨值股價比(bp)同時便宜，代表便宜是由兩個獨立會計基礎共同確認，價值陷阱機率較低，但市場估值篩選器多只用單一指標，未獎勵此交叉確認。",
+ "prediction": "sub-train ICIR > 0.45；此因子IC應優於單獨ep或bp排序；多頭腿年化超額報酬 > 0。",
+ "formula": "mul(cs_rank(ep), cs_rank(bp))",
+ "name_zh": "雙重價值確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "ep"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ep), cs_rank(bp))",
+  "fhash": "335b98c558bd0a16",
+  "sub_train": {
+   "mean_ic": 0.076,
+   "icir": 0.73
+  },
+  "validation": {
+   "mean_ic": 0.108,
+   "icir": 0.87,
+   "decay_pct": -19.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.064,
+    "多頭"
+   ],
+   "2015": [
+    0.079,
+    "盤整"
+   ],
+   "2016": [
+    0.116,
+    "多頭"
+   ],
+   "2017": [
+    0.096,
+    "多頭"
+   ],
+   "2018": [
+    0.103,
+    "盤整"
+   ],
+   "2019": [
+    0.113,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.099,
+   "down_months": 0.053
+  },
+  "industry_icir": {
+   "電子": 1.27,
+   "生技": 0.75,
+   "半導體": 0.38,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.073,
+   "short_excess_ann": 0.072
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.19,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.66,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.66 > 0.5"
+ },
+ "diagnosis": "預測全部成立：sub-train ICIR 0.73(>0.45)、validation更強0.87、多頭腿年化超額0.073為正，電子產業ICIR高達1.27。雙重估值確認降低價值陷阱機率的機制獲強力驗證，唯獨與庫內F-002(金融品質價值)相關係數0.66過高，被stage2淘汰——ep x bp本質上已被'淨值便宜+高ROE'品質價值主軸覆蓋。",
+ "failure_type": "duplicate",
+ "lesson": "見learnings_additions：雙指標交叉確認構造即使績效優異也高機率與庫內品質x價值因子重疊，應在深入開發前先做粗略相關性篩查。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0719",
+ "ts": "2026-08-12T14:54:09"
+}

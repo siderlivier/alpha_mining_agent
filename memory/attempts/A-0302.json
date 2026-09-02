@@ -1,0 +1,87 @@
+{
+ "round": 19,
+ "category": "securities_lending_neglect",
+ "hypothesis": "借券量佔成交量比偏低的股票代表法人（避險基金、造市商）幾乎不關注、無需借券避險或放空布局，屬於機構視野外的冷門股，資訊效率低、錯價機會較高。",
+ "prediction": "sub-train ICIR>0.4；四產業industry_icir皆為正；與F-008相關係數<0.5。",
+ "formula": "cs_rank(neg(lend_vol_21))",
+ "name_zh": "借券冷門股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(lend_vol_21))",
+  "fhash": "f7aa0585a9a7eeef",
+  "sub_train": {
+   "mean_ic": -0.028,
+   "icir": -0.32
+  },
+  "validation": {
+   "mean_ic": -0.045,
+   "icir": -0.48,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.049,
+    "盤整"
+   ],
+   "2013": [
+    -0.026,
+    "多頭"
+   ],
+   "2014": [
+    -0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.023,
+    "盤整"
+   ],
+   "2016": [
+    -0.027,
+    "多頭"
+   ],
+   "2017": [
+    -0.024,
+    "多頭"
+   ],
+   "2018": [
+    -0.056,
+    "盤整"
+   ],
+   "2019": [
+    -0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.044,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": -0.46,
+   "生技": -0.37,
+   "半導體": -0.21,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.028,
+   "short_excess_ann": -0.023
+  },
+  "coverage": 0.54,
+  "turnover_m": 0.42,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "全面性且一致的方向反轉：sub-train與validation ICIR皆為顯著負值(-0.32/-0.48)，逐年幾乎每年皆負，上漲/下跌月同號皆負，三個產業顯著負(電子-0.46,生技-0.37,半導體-0.21)。可能原因：借券量高的股票多為指數成分股/大型權值股(具規模與品質優勢)，且coverage僅0.54偏低，顯示借券資料本身樣本有限，可能把「無借券資料」與「借券量低但有資料」混為一談，方向因此失真。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "借券量偏低≠法人忽略的冷門股，在台股資料中反而穩定跑輸；很可能是借券資料只涵蓋法人熟悉/大型股，直接neg()處理會把資料缺失也算進「冷門」，方向因此失真。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0302",
+ "ts": "2026-07-21T13:13:10"
+}

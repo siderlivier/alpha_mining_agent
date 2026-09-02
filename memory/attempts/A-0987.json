@@ -1,0 +1,85 @@
+{
+ "round": 65,
+ "category": "cash_flow_quality_acceleration",
+ "hypothesis": "營業現金流對淨利比率半年內明顯改善，代表盈餘含金量正在加速提升；這類現金流品質加速訊號比應計項水準本身更早反映經營轉佳，但市場多半只關注應計項的靜態水準而非其變化速度，導致對現金流品質加速的公司反應不足。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿年化超額 > 0；與F-006(neg(ts_mean(accruals,12)))相關係數|ρ|<0.5，證明變化速度訊號有別於水準訊號。",
+ "formula": "mul(cs_rank(delta(ocf_ratio,6)), cs_rank(neg(accruals)))",
+ "name_zh": "現金品質加速股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(ocf_ratio,6)), cs_rank(neg(accruals)))",
+  "fhash": "cb0d07e2c6548d22",
+  "sub_train": {
+   "mean_ic": 0.012,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.02,
+   "icir": 0.38,
+   "decay_pct": -112.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.012,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    -0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.004,
+    "盤整"
+   ],
+   "2019": [
+    0.035,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": 0.02,
+   "生技": 0.1,
+   "半導體": 0.09,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.007,
+   "short_excess_ann": 0.0
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 ICIR>0.4、多頭腿>0，實際 sub-train ICIR 0.18、多頭腿-0.7%、各產業 ICIR 近零。但 validation ICIR 回升到 0.38(decay -112%)、2015/2019 為正，訊號並非全然不存在。現金流品質假設與已驗證的應計項水準因子(F-006)方向一致，問題較可能出在 delta(ocf_ratio,6) 對季頻雜訊比率取 6 月差分太粗糙。",
+ "failure_type": "expression_bad",
+ "lesson": "會計品質類比率(ocf_ratio、accruals)須年度平滑後再取趨勢；短窗差分會被季節性與一次性項目主導，容易吃到雜訊。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-029",
+ "id": "A-0987",
+ "ts": "2026-09-02T00:32:52"
+}

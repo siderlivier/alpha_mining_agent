@@ -1,0 +1,88 @@
+{
+ "round": 57,
+ "category": "value_trap_avoidance_via_lending_signal",
+ "hypothesis": "淨值便宜的股票中,若同時不存在顯著的機構借券做空行為(借券代表資訊性空頭,見C-1機制),代表這類便宜股是真正被低估而非價值陷阱(帳面便宜但基本面持續惡化);若便宜股同時被大量借券放空,通常代表市場已預期其帳面價值難以兌現。",
+ "prediction": "sub-train ICIR>0.4;多頭腿年化超額報酬>0;需與F-002/F-021相關性<0.5,並與C-1相關性<0.5。",
+ "formula": "mul(cs_rank(bp), cs_rank(neg(lend_vol_21)))",
+ "name_zh": "借券驗證便宜股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp",
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(neg(lend_vol_21)))",
+  "fhash": "cb5a6468ca52c00a",
+  "sub_train": {
+   "mean_ic": 0.021,
+   "icir": 0.19
+  },
+  "validation": {
+   "mean_ic": -0.007,
+   "icir": -0.06,
+   "decay_pct": 130.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    -0.025,
+    "盤整"
+   ],
+   "2016": [
+    0.053,
+    "多頭"
+   ],
+   "2017": [
+    0.018,
+    "多頭"
+   ],
+   "2018": [
+    0.024,
+    "盤整"
+   ],
+   "2019": [
+    -0.037,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.007,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": -0.16,
+   "生技": -0.08,
+   "半導體": -0.04,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": 0.004
+  },
+  "coverage": 0.43,
+  "turnover_m": 0.31,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.41
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.19 < 0.45; validation ICIR -0.06 < 0.3; validation 衰減 130% > 50%（過擬合徵兆）; 覆蓋率 0.43 < 0.6"
+ },
+ "diagnosis": "預測ICIR>0.4，但實際sub-train僅0.19、validation變號至-0.06(decay 130%)，且覆蓋率0.43過低——bp與lend_vol_21交集樣本本身稀疏(借券資料覆蓋率有限，同見C-1覆蓋率0.53)，訓練期過擬合、驗證期失效。『便宜股+無放空確認=真便宜』的邏輯本身未被推翻，只是所選借券變數覆蓋率太差。",
+ "failure_type": "expression_bad",
+ "lesson": "應換用覆蓋率更高的空方確認變數：本輪C-14用short_margin_ratio覆蓋率達0.77(遠高於lend_vol_21的0.53)且方向驗證良好，建議以short_margin_ratio取代lend_vol_21重新表達此組合因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0872",
+ "ts": "2026-08-19T00:11:01"
+}

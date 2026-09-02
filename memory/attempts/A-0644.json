@@ -1,0 +1,83 @@
+{
+ "round": 42,
+ "category": "biotech_cash_burn_transition",
+ "hypothesis": "生技公司研發期普遍現金流為負，一旦營運現金流比率出現明顯轉折（由負轉正/大幅回升），代表從燒錢邁向商轉的離散去風險化事件；市場錨定生技股長期虧損刻板印象，對轉折反應遲緩，此機制在生技產業特別顯著。",
+ "prediction": "sub-train ICIR>0.45；industry_icir於生技應為四產業最高(>0.5)；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(delta(ocf_ratio,12))",
+ "name_zh": "生技現金轉正",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,12))",
+  "fhash": "d3aa3559d6c6e7ce",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.17,
+   "半導體": 0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技業industry_icir應為四產業最高(>0.5)；實際生技-0.17，是四產業中第二差，方向完全相反。sub-train ICIR也為負(-0.13)。公式delta(ocf_ratio,12)未做任何產業條件化，只是套用全市場後事後檢視industry_icir，該檢驗方式無法真正驗證『生技刻板印象』的產業專屬假設。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『市場對產業Y存在刻板印象低估』類假設，若公式沒有明確限定/加權於產業Y，事後看industry_icir是弱檢定（小樣本雜訊大），且本案結果直接反向——下次應在公式內對目標產業做mask或interaction再測試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0644",
+ "ts": "2026-08-12T09:45:43"
+}

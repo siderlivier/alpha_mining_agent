@@ -1,0 +1,87 @@
+{
+ "round": 29,
+ "category": "margin_debt_stability",
+ "hypothesis": "融資餘額變化率的波動度反映該股散戶槓桿使用的穩定程度；若融資餘額變化率長期波動小，代表持有該股的融資戶籌碼穩定、非追高殺低的短線投機客主導，股價較不容易因融資斷頭骨牌效應出現非基本面的閃崩。這類「籌碼穩定」溢酬與F-005(價格波動度低)概念相似但衡量的是槓桿行為穩定度而非價格本身，屬不同風險維度；過去測試「去槓桿趨緩」斜率因子失敗，但尚未測試槓桿波動度水準本身作為穩定性代理。",
+ "prediction": "sub-train ICIR > 0.45；與F-005相關係數 |ρ| < 0.5（驗證非價格波動度的代理）。",
+ "formula": "cs_rank(neg(ts_std(margin_d21,12)))",
+ "name_zh": "融資籌碼穩定度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(margin_d21,12)))",
+  "fhash": "ee19ee312c10222c",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.15
+  },
+  "validation": {
+   "mean_ic": -0.005,
+   "icir": -0.07,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.022,
+    "盤整"
+   ],
+   "2013": [
+    -0.009,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    -0.027,
+    "盤整"
+   ],
+   "2016": [
+    0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.039,
+    "多頭"
+   ],
+   "2018": [
+    0.002,
+    "盤整"
+   ],
+   "2019": [
+    -0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": -0.0,
+   "生技": -0.21,
+   "半導體": -0.03,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.15,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train ICIR為-0.15，方向與假說相反且幅度微弱，逐年IC正負交錯、絕對值都小(<0.04)，看不出『融資波動度低=籌碼穩定=風險溢酬』的系統性效果。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "融資餘額變化率的12月波動度（作為槓桿穩定性代理）在台股測不出風險溢酬效果，此假說在目前形式下證據不支持，暫不建議以其他窗口參數重試同一構造。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0457",
+ "ts": "2026-07-29T23:14:31"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 3,
+ "category": "limited_attention_momentum",
+ "hypothesis": "依Hong & Stein(1999)漸進資訊擴散理論，低週轉率（關注度低）的股票中，價格動能因缺乏足夠交易者快速消化資訊而擴散更慢，使同等強度的動能訊號延續期更長；此為「動能×關注度」交互作用，與先前被否證的「周轉率×營收方向」組合機制不同（該組合已列為禁忌），此為因子庫與經驗庫皆未出現過的新機制類別。",
+ "prediction": "sub-train ICIR>0.40；低turn_21子樣本（前50%）動能IC應顯著高於高turn_21子樣本（差距>0.1）。",
+ "formula": "cs_rank(mul(neg(turn_21), mom_120))",
+ "name_zh": "冷門股動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(neg(turn_21), mom_120))",
+  "fhash": "6dd84984b912f189",
+  "sub_train": {
+   "mean_ic": -0.002,
+   "icir": -0.02
+  },
+  "validation": {
+   "mean_ic": 0.003,
+   "icir": 0.03,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.038,
+    "盤整"
+   ],
+   "2016": [
+    -0.016,
+    "多頭"
+   ],
+   "2017": [
+    -0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    -0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.009,
+   "down_months": 0.018
+  },
+  "industry_icir": {
+   "電子": -0.1,
+   "生技": -0.16,
+   "半導體": 0.1,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.072,
+   "short_excess_ann": -0.019
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.34,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.40且低週轉子樣本動能IC顯著高於高週轉子樣本(差距>0.1)』。實際sub-train ICIR接近零/負(-0.02)，stage1即遭拒，多空兩腿皆為負，上漲/下跌月IC也都很弱。作為全新機制類別的嘗試，在台股資料上完全沒有展現出訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "Hong & Stein的漸進資訊擴散(低週轉率×動能)機制以neg(turn_21)×mom_120這種簡單乘法交互形式，在此台股樣本/期間未觀察到任何邊際訊號，證據強度足以暫列觀察名單，但因僅單一個案，不宜直接列入永久禁忌。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0067",
+ "ts": "2026-07-19T17:08:22"
+}

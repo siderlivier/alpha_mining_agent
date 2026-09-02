@@ -1,0 +1,83 @@
+{
+ "round": 53,
+ "category": "earnings_growth_rank_persistence",
+ "hypothesis": "EPS年增率長期(12個月)處於自身歷史高分位，代表獲利成長的相對強度具跨期一致性，不同於單期年增率易受一次性項目干擾，市場對這種需跨期比較才能確認的持續強度存在系統性低估，分析師預估修正速度落後於實際獲利軌跡。",
+ "prediction": "sub-train ICIR>0.45；與F-022(sdiv eps_yoy/std)相關係數應<0.5(本因子用歷史分位排名而非除以自身波動度標準化)。",
+ "formula": "cs_rank(ts_rank(eps_yoy, 12))",
+ "name_zh": "EPS持續強度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(eps_yoy, 12))",
+  "fhash": "a2205c7cb4f46289",
+  "sub_train": {
+   "mean_ic": 0.016,
+   "icir": 0.34
+  },
+  "validation": {
+   "mean_ic": 0.035,
+   "icir": 0.73,
+   "decay_pct": -115.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.09,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.011,
+    "多頭"
+   ],
+   "2017": [
+    0.025,
+    "多頭"
+   ],
+   "2018": [
+    0.034,
+    "盤整"
+   ],
+   "2019": [
+    0.035,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.032,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": 0.4,
+   "生技": 0.07,
+   "半導體": 0.08,
+   "金融": 0.29
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.024
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.34未達標，但validation異常強(0.73，decay -115%)，產業分布(電子0.4、金融0.29)方向合理。相較之下C-5用相同「歷史分位排名」邏輯但窗口拉到24個月(營收年增率)，sub-train ICIR達0.52，顯示窗口長度可能是關鍵差異，12個月的EPS版本訊號被稀釋。",
+ "failure_type": "expression_bad",
+ "lesson": "「歷史分位排名持續性」類因子強度對ts_rank窗口長度敏感，12個月可能太短；EPS版本下次應優先嘗試拉長窗口至24個月，比照營收版本設定。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0817",
+ "ts": "2026-08-15T11:33:03"
+}

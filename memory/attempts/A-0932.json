@@ -1,0 +1,87 @@
+{
+ "round": 61,
+ "category": "biotech_cash_generation_trend",
+ "hypothesis": "生技股現金流對淨利比率(ocf_ratio)持續改善，代表公司從「燒錢換里程碑」階段真正轉為現金自給，這是比毛利率或EPS更早、更直接反映財務體質轉骨的訊號，市場更關注臨床/法規事件而忽略現金流趨勢，此為全新類別。",
+ "prediction": "生技產業內sub-train ICIR > 0.4；與F-022(eps_yoy/std版)截面相關 |ρ| < 0.5",
+ "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+ "name_zh": "生技現金轉佳股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+  "fhash": "df7f6e9bc413f841",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.25
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.029,
+    "盤整"
+   ],
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    -0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.12,
+   "半導體": -0.06,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業內ICIR>0.4，結果完全反向：sub-train ICIR為-0.25，各產業別ICIR全數為負，逐年也幾乎全負（僅2012、2018、2019微幅轉正）。ocf_ratio的12月斜率上升並未被市場低估、反而與未來報酬呈負相關，「現金自給轉骨比毛利率/EPS更早反映體質改善」的假設方向完全被證偽，而非表達或雜訊問題。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技股現金流比率(ocf_ratio)改善趨勢與未來超額報酬呈負相關而非正相關，不宜再假設「現金自給轉佳」是市場低估的正向訊號；若要再試，方向應反轉或改用臨床/法規事件類變數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0932",
+ "ts": "2026-08-27T10:25:20"
+}

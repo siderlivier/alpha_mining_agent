@@ -1,0 +1,89 @@
+{
+ "round": 66,
+ "category": "fundamental_price_divergence",
+ "hypothesis": "毛利率過去 12 個月明顯改善、但股價過去半年下跌的股票，存在基本面與價格的背離。負價格動能使這些名字從機構與散戶的雷達上消失，毛利率改善（產品組合、成本、定價力的慢變數）在財報揭露卻無人追蹤；當價格趨勢反轉或財報再確認，估值會向已改善的基本面收斂。",
+ "prediction": "direction pos；sub-train ICIR > 0.4；多頭腿（毛利改善+弱股價）年化超額 > 0（關鍵）；與 C-11、F-001、R-018 之 |ρ| < 0.5；下跌月 IC 不劣於上漲月。",
+ "formula": "rank_nz(if_else(less(mom_120,0), delta(gross_margin,12), 0))",
+ "name_zh": "毛利價背離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "rank_nz(if_else(less(mom_120,0), delta(gross_margin,12), 0))",
+  "fhash": "12378fba950b253c",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.29
+  },
+  "validation": {
+   "mean_ic": 0.008,
+   "icir": 0.08,
+   "decay_pct": 72.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.071,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    -0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.022,
+   "down_months": 0.019
+  },
+  "industry_icir": {
+   "電子": 0.39,
+   "生技": 0.18,
+   "半導體": -0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.051
+  },
+  "coverage": 0.34,
+  "turnover_m": 0.41,
+  "stage2_culprit": {
+   "factor": "R-018",
+   "rho": 0.99,
+   "factor_name": "毛利率年變化",
+   "factor_desc": "毛利率的 12 個月變化"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 R-018 |ρ|=0.99 > 0.5"
+ },
+ "diagnosis": "預測 pos、多頭腿為正(關鍵)——這點命中,多頭腿年化 +4.6%、sub-train IC 0.027、ICIR 0.29、電子 ICIR 0.39。但與 R-018 毛利率年變化 ρ=0.99——if_else(mom_120<0) 的硬 gate 幾乎完全沒有分離出『背離』成分,因子等同於 delta(gross_margin,12) 本身,只是覆蓋率被砍到 0.34。『背離』假說可能仍成立,表達完全沒做到。",
+ "failure_type": "expression_bad",
+ "lesson": "用 if_else 硬門檻 + rank_nz 表達『基本面改善 × 價格弱勢』的背離,結果是覆蓋率塌陷且訊號仍由基本面項主導(退化為既有因子)。下次背離類因子改用兩個排名的交乘 cs_rank(delta(gross_margin,12)) × cs_rank(neg(mom_120)),或對 mom_120 殘差化毛利改善,不用硬切。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-1013",
+ "ts": "2026-09-02T00:51:50"
+}

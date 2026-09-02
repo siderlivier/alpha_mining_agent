@@ -1,0 +1,94 @@
+{
+ "round": 54,
+ "category": "overlooked_profitability_liquidity",
+ "hypothesis": "本業獲利率經3月平滑後仍高、且成交金額低的公司代表獲利是持續性本業表現而非單季波動，機構篩選器仍因低成交金額而忽略，訊號比原始F-020更穩定、換手率更低。",
+ "prediction": "sub-train ICIR>0.45；與F-020相關係數|ρ|<0.5（顯示非純重複）；四產業中至少3個industry IC同號為正。",
+ "formula": "mul(cs_rank(ts_mean(op_margin,3)), cs_rank(neg(amt_21)))",
+ "name_zh": "平滑冷門獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_mean(op_margin,3)), cs_rank(neg(amt_21)))",
+  "fhash": "d47d039684f3471c",
+  "sub_train": {
+   "mean_ic": 0.058,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.085,
+   "icir": 0.7,
+   "decay_pct": -64.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.068,
+    "盤整"
+   ],
+   "2013": [
+    0.087,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.071,
+    "多頭"
+   ],
+   "2017": [
+    0.043,
+    "多頭"
+   ],
+   "2018": [
+    0.11,
+    "盤整"
+   ],
+   "2019": [
+    0.061,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.08,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.64,
+   "生技": 0.52,
+   "半導體": 0.27,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.052
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.19,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.97,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.97 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且與F-020|ρ|<0.5，實際sub-train ICIR僅0.43（不達標）且ρ=0.97，幾乎與F-020完全重複。對op_margin做3月平滑幾乎不改變其橫斷面排序，未能製造出與原始F-020的差異化，預測的『非純重複』完全落空。",
+ "failure_type": "duplicate",
+ "lesson": "對既有因子的單一欄位做輕度平滑（如ts_mean短窗）不足以脫離原相關性，因為cs_rank對平滑不敏感；若要做『冷門獲利』家族的變體，需换成結構不同的低關注度代理或改變組合邏輯，而非只加平滑。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0819",
+ "ts": "2026-08-18T21:21:48"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 39,
+ "category": "trust_flow_quality_confirmation",
+ "hypothesis": "投信法人買進前通常會進行財報體質篩選，若投信買超集中在應計項偏低(盈餘含金量高)的個股，代表這是基於扎實財報分析的資金行為，比單純籌碼動向更具資訊價值；市場對『籌碼x財報品質』複合訊號的反應慢於對單一籌碼流向的反應。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-006相關性<0.5(機制為投信確認x應計品質而非應計品質本身)",
+ "formula": "mul(cs_rank(trust_net_21),cs_rank(neg(accruals)))",
+ "name_zh": "投信選優質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(trust_net_21),cs_rank(neg(accruals)))",
+  "fhash": "a64a366d4a63cb55",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.03
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.02,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.007,
+    "多頭"
+   ],
+   "2014": [
+    -0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.019,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    -0.013,
+    "多頭"
+   ],
+   "2018": [
+    -0.013,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.015
+  },
+  "industry_icir": {
+   "電子": -0.0,
+   "生技": 0.19,
+   "半導體": -0.04,
+   "金融": -0.12
+  },
+  "legs": {
+   "long_excess_ann": -0.0,
+   "short_excess_ann": 0.008
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.4,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測投信買超x應計品質組合能過濾雜訊籌碼，但實際IC全期幾乎為零(sub -0.03、validation -0.02)，各年份正負交替且幅度極小，各產業ICIR也都接近0，「籌碼x財報品質」複合訊號在此表達法下完全沒有展現訊息價值。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信買超x應計品質的複合訊號在台股沒有觀察到任何效應，接近純噪音，暫不建議再用此組合形式重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0608",
+ "ts": "2026-08-12T09:06:34"
+}

@@ -1,0 +1,93 @@
+{
+ "round": 42,
+ "category": "informed_short_selling",
+ "hypothesis": "券資比偏高代表融券部位相對增加，融券者多具資訊優勢或基本面判斷力，非單純軋空題材；市場低估此知情放空訊號的持續性，導致券資比偏高個股後續報酬系統性偏弱。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(低券資比組)年化超額報酬>0；IC全期間應穩定為正；與F-008相關性|ρ|<0.5。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "知情放空訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.45；實際sub-train 0.27/validation 0.25（低於預測但穩定，decay僅6%，方向全期一致，電子業ICIR達0.47）。死於stage2：與F-008（低調接近新高，低週轉率）相關性0.57，剛好超過門檻。券資比與F-008的『低調/未被炒作』概念本質重疊。",
+ "failure_type": "duplicate",
+ "lesson": "以券資比構造『知情放空』訊號，容易與庫內『低調強勢』類因子（F-008）撞車——這類構造已是紅海，除非搭配明顯不同語意的第二腿。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0642",
+ "ts": "2026-08-12T09:45:43"
+}

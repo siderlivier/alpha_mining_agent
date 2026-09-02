@@ -1,0 +1,95 @@
+{
+ "round": 65,
+ "category": "overlooked_profitability_liquidity",
+ "hypothesis": "外資持股比率低的股票代表機構研究覆蓋度低、資訊不易被快速吸收；當這類低關注股同時具備高本業獲利率，市場需要更長時間才會發現並重新定價，形成關注度折價，此機制與已驗證通過的amt_21版本相同，但換用非交易活躍度代理，避開週轉率紅海。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿年化超額報酬 > 0；與F-020(neg(amt_21)版本)相關係數|ρ|<0.5視為成功脫離該因子而非純複製。",
+ "formula": "mul(cs_rank(op_margin), cs_rank(neg(frgn_ratio)))",
+ "name_zh": "冷門獲利股外資版",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(op_margin), cs_rank(neg(frgn_ratio)))",
+  "fhash": "7a94e51837c9cb82",
+  "sub_train": {
+   "mean_ic": 0.048,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.07,
+   "icir": 0.78,
+   "decay_pct": -103.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.058,
+    "盤整"
+   ],
+   "2013": [
+    0.06,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.065,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.081,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.059,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.5,
+   "半導體": 0.21,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.051,
+   "short_excess_ann": 0.043
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.67,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.67 > 0.5"
+ },
+ "diagnosis": "預測 sub-train ICIR>0.4 幾乎命中(0.38)，多頭腿+5.1% 與『冷門獲利股仍有超額』方向一致，validation 反而增強(decay -103%)顯示機制穩健。但核心預測『換外資持股代理即可脫離 F-020』被推翻：ρ=0.67。低外資持股比與低週轉率/低成交金額都是同一潛在變數(機構關注度/流動性)的代理，彼此高相關，換殼不換魂。",
+ "failure_type": "duplicate",
+ "lesson": "『冷門/低關注 × 高獲利』空間已被 F-020 佔據，且外資持股比、週轉率、成交金額互為關注度代理、無法靠切換代理脫離；下次要進此空間必須改動『獲利』那一側或加入正交的第三維度，而非再換一個關注度代理。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "from_queue": "Q-011",
+ "id": "A-0984",
+ "ts": "2026-09-02T00:32:52"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 11,
+ "category": "foreign_ownership_trend_diffusion",
+ "hypothesis": "外資持股比率的季度趨勢變化反映外資機構深入研究後的緩步加碼。這類長線布局需分批執行才能完成,資訊擴散慢,散戶與其他法人跟隨滯後,使價格對外資長線信念的反映呈現緩步而非跳躍過程。",
+ "prediction": "sub-train ICIR>0.45;月換手<0.4;訊號強度應在低週轉率(法人覆蓋較少)股票中更強",
+ "formula": "cs_rank(ts_mean(frgn_ratio_d63,3))",
+ "name_zh": "外資緩步加碼",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(frgn_ratio_d63,3))",
+  "fhash": "0e014d5c216060aa",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.014,
+    "盤整"
+   ],
+   "2013": [
+    0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    -0.009,
+    "多頭"
+   ],
+   "2018": [
+    -0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.1,
+   "半導體": 0.02,
+   "金融": -0.14
+  },
+  "legs": {
+   "long_excess_ann": 0.004,
+   "short_excess_ann": 0.047
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.23,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且低週轉率股票中訊號更強，實際sub-train ICIR僅-0.01完全無方向性，validation也僅0.01，cond_ic上漲/下跌月皆近0，長短腿也幾乎無區分度。外資持股比率3月均線的『緩步加碼』假設在數據上完全不成立，可能股價已快速消化持股比率變動。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資持股比率的季頻趨勢變化被市場快速消化，不存在預期的緩步擴散alpha；未來測外資資訊優勢應聚焦『短期淨買超金額/成交量占比異常』而非長期持股比率趨勢，兩者機制不可互相替代。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0177",
+ "ts": "2026-07-21T11:33:49"
+}

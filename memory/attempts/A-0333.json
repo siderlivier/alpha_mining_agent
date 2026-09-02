@@ -1,0 +1,83 @@
+{
+ "round": 21,
+ "category": "institutional_flow_momentum",
+ "hypothesis": "台灣投信基金研究能量集中於特定產業族群，其3個月平滑後的持續買超代表基於基本面研究的信心部位建立，而非單月資金追漲雜訊，此類持續性法人買盤因基金分批加碼執行會產生報酬慣性。",
+ "prediction": "sub-train ICIR>0.45；電子/半導體產業industry_icir應高於金融；月換手率<0.4。",
+ "formula": "cs_rank(ts_mean(trust_net_21,3))",
+ "name_zh": "投信買超延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(trust_net_21,3))",
+  "fhash": "a96aba087c509690",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.33,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.003,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    -0.025,
+    "多頭"
+   ],
+   "2017": [
+    -0.02,
+    "多頭"
+   ],
+   "2018": [
+    -0.021,
+    "盤整"
+   ],
+   "2019": [
+    -0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": -0.09,
+   "半導體": -0.14,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.023,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測投信持續買超代表基本面信心建倉、應為正報酬，但sub-train ICIR為-0.18、validation更負至-0.33，方向完全相反。產業別多數也是負值（金融-0.19、半導體-0.14），僅電子微幅正值(0.09)。這與C-1「投信賣壓=雜訊、外資買=資訊性」的假設互相矛盾——顯示投信持續買超本身更像是追高情緒的雜訊訊號，而非研究信心的證明。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信平滑後的持續買超與後續報酬呈負相關，不支持「法人分批建倉代表信心」的機制；反而更像追價情緒指標，可考慮以反向方向重新測試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0333",
+ "ts": "2026-07-21T13:38:15"
+}

@@ -1,0 +1,79 @@
+{
+ "round": 44,
+ "category": "biotech_milestone_profit_inflection",
+ "hypothesis": "生技股的營業利益年增率一旦轉正或大幅加速改善，往往對應重大里程碑事件兌現（藥證核准、授權收入認列、保險給付啟動），這類事件是脈衝式的，其後續營收貢獻具延續性，但分析師習慣性地把生技股營益的正向波動視為一次性，因此對於營益年增率明顯加速改善的生技股，重新評價存在滯後。",
+ "prediction": "生技產業限定：industry_icir > 0.5，decay < 30%；pos方向；此訊號應與F-011（毛利x營收生技組合）相關性 < 0.5，證明聚焦『加速度』而非水準。",
+ "formula": "cs_rank(delta(op_income_yoy, 12))",
+ "name_zh": "生技轉盈加速股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(op_income_yoy, 12))",
+  "fhash": "d382c9fe127861dd",
+  "sub_train": {
+   "mean_ic": 0.002,
+   "icir": 0.02
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.23,
+   "decay_pct": -1066.0
+  },
+  "ic_by_year": {
+   "2014": [
+    -0.024,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    -0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.013,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": -0.0,
+   "生技": 0.13,
+   "半導體": -0.09,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.006,
+   "short_excess_ann": -0.004
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.22,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業限定industry_icir>0.5、decay<30%。實際sub-train ICIR僅0.02(近乎零訊號)，生技產業icir僅0.13，半導體甚至為負(-0.09)，全面遠低於預測門檻。此為對『已是YoY成長率』的op_income_yoy再取12個月delta的雙重差分，訊號被過度放大雜訊，與C-4、C-9同屬本輪delta類訊號普遍偏弱的樣式。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "對已經是年增率(yoy)的欄位再取12個月delta形成雙重差分，訊號雜訊被進一步放大到接近零(icir 0.02)，這是本輪三個delta/雙重差分候選(C-4, C-9, C-15)共同的失敗樣式，而非單一個案巧合。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0683",
+ "ts": "2026-08-12T14:15:12"
+}

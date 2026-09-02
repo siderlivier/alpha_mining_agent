@@ -1,0 +1,87 @@
+{
+ "round": 44,
+ "category": "retail_margin_capitulation_reversal",
+ "hypothesis": "融資餘額持續去化（6個月平均變化率為負）代表散戶融資盤已充分出清，籌碼結構轉為健康持有；散戶容易在急跌後恐慌性斷頭或自行減碼，導致股價出現過度反應下殺，機構承接不及時，隨後存在均值回歸式反彈；此為『去化完成』的持續趨勢訊號，而非單月波動。",
+ "prediction": "sub-train ICIR > 0.45；neg(ts_mean(margin_d21,6))越高（去化越明顯）未來報酬越高；此訊號IC應在下跌月顯著高於上漲月（反轉特徵）；月換手率 < 0.4。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21, 6)))",
+ "name_zh": "融資去化反轉股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21, 6)))",
+  "fhash": "644251112a5cce0b",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.18,
+   "decay_pct": 20.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.004,
+    "盤整"
+   ],
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.011,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.14,
+   "半導體": 0.0,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測此訊號應在下跌月顯著高於上漲月(反轉特徵)。實際 cond_ic 上漲月0.021、下跌月僅0.005，方向與預測完全相反，且 sub-train ICIR 僅0.22 未達門檻。融資去化並未在下跌後的反彈期展現優勢，反而在多頭環境略有表現，更像是弱動能而非反轉訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『融資去化=籌碼健康=均值回歸反彈』的反轉敘事被證偽：實際條件IC顯示此訊號在上漲月才略有效，下跌月幾乎無效，與斷頭出清後反彈的機制不符，可能只是弱化的持續性(而非反轉)代理。下次測試融資相關反轉假設時應直接以cond_ic方向作第一道篩選，而非等到全指標算完才發現方向不符。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0671",
+ "ts": "2026-08-12T14:15:12"
+}

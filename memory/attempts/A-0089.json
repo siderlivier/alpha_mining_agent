@@ -1,0 +1,94 @@
+{
+ "round": 5,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "先前測試的px_hi252/vol_21比值因子(sub-train ICIR約0.60)換手率偏高，代表訊號存在月度雜訊；用3個月移動平均平滑後，保留錨定效應核心趨勢、濾除短期雜訊，應能在不犧牲太多IC的前提下明顯降低換手率，使因子更適合實際交易。",
+ "prediction": "平滑後sub-train ICIR仍需 > 0.45（相較原始版本衰減 < 15%），且月換手率應降至 < 0.4。",
+ "formula": "cs_rank(ts_mean(sdiv(px_hi252, vol_21),3))",
+ "name_zh": "平滑新高動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(sdiv(px_hi252, vol_21),3))",
+  "fhash": "f247f53b92fbb9e9",
+  "sub_train": {
+   "mean_ic": 0.071,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.108,
+   "icir": 0.72,
+   "decay_pct": -32.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.016,
+    "盤整"
+   ],
+   "2013": [
+    0.084,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.084,
+    "盤整"
+   ],
+   "2016": [
+    0.09,
+    "多頭"
+   ],
+   "2017": [
+    0.086,
+    "多頭"
+   ],
+   "2018": [
+    0.13,
+    "盤整"
+   ],
+   "2019": [
+    0.085,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.099,
+   "down_months": 0.031
+  },
+  "industry_icir": {
+   "電子": 0.74,
+   "生技": 0.52,
+   "半導體": 0.33,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.038
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.18,
+  "stage2_culprit": {
+   "factor": "F-005",
+   "rho": 0.86,
+   "factor_name": "低波動異常",
+   "factor_desc": "長期波動度低的穩定股因散戶偏好高波動股而被低估"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-005 |ρ|=0.86 > 0.5"
+ },
+ "diagnosis": "量化預測全部命中甚至超越：sub-train ICIR 0.55、validation 0.72（decay -32%，反而改善）、換手率0.18遠低於0.4目標，平滑降噪的判斷完全正確。但沒預料到的是，px_hi/vol_21平滑後結構上收斂到低波動因子：與F-005相關係數高達0.86。",
+ "failure_type": "duplicate",
+ "lesson": "對價格/波動度比值類因子做平滑處理，會讓分母（波動度）的持續性主導訊號，使其趨同於既有低波動因子——在投入更多平滑窗口調參前，應先檢查與波動度類庫內因子的相關性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0089",
+ "ts": "2026-07-19T17:32:31"
+}

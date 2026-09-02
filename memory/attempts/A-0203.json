@@ -1,0 +1,86 @@
+{
+ "round": 12,
+ "category": "biotech_margin_revenue_quality",
+ "hypothesis": "生技股從燒錢研發階段過渡到商業化階段的關鍵訊號，是「營收成長」同時伴隨「毛利率具備一定水準」；純授權金或一次性收入雖能推升營收年增率但毛利率結構脆弱，唯有毛利率與營收成長同時存在才代表真正具備可複製的產品化商轉能力，此邏輯因生技業獨特的燒錢/商轉轉折特性而不適用於其他產業。",
+ "prediction": "sub-train ICIR > 0.45；生技產業industry_icir應為四產業最高，其餘產業<0.25；與F-004(毛利波動度構造，非水準)相關係數應<0.5",
+ "formula": "cs_rank(mul(cs_rank(gross_margin), cs_rank(rev_yoy)))",
+ "name_zh": "生技轉骨訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(cs_rank(gross_margin), cs_rank(rev_yoy)))",
+  "fhash": "92ec4f3bdba8c30b",
+  "sub_train": {
+   "mean_ic": 0.041,
+   "icir": 0.49
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.33,
+   "decay_pct": 31.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.052,
+    "多頭"
+   ],
+   "2015": [
+    0.069,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.026,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": 0.05
+  },
+  "industry_icir": {
+   "電子": 0.59,
+   "生技": 0.12,
+   "半導體": 0.34
+  },
+  "legs": {
+   "long_excess_ann": 0.061,
+   "short_excess_ann": 0.073
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.34,
+  "stage2_max_rho": {
+   "factor": "F-003",
+   "rho": 0.4
+  },
+  "verdict": "passed"
+ },
+ "diagnosis": "整體通過門檻(sub-train ICIR 0.49, validation 0.33, decay 31%),但核心敘事完全落空——預測生技產業industry_icir應最高,實際生技是三個列出產業中最低(0.12),電子反而最高(0.59)。這其實是通用的「品質×成長」(毛利率×營收成長)因子,不具生技特有的燒錢/商轉轉折敘事,產業故事屬於事後過度延伸的錯誤歸因。",
+ "failure_type": "none",
+ "lesson": "即使因子最終通過,也要對照industry_icir檢驗敘事是否成立;本次「生技轉骨」產業專屬故事被證偽,該因子本質是跨產業通用的獲利品質×成長交乘因子,未來應以中性視角理解與延伸此因子家族,勿被單一產業敘事侷限延伸方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed",
+ "id": "A-0203",
+ "ts": "2026-07-21T11:46:43"
+}

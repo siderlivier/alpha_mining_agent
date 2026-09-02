@@ -1,0 +1,83 @@
+{
+ "round": 8,
+ "category": "earnings_stability_discount",
+ "hypothesis": "EPS年增率波動度低的公司代表獲利有結構性穩定來源，而非景氣循環財或一次性項目主導；市場對『穩定但不亮眼』的公司缺乏故事性、法人研究覆蓋率低，長期存在系統性低估，機制與F-007（營收波動）相同但改用EPS層級捕捉財務槓桿/會計穩定度而非訂單穩定度。",
+ "prediction": "sub-train ICIR > 0.45；與F-007相關係數 < 0.5；下跌月IC不弱於上漲月。",
+ "formula": "cs_rank(neg(ts_std(eps_yoy,6)))",
+ "name_zh": "獲利穩定溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(eps_yoy,6)))",
+  "fhash": "8efcb277e8b90a20",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.068,
+   "icir": 0.97,
+   "decay_pct": -578.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.047,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.031,
+    "盤整"
+   ],
+   "2016": [
+    0.026,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.081,
+    "盤整"
+   ],
+   "2019": [
+    0.054,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.037,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.13,
+   "半導體": 0.24,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.14，validation ICIR異常高達0.97(decay -578%)——但validation僅2018/2019兩個資料點驅動，樣本數過少使ICIR易被少數月份放大，可信度低而非真正機制轉強。多頭腿超額報酬為負(-0.005)，同樣不可交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "驗證期ICIR異常暴衝(本例0.97)且明顯由極少數年份驅動時，應視為統計雜訊而非機制驗證成功的證據，不宜以此為由放寬對sub-train表現不足的容忍。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0141",
+ "ts": "2026-07-19T21:42:48"
+}

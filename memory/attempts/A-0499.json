@@ -1,0 +1,87 @@
+{
+ "round": 32,
+ "category": "cash_runway_improvement",
+ "hypothesis": "生技股常年虧損燒錢，市場評價高度依賴「還能燒多久」的現金存續能力。當營運現金流/稅後淨利比率(ocf_ratio)呈現長期改善趨勢，代表公司正從純研發燒錢階段轉向現金流體質改善（即使淨利仍為負），這是半年報頻率外尚未被系統性追蹤的漸進式改善訊號。此機制僅在生技業成立，因傳統產業ocf_ratio波動主要反映景氣循環而非結構轉型。",
+ "prediction": "整體sub-train ICIR可能<0.45，但生技產業industry_icir>0.55；生技產業多頭腿年化超額>0；與F-011(生技毛利營收)相關性|ρ|<0.5。",
+ "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+ "name_zh": "生技現金轉骨",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+  "fhash": "df7f6e9bc413f841",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.25
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.029,
+    "盤整"
+   ],
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    -0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.12,
+   "半導體": -0.06,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測全面落空：預期整體ICIR可能<0.45但生技產業icir>0.55，實際整體為-0.25（方向相反），生技產業icir也是-0.12（同樣為負，並非高值）。cond_ic上漲/下跌月都接近零偏負，看不出生技特有的訊號。ocf_ratio的12個月斜率並未捕捉到『現金流體質改善但未被定價』的機會，反而略偏負向，可能是因為改善趨勢常伴隨業外認列或一次性調整，市場其實反應得不慢。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『生技現金流轉骨』假設的核心機制（漸進式ocf_ratio改善代表未被定價的轉機）目前證據不支持，且方向、產業專屬性兩項預測皆落空，屬於較乾淨的證偽案例。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0499",
+ "ts": "2026-07-29T23:57:20"
+}

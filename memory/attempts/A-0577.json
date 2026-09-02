@@ -1,0 +1,83 @@
+{
+ "round": 37,
+ "category": "operating_income_surprise_zscore",
+ "hypothesis": "將營業利益年增率的短期變動除以其自身過去兩年的波動度標準化後，能反映相對於公司自身正常波動的真實驚喜程度，一個原本波動小的公司出現同樣20%的成長其實更具資訊含量；市場容易對原始年增率數字直接反應，卻忽略應以公司自身波動基準衡量的統計顯著性。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-022相關性|ρ|<0.5。",
+ "formula": "cs_rank(sdiv(delta(op_income_yoy,3), ts_std(op_income_yoy,12)))",
+ "name_zh": "營益驚喜標準化",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(op_income_yoy,3), ts_std(op_income_yoy,12)))",
+  "fhash": "c168eb8d4d6672a6",
+  "sub_train": {
+   "mean_ic": -0.006,
+   "icir": -0.07
+  },
+  "validation": {
+   "mean_ic": -0.012,
+   "icir": -0.17,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.133,
+    "多頭"
+   ],
+   "2014": [
+    -0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.027,
+    "盤整"
+   ],
+   "2016": [
+    -0.031,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    -0.002,
+    "盤整"
+   ],
+   "2019": [
+    -0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": -0.013
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": -0.05,
+   "半導體": -0.07,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.42,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "標準化後的營益驚喜訊號整體平淡且雜訊高(ICIR -0.07)，主要由單一異常年份(2013年+0.133)拉動，其餘年度與產業方向不一致(僅電子業0.26為正)；以12個月的ts_std作為分母對波動較大的中小型股基本面而言分母可能不穩定，與C-9的比率不穩定問題呼應。",
+ "failure_type": "expression_bad",
+ "lesson": "用短窗滾動標準差(12個月)標準化短窗delta訊號，對波動大或覆蓋率較低的個股容易產生不穩定的分母；若重新測試，應拉長標準化窗口(24個月以上)或對標準化後數值做縮尾處理再排序。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0577",
+ "ts": "2026-07-30T01:03:36"
+}

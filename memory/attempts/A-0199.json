@@ -1,0 +1,84 @@
+{
+ "round": 12,
+ "category": "quality_growth_interaction",
+ "hypothesis": "低應計項(盈餘含金量高)同時ROE年增率(delta 12月)在改善的公司，代表獲利成長是真實營運改善而非會計操作墊高；兩者同時成立比單一應計或單一ROE趨勢訊號更能篩掉「虛胖成長」的假訊號。",
+ "prediction": "sub-train ICIR > 0.45；與F-001(ROE趨勢)、F-006(低應計品質)相關係數需各自<0.5(已知高風險交乘，任一超標即應淘汰)；多頭腿年化超額報酬須為正",
+ "formula": "cs_rank(mul(neg(accruals), delta(roe,12)))",
+ "name_zh": "真獲利真成長",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(neg(accruals), delta(roe,12)))",
+  "fhash": "77a4babe62d277cd",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.38,
+   "decay_pct": 13.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.026,
+    "多頭"
+   ],
+   "2015": [
+    0.039,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.03,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.022,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.36,
+   "生技": 0.11,
+   "半導體": 0.02,
+   "金融": 0.36
+  },
+  "legs": {
+   "long_excess_ann": 0.016,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.17
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.44 < 0.45"
+ },
+ "diagnosis": "本輪最接近通過的落選者——sub-train ICIR 0.44僅差0.01未達門檻,validation ICIR 0.38、decay僅13%(幾乎無過擬合跡象),與F-001相關係數僅0.17,多頭腿超額報酬為正(0.016)。門檻、相關性、可交易性三項預測幾乎全部支持假設方向正確,只是整體強度差臨門一腳。",
+ "failure_type": "expression_bad",
+ "lesson": "當sub-train ICIR僅些微低於門檻,但decay極低(<15%)且相關性/多空腿檢查都通過時,代表機制大概率成立只是表達力道不夠,應優先安排換表達重試(如加法組合避免乘法交乘抵銷、調整ROE窗口),而非直接放棄該方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0199",
+ "ts": "2026-07-21T11:46:43"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 55,
+ "category": "lottery_demand_discount",
+ "hypothesis": "台灣散戶主導的市場中，投資人偏好高週轉率、高波動的「彩券型」個股（類似樂透心理，追求小機率大報酬），此類股票長期被過度需求推高價格，形成系統性負向風險溢酬；當turn_21與vol_21同時偏高時，代表該股正被投機性買盤炒作而非基本面驅動，未來報酬將顯著低於冷門穩健股。",
+ "prediction": "sub-train ICIR絕對值>0.4；空頭腿（高turn×vol組）年化報酬顯著為負；下跌月的IC強度應高於上漲月（恐慌時彩券股拋售更劇烈）。",
+ "formula": "cs_rank(neg(mul(turn_21,vol_21)))",
+ "name_zh": "彩券股折價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(mul(turn_21,vol_21)))",
+  "fhash": "7e0c043a9267ae95",
+  "sub_train": {
+   "mean_ic": 0.062,
+   "icir": 0.54
+  },
+  "validation": {
+   "mean_ic": 0.065,
+   "icir": 0.43,
+   "decay_pct": 20.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.071,
+    "多頭"
+   ],
+   "2014": [
+    0.069,
+    "多頭"
+   ],
+   "2015": [
+    0.061,
+    "盤整"
+   ],
+   "2016": [
+    0.075,
+    "多頭"
+   ],
+   "2017": [
+    0.035,
+    "多頭"
+   ],
+   "2018": [
+    0.098,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.086,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.53,
+   "半導體": 0.22,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.018,
+   "short_excess_ann": 0.054
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.35,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.96,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.96 > 0.5"
+ },
+ "diagnosis": "訓練/驗證ICIR皆如預期>0.4且僅衰減20%，空頭腿為主要獲利來源的預測方向大致成立（short_excess_ann 0.054 > long_excess_ann 0.018）。但「下跌月訊號應更強」的預測落空：實際上漲月IC(0.086)遠高於下跌月(0.008)，是順勢型而非避險型訊號，校準有誤。最終死因是與F-008「低調接近新高」相關性高達0.96，本質是同一個「周轉率=炒作程度」概念的鏡像表達。",
+ "failure_type": "duplicate",
+ "lesson": "turn_21×vol_21的炒作度量與F-008的低周轉率近高確認，是同一潛在構造的正反面，方向相反不代表資訊獨立；下次切入周轉率/炒作面向前應先評估與F-008的概念距離。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0834",
+ "ts": "2026-08-18T23:46:33"
+}

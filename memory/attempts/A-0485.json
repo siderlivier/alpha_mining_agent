@@ -1,0 +1,87 @@
+{
+ "round": 31,
+ "category": "financial_margin_trend_underreaction",
+ "hypothesis": "金融股淨利率(net_margin)半年變動可近似反映利差與手續費收入結構的邊際改善；但分析師傳統上聚焦ROE、BVPS等資本效率指標，對淨利率邊際變化關注度低，形成金融業內特有的資訊擴散遲滯。此機制僅限金融業，因其獲利結構高度依賴利差與費用收入比例變化，其他產業net_margin變動驅動因素更複雜（成本結構、匯率等）而不具備此特定機制。",
+ "prediction": "金融產業限定 industry_icir > 0.5；與F-002/F-010相關性 |ρ| < 0.5；多頭腿年化超額報酬 > 0。",
+ "formula": "cs_rank(delta(net_margin,6))",
+ "name_zh": "金融淨利率改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(net_margin,6))",
+  "fhash": "27830292d4c7d9ea",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.03,
+   "icir": 0.66,
+   "decay_pct": -271.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.03,
+    "盤整"
+   ],
+   "2013": [
+    0.021,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    -0.029,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.51,
+   "生技": 0.13,
+   "半導體": 0.29,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.039,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.18，未達0.45門檻，rejected_stage1；validation ICIR異常跳升至0.66（衰減-271%），樣本數小導致的不穩定訊號而非真實改善。更根本的問題是：預測『金融產業限定』的機制，實際industry_icir中金融只有-0.03（接近零甚至為負），反而電子(0.51)、半導體(0.29)更高，直接推翻『此機制僅金融業存在資訊擴散遲滯』的核心敘事。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "與C-8同類：宣稱『僅金融業存在分析師關注盲區』的敘事未獲數據支持，金融業ICIR反而是四個產業中最低；net_margin半年變動的訊號若存在，更可能是跨產業的一般獲利改善訊號，而非金融業特有現象。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0485",
+ "ts": "2026-07-29T23:46:18"
+}

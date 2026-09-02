@@ -1,0 +1,90 @@
+{
+ "round": 35,
+ "category": "semiconductor_margin_inflection",
+ "hypothesis": "半導體產業具強烈庫存/景氣週期，毛利率較半年前明顯回升代表去庫存已近尾聲、進入回補階段；但市場因連續幾季獲利下滑養成慣性看空，對毛利率剛落底回升的初期反應遲鈍。",
+ "prediction": "sub-train ICIR>0.45；半導體產業industry_icir>0.5；多頭腿年化超額>0；下跌月與上漲月IC同向。",
+ "formula": "cs_rank(delta(gross_margin,6))",
+ "name_zh": "半導體毛利底",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(gross_margin,6))",
+  "fhash": "4e3cdb311f4821b8",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.75
+  },
+  "validation": {
+   "mean_ic": 0.019,
+   "icir": 0.34,
+   "decay_pct": 55.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.0,
+    "盤整"
+   ],
+   "2013": [
+    0.021,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    0.053,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.037
+  },
+  "industry_icir": {
+   "電子": 0.49,
+   "生技": 0.38,
+   "半導體": 0.26
+  },
+  "legs": {
+   "long_excess_ann": 0.056,
+   "short_excess_ann": 0.08
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.25,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.41
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation 衰減 55% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR 0.75遠超預測門檻，cond_ic同向(up0.031/down0.037)也達標，但validation ICIR降至0.34、decay 55%超過過擬合門檻而死。半導體產業ICIR僅0.26，反而電子(0.49)更高，與「半導體景氣循環特有」敘事不符，顯示這其實是廣泛電子業毛利改善因子，半導體子樣本量小導致訓練期效果被放大。",
+ "failure_type": "expression_bad",
+ "lesson": "delta(gross_margin,6)在小樣本半導體子產業內對單一6個月窗口敏感、容易過擬合；同一機制换成更長平滑窗口或要求連續確認回升可能降低decay，值得換表達方式重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0537",
+ "ts": "2026-07-30T00:34:10"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 10,
+ "category": "volatility_term_structure",
+ "hypothesis": "短期波動相對長期波動的比值快速上升，往往領先於法說會、月營收公布等消息的價格發現過程，反映知情交易在事件前提早進場，而非單純恐慌性拋售。",
+ "prediction": "sub-train ICIR>0.4；下跌月IC不應顯著為負(否則屬恐慌而非知情交易)；與F-005之ρ<0.5。",
+ "formula": "cs_rank(sdiv(vol_21, vol_126))",
+ "name_zh": "波動結構轉變",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(vol_21, vol_126))",
+  "fhash": "049a250ece877053",
+  "sub_train": {
+   "mean_ic": -0.025,
+   "icir": -0.36
+  },
+  "validation": {
+   "mean_ic": -0.005,
+   "icir": -0.08,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    -0.039,
+    "多頭"
+   ],
+   "2014": [
+    -0.036,
+    "多頭"
+   ],
+   "2015": [
+    -0.032,
+    "盤整"
+   ],
+   "2016": [
+    -0.029,
+    "多頭"
+   ],
+   "2017": [
+    -0.023,
+    "多頭"
+   ],
+   "2018": [
+    -0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.024,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": -0.43,
+   "生技": -0.34,
+   "半導體": -0.22,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.023,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.71,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測pos(短期波動急升=知情交易提前布局)，實測全年一致為負(sub-train -0.36)，電子/生技負值最深(-0.43/-0.34)。『下跌月不應顯著負』部分勉強成立(-0.009)，但主方向完全相反：短期波動急升更可能代表風險上升前兆而非知情交易買盤。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "vol_21/vol_126比值上升在台股對應負向報酬而非正向知情交易訊號；未來若重測短期波動類訊號，應改用neg方向(視為風險溢價/迴避訊號)而非提前布局的正面假設。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0168",
+ "ts": "2026-07-21T11:22:51"
+}

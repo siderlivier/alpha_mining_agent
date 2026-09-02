@@ -1,0 +1,82 @@
+{
+ "round": 40,
+ "category": "margin_trough_recovery",
+ "hypothesis": "電子/半導體供應鏈毛利率具有明顯庫存與價格週期性；毛利率剛脫離24個月低點通常對應去化庫存完成、報價止跌回升初期，但市場仍錨定於近期財報疲弱印象，對循環反轉的重新定價存在延遲。",
+ "prediction": "sub-train ICIR>0.45；電子/半導體industry_icir應明顯高於生技/金融；多頭腿年化超額>0；因對切分點敏感，validation期decay須<100%。",
+ "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,24)))",
+ "name_zh": "毛利谷底反彈",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,24)))",
+  "fhash": "fc03a70db59cc7a2",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": -0.014,
+   "icir": -0.2,
+   "decay_pct": 217.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.007,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.036,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.003,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.02,
+   "生技": 0.03,
+   "半導體": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.025,
+   "short_excess_ann": 0.075
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.12,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且電子/半導體industry_icir應明顯高於生技/金融，用以驗證『供應鏈庫存週期』的產業專屬機制。實際sub-train ICIR僅0.17，且電子（-0.02）、半導體（0.03）的industry_icir反而是四產業中最低，生技（0.03）與電子相近，完全不支持『電子/半導體特有』的核心假設。validation更decay 217%且符號翻負。這不只是統計量不足，而是機制本身在資料上被證偽——毛利率剛脫離24月低點在電子/半導體並未顯示比其他產業更強的訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『毛利率剛脫離低點=庫存週期底部反轉』的產業專屬假設在industry_icir分解上未獲支持，供應鏈庫存週期性可能已被市場即時定價（法說會/月營收頻繁揭露），不宜再用毛利率轉折類因子鎖定電子/半導體。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0611",
+ "ts": "2026-08-12T09:17:43"
+}

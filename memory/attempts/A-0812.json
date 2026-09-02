@@ -1,0 +1,87 @@
+{
+ "round": 53,
+ "category": "revenue_momentum_acceleration_raw",
+ "hypothesis": "月增率(rev_mom)本身6個月的斜率捕捉短期營收動能是否從『單月表現』轉為『持續加速』的建立過程，比單期月增率雜訊更低，且與F-009(用年增率均線斜率)機制不同，反映更即時的環比動能訊號。",
+ "prediction": "sub-train ICIR>0.45；與F-009、F-007相關係數應<0.5。",
+ "formula": "cs_rank(ts_slope(rev_mom, 6))",
+ "name_zh": "營收加速趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_mom, 6))",
+  "fhash": "be561bad7ba0daf1",
+  "sub_train": {
+   "mean_ic": -0.006,
+   "icir": -0.11
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.31,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.012,
+    "盤整"
+   ],
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    -0.024,
+    "盤整"
+   ],
+   "2016": [
+    -0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": -0.022
+  },
+  "industry_icir": {
+   "電子": -0.14,
+   "生技": -0.05,
+   "半導體": 0.13,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.018,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.94,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR為-0.11，方向與預測(pos)相反；validation翻正到0.31但decay無法計算，顯示訊號在train/validation間方向不穩定，月增率本身雜訊大，6個月斜率窗口可能不足以濾除雜訊。",
+ "failure_type": "expression_bad",
+ "lesson": "對本身高頻雜訊的欄位直接取短窗斜率，訊噪比可能不足導致跨期方向不穩定；應先對base欄位做平滑後再取斜率，或拉長斜率窗口。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0812",
+ "ts": "2026-08-15T11:33:03"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 33,
+ "category": "margin_improvement_underreaction",
+ "hypothesis": "淨利率半年改善代表公司在成本控制或訂價權上出現結構性轉變，但市場常解讀為單季波動而非趨勢，因分析師更新財測需至少一次財報循環確認，導致改善公司在重新評估完成前持續被低估；此機制預期在全市場（不限金融業）成立，比金融業限定假說更具穩健性。",
+ "prediction": "sub-train ICIR > 0.45；與F-001(ROE趨勢)相關性 |ρ| < 0.5；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(delta(net_margin,6))",
+ "name_zh": "淨利率轉強",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(net_margin,6))",
+  "fhash": "27830292d4c7d9ea",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.03,
+   "icir": 0.66,
+   "decay_pct": -271.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.03,
+    "盤整"
+   ],
+   "2013": [
+    0.021,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    -0.029,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.51,
+   "生技": 0.13,
+   "半導體": 0.29,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.039,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向錯誤：sub-train ICIR(0.18)遠低於0.45門檻，但validation卻大幅提升到0.66(衰減-271%)。逐年IC正負交錯(2012 -0.03、2017 -0.029，其餘多為正)，金融業industry_icir為負，顯示'全市場更穩健'的框架並未成立，validation期的好表現較可能是2年樣本的偶然，而非機制普遍存在。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "逐年IC正負反覆交錯(而非單純偏弱)是與'穩定但弱訊號'不同的失敗模式——遇到這種情況，即使驗證期數字亮眼也應保持懷疑，因為可能只是短驗證窗期(2年)的巧合而非機制確立。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0511",
+ "ts": "2026-07-30T00:08:12"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 24,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "應計項為正（獲利含金量低、有操縱空間）的公司，其ROE改善很可能是會計選擇造成的假象，市場對此保持懷疑並無系統性錯誤定價；但應計項為負或零（現金流品質佳）時，ROE改善反映真實營運面提升，市場仍錨定舊財報數字而低估這類真實成長。用門控而非線性相減，避免對高應計但真實成長的公司過度懲罰。",
+ "prediction": "sub-train ICIR > 0.45（優於先前線性相減版本的0.44）；通過閘門子集(accruals≤0)內多頭腿超額報酬須>0。",
+ "formula": "cs_rank(if_else(greater(accruals,0), 0, ts_slope(roe,6)))",
+ "name_zh": "應計淨化ROE門控",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(accruals,0), 0, ts_slope(roe,6)))",
+  "fhash": "e68a03c176243baf",
+  "sub_train": {
+   "mean_ic": 0.016,
+   "icir": 0.23
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.16,
+   "decay_pct": 29.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.013,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.018,
+    "多頭"
+   ],
+   "2018": [
+    0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": 0.3,
+   "生技": 0.16,
+   "半導體": 0.17,
+   "金融": 0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.039,
+   "short_excess_ann": 0.04
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.34,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『門控版本優於先前線性相減版本的0.44』完全錯誤——實際sub-train icir僅0.23，反而比舊線性版本更差。原因很可能是if_else硬門控把accruals>0的樣本全部設為常數0，導致這群股票在橫斷面排序上失去區分度（同分堆積），淨效果是丟棄了大量樣本的排序資訊，而非單純聚焦『真訊號子集』。閘門子集內多頭腿超額報酬雖>0（0.039），但整體訊號被稀釋。",
+ "failure_type": "expression_bad",
+ "lesson": "用if_else把未通過閘門的樣本設為同一常數（如0）會摧毀該子集內部的橫斷面排序資訊，這在rank IC計算下通常比線性相減更差；閘門類因子若要保留全樣本排序能力，應用連續懲罰（如乘上一個隨accruals遞減的權重）而非硬性歸零。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0372",
+ "ts": "2026-07-28T18:28:36"
+}

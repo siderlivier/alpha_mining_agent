@@ -1,0 +1,86 @@
+{
+ "round": 67,
+ "category": "gross_profitability_premium",
+ "hypothesis": "毛利率位於損益表上游、較難被會計手法操縱，是比稅後獲利更乾淨的品質指標（Novy-Marx）。同業中毛利率高的公司具備真實成本優勢，卻因『高毛利被視為理所當然、缺乏故事性』而長期折價；市場高估低毛利公司獲利改善的可能、低估高毛利公司的持續性。",
+ "prediction": "sub-train ICIR > 0.3；多頭腿年化超額 > 0；方向在四大產業一致為正；與 F-004、F-011、R-015/R-017 之 |ρ| < 0.5。",
+ "formula": "cs_rank(industry_demean(gross_margin))",
+ "name_zh": "毛利率溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(industry_demean(gross_margin))",
+  "fhash": "91e4ee0c2cc880af",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.18,
+   "decay_pct": -60.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.066,
+    "盤整"
+   ],
+   "2013": [
+    0.036,
+    "多頭"
+   ],
+   "2014": [
+    -0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.049,
+    "盤整"
+   ],
+   "2016": [
+    -0.027,
+    "多頭"
+   ],
+   "2017": [
+    -0.043,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.27,
+   "生技": -0.07,
+   "半導體": 0.12
+  },
+  "legs": {
+   "long_excess_ann": -0.004,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.05,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.11、ic_by_year 劇烈跳動(2012 +0.066, 2017 -0.043)、多頭腿 −0.4%(負)、cond_ic 跌月 0.030 ≫ 漲月 0.001。預測『多頭腿>0、四產業方向一致』雙雙落空。Novy-Marx 毛利率溢價在台股呈現為防禦型、且超額集中在放不掉的空方——長期站不住多頭腿。與 C-9 同病。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "台股靜態毛利率『水準』不是可交易的多頭 alpha：跌月才靈、多頭腿為負的防禦特徵。品質類因子要往變化量、產業內相對變化、或與價格/關注度交互的方向走。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1021",
+ "ts": "2026-09-02T01:09:58"
+}

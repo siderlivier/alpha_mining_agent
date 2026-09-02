@@ -1,0 +1,88 @@
+{
+ "round": 13,
+ "category": "biotech_derisking_reprice",
+ "hypothesis": "生技股長期虧損燒錢，市場主要依管線里程碑預期而非財報定價；當現金流含金量(OCF/淨利)與淨利率同時改善，代表公司正從研發燒錢期轉向商業化收成期，這類轉骨訊息缺乏單一新聞觸發點，分析師與散戶更新速度慢，此機制在其他產業（現金流健康為常態）不具邊際訊息量，故僅在生技業顯著。",
+ "prediction": "sub-train ICIR>0.4（產業限定門檻）；生技產業industry_icir應為四大產業最高且高於全市場整體ICIR。",
+ "formula": "mul(cs_rank(ocf_ratio), cs_rank(delta(net_margin,6)))",
+ "name_zh": "生技轉骨現金流",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio), cs_rank(delta(net_margin,6)))",
+  "fhash": "5d3d43fc1cdfa01b",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.19
+  },
+  "validation": {
+   "mean_ic": 0.032,
+   "icir": 0.57,
+   "decay_pct": -203.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.053,
+    "盤整"
+   ],
+   "2013": [
+    -0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.052,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    -0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.011,
+    "盤整"
+   ],
+   "2019": [
+    0.052,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.25,
+   "半導體": 0.25,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.037,
+   "short_excess_ann": 0.031
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業industry_icir應為四產業最高，實際生技0.25反低於電子0.56，直接打臉「機制僅生技顯著」的產業專屬假設；訊號本身在validation期意外轉強（ICIR 0.57，decay -203%，同屬train弱validation強模式），且sub-train早期(2012-2013)為負而後轉正，顯示ocf_ratio×Δnet_margin更像通用獲利品質確認因子，而非生技轉骨故事。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「產業限定」假說要用industry_icir排序直接檢驗；本案真正驅動產業是電子而非假說中的生技，代表這類獲利品質確認結構更像全市場通用因子，重試時應改global假說而非產業限定敘事。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0210",
+ "ts": "2026-07-21T11:59:28"
+}

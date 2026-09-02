@@ -1,0 +1,84 @@
+{
+ "round": 52,
+ "category": "biotech_milestone_volatility_quality/生技限定",
+ "hypothesis": "生技股常見燒錢期營收忽高忽低，一般视为雜訊(F-007懲罰此類波動)；但若同時觀察到營運現金流品質(ocf_ratio)持續改善，代表營收波動可能來自藥證核准、授權金等里程碑收入到位而非經營不穩，此組合在生技產業具有與F-007相反的解讀，屬於產業特定的例外機制。",
+ "prediction": "sub-train ICIR>0.45(生技產業子樣本)；與F-007相關係數方向相反(非同向重複)；多頭腿年化超額>0",
+ "formula": "mul(cs_rank(delta(ocf_ratio,12)), cs_rank(ts_std(rev_mom,6)))",
+ "name_zh": "生技現金里程碑",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(ocf_ratio,12)), cs_rank(ts_std(rev_mom,6)))",
+  "fhash": "3c2e37cf5bef1864",
+  "sub_train": {
+   "mean_ic": -0.028,
+   "icir": -0.38
+  },
+  "validation": {
+   "mean_ic": -0.025,
+   "icir": -0.44,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.055,
+    "多頭"
+   ],
+   "2014": [
+    -0.015,
+    "多頭"
+   ],
+   "2015": [
+    -0.031,
+    "盤整"
+   ],
+   "2016": [
+    -0.027,
+    "多頭"
+   ],
+   "2017": [
+    -0.019,
+    "多頭"
+   ],
+   "2018": [
+    -0.02,
+    "盤整"
+   ],
+   "2019": [
+    -0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.034,
+   "down_months": -0.011
+  },
+  "industry_icir": {
+   "電子": -0.45,
+   "生技": -0.44,
+   "半導體": -0.05,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.015,
+   "short_excess_ann": -0.025
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.25,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測生技子樣本應出現與F-007相反的正向IC，但實測整體IC為-0.38(icir)，生技產業別ICIR更是-0.44(全產業最差之一)，方向與假設完全相反——市場並未把『營收波動+現金流轉佳』解讀為里程碑收入，反而懲罰更重。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "見C-13的合併教訓：生技『燒錢/波動其實是好事』類反轉假說本輪兩次獨立測試皆失敗且方向與市場一致。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0793",
+ "ts": "2026-08-14T01:18:09"
+}

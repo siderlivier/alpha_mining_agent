@@ -1,0 +1,84 @@
+{
+ "round": 14,
+ "category": "earnings_quality_congruence",
+ "hypothesis": "當EPS年增率與營業利益年增率出現明顯落差（獲利成長主要來自業外或一次性項目），代表財報獲利品質較差，市場初期常對高EPS成長反應過度，之後隨業外貢獻無法延續而修正；落差越小（本業與帳面成長一致）代表獲利品質越可信、越應獲得溢價。",
+ "prediction": "formula數值（落差絕對值）越大，未來報酬越低（direction=neg）；sub-train ICIR > 0.4；此為前次mul()交乘失敗後改用差值絕對值表達的重試版本",
+ "formula": "cs_rank(abs(sub(op_income_yoy, eps_yoy)))",
+ "name_zh": "本業獲利一致",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(abs(sub(op_income_yoy, eps_yoy)))",
+  "fhash": "ac713fd0b7ef5ca5",
+  "sub_train": {
+   "mean_ic": -0.017,
+   "icir": -0.17
+  },
+  "validation": {
+   "mean_ic": -0.032,
+   "icir": -0.39,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.06,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    -0.036,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.028,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.02,
+   "半導體": -0.02,
+   "金融": -0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向neg（EPS與營業利益成長落差越大，報酬越低）獲得方向確認：sub-train IC -0.017、validation IC -0.032皆為負且驗證期更強（ICIR由-0.17增強到-0.39），電子(-0.22)與金融(-0.24)兩產業效果最集中，符合『業外貢獻虛胖』在業外收益占比高產業更明顯的直覺。唯sub-train絕對IC值(0.017)太小未達門檻；本次是前次mul()交乘失敗後改用abs(sub())的重試，方向邏輯已修正正確但強度仍不足。",
+ "failure_type": "expression_bad",
+ "lesson": "方向已連續兩次驗證正確（abs(sub())取代mul()後IC符號穩定為負），瓶頸純粹是訊號強度；下次可嘗試僅在op_income_yoy與eps_yoy同為正成長的子集中計算落差（排除虧轉盈干擾），以提高訊號純度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0230",
+ "ts": "2026-07-21T12:11:51"
+}

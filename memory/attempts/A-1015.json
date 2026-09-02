@@ -1,0 +1,88 @@
+{
+ "round": 67,
+ "category": "leverage_deleveraging_float_absorption",
+ "hypothesis": "融資餘額代表散戶槓桿部位。當融資餘額以緩和、非斷頭式速度持續去化超過一年，浮動籌碼由弱勢槓桿手逐步轉移到長期持有者手中，未來股價對利多的反應會因浮額稀少而放大。此供給面機制與恐慌性斷頭出貨不同，市場只看到價格波動不大、忽略籌碼結構的實質改善。",
+ "prediction": "sub-train ICIR > 0.3；多頭腿年化超額 > 0；8 個 sub-train 年至少 5 年 IC 為正；效果集中中小型股；與 F-008 之 |ρ| < 0.5。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,12)))",
+ "name_zh": "融資緩降浮額沉澱",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,12)))",
+  "fhash": "cf84b95b51d349b5",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.37,
+   "decay_pct": -89.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.021,
+    "盤整"
+   ],
+   "2013": [
+    0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    -0.007,
+    "多頭"
+   ],
+   "2018": [
+    0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.08,
+   "半導體": 0.05,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測部分達成：6/8 年為正(門檻≥5)、多頭腿+2.1%>0、turnover 0.19 低、電子 ICIR 0.47；但 sub-train ICIR 0.2<0.3 強度不足。公式 cs_rank(neg(ts_mean(margin_d21,12))) 只排『12 月平均融資變動』，完全沒編碼假設核心的『緩和、非斷頭式』去化——無法區分恐慌斷頭與溫和沉澱。cond_ic 跌月 0.000 顯示零避險性。validation ICIR 0.37 反而更好，假設不像被證偽，是表達沒抓到限定詞。",
+ "failure_type": "expression_bad",
+ "lesson": "假設裡的限定詞(『緩降』『非斷頭』)若公式沒有對應項，等於沒測到那個假設。融資去化要同時要求(a)持續為負的斜率與(b)單月跌幅的低波動/低極值，才是『溫和去化』。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-006",
+ "id": "A-1015",
+ "ts": "2026-09-02T01:09:58"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 20,
+ "category": "biotech_cash_burn_deceleration",
+ "hypothesis": "生技股評價高度依賴管線里程碑與現金燒盡預期。當營業現金流相對淨利的比率在過去一年顯著改善（燒錢速度趨緩），代表產品線可能進入授權金挹注或商轉初期，降低現金增資稀釋風險。此類非傳統獲利指標的『燒錢趨緩』訊號常被聚焦EPS的主流價值投資人忽略。",
+ "prediction": "sub-train ICIR > 0.45；生技產業industry_icir > 0.4 且高於半導體/電子/金融三產業；與F-011相關係數 < 0.5。",
+ "formula": "cs_rank(delta(ocf_ratio,12))",
+ "name_zh": "生技燒錢趨緩",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,12))",
+  "fhash": "d3aa3559d6c6e7ce",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.17,
+   "半導體": 0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業industry_icir>0.4且領先其他產業，實際生技業icir為-0.17，恰好與預測方向相反；sub-train整體也是負值(-0.13)。假說鎖定的目標產業本身訊號方向就反了，顯示生技股評價可能不受落後指標『燒錢趨緩』驅動。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技股評價主要由前瞻性管線/授權消息驅動，落後型現金流趨緩指標(delta ocf_ratio)在生技產業本身即呈負相關，此類回顧性財務指標不適合用來捕捉生技股行為偏誤。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0317",
+ "ts": "2026-07-21T13:24:55"
+}

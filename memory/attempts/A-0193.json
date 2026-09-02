@@ -1,0 +1,91 @@
+{
+ "round": 12,
+ "category": "long_term_momentum_underreaction",
+ "hypothesis": "法人(尤其外資與投信)對台股龍頭股的建倉是跨季甚至跨年度的漸進過程；12個月動能(mom_240)捕捉的是這種緩慢趨勢追隨效應，而mom_20/mom_60等短期動能容易被短期反轉雜訊污染，訊噪比較差。",
+ "prediction": "sub-train ICIR > 0.45；與短窗動能構造之因子(mom_60系)相關係數應<0.5；多頭腿年化超額報酬須為正(可交易性檢查)",
+ "formula": "cs_rank(mom_240)",
+ "name_zh": "長線動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_240)",
+  "fhash": "30124ce2fa791c47",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.047,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.23,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.28
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.2 < 0.45; validation ICIR 0.09 < 0.3; validation 衰減 54% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR僅0.2遠低於預測的0.45,驗證期腰斬至0.09且decay 54%超過過擬合門檻。預測核心產業半導體industry_icir竟為負(-0.01),cond_ic呈現典型動能崩潰(僅上漲月0.028有效,下跌月轉負-0.004),與「法人緩慢建倉」敘事不符,更像文獻已知的長期動能空頭反轉風險。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "長期動能(12個月)在下跌月轉負的動能崩潰是已知現象,不宜再包裝成台股法人緩慢建倉的獨特故事;法人集中度最高的半導體業ICIR反而最弱,進一步削弱該敘事,此方向需搭配狀態濾網才可能有效。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0193",
+ "ts": "2026-07-21T11:46:43"
+}

@@ -1,0 +1,25 @@
+{
+ "round": 60,
+ "category": "cash_flow_quality_streak",
+ "hypothesis": "單期ocf_ratio可能受季節性或一次性項目干擾；營業現金流連續多月優於稅後淨利代表管理層長期審慎、不靠盈餘管理美化財報，此「連續性」比單期水準更難被複製也更少被市場定價，因多數品質因子僅取當期或短期均值。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-006(neg應計12月均值)相關度|ρ|<0.5(streak衡量連續性而非均值水準)。",
+ "formula": "cs_rank(streak(greater(ocf_ratio,0),12))",
+ "name_zh": "現金流品質連續股",
+ "direction": "pos",
+ "complexity": {
+  "depth": null,
+  "fields": null
+ },
+ "result": {
+  "formula": "cs_rank(streak(greater(ocf_ratio,0),12))",
+  "verdict": "rejected_syntax",
+  "reason": "[type_error] streak 的參數型別錯誤（需要 n，得到 b）"
+ },
+ "diagnosis": "streak(greater(ocf_ratio,0),12)語法錯誤，與C-5同源問題，假設未進入回測，無從驗證「現金流連續性優於一次性水準」的機制。",
+ "failure_type": "expression_bad",
+ "lesson": "同C-5，streak()不接受布林輸入；「連續N期現金流優於淨利」類假設需找到替代表達方式(如ts_sum(greater(ocf_ratio,0),12)近似連續性強度)才能測試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_syntax",
+ "id": "A-0915",
+ "ts": "2026-08-20T08:30:15"
+}

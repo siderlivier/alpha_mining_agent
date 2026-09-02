@@ -1,0 +1,84 @@
+{
+ "round": 10,
+ "category": "earnings_quality_consistency",
+ "hypothesis": "EPS年增與營業利益年增出現顯著分歧，代表業外損益或一次性調整干擾大於本業表現，財報雜訊高、市場需要時間辨別真偽；分歧度越大，後續報酬應越差。",
+ "prediction": "sub-train |ICIR|>0.45且方向為負；高分歧組合應明顯跑輸低分歧組合。",
+ "formula": "cs_rank(abs(sub(op_income_yoy, eps_yoy)))",
+ "name_zh": "獲利雜訊分歧",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(abs(sub(op_income_yoy, eps_yoy)))",
+  "fhash": "ac713fd0b7ef5ca5",
+  "sub_train": {
+   "mean_ic": -0.017,
+   "icir": -0.17
+  },
+  "validation": {
+   "mean_ic": -0.032,
+   "icir": -0.39,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.06,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    -0.036,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.028,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.02,
+   "半導體": -0.02,
+   "金融": -0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向neg且|ICIR|>0.45，實際方向正確為負(sub-train -0.17、validation -0.39)，但幅度不足未達門檻；2016-2017出現罕見正值(0.004、0.006)顯示效應非年年穩定。方向判斷對，強度與穩定性不足。",
+ "failure_type": "expression_bad",
+ "lesson": "EPS與營業利益成長率分歧度的『雜訊懲罰』方向正確但強度偏弱，取abs可能把『業外正向美化』與『業外負向侵蝕』混為一談；下次可只保留單向情境(營業利益成長<EPS成長)測試，訊號可能更純淨。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0169",
+ "ts": "2026-07-21T11:22:51"
+}

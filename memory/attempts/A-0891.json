@@ -1,0 +1,85 @@
+{
+ "round": 58,
+ "category": "leverage_volume_normalized_deleveraging",
+ "hypothesis": "原始融資餘額變化率在市場整體熱度高時容易被放大或縮小(高成交量期間同樣的融資變化代表的槓桿壓力相對較小)，用21日週轉率正規化後可以更純粹地衡量「相對於市場關注度而言的真實去槓桿力道」；正規化後去槓桿力道大，代表散戶平倉壓力已相對充分釋放，未來斷頭賣壓造成的下檔風險降低。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；換手率 < 0.4；與C-1(margin_d21未正規化版本)相關性介於0.3-0.6，證明正規化提供增量資訊但非完全獨立。",
+ "formula": "cs_rank(neg(sdiv(margin_d21, turn_21)))",
+ "name_zh": "量能正規化去槓桿",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(margin_d21, turn_21)))",
+  "fhash": "78f35ebcc15e100a",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.008,
+   "icir": 0.1,
+   "decay_pct": 60.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.045,
+    "多頭"
+   ],
+   "2014": [
+    0.047,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    -0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.007
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": 0.12,
+   "半導體": 0.1,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": -0.045
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.56,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "distill_failed": true,
+ "id": "A-0891",
+ "ts": "2026-08-19T00:25:17"
+}

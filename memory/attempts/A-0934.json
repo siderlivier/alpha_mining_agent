@@ -1,0 +1,90 @@
+{
+ "round": 61,
+ "category": "margin_trend_reliability_premium",
+ "hypothesis": "毛利率不僅呈上升趨勢(ts_slope>0)，其線性趨勢擬合度(ts_rsq)也高，代表改善過程平穩、噪音低，屬於結構性轉變而非一次性跳升；市場對「平穩改善」的訊心不足，容易低估其持續性，此為全新的趨勢可信度類別。",
+ "prediction": "sub-train ICIR > 0.4；與F-004(neg(ts_std(gross_margin))水準版)截面相關 |ρ| < 0.5",
+ "formula": "mul(cs_rank(ts_slope(gross_margin,12)), cs_rank(ts_rsq(gross_margin,12)))",
+ "name_zh": "毛利趨勢穩健股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_slope(gross_margin,12)), cs_rank(ts_rsq(gross_margin,12)))",
+  "fhash": "4b28c2cd0c2b2e66",
+  "sub_train": {
+   "mean_ic": 0.026,
+   "icir": 0.5
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.12,
+   "decay_pct": 76.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.012,
+    "盤整"
+   ],
+   "2013": [
+    0.012,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.036,
+    "盤整"
+   ],
+   "2016": [
+    0.033,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    -0.002,
+    "盤整"
+   ],
+   "2019": [
+    0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.02,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.28,
+   "半導體": -0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.037,
+   "short_excess_ann": 0.034
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-025",
+   "rho": 0.3
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.12 < 0.3; validation 衰減 76% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4且與F-004相關性<0.5：兩者都命中（sub-train 0.5、ρ=0.3），但validation ICIR暴跌至0.12、decay 76%。逐年IC其實除了2018接近零外都算穩定為正，衰減主要是validation只有2018-2019兩年、且2018剛好是弱年拖累了整體ICIR估計；更核心的問題可能是ts_rsq要求「線性擬合度高」這個乘法閘門，過度篩選出2012-2017長多頭下走勢平滑的股票，對趨勢突變的辨識力不足，導致樣本外一遇到弱年就失準。",
+ "failure_type": "expression_bad",
+ "lesson": "用ts_slope×ts_rsq的乘法閘門去強化「趨勢可信度」，容易把訊號鎖死在訓練期特定的平穩多頭走勢型態上，樣本外遇到盤整年就大幅衰減；应考慮拉長rsq計算窗口或改用更寬鬆的穩健度指標，而非直接乘法相乘。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0934",
+ "ts": "2026-08-27T10:25:20"
+}

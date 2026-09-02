@@ -1,0 +1,91 @@
+{
+ "round": 68,
+ "category": "lottery_demand_overpricing",
+ "hypothesis": "散戶對『像彩券』的股票有系統性偏好並過度支付：高週轉率代表投機性關注、高波動代表大漲的想像空間。這類股票被高估、未來報酬低（Bali 等的 MAX 效應）。反過來，週轉率與波動皆低的『無聊股』被相對低估。這是偏好驅動的定價異常，與風險補償無關，用兩者乘積捕捉『彩券性』。",
+ "prediction": "sub-train ICIR > 0.3；空頭腿（彩券股）年化超額顯著 < 0；多頭腿年化超額 > 0；與F-005、F-008相關 |ρ| < 0.5。",
+ "formula": "cs_rank(neg(mul(turn_21, vol_21)))",
+ "name_zh": "非樂透股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(mul(turn_21, vol_21)))",
+  "fhash": "7e0c043a9267ae95",
+  "sub_train": {
+   "mean_ic": 0.062,
+   "icir": 0.54
+  },
+  "validation": {
+   "mean_ic": 0.065,
+   "icir": 0.43,
+   "decay_pct": 20.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.071,
+    "多頭"
+   ],
+   "2014": [
+    0.069,
+    "多頭"
+   ],
+   "2015": [
+    0.061,
+    "盤整"
+   ],
+   "2016": [
+    0.075,
+    "多頭"
+   ],
+   "2017": [
+    0.035,
+    "多頭"
+   ],
+   "2018": [
+    0.098,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.086,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.53,
+   "半導體": 0.22,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.018,
+   "short_excess_ann": 0.054
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.35,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.96,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.96 > 0.5"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "distill_failed": true,
+ "id": "A-1037",
+ "ts": "2026-09-02T01:25:25"
+}

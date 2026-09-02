@@ -1,0 +1,83 @@
+{
+ "round": 28,
+ "category": "trend_reliability_filter",
+ "hypothesis": "12個月價格走勢的線性擬合度(R²)越高，代表這段動能是緩步、低噪音累積而成，容易吸引順勢/系統性資金持續加碼並自我強化；反之靠單一利多跳空堆出的高R²偏低的動能則容易在消息消化後回落。市場多數動能追價者只看報酬幅度、不看走勢品質，此為未被定價的維度。",
+ "prediction": "sub-train ICIR>0.45；高ts_rsq子集內mom_120的條件IC應明顯高於低ts_rsq子集；多頭腿年化超額報酬>0；換手率<0.4。",
+ "formula": "mul(cs_rank(mom_120), cs_rank(ts_rsq(mom_120,12)))",
+ "name_zh": "乾淨趨勢動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(mom_120), cs_rank(ts_rsq(mom_120,12)))",
+  "fhash": "4bf7ee32a79bcec4",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.03
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.031,
+    "多頭"
+   ],
+   "2017": [
+    -0.022,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": 0.01,
+   "半導體": -0.06,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.038,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際幾乎為零(-0.03)。用mul(cs_rank(mom_120), cs_rank(ts_rsq))想表達'高R²動能優先'的條件式邏輯，但兩個rank相乘是線性加權而非條件篩選——一支動能中等但R²極高、與一支動能極強但R²中等的股票可能得到相近分數，稀釋了原本想測試的'高R²子集內動能IC更高'假設。長腿仍小幅正(0.038)顯示並非完全無效，只是被表達方式沖淡。",
+ "failure_type": "expression_bad",
+ "lesson": "想表達『在某條件變數的高分子集內，另一變數的效力更強』時，rank相乘(mul(cs_rank(A),cs_rank(B)))不能真正模擬條件式篩選，應改用分層/門檻式運算(如僅對ts_rsq高於中位數的股票計算mom_120排名，其餘設為中性值)才能準確測試假設。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0433",
+ "ts": "2026-07-28T19:19:09"
+}

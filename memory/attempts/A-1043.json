@@ -1,0 +1,91 @@
+{
+ "round": 68,
+ "category": "revenue_overreaction_single_month",
+ "hypothesis": "台股每月10日公布月營收，媒體以『單月年增/月減』下標題。當某公司單月營收月增率大跌但三月平均年增率仍穩健，散戶對頭條數字過度反應而賣出，忽略單月受工作天數、拉貨節奏、基期影響的雜訊。趨勢未變而價格被錯殺，後續數日至數週回補。",
+ "prediction": "sub-train ICIR > 0.3；多頭腿年化超額 > 0；下跌月IC不弱於上漲月；與F-007、F-009相關 |ρ| < 0.5。",
+ "formula": "mul(cs_rank(neg(rev_mom)), cs_rank(rev_yoy_ma3))",
+ "name_zh": "單月營收錯殺",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom",
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(rev_mom)), cs_rank(rev_yoy_ma3))",
+  "fhash": "e5ff002b236fe762",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.45
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.47,
+   "decay_pct": -4.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.028,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.032,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.57,
+   "生技": 0.44,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.038,
+   "short_excess_ann": 0.062
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.68,
+  "stage2_culprit": {
+   "factor": "F-025",
+   "rho": 0.51,
+   "factor_name": "半導體毛利拐點股",
+   "factor_desc": "毛利率半年內回升但營收還沒跟上，代表景氣循環早期反轉訊號。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-025 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "distill_failed": true,
+ "id": "A-1043",
+ "ts": "2026-09-02T01:25:25"
+}

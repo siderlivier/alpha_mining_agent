@@ -1,0 +1,90 @@
+{
+ "round": 29,
+ "category": "foreign_accumulation_trend_confirmation",
+ "hypothesis": "外資持股比率的63日變化代表中期、趨勢性的建倉行為（相對於20日淨流量更能過濾當沖與短線雜訊），這種緩慢累積式的外資佈局若同時搭配營收年增轉佳，代表外資是基於基本面研究進行中期布局而非短線交易。市場對「緩慢累積」型外資動向反應不足，因缺乏爆發性新聞事件不易引起散戶與媒體關注，形成資訊慢速擴散的機會，與C-10(短期淨流量confirm)為互補但不同時間尺度的假設。",
+ "prediction": "sub-train ICIR > 0.45；與C-10相關係數 |ρ| < 0.5（驗證非重複表達）；訊號不應僅在電子產業顯著。",
+ "formula": "mul(cs_rank(frgn_ratio_d63),cs_rank(rev_yoy))",
+ "name_zh": "外資中期佈局確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio_d63",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_ratio_d63),cs_rank(rev_yoy))",
+  "fhash": "3c88d67673c8ab2a",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.032,
+   "icir": 0.49,
+   "decay_pct": -81.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.017,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.046,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": 0.58,
+   "生技": 0.19,
+   "半導體": 0.14,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.047,
+   "short_excess_ann": 0.063
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.44,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.51,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "預測『訊號不應僅在電子產業顯著』——實際結果打臉：電子0.58明顯獨大，其餘產業0.10~0.19，與C-10高度相似的產業分布模式，顯示中期外資比率變化其實跟短期淨流量一樣主要在電子供應鏈起作用，並非獨立的時間尺度效應。且死因是與F-011(生技轉骨訊號)|ρ|=0.51（非預測中的C-10），顯示凡是『資金流×rev_yoy』的組合都容易撞上F-011家族。",
+ "failure_type": "duplicate",
+ "lesson": "frgn_ratio_d63與frgn_net_21在產業分布上表現高度相似（皆集中電子），『不同時間尺度→不同機制』的假設未獲支持；且只要組合公式包含rev_yoy乘積項，就容易與F-011重疊。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0455",
+ "ts": "2026-07-29T23:14:31"
+}

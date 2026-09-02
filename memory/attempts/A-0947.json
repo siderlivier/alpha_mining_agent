@@ -1,0 +1,87 @@
+{
+ "round": 62,
+ "category": "cash_conversion_improvement_underreaction",
+ "hypothesis": "營業現金流對淨利比率(ocf_ratio)長期上升趨勢，代表盈餘含金量正結構性改善；分析師普遍錨定損益表而非現金流量表，對緩慢累積的現金轉換率改善反應遲緩，直到現金部位明顯厚實才被重新定價，此為「趨勢」而非「水準」，區別於F-019。",
+ "prediction": "sub-train ICIR>0.4；與F-019截面相關|ρ|<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+ "name_zh": "現金含金度提升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+  "fhash": "df7f6e9bc413f841",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.25
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.029,
+    "盤整"
+   ],
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    -0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.12,
+   "半導體": -0.06,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測正向ICIR>0.4，但sub-train反而顯著為負(-0.25)，validation又翻正(0.14)，符號不一致且样本後段(2018-2019)才轉正。診斷資訊不足以判斷是現金流含金度機制真的方向相反，還是樣本期間結構轉變造成的巧合；證據強度不足以下定論。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金流轉換率(ocf_ratio)斜率的方向在sub-train與validation符號相反，證據不足以確認何者才是真實方向，暫不建議直接反向重試，需要更長樣本或分期檢視再判斷。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0947",
+ "ts": "2026-08-27T21:24:50"
+}

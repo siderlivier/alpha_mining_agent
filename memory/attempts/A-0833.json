@@ -1,0 +1,90 @@
+{
+ "round": 54,
+ "category": "shareholder_friendly_capital_discipline",
+ "hypothesis": "應計項低（盈餘含金量高）與願意配發現金股利，各自被市場視為獨立訊號分開篩選；但兩者同時成立代表管理層既不做假帳美化獲利、又願意把真實現金還給股東，是一種被低估的公司治理與資本配置紀律聯合訊號，市場尚未把兩者當作同一件事來定價。",
+ "prediction": "sub-train ICIR>0.45；與F-006/F-021相關係數|ρ|<0.5；四產業中至少3個industry IC同號為正。",
+ "formula": "mul(cs_rank(neg(accruals)), cs_rank(div_yield))",
+ "name_zh": "誠信配息紀律股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(accruals)), cs_rank(div_yield))",
+  "fhash": "135e43c916b00047",
+  "sub_train": {
+   "mean_ic": 0.047,
+   "icir": 0.51
+  },
+  "validation": {
+   "mean_ic": 0.073,
+   "icir": 1.01,
+   "decay_pct": -97.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.087,
+    "盤整"
+   ],
+   "2016": [
+    0.066,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.07,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.057,
+   "down_months": 0.051
+  },
+  "industry_icir": {
+   "電子": 0.57,
+   "生技": 0.52,
+   "半導體": 0.4,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": -0.007,
+   "short_excess_ann": 0.008
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.16,
+  "stage2_culprit": {
+   "factor": "F-006",
+   "rho": 0.52,
+   "factor_name": "低應計品質股",
+   "factor_desc": "應計項長期偏低的公司盈餘含金量高，市場常高估高應計公司獲利的持續性。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-006 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且ρ<0.5，實際ICIR 0.51達標，但ρ=0.52與F-006僅小幅超標（邊界案例），且更關鍵的是多空腿超額報酬都接近零（-0.007/0.008），與C-5的sdiv案例呈現相同模式：IC/ICIR很強但頭尾不具備單調可交易的報酬差，顯示『誠信配息』雙重確認假說即便通過相關性門檻，其經濟可交易性本身也存疑。",
+ "failure_type": "duplicate",
+ "lesson": "低應計x高殖利率的組合與F-006（低應計品質股）邊界重疊（ρ剛過0.5），且即使相關性夠低也可能面臨與C-5類似的『IC強但legs平』問題，顯示只用accruals/div_yield做二次乘法排序容易被單一應計品質因子的排序主導。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0833",
+ "ts": "2026-08-18T21:21:48"
+}

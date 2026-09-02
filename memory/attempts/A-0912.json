@@ -1,0 +1,87 @@
+{
+ "round": 60,
+ "category": "semiconductor_inventory_cycle_recovery/半導體限定",
+ "hypothesis": "半導體業存貨去化循環明確，營收月增率(rev_mom)的12月斜率轉正代表訂單能見度緩步改善；市場因半導體法說會頻率與供應鏈資訊落差，對這種緩步回溫訊號反應存在滯後，改用長窗斜率而非短窗差分以降低雜訊與換手率。",
+ "prediction": "半導體子樣本sub-train ICIR>0.4；多頭腿年化超額報酬>0；月換手率<0.4。",
+ "formula": "cs_rank(ts_slope(rev_mom,12))",
+ "name_zh": "半導體回溫加速股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_mom,12))",
+  "fhash": "4d605ebd5e6883d6",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.15
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.42,
+   "decay_pct": -181.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.054,
+    "盤整"
+   ],
+   "2013": [
+    0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    -0.008,
+    "盤整"
+   ],
+   "2016": [
+    0.013,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.0,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": 0.05,
+   "半導體": 0.2,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.007,
+   "short_excess_ann": 0.045
+  },
+  "coverage": 0.89,
+  "turnover_m": 0.5,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測半導體子樣本ICIR>0.4，實際全市場僅0.15、半導體子樣本亦僅0.2，遠低於預期。逐年IC訊號薄弱且時正時負(2015、2017為負)。rev_mom本身已是平滑後的動能指標，再疊加12月斜率(ts_slope)形成雙重平滑，可能過度稀釋短中期訊號，這是DSL算子疊加造成的表達層問題，但證據不足以完全排除「半導體庫存循環回溫」機制本身無效的可能。",
+ "failure_type": "expression_bad",
+ "lesson": "對已經是動能/變化率性質的欄位(如rev_mom)再套用長窗期ts_slope，容易造成雙重平滑、訊號過度滯後而稀釋。若要驗證「緩步回溫」類假設，優先在原始水準欄位(如rev_yoy)上取斜率，而非在已平滑的動能欄位上疊加。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0912",
+ "ts": "2026-08-20T08:30:15"
+}

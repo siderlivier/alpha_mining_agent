@@ -1,0 +1,25 @@
+{
+ "round": 32,
+ "category": "quality_attention_decay",
+ "hypothesis": "當一檔高ROE績優股的成交金額呈現半年下滑趨勢（市場關注度降低），代表機構與散戶注意力正在流失，形成「基本面穩健但被遺忘」的定價落差。此機制與F-013（電子限定，rev_yoy與amt_21排名差）不同：聚焦「關注度衰退的軌跡」而非單期流動性水準，不限電子業、改用ROE而非營收動能作為品質錨。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；與F-013及F-005相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(neg(delta(amt_21,6))), cs_rank(roe))",
+ "name_zh": "遺忘的績優股",
+ "direction": "pos",
+ "complexity": {
+  "depth": null,
+  "fields": null
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(delta(amt_21,6))), cs_rank(roe))",
+  "verdict": "rejected_syntax",
+  "reason": "[too_deep] 運算子深度 4 超過上限 3"
+ },
+ "diagnosis": "在DSL語法層即被拒絕，尚未進入任何實證檢驗，因此無法對假設本身做歸因判斷。公式mul(cs_rank(neg(delta(amt_21,6))), cs_rank(roe))中，neg(delta(amt_21,6))疊加在cs_rank內部，形成mul→cs_rank→neg→delta的4層巢狀，超過運算子深度上限3。",
+ "failure_type": "expression_bad",
+ "lesson": "當構想包含『時間序列變化量的反向排名』(cs_rank(neg(delta(x,n))))且需要再與另一cs_rank相乘時，天生就會踩到深度上限；應在設計階段就檢查巢狀深度，必要時把neg挪到cs_rank外層（若排名方向可由外部參數控制）或改用兩步驟因子組合。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_syntax",
+ "id": "A-0501",
+ "ts": "2026-07-29T23:57:20"
+}

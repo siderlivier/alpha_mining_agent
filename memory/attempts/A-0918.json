@@ -1,0 +1,25 @@
+{
+ "round": 60,
+ "category": "financial_profitability_resilience_streak/金融限定",
+ "hypothesis": "金融業獲利受景氣循環與利率環境影響大，能連續多期維持ROE為正(即使在產業逆風期)代表風控與資本配置能力優於同業，此穿越週期的一致性比單期水準更能反映真實體質；僅金融業因高槓桿特性使ROE持續性對資本適足性有直接意涵，其他產業無此邏輯關聯。",
+ "prediction": "金融子樣本sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-010(neg ts_std roe)相關度|ρ|<0.5(streak衡量連續為正而非離散度)。",
+ "formula": "cs_rank(streak(greater(roe,0),12))",
+ "name_zh": "金融資本韌性連續股",
+ "direction": "pos",
+ "complexity": {
+  "depth": null,
+  "fields": null
+ },
+ "result": {
+  "formula": "cs_rank(streak(greater(roe,0),12))",
+  "verdict": "rejected_syntax",
+  "reason": "[type_error] streak 的參數型別錯誤（需要 n，得到 b）"
+ },
+ "diagnosis": "streak(greater(roe,0),12)語法錯誤，與C-5/C-7同源問題，「金融業ROE連續為正代表風控韌性」的假設未進入回測。",
+ "failure_type": "expression_bad",
+ "lesson": "同C-5/C-7，streak()不接受布林輸入。三個獨立假設(獲利連增、現金流連續品質、ROE連續韌性)都採用同一種「streak(greater(x,0),n)」表達模式，顯示這是候選生成階段對DSL能力的系統性誤解，而非各自的個案錯誤。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_syntax",
+ "id": "A-0918",
+ "ts": "2026-08-20T08:30:15"
+}

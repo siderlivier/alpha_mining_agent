@@ -1,0 +1,84 @@
+{
+ "round": 16,
+ "category": "earnings_quality_consistency",
+ "hypothesis": "EPS年增率涵蓋業外損益、稅務調整與股數變動，而營業利益年增率反映核心本業成長，較難被短期操作；當EPS成長明顯超越營業利益成長（即eps_yoy - op_income_yoy擴大），代表獲利成長中有相當比例來自非重複性的業外或財務操作，市場容易被headline EPS吸引而過度反應，此類「虛胖」成長後續傾向均值回歸、報酬偏弱。",
+ "prediction": "sub-train ICIR>0.45（neg方向，即高divergence預測低報酬）；空頭腿（高divergence組）需顯著跑輸大盤；驗證divergence與accruals相關係數|ρ|<0.5以確認非F-006重複。",
+ "formula": "cs_rank(neg(sub(op_income_yoy,eps_yoy)))",
+ "name_zh": "EPS虛胖警訊",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(op_income_yoy,eps_yoy)))",
+  "fhash": "ebbb8c0d487f8574",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.06
+  },
+  "validation": {
+   "mean_ic": 0.04,
+   "icir": 0.55,
+   "decay_pct": -749.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    -0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    -0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.06,
+   "半導體": 0.03,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測(neg方向)高EPS/營業利益背離度應對應較低報酬，空頭腿需顯著跑輸；實際方向大致相符(short_excess -0.7%為負, long_excess +1.4%為正)，但整體sub-train ICIR僅0.06過弱，validation卻跳升到0.55(decay -749%，與C-7同樣屬於分母趨近零造成的數學假象而非真實樣本外改善)。逐年IC正負交錯(2015 -0.022, 2017 -0.008)，穩定性不足。",
+ "failure_type": "expression_bad",
+ "lesson": "op_income_yoy與eps_yoy兩個成長率直接相減來衡量「獲利虛胖度」雜訊過大(兩者本身都是高波動年增率)，導致sub-train期IC趨近零；未來測試此假說應先分別cs_rank再相減(如C-5的成功設計)，而非直接相減原始值，以降低兩個高波動序列相減放大雜訊的風險。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0260",
+ "ts": "2026-07-21T12:37:07"
+}

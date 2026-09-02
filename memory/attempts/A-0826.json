@@ -1,0 +1,87 @@
+{
+ "round": 54,
+ "category": "monthly_revenue_surprise_diffusion",
+ "hypothesis": "月增率相對自身歷史波動度標準化後的意外程度，是台股獨有高頻基本面訊號中尚未被充分利用的一環；月營收公告後市場只做初步反應，需要數週才完全消化「相對正常水準有多驚訝」，此差異被系統性低估。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；效果在生技等法人覆蓋率低的產業應強於半導體。",
+ "formula": "cs_rank(sdiv(rev_mom, ts_std(rev_mom,12)))",
+ "name_zh": "營收驚喜擴散股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(rev_mom, ts_std(rev_mom,12)))",
+  "fhash": "9d85353b87c1b668",
+  "sub_train": {
+   "mean_ic": -0.0,
+   "icir": -0.0
+  },
+  "validation": {
+   "mean_ic": 0.019,
+   "icir": 0.41,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.054,
+    "盤整"
+   ],
+   "2013": [
+    -0.027,
+    "多頭"
+   ],
+   "2014": [
+    -0.018,
+    "多頭"
+   ],
+   "2015": [
+    -0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.02,
+    "盤整"
+   ],
+   "2019": [
+    0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": -0.003
+  },
+  "industry_icir": {
+   "電子": 0.01,
+   "生技": -0.28,
+   "半導體": 0.11,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.87,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際sub-train幾乎為0，但validation卻回升到0.41，且逐年正負號反覆（2012:+0.054, 2013:-0.027, 2014:-0.018...2018/2019轉正），加上月換手高達0.87，顯示這不是穩定訊號而是雜訊或未被妥善標準化的『驚喜』度量，训练与验证期表現不一致方向性差。",
+ "failure_type": "expression_bad",
+ "lesson": "營收月增率相對自身12月波動度標準化的『驚喜』構造在早期樣本雜訊過大（正負號反覆、換手率過高），可能是ts_std窗口太短或未對月營收數據做季節調整；概念本身（意外程度未被充分定價）尚未被證偽，需要更穩定的標準化窗或加入平滑再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0826",
+ "ts": "2026-08-18T21:21:48"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 17,
+ "category": "short_interest_trend_reversal",
+ "hypothesis": "券資比持續下降代表空方回補、看空力道減弱，反映空頭信念動搖的資訊性訊號(非單純籌碼淹沒)；相較券資比水準高低，下降趨勢捕捉的是空方態度轉變的動態過程，投資人多半只關注絕對水位是否處於軋空熱區，忽略變化率蘊含的信念轉變。",
+ "prediction": "sub-train ICIR>0.45；與F-008相關係數<0.5(採趨勢而非水準，未除以turn_21)；多頭腿年化超額>0",
+ "formula": "cs_rank(neg(ts_slope(short_margin_ratio,6)))",
+ "name_zh": "券資比降溫",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_slope(short_margin_ratio,6)))",
+  "fhash": "c50a368c25bca5c5",
+  "sub_train": {
+   "mean_ic": 0.019,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.007,
+   "icir": 0.09,
+   "decay_pct": 61.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.046,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.007,
+    "盤整"
+   ],
+   "2016": [
+    0.019,
+    "多頭"
+   ],
+   "2017": [
+    -0.018,
+    "多頭"
+   ],
+   "2018": [
+    0.02,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.003,
+   "down_months": 0.047
+  },
+  "industry_icir": {
+   "電子": 0.07,
+   "生技": 0.18,
+   "半導體": 0.09,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": -0.038,
+   "short_excess_ann": 0.034
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.33,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45、多頭腿超額>0。實際sub-train ICIR僅0.24，validation衰減61%。cond_ic顯示效果集中在下跌月(0.047)，上漲月幾乎為零(0.003)，符合「空頭信念轉變」的避險型敘事方向，但多頭腿超額為-0.038(負)，空頭腿才是+0.034正報酬——代表報酬完全來自放空「券資比上升股」，而非做多「券資比下降股」。台股放空受限，此因子在long-only下不可交易，即使統計方向正確也無實用性。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "券資比降溫的「空方信念轉變」機制本身可能存在(避險型、下跌月效果集中)，但效應不對稱地集中在空頭腿，long-only無法變現；此為第四個「壓力後回穩」類案例(見C-9的全域規則)。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0273",
+ "ts": "2026-07-21T12:47:40"
+}

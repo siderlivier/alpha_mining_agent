@@ -1,0 +1,87 @@
+{
+ "round": 33,
+ "category": "attention_fading_effect",
+ "hypothesis": "成交金額持續下滑代表市場關注度與法人覆蓋度正在減少，屬於「被遺忘股效應」：關注度越低，資訊擴散速度越慢，任何基本面變化都需更長時間才被定價，導致逐漸被遺忘的股票長期報酬反而較高；此機制不含價格位置條件，純粹捕捉關注度趨勢下滑本身，與F-008(創高x低週轉)不同。",
+ "prediction": "sub-train ICIR > 0.45；與F-008相關性 |ρ| < 0.5；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(neg(delta(amt_21,6)))",
+ "name_zh": "冷門遺忘股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(amt_21,6)))",
+  "fhash": "b36a545d3853ca45",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.16,
+   "decay_pct": -488.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.021,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    -0.018,
+    "盤整"
+   ],
+   "2016": [
+    0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": 0.018
+  },
+  "industry_icir": {
+   "電子": 0.07,
+   "生技": 0.11,
+   "半導體": 0.01,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.06,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.41,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR(0.03)近乎零，與預測(>0.45)完全不符，且多頭腿(冷門股組)年化超額為負(-6%)，方向與假說相反。'被遺忘股效應'在缺乏價格位置或基本面條件配合下，未展現任何有效訊號，反而更像抓到基本面轉差的公司。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "純粹的關注度下滑(成交金額萎縮)若不搭配價格位置或基本面篩選條件，無法作為'被低估'的代理，容易反而抓到體質惡化中的股票；未來測試注意力型因子應搭配至少一個基本面或估值錨點。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0514",
+ "ts": "2026-07-30T00:08:12"
+}

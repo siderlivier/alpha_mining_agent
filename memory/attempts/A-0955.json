@@ -1,0 +1,25 @@
+{
+ "round": 63,
+ "category": "semiconductor_destocking_recovery",
+ "hypothesis": "半導體產業存貨去化尾聲時，月營收動能(rev_mom)率先回溫，但毛利率因產能利用率與價格仍低而落後反映；分析師與市場習慣以落後的毛利數字判斷景氣，導致營收動能已轉強但股價尚未反映早期循環反轉訊號（半導體限定）。",
+ "prediction": "半導體限定ICIR>0.5；sub-train半導體子集IC平均>0，回升循環月IC為正；與F-025(delta(gross_margin,6)×neg(rev_mom))截面相關|ρ|<0.5。",
+ "formula": "mul(cs_rank(ts_mean(delta(rev_mom,6),12)), cs_rank(neg(gross_margin)))",
+ "name_zh": "半導體去化回溫",
+ "direction": "pos",
+ "complexity": {
+  "depth": null,
+  "fields": null
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_mean(delta(rev_mom,6),12)), cs_rank(neg(gross_margin)))",
+  "verdict": "rejected_syntax",
+  "reason": "[too_deep] 運算子深度 4 超過上限 3"
+ },
+ "diagnosis": "假設本身（半導體去化尾聲營收動能領先毛利反映）完全沒被測試——公式在生成階段就因運算子深度4超過上限3被拒絕(rejected_syntax)，沒有sub-train/validation數據可供校準預測。",
+ "failure_type": "expression_bad",
+ "lesson": "四層結構（ts_mean(delta(x,n),m)再cs_rank後與另一cs_rank相乘）超出深度限制，應把時序平滑步驟簡化為單一transform，例如直接用delta(rev_mom,6)取代ts_mean(delta(rev_mom,6),12)，把深度降到3再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_syntax",
+ "id": "A-0955",
+ "ts": "2026-08-27T21:36:00"
+}

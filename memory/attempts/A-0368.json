@@ -1,0 +1,93 @@
+{
+ "round": 23,
+ "category": "short_squeeze_supply_demand",
+ "hypothesis": "借券量高的股票通常是機構投資人(可轉債套利、ETF成分股、指數基金證券借貸收益)高度關注且流動性佳的標的，借券本身反映機構參與深度而非單純空頭壓力；高機構參與度的股票長期而言資訊效率較高、治理較受監督，享有品質溢酬。",
+ "prediction": "sub-train ICIR>0.4；coverage>0.4子樣本仍成立；多頭腿超額報酬>0，且方向應與C-1互相印證。",
+ "formula": "cs_rank(lend_vol_21)",
+ "name_zh": "借券關注度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(lend_vol_21)",
+  "fhash": "93e58b82eba4b24d",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.045,
+   "icir": 0.48,
+   "decay_pct": -48.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.049,
+    "盤整"
+   ],
+   "2013": [
+    0.026,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.027,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.044,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": 0.46,
+   "生技": 0.37,
+   "半導體": 0.21,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.017,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.54,
+  "turnover_m": 0.35,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.61,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.61 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.32低於預測>0.4，但validation改善明顯(0.48, decay -48%)，coverage 0.54與多頭腿0.017為正皆符合預測；down_months IC(0.004)遠弱於up_months(0.044)，顯示訊號偏多頭限定。與C-1相同，死於和F-008相關係數0.61，證實借券量無論是否除以券資比都落在F-008紅海範圍內。",
+ "failure_type": "duplicate",
+ "lesson": "借券量水準類因子(不論原始值或比例化)系統性與F-008重疊，此路徑已飽和（另見learnings_additions，與C-1合併證據）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0368",
+ "ts": "2026-07-21T14:03:28"
+}

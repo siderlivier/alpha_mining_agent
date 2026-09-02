@@ -1,0 +1,87 @@
+{
+ "round": 28,
+ "category": "biotech_dilution_risk_discount",
+ "hypothesis": "生技股多處於研發燒錢期，投資人最大隱憂是未來需辦理現金增資稀釋股權；當公司營業現金流對淨利比率相對自身兩年中位數改善，代表對外部資金的依賴度下降、增資稀釋風險降低，但市場焦點多在臨床/法規進度，對這類財務體質改善訊號反應慢。",
+ "prediction": "sub-train ICIR>0.4；生技業industry_icir應明顯高於其他三產業；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sub(ocf_ratio, ts_med(ocf_ratio,12)))",
+ "name_zh": "生技現金流轉機",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ocf_ratio, ts_med(ocf_ratio,12)))",
+  "fhash": "d937b57e02044e5b",
+  "sub_train": {
+   "mean_ic": -0.019,
+   "icir": -0.31
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.007,
+    "盤整"
+   ],
+   "2013": [
+    -0.033,
+    "多頭"
+   ],
+   "2014": [
+    -0.017,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    -0.028,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.004,
+    "盤整"
+   ],
+   "2019": [
+    0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.014
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.19,
+   "半導體": -0.13,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.03,
+   "short_excess_ann": -0.006
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4、生技業應突出，實際全市場icir -0.31方向相反，且生技業內icir(-0.19)同樣為負、並非四產業最佳，機制(現金流改善降低增資稀釋疑慮)未獲得任何支持證據。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金流相對自身中位數改善(ocf_ratio - ts_med)這類'體質好轉'敘事在生技股上目前證據是全面負向，不只是訊號太弱；若日後要重試生技財務體質類因子，應先用更直接的稀釋風險代理變數(如已公告增資/現金餘額燒錢速度)而非用ocf_ratio間接推論。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0435",
+ "ts": "2026-07-28T19:19:09"
+}

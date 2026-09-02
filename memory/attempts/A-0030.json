@@ -1,0 +1,83 @@
+{
+ "round": 1,
+ "category": "retail_turnover_overreaction",
+ "hypothesis": "週轉率短期異常飆高代表散戶交易熱度暴增，追高殺低行為使股價短期偏離基本面，此類過熱注意力驅動的漲跌在下月出現均值回歸（限制性注意力＋過度反應機制）。",
+ "prediction": "產業內rank IC為負，sub-train ICIR<-0.3；效應在散戶佔比高的電子/生技類股顯著強於法人主導的金融股。",
+ "formula": "cs_rank(turn_21)",
+ "name_zh": "週轉過熱反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(turn_21)",
+  "fhash": "e5e69ce4ea8b8552",
+  "sub_train": {
+   "mean_ic": -0.042,
+   "icir": -0.42
+  },
+  "validation": {
+   "mean_ic": -0.044,
+   "icir": -0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.064,
+    "多頭"
+   ],
+   "2014": [
+    -0.066,
+    "多頭"
+   ],
+   "2015": [
+    -0.031,
+    "盤整"
+   ],
+   "2016": [
+    -0.043,
+    "多頭"
+   ],
+   "2017": [
+    -0.014,
+    "多頭"
+   ],
+   "2018": [
+    -0.074,
+    "盤整"
+   ],
+   "2019": [
+    -0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.064,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": -0.32,
+   "生技": -0.35,
+   "半導體": -0.19,
+   "金融": -0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.055,
+   "short_excess_ann": -0.021
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.42 < 0.45; validation ICIR -0.29 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "強度與產業異質性預測精準命中：sub-train ICIR -0.42優於預測-0.3，validation -0.29接近，電子(-0.32)/生技(-0.35)顯著強於金融(-0.14)完全符合預測。但同C-2模式，多頭腿(低週轉股)超額報酬-0.055、空頭腿-0.021皆為負，不可交易，於stage4被拒。",
+ "failure_type": "expression_bad",
+ "lesson": "見規則A，本案是最乾淨的證據之一：機制驗證極佳但結構性不可交易。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0030",
+ "ts": "2026-07-18T21:37:41"
+}

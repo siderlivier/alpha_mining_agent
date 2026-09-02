@@ -1,0 +1,86 @@
+{
+ "round": 64,
+ "category": "financial_operating_efficiency_repricing",
+ "hypothesis": "金融股的市场估值多由利差与ROE驱动，营业费用效率（如数位化降低分行/人力成本推升营业利益率）不是传统金融分析师的核心关注指标；当淨值便宜的金控同时出现本业营运效率明显改善，代表被低估的获利品质提升尚未反映在股价上，此机制仅在金融业成立，因其他产业营运效率改善通常已被营收成长叙事同步定价。",
+ "prediction": "金融产业子样本sub-train ICIR>0.4（产业限定）；与F-002、F-021截面相关性|ρ|<0.5",
+ "formula": "mul(cs_rank(bp), cs_rank(delta(op_margin,12)))",
+ "name_zh": "金控效率重估",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(delta(op_margin,12)))",
+  "fhash": "52f83116d89438b1",
+  "sub_train": {
+   "mean_ic": 0.064,
+   "icir": 0.91
+  },
+  "validation": {
+   "mean_ic": 0.041,
+   "icir": 0.51,
+   "decay_pct": 44.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.052,
+    "多頭"
+   ],
+   "2014": [
+    0.061,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    0.077,
+    "多頭"
+   ],
+   "2017": [
+    0.084,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.059,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.053,
+   "down_months": 0.067
+  },
+  "industry_icir": {
+   "電子": 0.89,
+   "生技": 0.63,
+   "半導體": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.085,
+   "short_excess_ann": 0.086
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.44
+  },
+  "verdict": "passed"
+ },
+ "diagnosis": "統計上passed(sub-train0.91/validation0.51/decay44%/與F-021僅ρ0.44)，但industry_icir未列出金融數據，反而電子(0.89)、生技(0.63)最強、半導體最弱(0.15)，與「僅金融業成立」的敘事矛盾，真正驅動力可能是更廣泛的「便宜估值+營運效率改善」重估效應。",
+ "failure_type": "none",
+ "lesson": "通過門檻不代表因果敘事正確；宣稱「產業限定」機制時應核對industry_icir是否真在該產業最強，本次「金融限定」敘事與資料矛盾，命名與適用範圍描述需修正為更通用的價值+效率重估因子。",
+ "lesson_confidence": "multi_case",
+ "verdict": "passed",
+ "id": "A-0978",
+ "ts": "2026-08-27T21:49:57"
+}

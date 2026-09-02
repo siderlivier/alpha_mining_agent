@@ -1,0 +1,92 @@
+{
+ "round": 18,
+ "category": "dividend_sustainability_quality",
+ "hypothesis": "高殖利率股票中，若同時有充足營運現金流支撐(ocf_ratio高)，代表配息是真金白銀而非靠盈餘操縱或舉債配息；市場對『高殖利率』傾向一視同仁地當價值股看待，未進一步區分含金量高低，因此現金流佐證充分的高殖利率股被系統性低估，含金量差的則隱含未來减配風險未被定價。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；與F-002/F-010相關係數|ρ|<0.5(全新欄位div_yield首次入庫)",
+ "formula": "cs_rank(add(cs_rank(div_yield), cs_rank(ocf_ratio)))",
+ "name_zh": "現金股利含金量",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(add(cs_rank(div_yield), cs_rank(ocf_ratio)))",
+  "fhash": "cb6e04c0af5807d8",
+  "sub_train": {
+   "mean_ic": 0.041,
+   "icir": 0.41
+  },
+  "validation": {
+   "mean_ic": 0.07,
+   "icir": 0.96,
+   "decay_pct": -135.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.013,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.066,
+    "盤整"
+   ],
+   "2016": [
+    0.069,
+    "多頭"
+   ],
+   "2017": [
+    0.038,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.084,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.052,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.52,
+   "生技": 0.36,
+   "半導體": 0.32,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": -0.012
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.39
+  },
+  "verdict": "rejected_stage3",
+  "reason": "與同批 C-12 |ρ|=0.74，保留 ICIR 較高者"
+ },
+ "diagnosis": "sub-train ICIR 0.41 接近門檻但未達，validation大幅轉強至0.96（decay為負代表不衰反增，訓練期反而是弱點）。真正死因是stage3：與同批C-12(純div_yield)|ρ|=0.74，代表加上ocf_ratio的『含金量』疊加並未讓因子與純殖利率脫鉤，本質仍是同一根源。",
+ "failure_type": "duplicate",
+ "lesson": "在div_yield上疊加品質變數(如ocf_ratio)用簡單相加rank，不足以産生足夠正交性；殖利率因子家族在庫內已密集，需要更強的殘差化（如先對div_yield做行業/市值中性化後才疊加，或用比值而非rank相加）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage3",
+ "id": "A-0280",
+ "ts": "2026-07-21T12:59:43"
+}

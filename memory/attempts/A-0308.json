@@ -1,0 +1,87 @@
+{
+ "round": 19,
+ "category": "securities_lending_unwind_signal",
+ "hypothesis": "借券量快速下降代表原本放空/避險部位正在回補，通常領先於機構對後市轉為樂觀的部位調整，尤其在半導體/電子供應鏈中，避險基金常因庫存週期轉佳而率先回補空頭部位，此訊號早於財報與營收公告反映的基本面改善。",
+ "prediction": "sub-train ICIR>0.4；電子/半導體產業industry_icir應高於金融/生技；月換手率<0.45。",
+ "formula": "cs_rank(neg(delta(lend_vol_21, 3)))",
+ "name_zh": "借券回補訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(lend_vol_21, 3)))",
+  "fhash": "899e30c3b25ab50a",
+  "sub_train": {
+   "mean_ic": -0.013,
+   "icir": -0.16
+  },
+  "validation": {
+   "mean_ic": -0.004,
+   "icir": -0.06,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.012,
+    "盤整"
+   ],
+   "2013": [
+    -0.001,
+    "多頭"
+   ],
+   "2014": [
+    -0.017,
+    "多頭"
+   ],
+   "2015": [
+    -0.034,
+    "盤整"
+   ],
+   "2016": [
+    -0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    -0.0,
+    "盤整"
+   ],
+   "2019": [
+    -0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.009,
+   "down_months": -0.015
+  },
+  "industry_icir": {
+   "電子": -0.07,
+   "生技": -0.1,
+   "半導體": 0.01,
+   "金融": -0.13
+  },
+  "legs": {
+   "long_excess_ann": 0.016,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.52,
+  "turnover_m": 0.55,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測電子/半導體ICIR應高於金融/生技且sub-train ICIR>0.4，但實際全樣本與所有產業ICIR皆接近零或小幅為負(半導體0.01勉強最高但無意義)，sub-train ICIR僅-0.16(方向與預測相反)，coverage僅0.52偏低。與C-9同樣依賴lend_vol欄位，同樣呈現弱/反向訊號與低覆蓋率，兩案例合併看更支持「lend_vol資料本身覆蓋有限」的推論，而非「借券回補領先」機制必然無效。",
+ "failure_type": "expression_bad",
+ "lesson": "與C-9合併看，lend_vol欄位覆蓋率結構性偏低(~0.5)，在覆蓋率改善或改用相對化表達之前，這類欄位很難清晰驗證「回補訊號領先」或「冷門忽略」類敘事；證據不足以斷定機制本身錯誤，更可能是資料稀疏導致訊號被稀釋。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0308",
+ "ts": "2026-07-21T13:13:10"
+}

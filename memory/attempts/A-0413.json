@@ -1,0 +1,84 @@
+{
+ "round": 26,
+ "category": "cash_flow_growth_confirmation",
+ "hypothesis": "現金流品質(半年OCF/NI移動平均水準)與本業獲利成長(營業利益年增)是評估獲利含金量與成長性的兩個獨立維度；當兩者同時強勁，代表公司不僅帳面成長更是真金白銀的成長，此複合訊號比單一維度更難被套利消除，市場常只關注其中一項而忽略聯合確認的價值。",
+ "prediction": "sub-train ICIR>0.45；與F-006、F-012、F-001相關係數<0.5；多頭腿超額報酬>0。",
+ "formula": "add(cs_z(ts_mean(ocf_ratio,6)), cs_z(op_income_yoy))",
+ "name_zh": "現金流成長雙擎",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_z(ts_mean(ocf_ratio,6)), cs_z(op_income_yoy))",
+  "fhash": "a0c5ba185bdb06d0",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.22,
+   "decay_pct": -31.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.038,
+    "盤整"
+   ],
+   "2016": [
+    0.005,
+    "多頭"
+   ],
+   "2017": [
+    0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.15,
+   "生技": 0.31,
+   "半導體": 0.07,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": 0.004
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.22,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "ICIR偏弱（0.17/0.22）且多頭腿轉負(-1.0%)，與C-6同樣以ocf_ratio為核心組件的複合因子再度表現不佳。兩個獨立的ocf_ratio型複合因子（C-6、C-15）本輪皆呈現弱ICIR與負/接近零的多頭腿，敘事聽起來合理但統計表現一致偏弱。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "OCF比率相關指標（無論斜率或水準）作為複合因子核心組件，本輪兩次獨立嘗試（C-6、C-15）皆表現弱於同結構的ROE版本（C-1），懷疑ocf_ratio在此pipeline中訊噪比或覆蓋率不如損益表獲利指標，未來優先用ROE/營益率類指標做「品質確認」的核心腿。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0413",
+ "ts": "2026-07-28T18:54:36"
+}

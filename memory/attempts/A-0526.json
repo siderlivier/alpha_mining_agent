@@ -1,0 +1,90 @@
+{
+ "round": 34,
+ "category": "earnings_quality_convergence",
+ "hypothesis": "現金流含金量高（ocf_ratio高）與應計項偏低是盈餘品質的兩個獨立面向：前者確認獲利有真實現金支撐，後者排除會計操縱空間。兩者同時成立時盈餘真實性的證據強度遠高於任一指標單獨成立，但市場評估財報品質多只用單一指標篩選，忽略交叉驗證帶來的額外確定性溢酬。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-006(低應計品質股)相關性須<0.5方能證明非單純應計因子的重複表達。",
+ "formula": "mul(cs_rank(ocf_ratio), cs_rank(neg(accruals)))",
+ "name_zh": "現金應計雙驗",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio), cs_rank(neg(accruals)))",
+  "fhash": "af34da56440cee19",
+  "sub_train": {
+   "mean_ic": 0.02,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.03,
+   "icir": 0.57,
+   "decay_pct": -80.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.032,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.049,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.013,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.25,
+   "生技": 0.3,
+   "半導體": 0.24,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.17,
+  "stage2_culprit": {
+   "factor": "F-012",
+   "rho": 0.58,
+   "factor_name": "淨化ROE動能",
+   "factor_desc": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-012 |ρ|=0.58 > 0.5"
+ },
+ "diagnosis": "預測風險點是與F-006(低應計品質股)相關>0.5，但實際造成拒絕的是與F-012「淨化ROE動能」相關(ρ=0.58)——分析師對風險來源預判有偏差：此組合實際上更接近「應計淨化後獲利品質再確認」邏輯，與F-012底層概念相同。sub-train ICIR 0.32低於門檻，但validation達0.57(decay -80%)顯示訊號存在且穩定，只是庫內已有更完整版本。",
+ "failure_type": "duplicate",
+ "lesson": "檢查候選因子與庫內相關性時，不能只鎖定「最直觀類似」的既有因子(本例原鎖定F-006)，應對整個「盈餘品質/應計淨化」因子家族做全面掃描，因概念上相近的因子(如F-012的ROE淨化)可能比表面最像的因子相關性更高。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0526",
+ "ts": "2026-07-30T00:21:47"
+}

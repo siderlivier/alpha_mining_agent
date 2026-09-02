@@ -1,0 +1,86 @@
+{
+ "round": 38,
+ "category": "semiconductor_margin_persistence_anchoring",
+ "hypothesis": "半導體產業具強烈景氣循環印象，投資人習慣認為毛利率創高即代表週期見頂、隨即均值回歸，對毛利率結構性維持高檔（技術領先或產品組合優化）的公司給予過度保守評價，導致股價持續被低估直到市場逐漸修正認知。",
+ "prediction": "sub-train ICIR整體或半導體產業industry_icir > 0.5；半導體產業industry_icir應高於電子、生技、金融；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(ts_rank(gross_margin,24))",
+ "name_zh": "半導體毛利韌性股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(gross_margin,24))",
+  "fhash": "642d8faeee2ecf20",
+  "sub_train": {
+   "mean_ic": 0.045,
+   "icir": 0.83
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.16,
+   "decay_pct": 81.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.051,
+    "多頭"
+   ],
+   "2015": [
+    0.04,
+    "盤整"
+   ],
+   "2016": [
+    0.056,
+    "多頭"
+   ],
+   "2017": [
+    0.034,
+    "多頭"
+   ],
+   "2018": [
+    -0.011,
+    "盤整"
+   ],
+   "2019": [
+    0.032,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.037,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.47,
+   "半導體": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.061,
+   "short_excess_ann": 0.086
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.37
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.16 < 0.3; validation 衰減 81% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR高達0.83但validation崩至0.16（衰減81%），嚴重過擬合；更關鍵的是產業拆解直接推翻「半導體特有錨定偏誤」敘事——半導體本身icir(0.16)遠低於電子(0.56)與生技(0.47)，訊號其實在其他產業更有效。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "凡「產業X特有認知偏誤」型假設，應先確認claimed產業是否真為四產業中IC最高者。本輪C-6/C-8/C-11/C-12/C-13共五例都出現「敘事鎖定的產業並非實際最強產業」，是本輪最頻繁的失因模式，之後設計產業專屬因子前應先做簡易產業別IC掃描做假設篩選。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0586",
+ "ts": "2026-07-30T01:16:47"
+}

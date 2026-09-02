@@ -1,0 +1,87 @@
+{
+ "round": 6,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "台股月營收為全球罕見的高頻基本面揭露，但分析師與投資人習慣以季頻財報與產業景氣循環敘事(如半導體庫存週期)為錨定，對個股營收成長斜率的邊際加速反應遲緩；改用cs_rank(產業內排名)而非全市場排名，可濾除跨產業景氣循環雜訊，凸顯真正的公司特定加速訊號，使該訊號更快被法人辨識並推升股價。",
+ "prediction": "sub-train四產業合併之產業內rank ICIR > 0.45；相較於過去全池排名版本(C-1/C-7全池版ICIR<0.3)，本版本validation期衰減幅度應<40%，且四產業中至少3個industry_icir>0.3。",
+ "formula": "cs_rank(ts_slope(rev_yoy,6))",
+ "name_zh": "營收加速動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_yoy,6))",
+  "fhash": "a7d8ae3cbf09cb94",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.47,
+   "decay_pct": -12.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.018,
+    "盤整"
+   ],
+   "2016": [
+    0.067,
+    "多頭"
+   ],
+   "2017": [
+    0.022,
+    "多頭"
+   ],
+   "2018": [
+    0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.026,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.74,
+   "生技": 0.2,
+   "半導體": 0.39,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.058,
+   "short_excess_ann": 0.081
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.38,
+  "stage2_max_rho": {
+   "factor": "F-003",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.42 < 0.45"
+ },
+ "diagnosis": "sub-train ICIR 0.42僅微幅低於0.45門檻，但validation ICIR不降反升至0.47(decay -12%)，強力驗證『產業內排名濾除景氣循環雜訊』的核心機制；唯一預測失準在於產業覆蓋廣度(預期≥3/4產業icir>0.3)，實際僅電子0.74、半導體0.39達標，生技0.2、金融0.09未達，訊號集中於科技產業。",
+ "failure_type": "expression_bad",
+ "lesson": "sub-train ICIR以0.03之差落在門檻邊緣屬表達層面問題而非機制錯誤；因validation完全沒有衰減，下一輪可嘗試限定電子/半導體子產業池或微調ts_slope窗口(如4或8個月)以拉高sub-train ICIR過門檻，而非放棄本假設。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0099",
+ "ts": "2026-07-19T17:47:42"
+}

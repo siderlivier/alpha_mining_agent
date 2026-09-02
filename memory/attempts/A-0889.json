@@ -1,0 +1,88 @@
+{
+ "round": 58,
+ "category": "margin_improvement_uncertainty_resolution",
+ "hypothesis": "半導體業毛利率受景氣循環影響劇烈，當毛利率剛開始改善時，市場對此改善是否可持續存在高度分歧(反映為個股波動度仍偏高而非收斂)；隨著後續季度財報持續驗證，分歧會逐漸收斂、波動下降同時股價重估，因此「改善中但仍具高不確定性」的階段正是風險溢酬尚未被充分定價的時點。",
+ "prediction": "半導體子樣本 sub-train ICIR > 0.4；多頭腿年化超額報酬 > 0；訊號強的個股後續3個月vol_63應下降，驗證不確定性收斂機制。",
+ "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(vol_63))",
+ "name_zh": "毛利未定價半導體",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(vol_63))",
+  "fhash": "ba3d743b2fe786ab",
+  "sub_train": {
+   "mean_ic": -0.019,
+   "icir": -0.24
+  },
+  "validation": {
+   "mean_ic": -0.052,
+   "icir": -0.42,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    -0.038,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.013,
+    "盤整"
+   ],
+   "2016": [
+    -0.024,
+    "多頭"
+   ],
+   "2017": [
+    -0.024,
+    "多頭"
+   ],
+   "2018": [
+    -0.076,
+    "盤整"
+   ],
+   "2019": [
+    -0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.04,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": -0.32,
+   "生技": -0.31,
+   "半導體": -0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "distill_failed": true,
+ "id": "A-0889",
+ "ts": "2026-08-19T00:25:17"
+}

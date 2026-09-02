@@ -1,0 +1,93 @@
+{
+ "round": 41,
+ "category": "cost_conversion_efficiency",
+ "hypothesis": "營業利益率除以毛利率，衡量的是「從毛利到本業獲利」的費用轉換效率（SG&A紀律），與F-004(毛利率波動度)、既有ROE/margin類因子衡量的「水準」或「穩定度」不同，這是衡量「管理層costcontrol能力」的結構性比率；分析師通常分開看毛利率與營益率絕對水準，較少直接比較兩者轉換效率，此比率改善代表管理層執行力正在被低估。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-001/F-004/F-016相關性|ρ|<0.5。",
+ "formula": "cs_rank(sdiv(op_margin, gross_margin))",
+ "name_zh": "費用轉換效率",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_margin, gross_margin))",
+  "fhash": "211bd4d63bae5865",
+  "sub_train": {
+   "mean_ic": 0.043,
+   "icir": 0.49
+  },
+  "validation": {
+   "mean_ic": 0.029,
+   "icir": 0.38,
+   "decay_pct": 24.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.026,
+    "盤整"
+   ],
+   "2013": [
+    0.001,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.09,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.076,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.049,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.042,
+   "down_months": 0.033
+  },
+  "industry_icir": {
+   "電子": 0.4,
+   "生技": 0.36,
+   "半導體": 0.28
+  },
+  "legs": {
+   "long_excess_ann": -0.003,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.1,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.54,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.49、驗證期0.38（衰減僅24%）均優於預測門檻，各產業表現均衡，看似優質因子。死因是stage2與F-002（金融品質價值）相關性0.54，但候選預測的是F-001/F-004/F-016，完全沒設想到F-002——顯示『費用轉換效率比率』與『金融股ROE×淨值』這類財務比率因子在數學結構上（都是sdiv兩個財務比率）容易產生高相關，即使產業與語意南轅北轍。此外多頭腿-0.003為負、短腿+0.032才是主要獲利來源，即使未撞相關性，也會因『多頭腿必須為正』的可交易性限制而被質疑。",
+ "failure_type": "duplicate",
+ "lesson": "任何『財務比率A÷財務比率B』型的sdiv構造，即使兩個候選的欄位與敘事語意差異很大（費用效率 vs 金融股價值），仍可能因數學結構相似（兩個比率相除）而與庫內其他sdiv類品質因子高度相關；相關性檢查應涵蓋所有sdiv結構的庫內因子，不能只挑語意相近的。另外，即使通過相關性，也要留意alpha是否主要來自空頭腿——本次多頭腿為負，在難放空的台股環境下即便存活也不具可交易性。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0633",
+ "ts": "2026-08-12T09:31:55"
+}

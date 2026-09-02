@@ -1,0 +1,91 @@
+{
+ "round": 67,
+ "category": "earnings_cash_conversion_premium",
+ "hypothesis": "投資人聚焦在 EPS 與營收成長的新聞標題，對『獲利有多少真的轉成現金』這種無聊指標打折。連續一年維持高現金轉換率的公司，帳面獲利是真的收得到的，但因為現金含金度變動緩慢、不吸睛，相對於同樣帳面獲利但轉換較差的公司仍被低估。",
+ "prediction": "sub-train ICIR > 0.4；分位數多頭腿單調且年化超額 > 0；與 F-006 之 |ρ| < 0.5；下跌月 IC ≥ 上漲月。",
+ "formula": "cs_rank(ts_mean(ocf_ratio,12))",
+ "name_zh": "現金含金度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(ocf_ratio,12))",
+  "fhash": "ac0e5f66d284442e",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.35
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.2,
+   "decay_pct": 44.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.037,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    -0.0,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.2,
+   "半導體": 0.2,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.0,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.09,
+  "stage2_max_rho": {
+   "factor": "F-006",
+   "rho": 0.4
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.35 < 0.45; validation ICIR 0.2 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "rejected_stage4：ICIR 0.35<0.45、val 0.20<0.3、多頭腿≈0(−0.0%)，與 F-006 ρ=0.4 通過相關檢查。預測『ICIR>0.4、分位多頭腿單調>0』過度樂觀。cond_ic 跌月 0.027>漲月 0.018，又是防禦型無多頭腿的品質因子。ts_mean(ocf_ratio,12) 表達本身沒問題，換表達難救——是機制在台股不產生多頭超額。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金轉換率持續性在台股與毛利率水準同病：防禦、無多頭腿。單純的會計品質水準平滑值不會產生多頭超額；需與『市場沒注意到』的情境(低關注、創高、事件)交互才有機會。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-1022",
+ "ts": "2026-09-02T01:09:58"
+}

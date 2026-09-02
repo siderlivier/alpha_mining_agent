@@ -1,0 +1,88 @@
+{
+ "round": 54,
+ "category": "momentum_term_structure",
+ "hypothesis": "近一月動能明顯強於近半年動能，代表價格趨勢剛出現再加速，這是資訊擴散速度差異的訊號——月頻調倉的投信與研究更新較慢的法人尚未跟上這波轉強；單一時間窗的動能（如mom_240）已知偏弱，但動能的「期限結構」變化能捕捉擴散速度本身這個獨立維度。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；stage4換手率檢查需<0.4（技術面短窗訊號需驗證可交易性）。",
+ "formula": "cs_rank(sub(mom_20, mom_120))",
+ "name_zh": "動能期限結構",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_120",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_20, mom_120))",
+  "fhash": "b4d25abe5dd64168",
+  "sub_train": {
+   "mean_ic": -0.013,
+   "icir": -0.11
+  },
+  "validation": {
+   "mean_ic": -0.022,
+   "icir": -0.28,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.003,
+    "盤整"
+   ],
+   "2013": [
+    -0.016,
+    "多頭"
+   ],
+   "2014": [
+    0.005,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    -0.041,
+    "多頭"
+   ],
+   "2017": [
+    -0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    -0.048,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.018,
+   "down_months": -0.011
+  },
+  "industry_icir": {
+   "電子": -0.26,
+   "生技": -0.3,
+   "半導體": -0.07,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.061,
+   "short_excess_ann": -0.058
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.39,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且方向為正，實際sub-train ICIR為-0.11、validation為-0.28，方向完全相反；且IC在8個年度中6個為負、四產業中三個（電子/生技/半導體）為負，只有金融為正，多空腿超額報酬也雙雙大幅為負（-0.061/-0.058）。『短窗動能相對長窗動能加速代表資訊擴散』的假說被數據強烈證偽，實際更像短期反轉（mean reversion）而非動能延續。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "台股在mom_20相對mom_120的『期限結構』構造上呈現的是短期反轉而非動能延續，與原始敘事（月頻法人尚未跟上短期轉強）方向相反；未來若要測試動能期限結構，應優先假設短窗成分帶有反轉性質，而非把短窗上升視為額外的正向確認訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0832",
+ "ts": "2026-08-18T21:21:48"
+}

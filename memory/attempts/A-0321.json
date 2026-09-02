@@ -1,0 +1,87 @@
+{
+ "round": 20,
+ "category": "short_interest_trend",
+ "hypothesis": "融券餘額比率若在過去半年持續緩步上升，代表空方壓力是逐步累積的知情看空共識，而非單一事件引發的情緒性放空。此漸進式訊號比靜態券資比水準更能捕捉尚未完全反映在股價中的負面資訊，故餘額比率未上升甚至下降的個股相對表現較佳。",
+ "prediction": "sub-train ICIR > 0.45；與F-008相關係數 < 0.5；多頭腿年化超額報酬 > 0。",
+ "formula": "cs_rank(neg(delta(short_margin_ratio,6)))",
+ "name_zh": "券資背離趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(short_margin_ratio,6)))",
+  "fhash": "ae2d4b954e8fc219",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.21,
+   "decay_pct": -20.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.007,
+    "盤整"
+   ],
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.03,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.01,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.09,
+   "半導體": -0.02,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": -0.053,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.43,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測長期緩步上升的融券比率代表知情看空，方向與IC符號一致(sub0.014/val0.017，decay僅-20%，穩定)，但多頭腿(融券比率下降端)報酬為-5.3%，空頭腿(融券比率上升端)報酬反而+2.7%，與C-1同樣出現『IC符號正確但多頭腿不可交易』的情形，訊號解釋力集中在非預期的一端。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "台股不易放空，多頭腿報酬才是可交易關鍵；本輪C-1、C-13皆出現IC符號正確但多頭腿虧損、訊號實際集中在空頭/非單調端的情形，之後評估應在stage1就同時檢視leg單調性，而不只看IC正負。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0321",
+ "ts": "2026-07-21T13:24:55"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 18,
+ "category": "short_squeeze_momentum",
+ "hypothesis": "當股價短期已轉強(mom_20>0)時，高券資比代表大量空頭部位承受虧損壓力，若股價續強將觸發強制回補形成自我強化的軋空上漲；若股價仍偏弱，高券資比只是單純看空未必反轉，因此需要動能轉強作為觸發條件才具軋空預測力，這與『低調接近新高』(低券資比)的邏輯方向相反。",
+ "prediction": "sub-train ICIR>0.45；觸發子集(mom_20>0)內的多頭腿(因子值最高組)超額報酬需顯著為正；與F-008相關係數|ρ|<0.5",
+ "formula": "cs_rank(if_else(greater(mom_20,0), short_margin_ratio, 0))",
+ "name_zh": "動能軋空訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_20",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(mom_20,0), short_margin_ratio, 0))",
+  "fhash": "05ac594c03a73d3b",
+  "sub_train": {
+   "mean_ic": -0.016,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": -0.011,
+   "icir": -0.13,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.02,
+    "盤整"
+   ],
+   "2013": [
+    -0.045,
+    "多頭"
+   ],
+   "2014": [
+    -0.026,
+    "多頭"
+   ],
+   "2015": [
+    0.019,
+    "盤整"
+   ],
+   "2016": [
+    -0.021,
+    "多頭"
+   ],
+   "2017": [
+    -0.001,
+    "多頭"
+   ],
+   "2018": [
+    -0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.018,
+   "down_months": -0.007
+  },
+  "industry_icir": {
+   "電子": -0.39,
+   "生技": -0.17,
+   "半導體": -0.19,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.017,
+   "short_excess_ann": -0.044
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測觸發子集內多頭腿超額報酬應為正、ICIR>0.45，實際sub-train icir為-0.18（方向完全相反），且多頭腿與空頭腿超額報酬雙雙為負(-0.017/-0.044)。軋空機制未成立，但更值得懷疑的是公式本身：if_else(...,short_margin_ratio,0) 讓未觸發股票全部並列在0，與真實觸發股票的short_margin_ratio數值混在同一個cs_rank裡，這種『假值填補』會系統性扭曲排序，而非乾淨地代表『無訊號』。",
+ "failure_type": "expression_bad",
+ "lesson": "用if_else(...,X,0)做條件式因子時，未觸發樣本全部並列在同一填補值(0)，會在cs_rank中製造大量並列與排序偏誤，可能讓整體IC方向失真甚至反轉；條件式因子應考慮用NaN/缺失排除未觸發樣本，而非填0後照樣全市場排序。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0281",
+ "ts": "2026-07-21T12:59:43"
+}

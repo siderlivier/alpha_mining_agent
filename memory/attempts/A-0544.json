@@ -1,0 +1,87 @@
+{
+ "round": 35,
+ "category": "securities_lending_information_signal",
+ "hypothesis": "借券量偏高反映機構投資人（多為避險或知情空方）對該股具負面資訊或估值疑慮，這類資訊優勢方在台股放空受限的市場中傾向透過借券管道提前布局，其資訊領先散戶認知，導致利空尚未完全反映在股價上。",
+ "prediction": "sub-train ICIR>0.45；下跌月與上漲月IC同向為正；多頭腿（低借券量者）年化超額>0。",
+ "formula": "cs_rank(neg(ts_mean(lend_vol_21,6)))",
+ "name_zh": "借券示警股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(lend_vol_21,6)))",
+  "fhash": "3106ad687766b48b",
+  "sub_train": {
+   "mean_ic": -0.01,
+   "icir": -0.1
+  },
+  "validation": {
+   "mean_ic": -0.054,
+   "icir": -0.51,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.044,
+    "盤整"
+   ],
+   "2013": [
+    -0.031,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    -0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.023,
+    "多頭"
+   ],
+   "2017": [
+    -0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.078,
+    "盤整"
+   ],
+   "2019": [
+    -0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.038,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": -0.38,
+   "生技": -0.29,
+   "半導體": -0.14,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": -0.037,
+   "short_excess_ann": -0.032
+  },
+  "coverage": 0.52,
+  "turnover_m": 0.16,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR -0.1，validation更負至-0.51，方向與預測(正值)相反。coverage僅0.52明顯低於多數候選(0.7+)，顯示借券資料覆蓋不足，可能是流動性充足/機構常態避險股票才有借券量，訊號被結構性混淆。相較之下C-1(券資比)在同一放空管道資訊類別下卻有正向穩定IC，顯示融資融券比與純借券量的資訊內涵不同。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "借券量本身作為知情空頭代理效果不佳(方向與預期相反且覆蓋率低)，融資融券比比原始借券量更能捕捉知情空方訊號；未來做空方資訊類因子應優先使用融資融券比，並留意借券資料覆蓋率過低(<0.6)的樣本可靠性問題。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0544",
+ "ts": "2026-07-30T00:34:10"
+}

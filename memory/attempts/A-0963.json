@@ -1,0 +1,83 @@
+{
+ "round": 63,
+ "category": "idiosyncratic_earnings_surprise_anchoring",
+ "hypothesis": "用EPS年增率相對「自身過去12個月」的時序百分位(ts_rank)取代跨個股絕對水準比較，捕捉公司相對自己歷史的罕見加速；市場對股票的成長/價值標籤是跨個股橫向比較形成的，投資人對相對自己過去表現的異常變化反應較慢，因不符既有標籤化認知框架。",
+ "prediction": "sub-train ICIR>0.4；與F-022(sdiv(eps_yoy,ts_std(eps_yoy,12)))截面相關|ρ|<0.5。",
+ "formula": "cs_rank(ts_rank(eps_yoy,12))",
+ "name_zh": "自我超越成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(eps_yoy,12))",
+  "fhash": "a2205c7cb4f46289",
+  "sub_train": {
+   "mean_ic": 0.016,
+   "icir": 0.34
+  },
+  "validation": {
+   "mean_ic": 0.035,
+   "icir": 0.73,
+   "decay_pct": -115.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.09,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.011,
+    "多頭"
+   ],
+   "2017": [
+    0.025,
+    "多頭"
+   ],
+   "2018": [
+    0.034,
+    "盤整"
+   ],
+   "2019": [
+    0.035,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.032,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": 0.4,
+   "生技": 0.07,
+   "半導體": 0.08,
+   "金融": 0.29
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.024
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.34略低於預測>0.4，但validation大幅躍升到0.73（decay為負115%，訓練期偏弱使指標失真）。sub-train平均IC僅0.016，絕對訊號強度偏低；ts_rank(eps_yoy,12)可能因EPS年增率在低基期時容易出現極端值，使時序百分位排序本身雜訊偏大，導致整體訊號偏弱而非完全無效。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用『相對自身歷史』的時序百分位取代『跨個股』水準比較，這個轉念本身沒有帶來預期的訊號強度提升，EPS年增率的離群值問題可能抵銷了『去標籤化』的優勢。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0963",
+ "ts": "2026-08-27T21:36:00"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 9,
+ "category": "earnings_growth_stability_discount",
+ "hypothesis": "EPS年增率波動度低代表獲利成長路徑穩定可預測；市場聚焦成長幅度而忽略穩定性，穩定成長股因缺乏故事性被低估，此為F-007營收穩健溢價在獲利端的類比，但涵蓋營運與非營運雜訊，更貼近真實盈餘品質。",
+ "prediction": "sub-train ICIR > 0.45；與F-007相關係數|ρ| < 0.5；validation衰減 < 40%。",
+ "formula": "cs_rank(neg(ts_std(eps_yoy,6)))",
+ "name_zh": "獲利穩健溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(eps_yoy,6)))",
+  "fhash": "8efcb277e8b90a20",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.068,
+   "icir": 0.97,
+   "decay_pct": -578.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.047,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.031,
+    "盤整"
+   ],
+   "2016": [
+    0.026,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.081,
+    "盤整"
+   ],
+   "2019": [
+    0.054,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.037,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.13,
+   "半導體": 0.24,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.14，遠低於0.45門檻，rejected_stage1，但validation ICIR異常高達0.97（decay -578%）。逐年拆解顯示2013-2017效果薄弱甚至為負(2013:-0.047)，但2018-2019（皆為驗證期、且2018為盤整/貿易戰不確定性升高的年份）明顯轉強(0.081, 0.054)。這暗示獲利穩健溢價可能是「不確定性升高時才顯現」的regime-dependent效應，而非長期穩定存在，只是本輪評估流程用sub-train門檻就直接判死，沒機會驗證這個猜測。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "獲利穩健溢價假說在2012-2017整體偏弱，證據不足以支持「市場長期忽略穩定性」的一般性機制；但驗證期異常轉強的模式值得懷疑是總體不確定性狀態依賴，下次可設計「僅在高波動/盤整年份」條件式版本重新測試，而非直接沿用全樣本sub-train門檻判死刑。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0153",
+ "ts": "2026-07-20T17:18:53"
+}

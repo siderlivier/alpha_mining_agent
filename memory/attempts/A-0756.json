@@ -1,0 +1,83 @@
+{
+ "round": 49,
+ "category": "growth_deceleration_overreaction",
+ "hypothesis": "當營收年增率斜率由正轉負，市場容易解讀為成長故事破滅並過度拋售，但3個月移動平均已濾除單月雜訊，斜率轉弱多數情況下只是成長速度放緩而非衰退。過度反應後股價往往修正過頭，隨後隨基本面實際表現（仍為正成長，只是減速）回歸合理評價而產生正報酬。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；與F-009相關係數|ρ|<0.5；validation decay<50%",
+ "formula": "cs_rank(neg(ts_slope(rev_yoy_ma3,12)))",
+ "name_zh": "營收降溫反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_slope(rev_yoy_ma3,12)))",
+  "fhash": "2f43f7d4dba897d6",
+  "sub_train": {
+   "mean_ic": -0.037,
+   "icir": -0.52
+  },
+  "validation": {
+   "mean_ic": -0.028,
+   "icir": -0.45,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.04,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.076,
+    "盤整"
+   ],
+   "2016": [
+    -0.047,
+    "多頭"
+   ],
+   "2017": [
+    -0.026,
+    "多頭"
+   ],
+   "2018": [
+    -0.023,
+    "盤整"
+   ],
+   "2019": [
+    -0.033,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.04,
+   "down_months": -0.02
+  },
+  "industry_icir": {
+   "電子": -0.49,
+   "生技": -0.38,
+   "半導體": -0.37,
+   "金融": -0.12
+  },
+  "legs": {
+   "long_excess_ann": -0.07,
+   "short_excess_ann": -0.056
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.15,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測pos方向（成長減速後反彈修正過頭），實際全年度幾乎全負(ICIR -0.52 sub-train, -0.45 validation)，電子(-0.49)、生技(-0.38)、半導體(-0.37)全部強烈負向，顯示成長減速並非過度反應，而是真實變差的前兆，股價持續下修；多空腿雙雙為負(-0.07/-0.056)顯示這是動能延續型的持續弱勢訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "與C-1、C-8同屬本輪「預期均值回歸、實際動能延續」的一致反向案例（三個獨立類別、方向皆相反且逐年一致），是本輪最值得記錄的通則：遇到「超跌反彈/超額修正」敘事應優先假設或至少雙向測試反向結果。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0756",
+ "ts": "2026-08-14T00:36:43"
+}

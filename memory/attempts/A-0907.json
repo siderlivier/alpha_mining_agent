@@ -1,0 +1,84 @@
+{
+ "round": 59,
+ "category": "asset_light_earnings_premium",
+ "hypothesis": "輕資產、高獲利模式的公司（例如品牌、通路、特殊製程授權）淨值規模小但賺錢能力強，傳統B/P價值篩選會因淨值基期小而錯過或低估這類公司；當盈餘殖利率明顯高於淨值殖利率時，代表市場用淨值角度定價過於保守，而用獲利角度看實則便宜，此類資產輕獲利股常被純B/P型價值投資人的篩選器忽略。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿年化超額>0；與F-002/F-015等既有價值複合因子相關性|ρ|<0.5。",
+ "formula": "cs_rank(sub(ep,bp))",
+ "name_zh": "資產輕獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "ep"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ep,bp))",
+  "fhash": "6ca3ecc5d277152e",
+  "sub_train": {
+   "mean_ic": -0.04,
+   "icir": -0.38
+  },
+  "validation": {
+   "mean_ic": -0.015,
+   "icir": -0.13,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.027,
+    "多頭"
+   ],
+   "2014": [
+    -0.029,
+    "多頭"
+   ],
+   "2015": [
+    -0.01,
+    "盤整"
+   ],
+   "2016": [
+    -0.083,
+    "多頭"
+   ],
+   "2017": [
+    -0.048,
+    "多頭"
+   ],
+   "2018": [
+    -0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.034,
+   "down_months": -0.03
+  },
+  "industry_icir": {
+   "電子": -0.33,
+   "生技": -0.5,
+   "半導體": -0.07,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.032,
+   "short_excess_ann": -0.045
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.09,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測方向為pos，但sub-train IC為-0.04(ICIR -0.38)、validation亦負(-0.13)，年度IC幾乎全負(僅2019微幅+0.002)，與『資產輕獲利股被低估』預期完全相反；多頭腿與空頭腿超額報酬皆為負(-0.032/-0.045)，顯示ep-bp差距大的股票整體跑輸，較可能反映財務槓桿/風險屬性而非機會，與C-13同型的方向誤判。",
+ "failure_type": "expression_bad",
+ "lesson": "ep減bp的『盈餘殖利率高於淨值殖利率』組合在台股呈現穩定負相關，可能對應的是高槓桿/低淨值品質股而非被低估的輕資產優質股；若要延續此構想，應先加入品質篩選（如ROE、負債比）排除財務體質差的個股，而非單純比較兩種殖利率差。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0907",
+ "ts": "2026-08-19T10:08:40"
+}

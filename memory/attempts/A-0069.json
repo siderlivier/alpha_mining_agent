@@ -1,0 +1,87 @@
+{
+ "round": 4,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "月營收年增率的短期加速（斜率）反映供應鏈訂單能見度的即時變化，但台股電子供應鏈訊號過去用全市場排名(cs_rank_all)會被非電子產業稀釋到門檻以下；改用cs_rank做產業內排名後，法人與散戶對加速度資訊仍消化慢，因為多數人只看單月YoY絕對值而非斜率趨勢，形成產業內系統性低估。",
+ "prediction": "sub-train ICIR>0.45；且電子/半導體產業內ICIR應顯著高於金融產業，驗證產業內排名確實保留了原本被稀釋的訊號",
+ "formula": "cs_rank(ts_slope(rev_yoy,6))",
+ "name_zh": "產業內營收加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_yoy,6))",
+  "fhash": "a7d8ae3cbf09cb94",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.47,
+   "decay_pct": -12.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.018,
+    "盤整"
+   ],
+   "2016": [
+    0.067,
+    "多頭"
+   ],
+   "2017": [
+    0.022,
+    "多頭"
+   ],
+   "2018": [
+    0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.026,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.74,
+   "生技": 0.2,
+   "半導體": 0.39,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.058,
+   "short_excess_ann": 0.081
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.38,
+  "stage2_max_rho": {
+   "factor": "F-003",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.42 < 0.45"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45差一點沒中(實際0.42)，但預測『產業內排名應讓電子/半導體訊號脫穎而出』完全命中(電子0.74、半導體0.39 >> 金融0.09)，且validation不但沒衰減反而變好(ICIR 0.47，decay -12%)，證明機制真實存在且穩健，只是全市場pooled平均被金融/生技等弱訊號產業拉低到門檻下。",
+ "failure_type": "expression_bad",
+ "lesson": "當產業別拆解強烈驗證假設但pooled ICIR只差一點沒過門檻時，不要整批放棄，應嘗試限定在確認有效的產業子集(電子+半導體)重算ICIR，或用產業覆蓋率加權而非簡單平均。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0069",
+ "ts": "2026-07-19T17:21:03"
+}

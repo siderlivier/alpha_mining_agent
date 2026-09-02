@@ -1,0 +1,83 @@
+{
+ "round": 59,
+ "category": "biotech_commercialization_inflection",
+ "hypothesis": "生技股常因臨床期燒錢而被以本夢比定價，一旦產品進入商轉，毛利率會出現結構性躍升，但市場仍慣性以「生技=燒錢」框架看待，反應遲緩；當半年期毛利率顯著提升且股價動能同步確認（顯示部分知情資金已開始反應）時，代表公司真正跨越了從研發轉向商業化的關鍵轉折，尚未被市場完整定價。",
+ "prediction": "sub-train ICIR > 0.4（生技子樣本）；industry_icir生技 > 其他三產業；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(delta(gross_margin,24)),cs_rank(mom_60))",
+ "name_zh": "生技轉商轉股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(gross_margin,24)),cs_rank(mom_60))",
+  "fhash": "3aa5eb4c69cf809c",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.12,
+   "decay_pct": 63.0
+  },
+  "ic_by_year": {
+   "2014": [
+    -0.011,
+    "多頭"
+   ],
+   "2015": [
+    0.031,
+    "盤整"
+   ],
+   "2016": [
+    0.049,
+    "多頭"
+   ],
+   "2017": [
+    0.038,
+    "多頭"
+   ],
+   "2018": [
+    -0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.048,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.036,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": 0.35,
+   "生技": 0.31,
+   "半導體": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.062,
+   "short_excess_ann": 0.054
+  },
+  "coverage": 0.6,
+  "turnover_m": 0.35,
+  "stage2_max_rho": {
+   "factor": "F-016",
+   "rho": 0.43
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.32 < 0.45; validation ICIR 0.12 < 0.3; validation 衰減 63% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際0.32未達；更關鍵的是validation ICIR僅0.12且衰減63%（>50%過擬合門檻），顯示『毛利率躍升+動能確認』這個複合條件在樣本外大幅減弱，較可能是sub-train期間少數生技股的巧合而非穩定機制。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『動能確認知情資金已反應』這類需要兩個條件同時成立的複合假設，容易在sub-train過擬合到特定個股，decay>50%是明確警訊，應對此類雙條件生技敘事保持更高懷疑。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0904",
+ "ts": "2026-08-19T10:08:40"
+}

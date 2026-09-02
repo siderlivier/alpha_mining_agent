@@ -1,0 +1,87 @@
+{
+ "round": 34,
+ "category": "attention_overreaction",
+ "hypothesis": "成交金額短期暴增代表該股突然成為市場焦點（新聞、社群討論、跟風盤湧入），依據注意力驅動假說，散戶主導的關注度飆升會造成短期過度反應，價格偏離基本面後需要修正；而成交金額平穩的股票較少受此雜訊干擾。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(成交金額變化最低端)年化超額報酬>0；月換手率<0.4；效果應在成交金額暴增後1個月內最強，3個月後轉弱驗證其為短期過度反應而非結構性重估。",
+ "formula": "cs_rank(neg(delta(amt_21,6)))",
+ "name_zh": "成交金額暴衝",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(amt_21,6)))",
+  "fhash": "b36a545d3853ca45",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.16,
+   "decay_pct": -488.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.021,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    -0.018,
+    "盤整"
+   ],
+   "2016": [
+    0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": 0.018
+  },
+  "industry_icir": {
+   "電子": 0.07,
+   "生技": 0.11,
+   "半導體": 0.01,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.06,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.41,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.03，幾乎無訊號，直接死於stage1。預測的「1個月內最強、3個月後轉弱」完全未被驗證——用delta(amt_21,6)(21日均量的6期變化)本質是中期平滑指標，已把短期注意力暴衝的即時反轉窗口平滑掉，測不到假設描述的短期過度反應。",
+ "failure_type": "expression_bad",
+ "lesson": "若假設本質是「短期注意力暴衝後的即時修正」，表達式時間窗口需與假設作用窗口對齊；用月頻6期(約半年)delta去捕捉「1個月內最強」的效應在時間尺度上已不匹配，即使假設對，此表達式也測不到。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0521",
+ "ts": "2026-07-30T00:21:47"
+}

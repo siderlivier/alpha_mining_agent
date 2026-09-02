@@ -1,0 +1,83 @@
+{
+ "round": 31,
+ "category": "cross_scope_rank_divergence",
+ "hypothesis": "生技產業家數少、產業內比較基準與全市場比較基準常有落差；當個股在生技產業內部排名遠高於其在全市場排名時，代表該股營收成長是相對同業的顯著優勢，但因生技產業規模小、全市場資金與研究覆蓋以電子/半導體權值股為主，此種『產業內強、全市場排名不顯眼』的訊號常被市場忽略。經驗庫顯示此方向僅生技產業一致成立，電子/半導體/金融因權值股眾多、資金覆蓋充足而不具備此資訊落差。",
+ "prediction": "生技產業限定 industry_icir > 0.45（依經驗庫僅生技產業此方向一致成立）；多頭腿年化超額報酬 > 0。",
+ "formula": "sub(cs_rank(rev_yoy), cs_rank_all(rev_yoy))",
+ "name_zh": "生技產業內強勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(rev_yoy), cs_rank_all(rev_yoy))",
+  "fhash": "86051192d88dfc56",
+  "sub_train": {
+   "mean_ic": 0.004,
+   "icir": 0.08
+  },
+  "validation": {
+   "mean_ic": -0.015,
+   "icir": -0.23,
+   "decay_pct": 397.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.035,
+    "多頭"
+   ],
+   "2018": [
+    -0.017,
+    "盤整"
+   ],
+   "2019": [
+    -0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": 0.28,
+   "生技": -0.23,
+   "半導體": 0.1,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.012,
+   "short_excess_ann": -0.016
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.61,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.08，rejected_stage1，validation更轉負(-0.23，衰減397%極不穩定)。核心敘事『生技產業內排名優於全市場排名代表被忽略的相對優勢』被industry_icir直接推翻：生技產業ICIR為-0.23（負值），反而是電子(0.28)、半導體(0.1)呈現微弱正值，說明『產業內強、全市場不顯眼』這個資訊落差敘事在生技產業本身完全不成立，可能該產業家數過少導致產業內排名雜訊過大而非資訊訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "cs_rank與cs_rank_all的差值類『跨範疇排名背離』因子，在成分股過少的產業（如生技）容易因樣本雜訊而不穩定，而非捕捉到真實的資訊覆蓋落差；此類因子如要再測試，應選成分股數量足夠、排名本身穩定的產業，而非直覺上『被忽略』的小產業。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0487",
+ "ts": "2026-07-29T23:46:18"
+}

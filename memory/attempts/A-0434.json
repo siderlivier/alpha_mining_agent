@@ -1,0 +1,88 @@
+{
+ "round": 28,
+ "category": "financial_nim_underreaction",
+ "hypothesis": "金融股的淨利率與營業利益率之間的缺口主要來自業外的利息淨收益、投資收益等「利差」成分；當淨利率持續超越營業利益率，代表淨利差(NIM)正在擴大，但市場慣性把「本業獲利」當核心指標，對這類非本業但屬金融業核心獲利引擎的訊號反應遲鈍。",
+ "prediction": "sub-train ICIR>0.4；金融業industry_icir應明顯高於電子/生技/半導體(產業限定門檻)；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sub(net_margin, op_margin))",
+ "name_zh": "金融業淨利差訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(net_margin, op_margin))",
+  "fhash": "629cda272f015069",
+  "sub_train": {
+   "mean_ic": -0.024,
+   "icir": -0.2
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.25,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.003,
+    "盤整"
+   ],
+   "2013": [
+    -0.032,
+    "多頭"
+   ],
+   "2014": [
+    -0.043,
+    "多頭"
+   ],
+   "2015": [
+    -0.076,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.015,
+    "多頭"
+   ],
+   "2018": [
+    -0.019,
+    "盤整"
+   ],
+   "2019": [
+    -0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.028,
+   "down_months": -0.011
+  },
+  "industry_icir": {
+   "電子": -0.17,
+   "生技": -0.04,
+   "半導體": -0.27,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.024,
+   "short_excess_ann": 0.0
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測pos方向、金融業ICIR應突出，實際全市場icir -0.20方向相反，金融業內icir(-0.11)也是負值，並非突出的正值，直接反證'淨利差擴大代表核心獲利被低估'的機制。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "業外/利差成分(net_margin-op_margin gap)在金融股身上目前看來是負向訊號而非正向，可能反映淨利中的業外波動(如投資部位評價損益)本身是雜訊或負面訊號，而非穩定獲利引擎；下次涉及金融股利差類因子應先假設兩種方向都測試，不要預設『被低估』。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0434",
+ "ts": "2026-07-28T19:19:09"
+}

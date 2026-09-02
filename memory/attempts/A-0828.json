@@ -1,0 +1,97 @@
+{
+ "round": 54,
+ "category": "semiconductor_margin_inflection",
+ "hypothesis": "半導體景氣循環中，毛利率率先反映產品組合與價格回升，通常領先出貨量與營收數字1-2季；毛利率半年內明顯回升但月營收尚未跟上的公司，代表市場還在等待營收確認、尚未反映早期循環反轉訊號。",
+ "prediction": "半導體產業industry_icir>0.4；與F-004/F-009相關係數|ρ|<0.5；多頭腿年化超額報酬>0（產業限定候選，全市場門檻可不達標）。",
+ "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(neg(rev_mom)))",
+ "name_zh": "半導體毛利拐點股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(neg(rev_mom)))",
+  "fhash": "067b04a77e46168c",
+  "sub_train": {
+   "mean_ic": 0.045,
+   "icir": 0.85
+  },
+  "validation": {
+   "mean_ic": 0.019,
+   "icir": 0.41,
+   "decay_pct": 52.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.002,
+    "盤整"
+   ],
+   "2013": [
+    0.042,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.054,
+    "盤整"
+   ],
+   "2016": [
+    0.048,
+    "多頭"
+   ],
+   "2017": [
+    0.046,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.026,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.037,
+   "down_months": 0.039
+  },
+  "industry_icir": {
+   "電子": 0.58,
+   "生技": 0.55,
+   "半導體": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.048,
+   "short_excess_ann": 0.064
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.71,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.31
+  },
+  "industry_scope": "生技",
+  "industry_metrics": {
+   "train_icir": 0.61,
+   "valid_icir": 0.38,
+   "decay_pct": 37
+  },
+  "verdict": "passed_industry",
+  "reason": "整體未達標（validation 衰減 52% > 50%（過擬合徵兆）; 月換手 0.71 > 0.4），但於「生技」產業內達到專屬門檻"
+ },
+ "diagnosis": "預測半導體industry_icir>0.4，實際半導體僅0.2（未達標），反而在完全未預期的生技產業意外通過產業限定門檻（train_icir 0.61, valid_icir 0.38, decay 37%）。毛利率領先營收的機制假說在半導體本業（原始邏輯來源）反而較弱，但在生技產業卻成立，顯示『毛利先行、營收落後確認』這個時間差機制可能是跨產業的財報揭露延遲現象，而非半導體特有的庫存循環現象。",
+ "failure_type": "none",
+ "lesson": "『毛利拐點領先營收』機制的產業歸屬判斷經常會出錯——這次錯判半導體、實際在生技通過，顯示這類財報揭露延遲型訊號的產業强弱難以單靠敘事直覺預測，應在生成階段對多個產業都做假設而非只鎖定敘事最直觀的產業。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed_industry",
+ "id": "A-0828",
+ "ts": "2026-08-18T21:21:48"
+}

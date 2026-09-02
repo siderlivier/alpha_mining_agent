@@ -1,0 +1,84 @@
+{
+ "round": 11,
+ "category": "smart_money_breakout_confirmation",
+ "hypothesis": "外資近21日買超集中且股價同時逼近52週高點,代表外資是趨勢的主導推手而非散戶追高。股價創高卻無外資買超的情況常是純粹過熱;股價創高後仍有外資買超則顯示趨勢有基本面資訊支撐,市場對『外資確認的突破』消化較慢。",
+ "prediction": "sub-train ICIR>0.45;與F-008相關係數<0.5(機制是外資流向而非周轉率)",
+ "formula": "if_else(greater(px_hi252, ts_med(px_hi252,12)), cs_rank(frgn_net_21), 0)",
+ "name_zh": "外資創高確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "if_else(greater(px_hi252, ts_med(px_hi252,12)), cs_rank(frgn_net_21), 0)",
+  "fhash": "ff9e83142458ad40",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.19
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.14,
+   "decay_pct": 27.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.014,
+    "多頭"
+   ],
+   "2014": [
+    -0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.037,
+    "盤整"
+   ],
+   "2016": [
+    0.032,
+    "多頭"
+   ],
+   "2017": [
+    0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.033,
+    "盤整"
+   ],
+   "2019": [
+    -0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": -0.02
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": 0.16,
+   "半導體": 0.03,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.056
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.55,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且與F-008相關係數<0.5，實際sub-train ICIR僅0.19(stage1淘汰，未進stage2)。上漲月IC 0.029 vs下跌月-0.02，呈現明顯多空市場狀態不對稱，是典型『搭載大盤beta』特徵而非獨立資訊優勢——外資買超+創高組合僅在多頭放大動能曝險，並非『外資確認突破』帶來增量資訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用『價格創高+外資買超』AND條件試圖捕捉資訊確認效果，但上漲/下跌月IC正負對半分通常代表訊號被大盤beta污染而非真正alpha；下次測『法人確認』類因子應先用大盤中性化後的動能，排除beta污染再看是否還有增量資訊。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0186",
+ "ts": "2026-07-21T11:33:49"
+}

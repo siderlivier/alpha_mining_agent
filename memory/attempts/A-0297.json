@@ -1,0 +1,83 @@
+{
+ "round": 19,
+ "category": "informed_trading_leakage",
+ "hypothesis": "電子代工/零組件供應鏈公司每月10日公告營收前，通路商與上下游廠商的訂單變化常先透過法人查產業鏈動作反映在股票成交周轉率異常放大上，構成合法但緩慢擴散的資訊洩漏管道。",
+ "prediction": "電子產業industry_icir應為四產業中最高，sub-train ICIR>0.4。",
+ "formula": "cs_rank(delta(turn_21, 3))",
+ "name_zh": "周轉異常領先",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(turn_21, 3))",
+  "fhash": "ea5856a67a7d55a2",
+  "sub_train": {
+   "mean_ic": -0.033,
+   "icir": -0.36
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.24,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.049,
+    "多頭"
+   ],
+   "2015": [
+    -0.046,
+    "盤整"
+   ],
+   "2016": [
+    -0.024,
+    "多頭"
+   ],
+   "2017": [
+    -0.027,
+    "多頭"
+   ],
+   "2018": [
+    0.042,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.013,
+   "down_months": -0.026
+  },
+  "industry_icir": {
+   "電子": -0.24,
+   "生技": -0.21,
+   "半導體": -0.15,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.024,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.51,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測電子產業因供應鏈資訊洩漏應是ICIR最高的正向產業，但實際sub-train ICIR為-0.36，四產業ICIR皆為負，電子(-0.24)也非最不負的產業(金融-0.02最溫和)，方向與假設完全相反。週轉率異常放大預示的是未來報酬下降，較符合追價出貨/籌碼混亂的過熱訊號，而非合法資訊洩漏的知情累積。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "週轉率異常放大在台股電子供應鏈中呈現負向(過熱/出貨)訊號而非正向(知情累積)訊號；週轉率類特徵若要找正向alpha，方向應偏向「低調/平穩」而非「異常放大」(呼應C-12被F-008取代的模式)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0297",
+ "ts": "2026-07-21T13:13:10"
+}

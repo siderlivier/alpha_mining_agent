@@ -1,0 +1,87 @@
+{
+ "round": 46,
+ "category": "institutional_lending_attention",
+ "hypothesis": "台股借券需求主要來自可轉債套利、ETF申贖與造市避險等機構性活動，而非單純的看空放空；借券量偏高反映該股票被量化基金、避險機構納入套利或對沖組合的密度較高，代表機構關注度與資訊覆蓋較充分。這類股票的基本面訊息能較快被有效定價，後續因錯價修正帶來的超額報酬也更持續，而市場多數投資人仍將高借券量直覺解讀為空方壓力而低估其真實含義。",
+ "prediction": "sub-train ICIR>0.45；下跌月與上漲月IC同向為正（非避險型訊號）；validation decay<40%；多頭腿（借券活躍度最高組）年化超額>0可交易；與F-008相關性<0.5。",
+ "formula": "cs_rank(ts_mean(lend_vol_21,6))",
+ "name_zh": "借券活躍優質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(lend_vol_21,6))",
+  "fhash": "52bd911cbdef0096",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.1
+  },
+  "validation": {
+   "mean_ic": 0.054,
+   "icir": 0.51,
+   "decay_pct": -432.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.044,
+    "盤整"
+   ],
+   "2013": [
+    0.031,
+    "多頭"
+   ],
+   "2014": [
+    0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.023,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.078,
+    "盤整"
+   ],
+   "2019": [
+    0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.038,
+   "down_months": -0.02
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.29,
+   "半導體": 0.14,
+   "金融": -0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.034,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.52,
+  "turnover_m": 0.13,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且上漲/下跌月同向為正，但實際sub-train ICIR僅0.10（stage1即遭拒），validation ICIR反而衝高到0.51、decay_pct為-432%，方向上cond_ic下跌月轉負(-0.02)、上漲月正(0.038)，與『非避險型訊號、上下月同向』的預測矛盾。coverage僅0.52，資料稀疏可能是sub-train雜訊主導、validation失真的主因。",
+ "failure_type": "expression_bad",
+ "lesson": "借券量作為機構關注度代理指標，覆蓋率不足(0.52)加上簡單6個月均值，雜訊主導難以在長樣本中穩定；下跌月轉負也顯示仍帶有部分放空悲觀含義，並非純機構中性訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0699",
+ "ts": "2026-08-12T14:41:10"
+}

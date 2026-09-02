@@ -1,0 +1,83 @@
+{
+ "round": 60,
+ "category": "financial_capital_accretion_signal/金融限定",
+ "hypothesis": "金融股bp若呈長期上升趨勢，代表公司透過保留盈餘持續累積資本(而非股價下跌被動推升)，此為資產負債表面的緩慢改善；分析師覆蓋多聚焦損益表，較少追蹤資本累積速度，形成定價滯後；僅金融業因監理資本適足要求使bp趨勢具實質清償能力意涵，一般產業bp上升可能只反映股價下跌。",
+ "prediction": "金融子樣本sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-002/F-021(bp水準交乘類)相關度|ρ|<0.5(純趨勢而非水準)。",
+ "formula": "cs_rank(ts_slope(bp,12))",
+ "name_zh": "金融資本累積股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(bp,12))",
+  "fhash": "dc692d57acb69428",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.04
+  },
+  "validation": {
+   "mean_ic": -0.012,
+   "icir": -0.09,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.055,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    -0.008,
+    "盤整"
+   ],
+   "2016": [
+    -0.011,
+    "多頭"
+   ],
+   "2017": [
+    -0.054,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.014,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.18,
+   "半導體": -0.05,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.024,
+   "short_excess_ann": -0.059
+  },
+  "coverage": 0.65,
+  "turnover_m": 0.15,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融子樣本ICIR>0.4，實際sub-train ICIR為-0.04，方向與預測完全相反。金融股bp長期上升趨勢被假設為「資本穩健累積」的正面訊號，但實證顯示bp上升反而伴隨較差的後續報酬(電子-0.09、生技-0.18、金融本身也僅0.03)，機制方向判斷完全錯誤。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「bp上升=資本體質改善」的直覺可能對金融股不成立，bp上升更可能反映股價下跌(分母端)或成長性低落而非正面的資本累積，此類「淨值趨勢」方向性假設在验证前應先確認是分子(盈餘累積)還是分母(股價)驅動的上升。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0920",
+ "ts": "2026-08-20T08:30:15"
+}

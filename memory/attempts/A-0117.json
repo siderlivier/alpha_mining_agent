@@ -1,0 +1,91 @@
+{
+ "round": 7,
+ "category": "cash_flow_quality_level",
+ "hypothesis": "營業現金流對稅後淨利的長期平均比值代表盈餘的現金含金量，法人研究資源多集中在成長與動能敘事上，對這類「無聊但可靠」的現金流品質訊號反應不足，導致高含金量公司長期被低估。",
+ "prediction": "sub-train 產業內 ICIR>0.45；且與F-006(neg accruals)截面相關係數|ρ|<0.5，確認提供互補資訊而非重複表達。",
+ "formula": "cs_rank(ts_mean(ocf_ratio,12))",
+ "name_zh": "現金含金量",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(ocf_ratio,12))",
+  "fhash": "ac0e5f66d284442e",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.35
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.2,
+   "decay_pct": 44.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.037,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    -0.0,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.2,
+   "半導體": 0.2,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.0,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.09,
+  "stage2_max_rho": {
+   "factor": "F-006",
+   "rho": 0.4
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.35 < 0.45; validation ICIR 0.2 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測ICIR>0.45且與F-006相關<0.5；實際相關係數0.4通過stage2，但ICIR不足(sub-train0.35、validation0.20、decay44%)，且多頭腿超額約0(-0.0)、空頭腿也僅-0.007，兩腿幾乎無報酬價差，'法人忽略無聊訊號'假說未獲經濟量級支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金流品質水準類因子即使通過相關性檢查，仍可能因報酬價差過小而不可交易；注意力假說需legs顯著非零佐證，單純IC顯著不足以支撐重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0117",
+ "ts": "2026-07-19T17:59:13"
+}

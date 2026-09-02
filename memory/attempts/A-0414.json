@@ -1,0 +1,88 @@
+{
+ "round": 27,
+ "category": "smart_money_distribution",
+ "hypothesis": "外資具資訊優勢且交易成本低於散戶，融資餘額變化(margin_d21)代表散戶用槓桿加碼的熱度。當外資淨賣超同時散戶融資餘額上升，代表外資把籌碼出給正在加槓桿追價的散戶（資訊不對稱下的出貨行為）；反之外資買超、散戶去槓桿代表籌碼正被聰明錢悄悄收集而未被散戶注意。此機制源於外資研究資源與資訊處理速度優於融資戶，且融資戶天生追價、風控弱，形成系統性的籌碼移轉可預測性。",
+ "prediction": "sub-train ICIR>0.45；多頭腿（外資買超同時融資去槓桿組）月均超額報酬>0；此訊號在融資餘額大幅波動月份效果應更強於平穩月份。",
+ "formula": "sub(cs_rank(frgn_net_21), cs_rank(margin_d21))",
+ "name_zh": "外資出貨警訊",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(frgn_net_21), cs_rank(margin_d21))",
+  "fhash": "e662cc2d7d213d6f",
+  "sub_train": {
+   "mean_ic": 0.021,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": -0.004,
+   "icir": -0.06,
+   "decay_pct": 121.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.048,
+    "多頭"
+   ],
+   "2015": [
+    0.01,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.015,
+    "盤整"
+   ],
+   "2019": [
+    -0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": 0.15,
+   "生技": 0.08,
+   "半導體": 0.03,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": -0.004,
+   "short_excess_ann": 0.012
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.7,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.11
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.26 < 0.45; validation ICIR -0.06 < 0.3; validation 衰減 121% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.7 > 0.4"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.26；逐年IC從2013年0.048單調遞減到2019年-0.023，顯示訊號隨時間結構性衰退而非單純過擬合。驗證期翻負(icir -0.06, decay 121%)，多頭腿超額為負(-0.004)——「聰明錢悄悄收集」的正面預測完全未兌現，唯一有效的是空方(散戶追價出貨組)下跌，但台股難放空無法交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資-融資背離類訊號逐年單調衰退且alpha集中在空頭腿，顯示機制隨時間失效而非樣本外過擬合，此方向重測優先級應降低。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0414",
+ "ts": "2026-07-28T19:08:22"
+}

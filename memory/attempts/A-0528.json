@@ -1,0 +1,83 @@
+{
+ "round": 34,
+ "category": "trend_smoothness_underreaction",
+ "hypothesis": "價格趨勢的『平滑度』（用ts_rsq衡量動能的線性擬合優度）本身是被低估的資訊：噴出式、劇烈波動的上漲容易吸引媒體與散戶關注進而過度反應後回落；而穩健爬升、缺乏戲劇性的上漲趨勢因不具話題性而長期被機構篩選器忽略，但其延續性其實更強，因為背後往往是持續的基本面驅動而非事件性炒作。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(趨勢平滑且方向向上)年化超額報酬>0；月換手率<0.4；與F-005/F-018(低波動家族)相關性須<0.5，證明此為『趨勢品質』而非單純低波動的代理。",
+ "formula": "mul(cs_rank(ts_rsq(mom_120,12)), cs_rank(mom_120))",
+ "name_zh": "穩健趨勢低估",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_rsq(mom_120,12)), cs_rank(mom_120))",
+  "fhash": "4bf7ee32a79bcec4",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.03
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.031,
+    "多頭"
+   ],
+   "2017": [
+    -0.022,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": 0.01,
+   "半導體": -0.06,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.038,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR -0.03，接近零，各產業(電子0.14最高，其餘接近0或負)均無實質訊號，「趨勢平滑度被低估」假設未獲任何支持，長腿超額報酬雖正(0.038)但整體IC太弱不具統計意義。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "ts_rsq衡量的動能線性擬合優度本身不是有效的cross-sectional預測訊號，「平滑上漲=被忽略的真訊號」假設未獲驗證，動能品質的鑑別可能需與其他維度(如成交量配合度)交乘才有效，單獨用r-squared不足。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0528",
+ "ts": "2026-07-30T00:21:47"
+}

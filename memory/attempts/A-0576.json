@@ -1,0 +1,84 @@
+{
+ "round": 37,
+ "category": "post_earnings_announcement_drift",
+ "hypothesis": "財報公布EPS年增率大幅提升，且伴隨成交金額同步放大(市場開始注意)，價格對此驚喜的反應通常不完全，接下來數月會持續向獲利驚喜方向漂移(PEAD)，這是全球股市最穩健的異常現象之一，台股因散戶為主、法人覆蓋有限，資訊擴散速度更慢，此效應應更顯著且尚未被本因子庫觸及。",
+ "prediction": "sub-train ICIR>0.45；短窗(3月)應捕捉到公告後最強反應；多頭腿年化超額報酬>0；與F-016、F-017相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(delta(eps_yoy,3)), cs_rank(delta(amt_21,3)))",
+ "name_zh": "財報驚喜漂移",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(eps_yoy,3)), cs_rank(delta(amt_21,3)))",
+  "fhash": "df3be4ba3856be5a",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.04
+  },
+  "validation": {
+   "mean_ic": 0.035,
+   "icir": 0.43,
+   "decay_pct": -859.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.06,
+    "多頭"
+   ],
+   "2014": [
+    -0.015,
+    "多頭"
+   ],
+   "2015": [
+    0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    -0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.045,
+    "盤整"
+   ],
+   "2019": [
+    0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": 0.07,
+   "生技": -0.0,
+   "半導體": -0.04,
+   "金融": 0.26
+  },
+  "legs": {
+   "long_excess_ann": 0.009,
+   "short_excess_ann": 0.031
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.52,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR接近零(0.04)幾乎無訊號，驗證期升至0.43，但-859%的衰減數字是分母接近零造成的統計假象，不應解讀為真實改善；cond_ic在多頭月為正、空頭月為負的不對稱性，顯示這個PEAD代理指標更像是搭乘市場動能/成交量，而非真正捕捉盈餘驚喜漂移，原因可能是delta(eps_yoy,3)×delta(amt_21,3)是缺乏分析師預期資料下的粗糙代理。",
+ "failure_type": "expression_bad",
+ "lesson": "在沒有分析師共識預期欄位的情況下，用原始年增率變動×成交量變動代理『盈餘驚喜』無法有效隔離PEAD效應，反而表現得像動能因子；若要重新驗證PEAD假設，應嘗試以相對自身波動度標準化的驚喜衡量(如C-14的嘗試方向)，而非原始年增率變動。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0576",
+ "ts": "2026-07-30T01:03:36"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 61,
+ "category": "overlooked_profitability_liquidity",
+ "hypothesis": "外資持股比率低代表機構研究覆蓋與市場關注度低（非交易活躍度代理，區別於已飽和的成交金額/週轉率），毛利率高的公司若同時外資關注度低，其獲利品質優勢尚未反映進股價，屬於機構篩選器的盲區。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿年化超額報酬 > 0；與F-020(op_margin×neg(amt_21))截面相關 |ρ| < 0.5",
+ "formula": "mul(cs_rank(gross_margin), cs_rank(neg(frgn_ratio)))",
+ "name_zh": "隱蔽毛利孤兒股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio",
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(gross_margin), cs_rank(neg(frgn_ratio)))",
+  "fhash": "ef8db89c5ff51305",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.07
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.14,
+   "decay_pct": -115.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.034,
+    "盤整"
+   ],
+   "2013": [
+    0.033,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    -0.015,
+    "多頭"
+   ],
+   "2017": [
+    -0.034,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    -0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.0,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.04,
+   "半導體": -0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.039
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.08,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 sub-train ICIR>0.4，實際僅 0.07，落差極大。IC 逐年正負反覆（2012-2015 正、2016-2017 轉負、2018-2019 趨零），非持續性訊號；cond_ic 顯示下跌月(0.023)優於上漲月(0)，帶點防禦特徵但整體太弱。外資持股比率低作為「機構關注度盲區」代理，疊加毛利率後並未穩定捕捉錯價，可能是因為外資持股本身已與規模/流動性等既有因子高度重疊，稀釋了這個假設想抓的獨立訊息。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用「外資持股比率」當作機構關注度/盲區代理效果不穩定，逐年正負反覆，不建議再單獨用它做關注度代理去交叉獲利品質因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0924",
+ "ts": "2026-08-27T10:25:20"
+}

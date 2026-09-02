@@ -1,0 +1,83 @@
+{
+ "round": 14,
+ "category": "institutional_window_dressing_reversal",
+ "hypothesis": "投信基金存在季底作帳與績效追逐行為：近期買超力道越強的股票，越可能是投信為美化持股報表而短期拉抬，此買盤缺乏基本面支撐，待投信於季底後調節部位，价格容易回落；因此近期投信買超越強，後續報酬反而越弱，此為結構摩擦類假說的反向驗證版本。",
+ "prediction": "sub-train ICIR > 0.45；效果應在3/6/9/12月季底後1-2個月更顯著；若實測方向與預期相反則反過來確認投信買超具資訊性而非作帳效應",
+ "formula": "cs_rank(neg(trust_net_21))",
+ "name_zh": "投信作帳反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(trust_net_21))",
+  "fhash": "5b1202e4dbb03ae6",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.32,
+   "decay_pct": -18.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.044,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.01,
+   "半導體": 0.29,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測效果應集中於季底後1-2個月更顯著，但診斷缺乏逐月/季度細分資料無法直接驗證（cond_ic僅分漲跌月，上漲0.018/下跌0.023差異不大，看不出季節性）。ICIR本身sub-train 0.27、validation 0.32（decay -18%，穩定略增），方向與預測（投信買超力道強反而未來報酬較弱）一致，只是強度未達0.45門檻，半導體(0.29)與金融(0.2)產業效果較集中。",
+ "failure_type": "expression_bad",
+ "lesson": "方向驗證正確但強度不足，且原假說核心機制（季底作帳後1-2個月回落）並未真正編碼進公式（trust_net_21只是連續移動窗口，沒有季底錨定）；下次應直接構造季底事件視窗變數才能真正檢驗這個機制，而非用連續視窗代理。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0231",
+ "ts": "2026-07-21T12:11:51"
+}

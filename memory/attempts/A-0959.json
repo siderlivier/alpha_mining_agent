@@ -1,0 +1,90 @@
+{
+ "round": 63,
+ "category": "industry_rotation_bias_idiosyncratic_strength",
+ "hypothesis": "當整個產業因總經或情緒因素被系統性看空(產業平均動能弱)，但個股相對自身產業的動能仍突出(industry_demean後為正)，且營收成長佐證基本面無虞，代表該股被「產業標籤」錯殺；投資人常用產業輪動總經敘事一刀切決策，忽略個股層級相對強度。",
+ "prediction": "sub-train ICIR>0.4；四大產業內individual ICIR方向不應與整體相反(避免規則2敘事反轉陷阱)；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_rank(industry_demean(mom_120)), cs_rank(rev_yoy))",
+ "name_zh": "產業錯殺強勢股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(industry_demean(mom_120)), cs_rank(rev_yoy))",
+  "fhash": "50627eac4410301f",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.038,
+   "icir": 0.47,
+   "decay_pct": -92.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.013,
+    "多頭"
+   ],
+   "2014": [
+    -0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    0.052,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.059,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.042,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.26,
+   "半導體": 0.15,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.086,
+   "short_excess_ann": 0.067
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.38,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.6,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.24明顯低於預測>0.4，validation回升到0.47（decay為負，訓練期本身偏弱使衰減率失去參考意義）。相關性檢查被F-011（生技轉骨訊號）點名，ρ=0.60，這是預測時完全沒設防的組合——顯示只要因子一端用了rev_yoy，就有撞上F-011的風險，不限於『生技/成長』主題的因子。",
+ "failure_type": "duplicate",
+ "lesson": "rev_yoy是被F-011重度使用的欄位，任何把rev_yoy當作其中一支腳的新因子（即使主題完全不同，如本例的產業輪動）都該預先檢查與F-011的相關性，而不是只比對主題相近的因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0959",
+ "ts": "2026-08-27T21:36:00"
+}

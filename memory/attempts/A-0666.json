@@ -1,0 +1,93 @@
+{
+ "round": 43,
+ "category": "quality_payout_stability",
+ "hypothesis": "毛利率高（具備定價權/品牌溢價）同時願意配發現金股利的公司，代表獲利品質真實且管理層對未來現金流有信心；這種「有能力且願意」回饋股東的組合，因缺乏成長題材容易被成長型或動能型篩選器忽略，市場對這類安靜的優質配息股存在系統性低估。",
+ "prediction": "sub-train ICIR>0.45；電子/半導體產業industry_icir應優於金融；與F-004、F-011相關度<0.5。",
+ "formula": "mul(cs_rank(gross_margin), cs_rank(div_yield))",
+ "name_zh": "優質配息股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(gross_margin), cs_rank(div_yield))",
+  "fhash": "58aab1a4744f33d6",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.07,
+   "icir": 0.86,
+   "decay_pct": -99.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.054,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.105,
+    "盤整"
+   ],
+   "2016": [
+    0.027,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    0.069,
+    "盤整"
+   ],
+   "2019": [
+    0.071,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.056
+  },
+  "industry_icir": {
+   "電子": 0.49,
+   "生技": 0.44,
+   "半導體": 0.31
+  },
+  "legs": {
+   "long_excess_ann": 0.011,
+   "short_excess_ann": 0.023
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.09,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.56,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.56 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.43接近門檻，validation大幅提升到0.86(decay -99%)，8年逐年IC全部為正，是本輪穩定性最好的候選之一，你的「品質+配息=被忽略的安靜優質股」機制基本得到驗證。但與F-011(生技轉骨訊號)相關度0.56，暗示訊號主要由生技/電子少數強獲利股驅動。",
+ "failure_type": "duplicate",
+ "lesson": "gross_margin×div_yield訊號強且穩定，但與F-011重疊；此類毛利率×其他的乘法因子普遍撞上庫內生技品質類因子，需對F-011殘差化或改用非生技子樣本驗證增量價值。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0666",
+ "ts": "2026-08-12T14:04:06"
+}

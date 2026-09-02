@@ -1,0 +1,83 @@
+{
+ "round": 11,
+ "category": "dividend_stability_premium",
+ "hypothesis": "現金殖利率持續處於自身歷史相對高檔,代表管理層對未來現金流有穩定信心(股利具僵固性,不輕易調降),這類股票受穩定型法人與退休基金資金流的持續買盤支撐,此資金流效應緩步而非跳躍式地反映在價格上。",
+ "prediction": "sub-train ICIR>0.45;金融產業industry_icir應顯著較高(股利政策受監管制約,磁吸效應更強)",
+ "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+ "name_zh": "股利紀律溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+  "fhash": "e2ef4d198b38d0f7",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.16
+  },
+  "validation": {
+   "mean_ic": -0.013,
+   "icir": -0.2,
+   "decay_pct": 227.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.039,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.15,
+   "半導體": 0.01,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.16,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且金融產業icir應顯著較高，實際sub-train ICIR僅0.16，validation直接翻負至-0.2(decay 227%，訊號反轉)，金融icir為-0.05，與預測的『磁吸效應更強』完全相反。cond_ic下跌月(0.024)優於上漲月(-0.006)，符合防禦型直覺但整體太弱且訓練/驗證不一致。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金殖利率相對自身24月中位數的『股利政策僵固性』代理變數，在台股上找不到金融股溢價，且訊號驗證期反轉——顯示股利穩定性可能不是獨立於獲利品質之外的alpha來源，未來測股利類因子應與獲利品質交叉驗證而非單獨使用殖利率相對水準。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0185",
+ "ts": "2026-07-21T11:33:49"
+}

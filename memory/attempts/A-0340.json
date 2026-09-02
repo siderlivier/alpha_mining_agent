@@ -1,0 +1,94 @@
+{
+ "round": 22,
+ "category": "style_box_orphan_stocks",
+ "hypothesis": "市場對成長股的辨識高度依賴單一營收成長敘事，但本業營業利益成長比營收成長更能反映真實競爭力提升；低估值(高sp)公司同時展現本業獲利加速，卻因不符單一風格標籤而被機構篩選器忽略，形成風格孤兒溢酬。",
+ "prediction": "sub-train ICIR>0.45；與F-003相關係數<0.5；多頭腿年化超額報酬>0。",
+ "formula": "add(cs_rank(sp), cs_rank(op_income_yoy))",
+ "name_zh": "本業成長價值股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_income_yoy",
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_rank(sp), cs_rank(op_income_yoy))",
+  "fhash": "d4857c61bd483540",
+  "sub_train": {
+   "mean_ic": 0.062,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.007,
+   "icir": 0.07,
+   "decay_pct": 87.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.068,
+    "多頭"
+   ],
+   "2015": [
+    0.075,
+    "盤整"
+   ],
+   "2016": [
+    0.081,
+    "多頭"
+   ],
+   "2017": [
+    0.063,
+    "多頭"
+   ],
+   "2018": [
+    -0.013,
+    "盤整"
+   ],
+   "2019": [
+    0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.052,
+   "down_months": 0.031
+  },
+  "industry_icir": {
+   "電子": 0.75,
+   "生技": 0.66,
+   "半導體": 0.04,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.04,
+   "short_excess_ann": 0.055
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.19,
+  "stage2_max_rho": {
+   "factor": "F-004",
+   "rho": 0.32
+  },
+  "industry_scope": "電子",
+  "industry_metrics": {
+   "train_icir": 0.81,
+   "valid_icir": 0.61,
+   "decay_pct": 25
+  },
+  "verdict": "passed_industry",
+  "reason": "整體未達標（validation ICIR 0.07 < 0.3; validation 衰減 87% > 50%（過擬合徵兆）），但於「電子」產業內達到專屬門檻"
+ },
+ "diagnosis": "三項預測全部命中：sub-train ICIR 0.52>0.45、與庫內因子相關係數0.32<0.5、多頭腿超額0.04>0。全市場validation嚴重衰減(87%)顯示風格孤兒溢酬並非普遍存在，但電子產業內train_icir 0.81/valid_icir 0.61、decay僅25%，遠優於全市場版本，最終以passed_industry通過。證實訊號主要集中於電子供應鏈(半導體、金融幾乎無效)，與C-1呈現同樣的產業集中特徵。",
+ "failure_type": "none",
+ "lesson": "本業獲利加速+低估值的風格孤兒效應訊號集中在電子產業(半導體/金融/生技效果弱或不穩定)，未來應以電子產業限定作為此類公式的預設評估範圍。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed_industry",
+ "id": "A-0340",
+ "ts": "2026-07-21T13:51:27"
+}

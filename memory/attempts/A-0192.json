@@ -1,0 +1,91 @@
+{
+ "round": 12,
+ "category": "retail_margin_deleveraging",
+ "hypothesis": "融資餘額驟降代表散戶遭強制斷頭，這是與基本面無關的流動性驅動賣壓；一旦去槓桿完成，強制性賣壓消失，股價會向基本面均值回歸而反彈，此機制與資訊無關純屬籌碼面失衡修正。",
+ "prediction": "sub-train ICIR > 0.45；以ts_mean(3)平滑後月換手率應 < 0.4；訊號應在大盤下跌月IC更強(斷頭多發生於下跌期)",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+ "name_zh": "斷頭出清反彈",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+  "fhash": "8dcb62747ea222cf",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.21,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.041,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.22,
+   "半導體": 0.11,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.001
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45; validation ICIR 0.21 < 0.3"
+ },
+ "diagnosis": "sub-train ICIR 0.39接近但未達0.45,驗證期降至0.21(decay 47%接近但未達過擬合門檻)。預測的「下跌月更強」防禦不對稱性未出現(up 0.025 vs down 0.021幾乎相同),但多頭腿超額報酬為正(0.019),顯示方向正確只是強度偏弱且不具狀態依賴性。",
+ "failure_type": "expression_bad",
+ "lesson": "融資斷頭訊號可能需要更尖銳的觸發條件(急速下降的絕對速度/加速度),連續3月平滑排名可能把「急速斷頭」與「緩慢去化」混為一談而稀釋真正的籌碼修正訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0192",
+ "ts": "2026-07-21T11:46:43"
+}

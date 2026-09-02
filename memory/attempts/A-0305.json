@@ -1,0 +1,89 @@
+{
+ "round": 19,
+ "category": "turnover_crowding_reversal",
+ "hypothesis": "生技股缺乏穩定獲利支撐，股價常受消息面（法規進度、臨床結果）驅動散戶追價，週轉率持續偏高代表交易由投機性資金主導而非長線法人建倉，這種過熱狀態在題材退燒後容易反轉。",
+ "prediction": "生技產業sub-train ICIR>0.35；生技產業industry_icir應為四產業中neg方向效果最強者。",
+ "formula": "cs_rank(neg(ts_mean(turn_21, 6)))",
+ "name_zh": "生技過熱降溫",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(turn_21, 6)))",
+  "fhash": "c4955fa82e7103fe",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.059,
+   "icir": 0.37,
+   "decay_pct": -46.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.026,
+    "多頭"
+   ],
+   "2014": [
+    0.044,
+    "多頭"
+   ],
+   "2015": [
+    0.016,
+    "盤整"
+   ],
+   "2016": [
+    0.036,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    0.108,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.061,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.3,
+   "半導體": 0.13,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.034,
+   "short_excess_ann": 0.061
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.09,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.88,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.88 > 0.5"
+ },
+ "diagnosis": "生技過熱降溫假設在資料上得到相當支持(sub-train ICIR 0.25、validation 0.37更強，生技產業ICIR 0.3、多頭腿超額報酬3.4%可交易)，但stage2相關性檢查中與庫內因子F-008(低調接近新高)高達0.88相關，代表這個低週轉率訊號的alpha來源已被F-008的「接近新高但週轉不高」概念實質涵蓋，屬於重複因子而非獨立訊號。",
+ "failure_type": "duplicate",
+ "lesson": "週轉率的均值反轉/冷卻類訊號與庫內「低調接近新高」因子高度重疊，屬於紅海邊界；未來開發週轉率相關新因子，應避開單純「低/降週轉率排序」表達，改尋找與價格位置無關的角度(如週轉率與大盤同步性、週轉率離散度)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0305",
+ "ts": "2026-07-21T13:13:10"
+}

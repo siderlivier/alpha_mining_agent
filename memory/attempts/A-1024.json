@@ -1,0 +1,89 @@
+{
+ "round": 67,
+ "category": "relative_revenue_share_gain",
+ "hypothesis": "營收成長快於所屬產業的公司正在搶奪市佔——一種持久的競爭態勢轉變——但投資人以絕對成長率或市場預期為基準，把『成長 10%』一視同仁，不管產業本身成長 3% 還是 15%。市場對『相對競爭位置』反應不足，而這正預測後續持續的市佔擴張與定價能力。",
+ "prediction": "sub-train ICIR > 0.3；多頭腿年化超額 > 0；與 F-009、F-011、F-013 之 |ρ| < 0.5；效果在電子/半導體較強。",
+ "formula": "cs_rank(industry_demean(rev_yoy_ma3))",
+ "name_zh": "相對搶市佔",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(industry_demean(rev_yoy_ma3))",
+  "fhash": "9a460728d7b0c23d",
+  "sub_train": {
+   "mean_ic": 0.034,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.033,
+   "icir": 0.53,
+   "decay_pct": -35.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.015,
+    "多頭"
+   ],
+   "2015": [
+    0.052,
+    "盤整"
+   ],
+   "2016": [
+    0.044,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.034
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.21,
+   "半導體": 0.33,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.045,
+   "short_excess_ann": 0.068
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.2,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.57,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "因子強且穩：sub-train ICIR 0.39、val 0.53、cond_ic 對稱(0.034/0.034)、逐年全正、多頭腿+4.5%，電子0.47/半導體0.33 符合預測。死於與 F-011『生技轉骨訊號』ρ=0.57——一個全市場因子被一個生技專屬因子的中度相關擋下，顯示 industry_demean(rev_yoy_ma3) 的訊號有相當比例集中在生技營收轉強。",
+ "failure_type": "expression_bad",
+ "lesson": "全市場相對成長因子若與某產業專屬因子 ρ>0.5，通常代表訊號過度集中在該產業；殘差化或排除該產業後常能露出乾淨的全市場增額 alpha。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-1024",
+ "ts": "2026-09-02T01:09:58"
+}

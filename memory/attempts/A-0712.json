@@ -1,0 +1,83 @@
+{
+ "round": 46,
+ "category": "operating_income_stability_quality",
+ "hypothesis": "營業利益年增率同時受營收與成本雙重因素影響，其波動度偏低的公司代表營收與成本控制的聯動穩定，不受單一景氣或匯率因素過度干擾。這種『全面性營運穩定度』比F-004(僅毛利率波動)或F-007(僅營收動能波動)更能反映管理層的整體執行力，是現行因子庫尚未涵蓋的維度，市場對此缺乏直接的評價基準因而低估。",
+ "prediction": "sub-train ICIR>0.45；與F-004、F-007相關性<0.5；validation decay<40%；多頭腿年化超額>0。",
+ "formula": "cs_rank(neg(ts_std(op_income_yoy,12)))",
+ "name_zh": "營運利益穩定股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(op_income_yoy,12)))",
+  "fhash": "0e90b8321e2c4106",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.08
+  },
+  "validation": {
+   "mean_ic": 0.053,
+   "icir": 0.57,
+   "decay_pct": -632.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.119,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.078,
+    "盤整"
+   ],
+   "2019": [
+    0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": -0.06,
+   "半導體": 0.25,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": -0.014,
+   "short_excess_ann": 0.001
+  },
+  "coverage": 0.68,
+  "turnover_m": 0.13,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.08(stage1即遭拒)，但validation卻衝到0.57，decay_pct為-632%，是本輪最極端的逆衰減案例。連同C-1(-432%)、C-8(-89%)、C-9(-85%)、C-12(-70%)，本輪共5個候選出現validation大幅優於sub-train的現象，高機率反映validation期(2018-2019僅約24個月)樣本數過少造成ICIR估計方差大，而非真正樣本外改善。",
+ "failure_type": "expression_bad",
+ "lesson": "sub-train ICIR已很低(0.08)時，即便validation亮眼也不代表訊號真實；大幅負decay應優先歸因於validation樣本期過短的估計雜訊。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0712",
+ "ts": "2026-08-12T14:41:10"
+}

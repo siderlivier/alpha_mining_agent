@@ -1,0 +1,84 @@
+{
+ "round": 61,
+ "category": "conditional_growth_confirmation_rank_nz",
+ "hypothesis": "用rank_nz取代if_else零值填補，只在營收真正正成長的子集中比較本業獲利成長，避免傳統if_else零值填補造成同分並列壓低IC/ICIR的DSL缺陷；市場對「真成長中的本業超額表現」反應不足。",
+ "prediction": "sub-train ICIR > 0.4；換手率 < 0.4（無需額外平滑即可通過stage4）",
+ "formula": "rank_nz(if_else(greater(rev_yoy,0), op_income_yoy, 0))",
+ "name_zh": "真成長本業股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "rank_nz(if_else(greater(rev_yoy,0), op_income_yoy, 0))",
+  "fhash": "c0871fcbe6fb627c",
+  "sub_train": {
+   "mean_ic": 0.019,
+   "icir": 0.19
+  },
+  "validation": {
+   "mean_ic": 0.0,
+   "icir": 0.0,
+   "decay_pct": 98.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    -0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.044,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    -0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": 0.24,
+   "半導體": -0.15,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.003
+  },
+  "coverage": 0.42,
+  "turnover_m": 0.38,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測rank_nz取代if_else可解決零值並列問題並讓ICIR>0.4，結果sub-train僅0.19、validation直接衰減至0（decay 98%）。關鍵在coverage只有0.42：rank_nz雖不再產生大量並列排名，但rev_yoy≤0的個股仍被if_else清零、對整體排名幾乎無貢獻，等於變相把樣本砍半，統計檢定力大失，這是表達層面的問題而非「真成長中本業超額」的機制被證偽。",
+ "failure_type": "expression_bad",
+ "lesson": "用if_else(cond,x,0)做子集篩選再排名時，即使外層改用rank_nz，非cond子集仍會被壓成同一值拖累coverage與檢定力；此類「條件性比較」宜改用分組內排名或訊號保留但降權的方式，而非直接清零。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0927",
+ "ts": "2026-08-27T10:25:20"
+}

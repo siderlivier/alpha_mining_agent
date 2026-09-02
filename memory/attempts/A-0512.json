@@ -1,0 +1,84 @@
+{
+ "round": 33,
+ "category": "institutional_flow_consensus",
+ "hypothesis": "外資與投信是台股中研究資源最完整的兩類法人，兩者觀點分歧往往反映對公司真實價值的不確定性；當外資與投信同時淨買超同一檔股票，代表兩個獨立資訊來源達成共識，訊噪比大幅提升，此「共識確認」訊號比任一法人單獨買超更能代表真實資訊優勢，而非規模/流動性代理。",
+ "prediction": "sub-train ICIR > 0.45（優於任一法人單獨使用之ICIR<0.3，證明共識具增量價值）；多頭腿年化超額 > 0；下跌月IC不弱於上漲月。",
+ "formula": "mul(cs_rank(frgn_net_21), cs_rank(trust_net_21))",
+ "name_zh": "法人買超共識",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_net_21), cs_rank(trust_net_21))",
+  "fhash": "fd98bbdaa6a3661a",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.22
+  },
+  "validation": {
+   "mean_ic": -0.025,
+   "icir": -0.33,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.009,
+    "多頭"
+   ],
+   "2014": [
+    -0.024,
+    "多頭"
+   ],
+   "2015": [
+    -0.017,
+    "盤整"
+   ],
+   "2016": [
+    -0.009,
+    "多頭"
+   ],
+   "2017": [
+    -0.028,
+    "多頭"
+   ],
+   "2018": [
+    -0.012,
+    "盤整"
+   ],
+   "2019": [
+    -0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.012,
+   "down_months": -0.032
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": 0.01,
+   "半導體": -0.24,
+   "金融": -0.22
+  },
+  "legs": {
+   "long_excess_ann": -0.012,
+   "short_excess_ann": 0.004
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向完全反轉：假設外資+投信同時買超代表資訊優勢共識，應優於任一法人單獨使用；實測卻在7年中6年為負、多空月份皆負(上漲月-0.012、下跌月-0.032)、四大產業皆為負或近零。這是乾淨且一致的反向結果，而非弱訊號或雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資與投信同時買超在台股呈現負向(擁擠/出貨後段)訊號而非正向資訊確認——可能是兩大慢速法人同時進場時，價格已經反映完畢甚至過熱，此方向應列入禁忌，避免同類'雙法人共識'假說重複測試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0512",
+ "ts": "2026-07-30T00:08:12"
+}

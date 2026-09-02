@@ -1,0 +1,87 @@
+{
+ "round": 40,
+ "category": "biotech_commercialization_inflection",
+ "hypothesis": "生技股從研發燒錢轉向商業化的關鍵訊號是毛利率與實際現金流「同時」改善，而非僅財報淨利；兩者同步走高比單一指標更能篩掉毛利率好看但現金持續流出的假訊號，市場對生技估值仍多依賴管線新聞而非財務體質。",
+ "prediction": "sub-train ICIR>0.45；生技產業industry_icir應為四產業最高；多頭腿年化超額>0；與F-011相關係數|ρ|<0.5。",
+ "formula": "mul(cs_rank(gross_margin), cs_rank(ocf_ratio))",
+ "name_zh": "生技轉商轉訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(gross_margin), cs_rank(ocf_ratio))",
+  "fhash": "67d6c9fa47fbe1fc",
+  "sub_train": {
+   "mean_ic": 0.019,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.023,
+   "icir": 0.41,
+   "decay_pct": -66.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.069,
+    "盤整"
+   ],
+   "2013": [
+    0.017,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.037,
+    "盤整"
+   ],
+   "2016": [
+    -0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.33,
+   "生技": 0.03,
+   "半導體": 0.24
+  },
+  "legs": {
+   "long_excess_ann": -0.004,
+   "short_excess_ann": 0.026
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.15,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業industry_icir應為四產業最高，用以驗證『生技商轉』的專屬機制；實際生技industry_icir僅0.03，是三個可比產業中最低（電子0.33、半導體0.24），直接與核心假設矛盾——毛利率×現金流比的組合訊號其實在電子/半導體更有效，與生技無關。sub-train ICIR僅0.25亦未達標。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『生技從燒錢轉商業化』的財務訊號未在生技樣本中顯現，可能因台股生技股樣本數過少、財報週期與商業化事件時點錯配過大，或商轉本身仍主要由管線新聞而非季度財務指標定價；此類生技專屬假設下次應直接鎖定生技子樣本做假設檢定（而非全市場跑再看industry_icir），並考慮加入事件型變數（如藥證核准、量產里程碑）而非純財務比率。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0616",
+ "ts": "2026-08-12T09:17:43"
+}

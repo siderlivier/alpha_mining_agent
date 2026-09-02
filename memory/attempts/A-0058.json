@@ -1,0 +1,91 @@
+{
+ "round": 3,
+ "category": "operating_leverage_trend",
+ "hypothesis": "營業利益率的12個月趨勢斜率比短窗口變化更能過濾單季雜訊，反映本業營運槓桿正在結構性改善；分析師更關注單季優於預期與否而非緩慢累積的趨勢斜率，市場對此反應不足。",
+ "prediction": "sub-train ICIR>0.45。",
+ "formula": "cs_rank(ts_slope(op_margin,12))",
+ "name_zh": "營益率趨勢改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(op_margin,12))",
+  "fhash": "8c877016a084face",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.14,
+   "decay_pct": 63.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.019,
+    "多頭"
+   ],
+   "2015": [
+    0.069,
+    "盤整"
+   ],
+   "2016": [
+    0.023,
+    "多頭"
+   ],
+   "2017": [
+    0.061,
+    "多頭"
+   ],
+   "2018": [
+    -0.01,
+    "盤整"
+   ],
+   "2019": [
+    0.037,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.04,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.4,
+   "生技": 0.23,
+   "半導體": 0.18,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.023,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.39
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.38 < 0.45; validation ICIR 0.14 < 0.3; validation 衰減 63% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.45』。實際0.38，驗證期驟降至0.14（decay 63%，明確過擬合），訓練期表現集中在2015、2017兩個好年份，驗證期未能重現。對比C-1同樣用ts_slope但窗口更短(6mo)且較穩定，暗示12個月長窗口的斜率估計可能被少數大幅波動的訓練期年份主導。",
+ "failure_type": "expression_bad",
+ "lesson": "在慢變動的基本面比率(如營益率)上用過長的ts_slope窗口，容易被訓練期少數極端年份主導而過擬合；C-1的6個月窗口版本反而更穩定。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0058",
+ "ts": "2026-07-19T17:08:22"
+}

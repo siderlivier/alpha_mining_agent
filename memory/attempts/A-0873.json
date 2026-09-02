@@ -1,0 +1,90 @@
+{
+ "round": 57,
+ "category": "post_earnings_announcement_drift",
+ "hypothesis": "PEAD(盈餘公告後漂移)是穩健的市場異象:市場受限於投資人注意力與資訊處理能力,對財報意外的反應只會逐步完成。近期價格動能是市場對盈餘意外初步反應的代理,若EPS高成長同時伴隨正向短期價格動能,代表市場仍在消化這則資訊,後續會持續漂移。",
+ "prediction": "sub-train ICIR>0.4;多頭腿年化超額報酬>0;需與F-024相關性<0.5。",
+ "formula": "mul(cs_rank(eps_yoy), cs_rank(mom_20))",
+ "name_zh": "盈餘意外延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(eps_yoy), cs_rank(mom_20))",
+  "fhash": "f1edd94dee065d00",
+  "sub_train": {
+   "mean_ic": 0.021,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.28,
+   "decay_pct": -16.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.011,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.028,
+    "多頭"
+   ],
+   "2017": [
+    0.035,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.2,
+   "半導體": -0.23,
+   "金融": 0.33
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": 0.017
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.61,
+  "stage2_culprit": {
+   "factor": "F-022",
+   "rho": 0.6,
+   "factor_name": "生技穩健成長",
+   "factor_desc": "生技股EPS成長相對自身波動穩定，代表已脫離燒錢賭博期、進入穩定收成階段。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-022 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.4，實際sub-train 0.24、validation 0.28(decay -16%穩定)，方向正確且相對穩健，但與庫內F-022(生技穩健成長)相關性達0.60，經濟上『EPS成長動能x價格動能』與『EPS成長相對自身波動穩定』高度重疊，且訊號可能多半由生技股貢獻。",
+ "failure_type": "duplicate",
+ "lesson": "PEAD類(EPS動能x價格動能)因子在台股與既有生技成長穩定因子紅海重疊；若要保留PEAD假設，應先排除生技產業或改在非生技子樣本測試以脫離重疊區。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0873",
+ "ts": "2026-08-19T00:11:01"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 60,
+ "category": "neglected_turnaround_momentum",
+ "hypothesis": "長期股價落後(mom_240低)的公司常被機構投資人因覆蓋成本或聲譽因素長期排除在名單外(機構性忽略)；當這類公司EPS年增轉佳，市場需更長時間才會重新關注並修正評價，形成定價滯後，此為「長期忽略+基本面確認」複合效應，不同於已證偽的純短期反轉。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；下跌月IC不應顯著劣於上漲月(排除純反轉雜訊特徵)。",
+ "formula": "mul(cs_rank(neg(mom_240)), cs_rank(eps_yoy))",
+ "name_zh": "遺珠反轉成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(mom_240)), cs_rank(eps_yoy))",
+  "fhash": "112bbecabbe7c354",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": 0.042,
+   "icir": 0.51,
+   "decay_pct": -139.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.045,
+    "多頭"
+   ],
+   "2014": [
+    0.026,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.091,
+    "盤整"
+   ],
+   "2019": [
+    -0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.037
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.02,
+   "半導體": 0.14,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": 0.005
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.31,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際僅0.21。多頭腿年化超額為負(-1.1%)，且下跌月IC(0.037)反而優於上漲月(0.018)，與假設欲排除的「純短期反轉」訊號特徵相似，未能證明「長期忽略+基本面確認」是有別於已知反轉效應的獨立機制。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "以mom_240(長期價格落後)為核心成分的組合，即便疊加基本面確認(eps_yoy)，仍呈現與純反轉相似的下跌月優於上漲月特徵、且多頭腿無正超額，延續了「純短期反轉已證偽」的模式到長窗期版本，暗示反轉類機制在本市場整體上難以產生可交易的多頭邊際。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0919",
+ "ts": "2026-08-20T08:30:15"
+}

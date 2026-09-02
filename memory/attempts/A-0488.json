@@ -1,0 +1,84 @@
+{
+ "round": 31,
+ "category": "operating_leverage_divergence",
+ "hypothesis": "當營業利益率(op_margin)半年斜率高於營收年增率(rev_yoy)半年斜率，代表獲利改善速度超出營收成長本身可解釋的幅度，意味企業存在成本控制或營運槓桿效應帶來的額外獲利品質，而非單純營收驅動；分析師慣以營收成長作為主要評價驅動因子，容易忽略此類成本結構改善帶來的獨立超額獲利動能，造成重新評價的遲滯。",
+ "prediction": "sub-train ICIR > 0.45；與F-001/F-009相關性 |ρ| < 0.5；多頭腿年化超額報酬 > 0。",
+ "formula": "cs_rank(sub(ts_slope(op_margin,6), ts_slope(rev_yoy,6)))",
+ "name_zh": "營運槓桿背離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ts_slope(op_margin,6), ts_slope(rev_yoy,6)))",
+  "fhash": "57e1b5e6faf6d458",
+  "sub_train": {
+   "mean_ic": -0.047,
+   "icir": -0.44
+  },
+  "validation": {
+   "mean_ic": -0.031,
+   "icir": -0.3,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.014,
+    "多頭"
+   ],
+   "2014": [
+    -0.078,
+    "多頭"
+   ],
+   "2015": [
+    -0.017,
+    "盤整"
+   ],
+   "2016": [
+    -0.046,
+    "多頭"
+   ],
+   "2017": [
+    -0.07,
+    "多頭"
+   ],
+   "2018": [
+    -0.052,
+    "盤整"
+   ],
+   "2019": [
+    -0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.045,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": -0.74,
+   "生技": -0.17,
+   "半導體": -0.38,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.081,
+   "short_excess_ann": -0.061
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.37,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "與預測方向完全相反：假設『營運槓桿優於營收成長速度代表額外獲利品質，應正向預測報酬』，但實際sub-train ICIR為-0.44，全部7個年份、全部四個產業ICIR皆為負（電子-0.74最強烈），驗證期同樣為負（-0.3）。訊號穩定性極高但方向與假設相反，顯示『營業利益率成長快於營收成長』實際上可能代表獲利已提前反映樂觀预期或成本結構不可持續（如一次性費用轉列、存貨去化），後續反而均值回歸下修，而非市場低估的營運槓桿優勢。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "op_margin斜率超前於rev_yoy斜率的『營運槓桿背離』訊號，實測方向與敘事完全相反且跨年份/產業高度一致（非單一年份雜訊），屬於高信心的方向證偽；下次可直接以負向方向（背離程度越高、後續報酬越低）重新設計因子，敘事改為『獲利提前反映樂觀預期、後續估值修正』。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0488",
+ "ts": "2026-07-29T23:46:18"
+}

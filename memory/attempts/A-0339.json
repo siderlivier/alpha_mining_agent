@@ -1,0 +1,83 @@
+{
+ "round": 22,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "電子/半導體供應鏈存貨循環具規律性，當月營收年增率貼近自身近12個月低點時，代表去化庫存已近尾聲；市場因近期趨勢外推偏誤容易線性外推疲弱營收將持續惡化，低估循環見底後反彈機率，導致股價未提前反映復甦。",
+ "prediction": "sub-train ICIR>0.45；電子/半導體產業industry_icir應顯著高於金融/生技（差距>0.15）；下跌後回升月IC應高於持續下跌月IC。",
+ "formula": "cs_rank(sub(rev_yoy, ts_min(rev_yoy,12)))",
+ "name_zh": "營收落底訊號",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_yoy, ts_min(rev_yoy,12)))",
+  "fhash": "27125562036f3c20",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.28,
+   "decay_pct": 256.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.034,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    -0.029,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": -0.16,
+   "半導體": 0.36,
+   "金融": -0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.041,
+   "short_excess_ann": 0.076
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.39,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測「電子/半導體 industry_icir 顯著高於金融/生技(差距>0.15)」完全命中，實際差距達0.5以上；但預測「sub-train ICIR>0.45」嚴重落空(實際僅0.18)，且train/validation正負號不穩定(0.01→-0.017，decay 256%)，全市場版本在stage1即被刷掉。cond_ic上漲/下跌月幾乎對稱微弱，未驗證到「落底反彈」的機制細節。整體看，機制在電子/半導體子產業確實存在訊號，但被金融、生技等機制不適用的產業拖累到全市場IC不顯著。",
+ "failure_type": "expression_bad",
+ "lesson": "當假設的機制本質上是產業特定的(電子/半導體庫存循環)，應直接用產業子集做sub-train評估，而非全市場cs_rank；全市場版本會被機制不適用的產業拖累到過不了stage1。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0339",
+ "ts": "2026-07-21T13:51:27"
+}

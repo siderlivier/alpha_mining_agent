@@ -1,0 +1,88 @@
+{
+ "round": 12,
+ "category": "biotech_catalyst_drift",
+ "hypothesis": "生技股股價對法規里程碑(FDA核准、臨床數據)等二元事件反應初期不足，因一般投資人難以獨立判讀複雜臨床數據；成交量同步放大(amt_21)確認的價格急升(mom_20)代表真實資訊事件而非雜訊，此類事件驅動訊號在專業門檻高的生技股應有顯著後續漂移，其他產業因資訊透明度較高不易出現此現象。",
+ "prediction": "sub-train ICIR > 0.45；生技產業industry_icir應為四產業最高，其餘產業<0.2；多頭腿超額報酬須為正",
+ "formula": "cs_rank(mul(cs_rank(mom_20), cs_rank(amt_21)))",
+ "name_zh": "生技量價事件",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(cs_rank(mom_20), cs_rank(amt_21)))",
+  "fhash": "3bd39bc3e9f70546",
+  "sub_train": {
+   "mean_ic": -0.019,
+   "icir": -0.19
+  },
+  "validation": {
+   "mean_ic": -0.005,
+   "icir": -0.05,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.026,
+    "盤整"
+   ],
+   "2013": [
+    -0.056,
+    "多頭"
+   ],
+   "2014": [
+    -0.056,
+    "多頭"
+   ],
+   "2015": [
+    0.016,
+    "盤整"
+   ],
+   "2016": [
+    0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.007,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.019,
+   "down_months": -0.007
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.41,
+   "半導體": -0.09,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": -0.019,
+   "short_excess_ann": -0.02
+  },
+  "coverage": 0.99,
+  "turnover_m": 0.6,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "方向完全與預測相反——預測生技產業industry_icir應最高且為正,實際生技是四產業最負(-0.41),電子、半導體亦負,僅金融微幅為正;sub-train ICIR為-0.19而非正值。強烈暗示生技股「量價齊揚動能」更接近短線過熱追高的反轉訊號,而非資訊擴散不足。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技股對法規事件「反應不足」的假設被證偽,資料顯示恰恰相反——量價齊揚在生技業更像短線過熱反轉訊號;下次驗證生技事件驅動效應應優先測試反向假設(短期回檔)而非動能延續。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0196",
+ "ts": "2026-07-21T11:46:43"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 10,
+ "category": "electronics_inventory_cycle",
+ "hypothesis": "反向測試「月增領先年增=透支警訊」的既有禁忌方向：電子供應鏈存貨週期短、下單到認列營收有時間差，月增率突然超越年增率代表急單回補正在發生，而非提前透支，此效應在電子業會延續1-2季。",
+ "prediction": "電子產業限定sub-train ICIR>0.45；與F-007(neg std rev_mom)方向相反且|ρ|<0.5；順週期因子，需檢查下跌月IC是否明顯轉弱。",
+ "formula": "cs_rank(sub(rev_mom, rev_yoy))",
+ "name_zh": "電子急單回補",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_mom, rev_yoy))",
+  "fhash": "af2e63ea4168dcb8",
+  "sub_train": {
+   "mean_ic": -0.04,
+   "icir": -0.58
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.34,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.037,
+    "多頭"
+   ],
+   "2015": [
+    -0.048,
+    "盤整"
+   ],
+   "2016": [
+    -0.048,
+    "多頭"
+   ],
+   "2017": [
+    -0.042,
+    "多頭"
+   ],
+   "2018": [
+    -0.026,
+    "盤整"
+   ],
+   "2019": [
+    -0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.034,
+   "down_months": -0.036
+  },
+  "industry_icir": {
+   "電子": -0.69,
+   "生技": -0.42,
+   "半導體": -0.35,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.079,
+   "short_excess_ann": -0.067
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.55,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "此案為刻意反向驗證既有禁忌(月增超越年增=透支警訊)的方向，假設宣稱pos(認為是急單回補)，但實測全年IC一致為負(sub-train -0.58、validation -0.34)，電子業ICIR達-0.69，與原禁忌方向完全一致而非相反。反向假說被證偽，等於再次獨立確認了原本的禁忌方向。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "月增率突然超越年增率在電子供應鏈確實對應追高/透支警訊(neg)而非急單回補(pos)，此為對既有禁忌的第二次獨立驗證，強化其可信度；『刻意反轉既有禁忌做驗證』這個手法本身有效，可用於校驗其他禁忌的穩健性，但不需再投入資源測試同方向的正版本。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0161",
+ "ts": "2026-07-21T11:22:51"
+}

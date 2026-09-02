@@ -1,0 +1,84 @@
+{
+ "round": 10,
+ "category": "institutional_consensus_flow",
+ "hypothesis": "外資與投信各自買賣超常有雜訊，但當兩類法人同時且同向買超時代表資訊解讀一致，這種雙重共識比單一法人訊號更可靠，且基金週報揭露延遲使市場反應滯後。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0(純多方訊號不涉及放空)；與C-14之ρ<0.5。",
+ "formula": "add(cs_rank(frgn_net_21), cs_rank(trust_net_21))",
+ "name_zh": "法人買超共識",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_rank(frgn_net_21), cs_rank(trust_net_21))",
+  "fhash": "8c2ef2fd5c890aa7",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.16
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.007,
+    "多頭"
+   ],
+   "2014": [
+    -0.023,
+    "多頭"
+   ],
+   "2015": [
+    -0.01,
+    "盤整"
+   ],
+   "2016": [
+    -0.008,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    -0.016,
+    "盤整"
+   ],
+   "2019": [
+    -0.026,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.007,
+   "down_months": -0.03
+  },
+  "industry_icir": {
+   "電子": 0.02,
+   "生技": 0.07,
+   "半導體": -0.23,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.012,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測法人雙重共識pos、多頭腿應>0，實測sub-train IC -0.016、validation -0.021方向相反，下跌月更負(-0.03)。顯示雙重買超訊號可能已被市場即時消化，基金週報揭露延遲假說不成立，也可能兩者買超本身跟隨近期強勢股(動能追價)而非提前布局。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資+投信同向買超的『雙重共識』在月頻資料下不具備假設中的資訊滯後優勢；若重測應先排除是否只是既有動能因子的代理變數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0166",
+ "ts": "2026-07-21T11:22:51"
+}

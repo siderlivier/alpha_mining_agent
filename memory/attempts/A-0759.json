@@ -1,0 +1,83 @@
+{
+ "round": 50,
+ "category": "dividend_reallocation_lag",
+ "hypothesis": "高股息ETF與退休/保險資金採季度或年度再平衡機制，對殖利率相對自身兩年中位數顯著彈升的個股，資金實際進場布局落後於殖利率本身的變化；因此殖利率創相對高點的股票在資金持續回補下有數月的延遲上漲空間，這與『下跌月防禦力』敘事不同，純粹是被動資金再平衡的資訊/執行延遲。",
+ "prediction": "sub-train ICIR>0.45；訊號強度應隨市值愈小、法人覆蓋愈低愈強（可用amt_21分組驗證）。",
+ "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+ "name_zh": "殖利率彈升落後",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+  "fhash": "e2ef4d198b38d0f7",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.16
+  },
+  "validation": {
+   "mean_ic": -0.013,
+   "icir": -0.2,
+   "decay_pct": 227.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.039,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.15,
+   "半導體": 0.01,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.16,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 ICIR>0.45 且小型股/低法人覆蓋子樣本應更強，實際 sub-train ICIR 僅0.16、validation轉負(-0.20)且decay 227%；下跌月IC(0.024)反而高於上漲月(-0.006)，逐年符號不穩定(2016正0.039、2018負-0.033)，顯示訊號接近雜訊，不支持「資金再平衡延遲上漲」的敘事。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "殖利率相對自身兩年中位數的彈升(而非水準)在台股樣本中不具穩定預測力，年度符號不一致顯示是雜訊而非慢速資金流機制；下次測「被動資金再平衡延遲」類假設前，應先用逐年符號穩定性做快篩，避免投入完整分期評估。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0759",
+ "ts": "2026-08-14T00:51:32"
+}

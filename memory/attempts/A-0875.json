@@ -1,0 +1,89 @@
+{
+ "round": 57,
+ "category": "semiconductor_margin_breakout_underreaction",
+ "hypothesis": "電子業本業獲利率創兩年新高代表產品組合或訂價權出現結構性轉折(如轉單效應、新產品放量放大規模效應),而非單純景氣循環性波動;市場對本業獲利創高此一結構性訊號的認知,落後於股價本身對營收成長數字的反應。",
+ "prediction": "sub-train ICIR(電子子樣本)>0.4;多頭腿年化超額報酬>0;需與F-023/F-016相關性<0.5。",
+ "formula": "cs_rank(sdiv(op_margin, ts_max(op_margin,24)))",
+ "name_zh": "半導體毛利創高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_margin, ts_max(op_margin,24)))",
+  "fhash": "674ae00cd7afd83e",
+  "sub_train": {
+   "mean_ic": 0.062,
+   "icir": 0.61
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.03,
+   "decay_pct": 105.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.112,
+    "多頭"
+   ],
+   "2015": [
+    0.065,
+    "盤整"
+   ],
+   "2016": [
+    0.023,
+    "多頭"
+   ],
+   "2017": [
+    0.062,
+    "多頭"
+   ],
+   "2018": [
+    -0.015,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.048,
+   "down_months": 0.028
+  },
+  "industry_icir": {
+   "電子": 0.51,
+   "生技": 0.06,
+   "半導體": 0.09,
+   "金融": 0.32
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.16,
+  "stage2_culprit": {
+   "factor": "F-023",
+   "rho": 0.62,
+   "factor_name": "利差創高金控股",
+   "factor_desc": "淨利率創近兩年新高的金融股，代表利差擴張才剛開始被市場注意到。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-023 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "預測電子/半導體ICIR>0.4，sub-train實際0.61遠超預期，但validation崩塌至-0.03(decay 105%，嚴重過擬合)，且與庫內F-023(利差創高金控股)相關性0.62觸發stage2淘汰。訓練期表現亮眼但完全不能外推，且與看似不相關產業(金控利差)的既有因子高度重疊，顯示『當前值/滾動最大值』這種相對創高轉換本身是通用結構，非電子業特有意義。",
+ "failure_type": "duplicate",
+ "lesson": "高sub-train ICIR不代表穩健，本例decay高達105%卻仍先卡在stage2重複性——提醒即使在stage2前也要用validation decay檢視訓練期數字的可信度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0875",
+ "ts": "2026-08-19T00:11:01"
+}

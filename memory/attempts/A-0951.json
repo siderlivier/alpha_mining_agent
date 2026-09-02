@@ -1,0 +1,83 @@
+{
+ "round": 62,
+ "category": "earnings_trough_recovery_underreaction",
+ "hypothesis": "EPS年增率相對其自身12個月低點的回升幅度，反映公司正走出獲利谷底；分析師修正獲利預估通常落後實際財報表現數季，離開谷底初期的回升動能容易被低估，此為「谷底回升幅度」而非「絕對高成長」，比F-001/F-012更聚焦轉折點而非趨勢延續。",
+ "prediction": "sub-train ICIR>0.4；與F-001/F-012截面相關|ρ|<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(sub(eps_yoy, ts_min(eps_yoy,12)))",
+ "name_zh": "獲利脫離谷底",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(eps_yoy, ts_min(eps_yoy,12)))",
+  "fhash": "d2704db160cd1902",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": -0.007,
+   "icir": -0.11,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.111,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    -0.021,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    -0.014,
+    "盤整"
+   ],
+   "2019": [
+    -0.0,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": -0.013
+  },
+  "industry_icir": {
+   "電子": -0.07,
+   "生技": -0.11,
+   "半導體": -0.03,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.008,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4，實得-0.01接近零，2013年單一極端值(0.111)疑似早期小樣本雜訊撐起表面數字，其餘年份分散在正負之間無規律。「EPS脫離年度低點」的谷底回升訊號未展現任何跨期一致性，與C-11(半導體毛利谷底回升)同屬「谷底回升距離」這一構型的第二次失敗。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「相對自身12個月低點的回升幅度」這一構型已在兩個不同財務指標(C-11毛利率、C-13 EPS年增率)上都表現為跨期不穩定、接近雜訊，這類「谷底距離」單變數構型本身可能不足以構成穩健訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0951",
+ "ts": "2026-08-27T21:24:50"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 23,
+ "category": "biotech_cashflow_inflection",
+ "hypothesis": "生技股常年營運現金流為負(研發燒錢期)，當現金流狀況12個月來顯著改善(燒錢速度減緩或轉正)，代表可能跨越商業化拐點(藥品上市放量、授權金入帳)；此轉骨訊號因生技複雜的臨床/法規敘事使分析師更關注管線進度而非現金流細節，導致反應滯後。",
+ "prediction": "生技產業industry_icir>0.5；其他產業(現金流本為正)應無類似強度效應作為交叉驗證；多頭腿超額報酬>0。",
+ "formula": "cs_rank(delta(ocf_ratio,12))",
+ "name_zh": "生技轉骨現金流",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,12))",
+  "fhash": "d3aa3559d6c6e7ce",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.17,
+   "半導體": 0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技industry_icir>0.5為突出表現且其他產業應無效應，實際生技industry_icir為負(-0.17)，sub-train ICIR整體為負(-0.13)，方向完全反轉而非單純強度不足。多頭腿亦為負(-0.016)。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "OCF ratio 12個月變化未捕捉到生技「轉骨」拐點，甚至方向為負；可能因研發期現金流雜訊過大或市場已即時消化此類訊息，此類現金流拐點假說在生技樣本不成立。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0367",
+ "ts": "2026-07-21T14:03:28"
+}

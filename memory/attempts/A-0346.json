@@ -1,0 +1,90 @@
+{
+ "round": 22,
+ "category": "accruals_quality_anomaly",
+ "hypothesis": "應計項與ROE水準的線性相減表達力不足；非線性品質閘門可能更有效：只在應計項為負（現金流大於帳列淨利、盈餘品質高）的公司中，才將ROE水準視為有效訊號，應計項為正者其ROE可能是會計操縱墊高，不應納入排序以免稀釋整體訊號。",
+ "prediction": "sub-train ICIR>0.45（前次線性版本僅0.44）；多頭腿年化超額報酬>0；與F-001、F-012相關係數<0.5。",
+ "formula": "cs_rank(if_else(greater(accruals,0), 0, roe))",
+ "name_zh": "低應計品質動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(accruals,0), 0, roe))",
+  "fhash": "3441c9c145d9f224",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.054,
+   "icir": 0.84,
+   "decay_pct": -108.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.09,
+    "盤整"
+   ],
+   "2016": [
+    0.053,
+    "多頭"
+   ],
+   "2017": [
+    0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    0.071,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.046,
+   "down_months": 0.034
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.51,
+   "半導體": 0.22,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.027,
+   "short_excess_ann": 0.026
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.15,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.63,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.63 > 0.5"
+ },
+ "diagnosis": "預測「非線性品質閘門優於前次線性版本(0.44)」部分驗證：sub-train ICIR 0.4實際略低於前次線性版本，但validation ICIR暴增到0.84(decay為負108%，樣本外遠優於樣本內)，多頭腿超額0.027>0命中預測。然而在stage2因與庫內F-002(金融品質價值)相關係數0.63被刷掉。值得注意的是industry_icir顯示此因子優勢集中在電子(0.47)、生技(0.51)，而非F-002主打的金融產業(僅0.16)，暗示重疊主要來自金融股子集，非本質同構。",
+ "failure_type": "duplicate",
+ "lesson": "應計為負才採用ROE的非線性品質閘門統計表現很強，但與庫內金融品質價值因子(F-002)在金融股上高度重疊；若排除或降權金融股，重疊度可能大幅下降，值得作為expression變體重新嘗試而非直接放棄整個方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0346",
+ "ts": "2026-07-21T13:51:27"
+}

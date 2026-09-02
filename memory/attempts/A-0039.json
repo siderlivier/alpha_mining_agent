@@ -1,0 +1,87 @@
+{
+ "round": 2,
+ "category": "revenue_acceleration_underreaction",
+ "hypothesis": "台灣月營收公告頻率高，但法人調整獲利預測多以季頻為主，導致營收年增率「加速度」（近期相對三個月前轉強）未被即時反映在股價，直到下次財報才修正定價。",
+ "prediction": "sub-train ICIR>0.4；訊號最高分位組未來1個月超額報酬顯著為正，且該IC在營收公布後一個月內達到高峰。",
+ "formula": "cs_rank(sub(rev_yoy, delay(rev_yoy,3)))",
+ "name_zh": "營收動能加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_yoy, delay(rev_yoy,3)))",
+  "fhash": "e6b8c02c0342f31d",
+  "sub_train": {
+   "mean_ic": 0.02,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.26,
+   "decay_pct": 4.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.005,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.0,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.024,
+    "盤整"
+   ],
+   "2019": [
+    0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.62,
+   "生技": -0.1,
+   "半導體": 0.29,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.041,
+   "short_excess_ann": 0.054
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.61,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": -0.09
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.27 < 0.45; validation ICIR 0.26 < 0.3; 月換手 0.61 > 0.4"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際僅0.27，顯著低估難度；但validation decay僅4%，顯示訊號本身穩定、非過擬合，真正的失敗點是訊號強度與換手率（0.61>0.4）雙重未達stage4門檻。產業別ICIR顯示訊號集中在電子(0.62)/半導體(0.29)，生技幾乎無效(-0.1)，全市場等權重表達稀釋了訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "營收加速度訊號在電子/半導體供應鏈內有效但全市場表達被稀釋且換手過高，下次可嘗試產業中性化或限定子樣本、加長平滑窗口降低換手。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0039",
+ "ts": "2026-07-19T09:53:03"
+}

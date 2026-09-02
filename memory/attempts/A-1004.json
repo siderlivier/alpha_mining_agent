@@ -1,0 +1,84 @@
+{
+ "round": 66,
+ "category": "operating_leverage_underreaction",
+ "hypothesis": "營業利益年增率顯著高於營收年增率，代表固定成本營運槓桿正在發酵——營收小幅成長就放大獲利。分析師模型多假設營業利益率隨營收等比線性成長，因此在營運槓桿拐點出現時系統性低估未來獲利彈性，此低估要到下一次財報獲利超預期才被修正。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿年化超額 > 0 且大於空頭腿絕對值（是『該買』而非『該避開』）；財報公布後 1-2 月 IC 較高；與 F-014、F-016、R-008 之 |ρ| < 0.5。",
+ "formula": "cs_rank(sub(op_income_yoy, rev_yoy))",
+ "name_zh": "營運槓桿差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_income_yoy",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(op_income_yoy, rev_yoy))",
+  "fhash": "0e26a53a120af50d",
+  "sub_train": {
+   "mean_ic": 0.012,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": -0.001,
+   "icir": -0.01,
+   "decay_pct": 106.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.026,
+    "多頭"
+   ],
+   "2015": [
+    0.04,
+    "盤整"
+   ],
+   "2016": [
+    -0.038,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    -0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": 0.2,
+   "生技": 0.34,
+   "半導體": -0.25,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.012,
+   "short_excess_ann": -0.0
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 ICIR>0.4、多頭腿為正且大於空頭腿,實際 sub-train ICIR 僅 0.13、validation 衰減 106%(轉負)、多頭腿年化 -1.2%。生技(0.34)、電子(0.20)ICIR 為正暗示或有微弱真實訊號,但被表達方式吃掉:sub(op_income_yoy, rev_yoy) 是兩個年增率相減,當營業利益基期接近零時數值爆量,樣本被少數極端值主導。營運槓桿機制本身合理,表達不當。",
+ "failure_type": "expression_bad",
+ "lesson": "營運槓桿不要用『兩個 YoY 成長率相減』表達(分母近零爆量、驗證期不穩)。下次改用營業利益率的變化量 delta(op_margin, k),或 Δ營業利益對 Δ營收的滾動迴歸斜率(若 DSL 支援),對極端值更穩健。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1004",
+ "ts": "2026-09-02T00:51:49"
+}

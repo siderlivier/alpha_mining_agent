@@ -1,0 +1,93 @@
+{
+ "round": 52,
+ "category": "short_interest_capitulation",
+ "hypothesis": "券資比(融資融券比)長期偏高反映市場對該股資訊面與籌碼面持保守態度；當券資比從高檔緩步下降，代表空方與保守資金退場、籌碼壓力釋放，這是壓力消化後的緩步修正而非軋空延續(先前正向框架已證偽，此為反向測試)，市場對籌碼結構轉鬆的訊息消化較慢。",
+ "prediction": "sub-train ICIR>0.45；上漲月與下跌月IC同號(非僅單一情境有效)；多頭腿(低券資比端)年化超額>0",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "券資比降溫股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.45未達標(sub-train僅0.27、validation 0.25)，衰減6%顯示穩定但強度不足；預測『上漲月與下跌月IC同號』也未成立(down_months=-0.017與up_months=0.049異號)。最終死因是stage2與F-008(低調接近新高)相關係數0.57——券資比降溫與週轉率型『低調/籌碼未過熱』因子在因子空間上高度重疊，兩者本質都在偵測『非炒作/非追價』狀態。",
+ "failure_type": "duplicate",
+ "lesson": "券資比/籌碼降溫類反向指標容易與既有『低調接近新高』(F-008)這類週轉率-籌碼冷門因子重疊，提交前應先對照F-008做相關性初篩。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0789",
+ "ts": "2026-08-14T01:18:09"
+}

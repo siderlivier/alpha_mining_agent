@@ -1,0 +1,84 @@
+{
+ "round": 63,
+ "category": "revenue_inflection_diffusion_lag",
+ "hypothesis": "當「當月營收年增率」明顯高於「近3月移動平均營收年增率」，代表營收正處於加速拐點，但市場與分析師模型多以平滑後趨勢資料建立預期，對單月躍升認知有延遲(需多月數據確認才調整评级)，形成可捕捉的資訊擴散落差。",
+ "prediction": "sub-train ICIR>0.4；與F-009(ts_slope(rev_yoy_ma3,6))、F-013、F-018截面相關|ρ|<0.5。",
+ "formula": "mul(cs_rank(rev_yoy), cs_rank(neg(rev_yoy_ma3)))",
+ "name_zh": "營收拐點搶跑股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(rev_yoy), cs_rank(neg(rev_yoy_ma3)))",
+  "fhash": "46553a5a08d1e477",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": 0.033,
+   "icir": 0.62,
+   "decay_pct": -141.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.013,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.033,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.034,
+    "盤整"
+   ],
+   "2019": [
+    0.032,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": 0.66,
+   "生技": 0.27,
+   "半導體": 0.09,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.0,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.69,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.26低於預測>0.4門檻，validation回升到0.62（decay-141%，訓練期偏弱使比較失真）。更值得注意的是多頭腿(當月營收年增率明顯高於3月均值組)超額報酬幾乎為零(-0.00)，訊號的全部超額報酬都來自空頭腿(0.037)——即便IC達標，這類『邊際加速』因子在台股難放空限制下也不具可交易性，這點預測完全沒考慮到。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『單月營收年增率高於移動平均=拐點搶跑』機制的多頭腿本身沒有正超額報酬，訊號全靠空頭腿貢獻；營收拐點類因子在提交前應先檢查多空腿超額報酬分佈，而不是只看整體IC是否達標，因為台股多頭腿為正是可交易的硬性條件。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0968",
+ "ts": "2026-08-27T21:36:01"
+}

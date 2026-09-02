@@ -1,0 +1,94 @@
+{
+ "round": 4,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "錨定效應解除需要本業獲利能力佐證，但用sign()式二元門檻在邊界值附近訊號會跳動且過去被驗證不穩定；改用營益率連續交乘取代離散門檻，讓「接近前高+高獲利」形成平滑的動能強度排序，避免二元閘門造成的訊號斷層。",
+ "prediction": "sub-train ICIR>0.45；且相較於C-2(離散門檻版本)，此連續版本的月度換手率應更低、訊號更穩定（標準差更小）",
+ "formula": "cs_rank(mul(px_hi252, op_margin))",
+ "name_zh": "連續破高獲利權重",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(px_hi252, op_margin))",
+  "fhash": "c9bcfe9f1b335277",
+  "sub_train": {
+   "mean_ic": 0.056,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.07,
+   "icir": 0.69,
+   "decay_pct": -63.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.076,
+    "盤整"
+   ],
+   "2013": [
+    0.056,
+    "多頭"
+   ],
+   "2014": [
+    0.058,
+    "多頭"
+   ],
+   "2015": [
+    0.069,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.062,
+    "多頭"
+   ],
+   "2018": [
+    0.05,
+    "盤整"
+   ],
+   "2019": [
+    0.09,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.072,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.4,
+   "半導體": 0.38,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.053
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.12,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.68,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.68 > 0.5"
+ },
+ "diagnosis": "預測『相較C-2離散門檻版本，連續版本換手率應更低更穩定』完全命中(turnover 0.12 vs C-2的0.42)，且ICIR表現優異(validation 0.69)；但同樣死於stage2高相關——這次是F-002(金融品質價值:淨值便宜+高ROE)，ρ=0.68。與C-2共同構成52週高點家族連續兩次死於重複，證實此方向與庫內F-002/F-003變異來源高度重疊，不是單一個案巧合。",
+ "failure_type": "duplicate",
+ "lesson": "見C-2的52週高點紅海邊界教訓；連續化(乘法)取代離散門檻雖改善了訊號品質與穩定性(換手率、ICIR皆提升)，但沒解決根本重複問題，因為重複來源是『破高』與『獲利能力/便宜』兩腳位的組合本身，不是門檻的離散/連續形式。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0080",
+ "ts": "2026-07-19T17:21:03"
+}

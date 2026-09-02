@@ -1,0 +1,89 @@
+{
+ "round": 27,
+ "category": "quality_neglect_discount",
+ "hypothesis": "高毛利率代表公司具備定價權/護城河，但缺乏成長故事的高毛利股票在台股散戶偏好高週轉、話題性標的的市場文化下容易被忽略（低週轉率=低關注度）。這類好公司但沒人理的組合因缺乏催化劑導致重新評價緩慢，但基本面優勢終將透過長期獲利能力反映在股價，形成價值實現的時間差。",
+ "prediction": "sub-train ICIR>0.45；多頭腿（高毛利率+低週轉率）超額報酬>0；效應與F-004、F-008相關係數應<0.5，代表捕捉到不同的忽略維度。",
+ "formula": "sub(cs_rank(gross_margin), cs_rank(turn_21))",
+ "name_zh": "冷門高毛利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(gross_margin), cs_rank(turn_21))",
+  "fhash": "19764688c9e80026",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.041,
+   "icir": 0.32,
+   "decay_pct": 24.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.095,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.056,
+    "盤整"
+   ],
+   "2016": [
+    0.036,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.075,
+    "盤整"
+   ],
+   "2019": [
+    0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.053,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": 0.39,
+   "生技": 0.31,
+   "半導體": 0.22
+  },
+  "legs": {
+   "long_excess_ann": 0.018,
+   "short_excess_ann": 0.057
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.2,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.65,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.65 > 0.5"
+ },
+ "diagnosis": "本輪預測最準的案例之一：sub-train icir 0.42（略低於0.45門檻）、驗證0.32、decay僅24%，多頭腿超額0.018為正，機制「好公司被忽略」得到印證。唯一失準之處：預測與F-004/F-008相關係數應<0.5，實際與F-008相關係數高達0.65。兩者本質上都用turn_21(周轉率)當「未被關注/未被炒作」的代理變數，只是搭配的品質維度不同(F-008搭配近新高價位，本因子搭配高毛利率)，核心低周轉率維度重疊過高。",
+ "failure_type": "duplicate",
+ "lesson": "turn_21(周轉率)作為「低關注度」代理已被F-008佔用；任何新因子用turn_21搭配另一品質/位置變數都高機率與F-008重疊，未來構造冷門類因子應換用其他關注度代理（法人持股變化、融資戶占比、爆量頻率等）。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0420",
+ "ts": "2026-07-28T19:08:22"
+}

@@ -1,0 +1,91 @@
+{
+ "round": 21,
+ "category": "silicon_cycle_momentum",
+ "hypothesis": "半導體業存在著名的「矽循環」，供需調節需要數年資本支出周期才能完成，法人與分析師傾向依季度數據調整預期而低估跨週期趨勢的持續性，導致240日長期動能在半導體產業比其他產業更能延續、反轉風險更低。",
+ "prediction": "sub-train ICIR>0.45；半導體產業industry_icir應為四產業最高且與電子產業差距>0.1；下跌月與上漲月IC方向一致。",
+ "formula": "cs_rank(mom_240)",
+ "name_zh": "半導體長波動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_240)",
+  "fhash": "30124ce2fa791c47",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.047,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.23,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.3
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.2 < 0.45; validation ICIR 0.09 < 0.3; validation 衰減 54% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測「半導體industry_icir應為四產業最高且與電子差距>0.1」被完全推翻：半導體實際為-0.01，是四產業中最差（生技0.23反而最高）。這是對「矽循環驅動半導體長期動能持續性」機制的直接反證，而非表達問題——如果矽循環假說成立，半導體不該是動能最弱的產業。validation衰減54%也達過擬合門檻。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "長期動能(mom_240)在半導體並未展現特殊持續性，矽循環資訊消化較慢的敘事未獲數據支持；產業特定持續性主張需要更直接證據（如資本支出週期數據本身），而非套用通用長窗動能去套產業故事。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0328",
+ "ts": "2026-07-21T13:38:15"
+}

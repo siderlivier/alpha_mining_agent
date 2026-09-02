@@ -1,0 +1,83 @@
+{
+ "round": 13,
+ "category": "earnings_surprise_persistence",
+ "hypothesis": "依據盈餘公告後漂移(PEAD)理論，EPS年增率的變動(盈餘驚奇)相對其自身歷史波動度標準化後，代表訊息含量更純粹的驚奇程度；投資人對此類標準化驚奇反應遲緩，訊號應在未來數月持續產生正報酬，而非單月即完全反映。",
+ "prediction": "sub-train ICIR>0.45；訊號構建後第1個月與第3個月IC同號且皆為正（驗證漂移特性而非單月效應）。",
+ "formula": "cs_rank(sdiv(delta(eps_yoy,3), ts_std(eps_yoy,12)))",
+ "name_zh": "標準化盈餘驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(eps_yoy,3), ts_std(eps_yoy,12)))",
+  "fhash": "422be603e02136d6",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": 0.023,
+   "icir": 0.45,
+   "decay_pct": -73.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.076,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.22,
+   "生技": 0.14,
+   "半導體": 0.09,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.43,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "假說（PEAD延續、標準化驚奇比原始年增更純粹）在validation期表現不錯（ICIR 0.45，decay -73%即validation優於train），方向也與cond_ic(上漲月0.03 vs下跌月-0.008)相符，但在stage1即被sub-train ICIR 0.26擋下，未能進入你設計的月1/月3同號驗證。這是機制可能成立但訓練期未達門檻的個案。",
+ "failure_type": "expression_bad",
+ "lesson": "validation期ICIR明顯優於sub-train（衰減為負）時，可能是訓練樣本雜訊大或窗口參數未對齊真正的驚奇釋放節奏，下次可調整delta窗口或改用財報公告日對齊，而非放棄PEAD類機制本身。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0206",
+ "ts": "2026-07-21T11:59:28"
+}

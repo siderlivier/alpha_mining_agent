@@ -1,0 +1,89 @@
+{
+ "round": 17,
+ "category": "trend_quality_rsq",
+ "hypothesis": "用R平方加權斜率而非單純斜率，可區分「線性平穩改善」與「單季暴衝後打回原形」；平穩、高R²的獲利改善趨勢缺乏戲劇性，不易引起市場關注與重新評價，因而系統性低估，低R²鋸齒狀趨勢即使斜率為正也常是雜訊。",
+ "prediction": "sub-train ICIR>0.45；與F-001相關係數<0.5(額外乘上R²權重篩掉雜訊趨勢，訊號結構不同)",
+ "formula": "cs_rank(mul(ts_slope(roe,12), ts_rsq(roe,12)))",
+ "name_zh": "平穩獲利趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(ts_slope(roe,12), ts_rsq(roe,12)))",
+  "fhash": "9726d6bd0294baca",
+  "sub_train": {
+   "mean_ic": 0.031,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.37,
+   "decay_pct": 15.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.031,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.072,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.002,
+    "盤整"
+   ],
+   "2019": [
+    0.054,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.42,
+   "半導體": 0.07,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.045,
+   "short_excess_ann": 0.072
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.22,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.6,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且與F-001相關<0.5。實際數字其實相當不錯：sub-train ICIR 0.44(僅一步之遙)、validation ICIR 0.37、衰減僅15%(穩定)，統計表現預測基本正確。但死於stage2，與F-001(ROE趨勢改善)相關係數0.60，遠高於預期<0.5。用R²加權同一顆ROE斜率並未如預期般改變訊號結構——加權法未能讓相關係數跌破既有因子。",
+ "failure_type": "duplicate",
+ "lesson": "對既有因子的核心欄位做二次加權(如乘上R²)仍高度依附原始欄位的訊息內容，不足以視為「結構不同」；要真正降低相關性需換掉底層欄位而非只調整權重函數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0268",
+ "ts": "2026-07-21T12:47:40"
+}

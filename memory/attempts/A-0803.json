@@ -1,0 +1,90 @@
+{
+ "round": 52,
+ "category": "anchoring_quality_confirmation",
+ "hypothesis": "F-016用op_income_yoy等成長指標確認創新高的可信度，但市場對創新高的反應多聚焦價格本身，較少交叉驗證盈餘品質；應計項偏低(neg(accruals)高)的創高股，代表這波上涨是由真實現金獲利支撐、非會計操縱堆砌的帳面利潤，此為品質面確認而非成長面確認，與F-016機制不同。",
+ "prediction": "sub-train ICIR>0.45；與F-016相關係數<0.5；多頭腿年化超額>0",
+ "formula": "mul(cs_rank(px_hi252), cs_rank(neg(accruals)))",
+ "name_zh": "低應計創高股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(px_hi252), cs_rank(neg(accruals)))",
+  "fhash": "ce3be0eda19d5410",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.059,
+   "icir": 0.61,
+   "decay_pct": -56.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.009,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.079,
+    "盤整"
+   ],
+   "2016": [
+    0.038,
+    "多頭"
+   ],
+   "2017": [
+    0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.078,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.063,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.42,
+   "半導體": 0.23,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.066,
+   "short_excess_ann": 0.031
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.28,
+  "stage2_culprit": {
+   "factor": "F-012",
+   "rho": 0.61,
+   "factor_name": "淨化ROE動能",
+   "factor_desc": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-012 |ρ|=0.61 > 0.5"
+ },
+ "diagnosis": "IC品質優於預測(train 0.39略低於門檻，但validation 0.61、衰減-56%，多空腿皆強且為正)。預測鎖定F-016(因兩者共用px_hi252創高腿)，方向合理，但實際stage2剔除是與F-012(淨化ROE動能，同樣使用accruals淨化邏輯)相關係數0.61——重疊來源其實是neg(accruals)這條品質腿，而非px_hi252成長確認腿。",
+ "failure_type": "duplicate",
+ "lesson": "同C-8的合併教訓：低應計(neg(accruals))類品質過濾腿容易與F-012這類『應計淨化』因子重疊，此重疊來源常被預測時忽略(預測focus在價格/成長腿而非品質腿)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0803",
+ "ts": "2026-08-14T01:18:09"
+}

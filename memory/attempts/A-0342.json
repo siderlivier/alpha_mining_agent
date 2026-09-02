@@ -1,0 +1,88 @@
+{
+ "round": 22,
+ "category": "short_squeeze_dynamics",
+ "hypothesis": "當股價動能已轉正(mom_20>0)時，融券空頭部位面臨帳面虧損，若同時券資比偏高代表空頭部位相對集中，被迫回補的買盤會對股價形成額外正向回饋；此為動能已確立後才觸發的擠壓動態，區別於單純券資比高即看空的靜態反向假設。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(if_else(greater(mom_20,0), short_margin_ratio, 0))",
+ "name_zh": "動能軋空加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_20",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(mom_20,0), short_margin_ratio, 0))",
+  "fhash": "05ac594c03a73d3b",
+  "sub_train": {
+   "mean_ic": -0.016,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": -0.011,
+   "icir": -0.13,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.02,
+    "盤整"
+   ],
+   "2013": [
+    -0.045,
+    "多頭"
+   ],
+   "2014": [
+    -0.026,
+    "多頭"
+   ],
+   "2015": [
+    0.019,
+    "盤整"
+   ],
+   "2016": [
+    -0.021,
+    "多頭"
+   ],
+   "2017": [
+    -0.001,
+    "多頭"
+   ],
+   "2018": [
+    -0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.018,
+   "down_months": -0.007
+  },
+  "industry_icir": {
+   "電子": -0.39,
+   "生技": -0.17,
+   "半導體": -0.19,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.017,
+   "short_excess_ann": -0.044
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向完全相反：sub-train與validation ICIR皆為負(-0.18、-0.13，符號一致非雜訊)，多頭腿與空頭腿超額雙雙為負，電子、半導體產業ICIR明顯負向(僅金融正0.11)。「動能確立後才觸發軋空」的機制未獲支持，更可能是高券資比本身即為負面訊號。公式用if_else將動能非正的股票券資比訊號歸零，會在cs_rank中製造大量同分並列，可能進一步稀釋/扭曲統計量。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "動能+券資比的軋空敘事在台股未獲支持，符號系統性為負而非雜訊；若延續此方向，需先驗證「純券資比高是否本身即為負向訊號」這個更基礎的前提。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0342",
+ "ts": "2026-07-21T13:51:27"
+}

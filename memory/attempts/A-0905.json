@@ -1,0 +1,84 @@
+{
+ "round": 59,
+ "category": "biotech_dilution_risk_reduction",
+ "hypothesis": "生技股估值長期受限於未來增資稀釋的疑慮；當公司營運現金流對淨利比率持續改善，代表其愈來愈接近自給自足、不需頻繁辦理現金增資，稀釋風險實質下降，但市場仍以臨床新聞和燒錢敘事為主要定價依據，尚未反映這項財務體質的實質改善，此訊號會隨股價動能逐步確認而擴散。",
+ "prediction": "sub-train ICIR > 0.4（生技子樣本）；industry_icir生技 > 其他三產業；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(delta(ocf_ratio,12)),cs_rank(mom_120))",
+ "name_zh": "生技降風險股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(ocf_ratio,12)),cs_rank(mom_120))",
+  "fhash": "c5965698a55a3310",
+  "sub_train": {
+   "mean_ic": 0.001,
+   "icir": 0.02
+  },
+  "validation": {
+   "mean_ic": 0.027,
+   "icir": 0.43,
+   "decay_pct": -2653.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    -0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.042,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": 0.16,
+   "生技": 0.06,
+   "半導體": 0.09,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.005
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際整體僅0.02接近零，證據不足以支持『降低增資風險』訊號存在；validation ICIR意外達0.43，但decay_pct為-2653%的極端值恰恰說明分母(sub-train icir)太接近零，此衰減指標在此已不具參考意義——證據本身很薄弱，難以判斷是雜訊還是真訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "sub-train ICIR接近零時，decay_pct數值會被放大到不合理區間，判讀時應直接忽略該欄位轉而看mean_ic與逐年一致性；本案逐年IC正負不一(2014、2017為負)，證據不足以支持機制存在。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0905",
+ "ts": "2026-08-19T10:08:40"
+}

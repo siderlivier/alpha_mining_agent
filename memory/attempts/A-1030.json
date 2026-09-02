@@ -1,0 +1,85 @@
+{
+ "round": 68,
+ "category": "cash_conversion_quality_repricing",
+ "hypothesis": "市場用EPS建構共識預期，很少校正『盈餘的現金含量趨勢』。當營業現金流/淨利比值持續高於自身兩年中位數，代表盈餘品質結構性改善、未來財報跳票機率下降，但這個變化不在賣方模型與媒體敘事裡，形成系統性低估。用長窗（24月）中位數當基準可濾掉單季營運資金雜訊。",
+ "prediction": "sub-train ICIR > 0.35；與F-006相關 |ρ| < 0.5；多頭腿年化超額 > 0；2012–2019至少6個年度為正IC。",
+ "formula": "cs_rank(sub(ocf_ratio, ts_med(ocf_ratio, 24)))",
+ "name_zh": "現金含量轉佳",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ocf_ratio, ts_med(ocf_ratio, 24)))",
+  "fhash": "291f5e558aa0b5ce",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.23
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.22,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.057,
+    "多頭"
+   ],
+   "2014": [
+    -0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.017,
+    "多頭"
+   ],
+   "2017": [
+    -0.013,
+    "多頭"
+   ],
+   "2018": [
+    -0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.009,
+   "down_months": -0.002
+  },
+  "industry_icir": {
+   "電子": -0.23,
+   "生技": -0.19,
+   "半導體": -0.02,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.015,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.23,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-032",
+ "distill_failed": true,
+ "id": "A-1030",
+ "ts": "2026-09-02T01:25:25"
+}

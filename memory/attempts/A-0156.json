@@ -1,0 +1,84 @@
+{
+ "round": 9,
+ "category": "biotech_revenue_margin_derisking",
+ "hypothesis": "生技股結構性處於燒錢階段，市場評價高度錨定在深負的營業利益率，但真正決定價值的是商業化營收能否起飛；當營收年增率排名相對營益率排名走高，代表公司正從臨床燒錢邁向商業化里程碑，此「營收超前於虧損改善」訊號因市場過度聚焦虧損數字而被低估，僅在生技產業的燒錢與里程碑結構下成立。",
+ "prediction": "整體sub-train ICIR可能 < 0.45，但生技產業內ICIR應 > 0.5且明顯高於其他三產業；生技產業內下跌月IC不應為負。",
+ "formula": "sub(cs_rank(rev_yoy),cs_rank(op_margin))",
+ "name_zh": "生技營收超前訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(rev_yoy),cs_rank(op_margin))",
+  "fhash": "1bca483d434591cc",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.04
+  },
+  "validation": {
+   "mean_ic": -0.032,
+   "icir": -0.26,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.031,
+    "多頭"
+   ],
+   "2015": [
+    -0.024,
+    "盤整"
+   ],
+   "2016": [
+    0.043,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    -0.024,
+    "盤整"
+   ],
+   "2019": [
+    -0.04,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.021,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": -0.05,
+   "生技": -0.21,
+   "半導體": -0.03,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.015,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.38,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "整體ICIR -0.04接近零，rejected_stage1，但更關鍵的是設計目標產業「生技」內部ICIR為-0.21，是四產業中最負，與預測的「生技內應>0.5」完全相反。「營收超前於虧損改善」在生技股實際上是負面訊號，這可能反映生技股評價更依賴管線進度/法規里程碑等離散事件而非線性營收/利潤率趨勢，營收成長同時利潤率未跟上甚至可能被解讀為商業化執行不如預期。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技股評價机制對線性財務指標（營收/利潤率排序組合）不敏感甚至反向，下次針對生技的假說應改用事件驅動型變數（如藥證/臨床里程碑公告、法說會upgrade等）而非把一般財務動能邏輯套用到生技子產業。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0156",
+ "ts": "2026-07-20T17:18:53"
+}

@@ -1,0 +1,89 @@
+{
+ "round": 41,
+ "category": "growth_consistency_risk_adjustment",
+ "hypothesis": "營業利益年增率除以自身12個月波動度，衡量的是「風險調整後的本業成長」：在天生波動大的景氣循環產業（如電子、半導體）中，同樣10%的成長率，波動度低的公司代表成長更可預測、品質更高，但市場常直接比較原始成長率高低而忽略背後的離散程度，導致波動小的優質成長股被低估、波動大的僥倖成長股被高估。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-022(生技EPS穩定溢價)相關性|ρ|<0.5，證明非單純field替換重複。",
+ "formula": "cs_rank(sdiv(op_income_yoy, ts_std(op_income_yoy,12)))",
+ "name_zh": "營益成長穩定度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_income_yoy, ts_std(op_income_yoy,12)))",
+  "fhash": "bb0f5e0792bce1d7",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": -0.003,
+   "icir": -0.03,
+   "decay_pct": 110.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.139,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    -0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.013,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.35,
+   "生技": 0.43,
+   "半導體": -0.03,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.68,
+  "turnover_m": 0.25,
+  "stage2_culprit": {
+   "factor": "F-016",
+   "rho": 0.68,
+   "factor_name": "本業獲利創高股",
+   "factor_desc": "股價近高點且本業獲利成長佳，勝過單純營收確認。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-016 |ρ|=0.68 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.36已低於預測的0.45（且2013年-0.139為極端離群值拖累），驗證期翻負-0.03（衰減110%），即使沒有相關性問題，本身也大概率過不了stage4。真正死因是stage2與F-016（本業獲利創高股）相關性0.68——候選預測的是F-022，猜錯了；『營益成長÷自身波動』與『本業獲利創高』雖公式不同，但底層都在用op_income/獲利成長序列，容易高度相關。",
+ "failure_type": "duplicate",
+ "lesson": "凡是以『營業利益/本業獲利成長』為核心欄位構造的品質類因子，即使做了風險調整（除以自身波動度），仍容易與F-016這類『本業獲利創高』因子高度相關；下次設計此類因子前應先檢查F-016本身的公式結構，而非只看『穩定度』與『創高』字面上的語意差異。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0629",
+ "ts": "2026-08-12T09:31:55"
+}

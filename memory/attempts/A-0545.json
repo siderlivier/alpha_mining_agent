@@ -1,0 +1,83 @@
+{
+ "round": 35,
+ "category": "dividend_policy_momentum",
+ "hypothesis": "現金殖利率相較一年前明顯提升，代表公司股利政策轉趨積極，通常伴隨管理層對未來現金流的信心增強；但市場多依賴殖利率『絕對水準』篩選（如殖利率>5%才留意），忽略『改善方向』所隱含的管理層資訊，導致殖利率成長股被誤判為普通股。",
+ "prediction": "sub-train ICIR>0.45；下跌月與上漲月IC同向；月換手率<0.4。",
+ "formula": "cs_rank(delta(div_yield,12))",
+ "name_zh": "殖利率成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(div_yield,12))",
+  "fhash": "67ee0fe11bf501aa",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": -0.01,
+   "icir": -0.15,
+   "decay_pct": 159.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.002,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.04,
+   "生技": 0.21,
+   "半導體": 0.02,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.014,
+   "short_excess_ann": -0.009
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.17,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.25低於預測門檻0.45，validation更翻負至-0.15，decay高達159%，訊號完全不穩定/樣本外反轉。多空月同向方向也不顯著(up 0.002/down 0.021)。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "殖利率年增(delta div_yield)的「股利政策轉趨積極」敘事訊號極弱且不穩定，可能因殖利率變動主要由股價波動主導(分母效應)而非股利政策本身，而非市場對管理層信號解讀滯後。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0545",
+ "ts": "2026-07-30T00:34:10"
+}

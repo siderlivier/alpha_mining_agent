@@ -1,0 +1,88 @@
+{
+ "round": 64,
+ "category": "stealth_accumulation_divergence",
+ "hypothesis": "成交金额半年内明显放大但月度价格变动幅度很小，代表买卖双方在低调换手、可能是知情资金正在悄悄建立部位而不推升股价以避免打草惊蛇；散户与技术分析者只关注价格突破，忽略「量增价平」这种隐性吸筹讯号，导致此类股票后续报酬被低估，此为全新量价背离类别，与F-008/F-020的距高点或关注度概念不同。",
+ "prediction": "sub-train ICIR>0.4；该组合在下跌月IC不弱于上涨月（验证是吸筹而非派发）；多头腿年化超额报酬>0",
+ "formula": "cs_rank(sdiv(delta(amt_21,6), abs(mom_20)))",
+ "name_zh": "隐性吸筹讯号",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(amt_21,6), abs(mom_20)))",
+  "fhash": "00c503bded8a603d",
+  "sub_train": {
+   "mean_ic": 0.0,
+   "icir": 0.0
+  },
+  "validation": {
+   "mean_ic": -0.007,
+   "icir": -0.1,
+   "decay_pct": 2458.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.018,
+    "盤整"
+   ],
+   "2013": [
+    -0.012,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.017,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.001,
+    "盤整"
+   ],
+   "2019": [
+    -0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": -0.11,
+   "半導體": -0.01,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.006,
+   "short_excess_ann": 0.055
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.45,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際恰為0.0，完全無訊號，逐年IC正負交錯無規律。「量增價平=隱性吸籌」的假說在資料中未展現任何可偵測訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「量增價平=隱性吸籌」假說目前不成立，amt_21變化與abs(mom_20)比值組合抓不到吸籌訊號，此方向與表達方式都需重新檢視。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0976",
+ "ts": "2026-08-27T21:49:57"
+}

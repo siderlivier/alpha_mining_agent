@@ -1,0 +1,84 @@
+{
+ "round": 4,
+ "category": "earnings_quality_momentum_interaction",
+ "hypothesis": "應計低（盈餘品質高）且ROE呈上升趨勢的公司，代表獲利改善是真實現金流驅動、非會計操縱，屬雙重確認的高信度訊號；但分析師習慣分開檢視應計與獲利成長，較少交乘評估，導致這類「品質+動能」共振的公司被系統性低估。",
+ "prediction": "sub-train ICIR>0.45，且應優於單獨使用neg(accruals)或ts_slope(roe,6)任一項的ICIR（驗證交乘有增益而非重複資訊）",
+ "formula": "cs_rank(mul(neg(accruals), ts_slope(roe,6)))",
+ "name_zh": "低應計獲利趨升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(neg(accruals), ts_slope(roe,6)))",
+  "fhash": "6f9371632ff33593",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.23,
+   "decay_pct": -26.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.026,
+    "盤整"
+   ],
+   "2016": [
+    0.011,
+    "多頭"
+   ],
+   "2017": [
+    0.026,
+    "多頭"
+   ],
+   "2018": [
+    0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.016
+  },
+  "industry_icir": {
+   "電子": 0.21,
+   "生技": 0.05,
+   "半導體": 0.22,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.004,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.35,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且交乘應優於單腳位，實際sub-train ICIR僅0.18，多空兩腿超額報酬都趨近於零(0.004/0.028)，訊號基本上是雜訊。應計與ROE斜率是帶符號原始值直接相乘，正負號組合(負應計×正ROE斜率 vs 正應計×負ROE斜率可能同號)會混淆『高品質上升』與『低品質下降』兩種不同意涵的公司，稀釋了任何真實訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "交乘兩個原始帶符號財務比率前，應先個別cs_rank再組合(相加或相乘排名值)，避免符號混淆吃掉訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0071",
+ "ts": "2026-07-19T17:21:03"
+}

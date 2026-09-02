@@ -1,0 +1,94 @@
+{
+ "round": 36,
+ "category": "operating_cashflow_leverage_quality",
+ "hypothesis": "營運現金流強勁但融資餘額同步下降的公司，代表成長由內生現金流支撐而非依賴散戶投機性槓桿資金推動；這類公司財務體質更穩健，但因缺乏融資暴增帶來的關注度而被市場忽略，形成「現金流健康但融資冷清」的錯價機會。",
+ "prediction": "sub-train ICIR > 0.45；下跌月IC不低於上漲月IC；月換手率 < 0.4。",
+ "formula": "mul(cs_rank(ocf_ratio), cs_rank(neg(margin_d21)))",
+ "name_zh": "現金流去槓桿股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio), cs_rank(neg(margin_d21)))",
+  "fhash": "3d4e4f5d85946288",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.47
+  },
+  "validation": {
+   "mean_ic": 0.02,
+   "icir": 0.4,
+   "decay_pct": 16.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.056,
+    "盤整"
+   ],
+   "2013": [
+    0.033,
+    "多頭"
+   ],
+   "2014": [
+    0.047,
+    "多頭"
+   ],
+   "2015": [
+    0.031,
+    "盤整"
+   ],
+   "2016": [
+    0.026,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.036,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": 0.2,
+   "半導體": 0.28,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.005,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.59,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.51,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.45（sub-train剛好0.47低空達標，validation僅0.4未達）、turnover<0.4（實際0.59違反）、下跌月IC不低於上漲月（實際0.017<0.036，違反），三項預測兩項落空；加上與F-019（現金含金價值股）ρ=0.51臨界重複，顯示ocf_ratio+融資變化組合既不穩定也不夠新穎。",
+ "failure_type": "duplicate",
+ "lesson": "現金流品質類因子（ocf_ratio）與F-019高度相關且為紅海；margin_d21作為槓桿冷卻訊號在多個候選（C-5, C-9）中換手率偏高且條件IC不如預期，可能不是有效輔助變數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0557",
+ "ts": "2026-07-30T00:46:50"
+}

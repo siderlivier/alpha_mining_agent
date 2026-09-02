@@ -1,0 +1,90 @@
+{
+ "round": 43,
+ "category": "earnings_growth_institutional_confirmation",
+ "hypothesis": "EPS年增率成長的公司如果同時觀察到外資持股比率呈現中期上升趨勢（非短期買賣超雜訊），代表外資長線資金已開始認可此獲利成長的持續性；這種「基本面成長+外資中期籌碼確認」的雙重訊號比單看EPS成長更可信，因為外資持股比率變化速度慢，市場對這種慢變量的資訊消化不足。",
+ "prediction": "sub-train ICIR>0.45；與F-017相關度<0.5（用frgn_ratio_d63非net_21，eps_yoy非rev_yoy）；月換手率<0.4。",
+ "formula": "mul(cs_rank(eps_yoy), cs_rank(frgn_ratio_d63))",
+ "name_zh": "外資認證獲利",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(eps_yoy), cs_rank(frgn_ratio_d63))",
+  "fhash": "d0c240f7fe91da4d",
+  "sub_train": {
+   "mean_ic": 0.02,
+   "icir": 0.23
+  },
+  "validation": {
+   "mean_ic": 0.041,
+   "icir": 0.69,
+   "decay_pct": -200.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.031,
+    "多頭"
+   ],
+   "2014": [
+    -0.0,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.031,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    0.039,
+    "盤整"
+   ],
+   "2019": [
+    0.042,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.032,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.21,
+   "半導體": 0.01,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.34,
+  "stage2_culprit": {
+   "factor": "F-022",
+   "rho": 0.6,
+   "factor_name": "生技穩健成長",
+   "factor_desc": "生技股EPS成長相對自身波動穩定，代表已脫離燒錢賭博期、進入穩定收成階段。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-022 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.23偏弱，但validation達0.69(decay -200%)，方向隨時間增強；cond_ic上漲月(0.032)略優於下跌月(0.012)，「外資中期籌碼確認」機制方向大致成立。死因同樣是與庫內生技類因子(F-022生技穩健成長)相關度0.60重疊。",
+ "failure_type": "duplicate",
+ "lesson": "eps_yoy×frgn_ratio_d63再度撞上生技品質因子(F-022)，這是本輪第三次「獲利成長×外部驗證」類乘法因子撞上生技子產業訊號的案例，顯示該領域已被庫內多因子從不同角度覆蓋。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0667",
+ "ts": "2026-08-12T14:04:06"
+}

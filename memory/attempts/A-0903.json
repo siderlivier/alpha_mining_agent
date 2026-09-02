@@ -1,0 +1,92 @@
+{
+ "round": 59,
+ "category": "semiconductor_destocking_recovery",
+ "hypothesis": "半導體產業具明顯庫存循環，市場在去化末端常因連續數月營收年增疲弱而過度悲觀、錨定於近期壞消息；當月營收動能剛從谷底回升（近半年由負轉正的趨勢反轉）且營業利益率仍維持正值（顯示成本結構未受損），代表庫存去化已近尾聲、需求剛開始回補，此轉折點市場尚未及時定價。",
+ "prediction": "sub-train ICIR > 0.4（半導體子樣本）；industry_icir半導體 > 其他三產業；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(delta(rev_mom,6)),cs_rank(op_margin))",
+ "name_zh": "半導體去化回溫股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(rev_mom,6)),cs_rank(op_margin))",
+  "fhash": "19d3988839407397",
+  "sub_train": {
+   "mean_ic": 0.049,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.056,
+   "icir": 0.6,
+   "decay_pct": -43.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.055,
+    "多頭"
+   ],
+   "2014": [
+    0.03,
+    "多頭"
+   ],
+   "2015": [
+    0.043,
+    "盤整"
+   ],
+   "2016": [
+    0.031,
+    "多頭"
+   ],
+   "2017": [
+    0.094,
+    "多頭"
+   ],
+   "2018": [
+    0.037,
+    "盤整"
+   ],
+   "2019": [
+    0.075,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.064,
+   "down_months": 0.018
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.24,
+   "半導體": 0.28,
+   "金融": 0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.018,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.68,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.46
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.42 < 0.45; 月換手 0.68 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.42非常接近但未達0.45門檻，同時月換手0.68>0.4，雙重不通過；產業別預測應以半導體最高，但實際電子(0.47)高於半導體(0.28)，產業特定敘事同樣未被證實（同型落差見[[C-5]]）。IC本身其實不弱(validation ICIR 0.6)，主要卡在換手率過高——delta(rev_mom,6)變動太快，屬於表達層面可修正的問題而非機制錯誤。",
+ "failure_type": "expression_bad",
+ "lesson": "營收動能的短期delta變化太快會拉高換手率，若IC本身夠強但換手超標，應優先嘗試對訊號做更長平滑（如改用更長delta窗口或先ts_mean再取delta）降低周轉，而非直接放棄假設。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0903",
+ "ts": "2026-08-19T10:08:40"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 7,
+ "category": "liquidity_conditioned_momentum",
+ "hypothesis": "成交金額低於自身歷史均值（法人與媒體關注度低）的個股，其動能訊號的資訊擴散速度較慢，需要更久才被市場完全定價；相對地高關注度股票資訊已被快速消化，動能效果較弱。",
+ "prediction": "sub-train 產業內 ICIR>0.45；且此條件式訊號IC應顯著高於未經流動性篩選的全樣本cs_rank(mom_120)。",
+ "formula": "if_else(less(amt_21,ts_mean(amt_21,12)),cs_rank(mom_120),0)",
+ "name_zh": "冷門股動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "if_else(less(amt_21,ts_mean(amt_21,12)),cs_rank(mom_120),0)",
+  "fhash": "391db95adba63848",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.12
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.12,
+   "decay_pct": -2.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.008,
+    "盤整"
+   ],
+   "2013": [
+    0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.003,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    0.028,
+    "盤整"
+   ],
+   "2019": [
+    -0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": 0.15,
+   "生技": 0.35,
+   "半導體": -0.1,
+   "金融": -0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.017,
+   "short_excess_ann": -0.051
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.54,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45且應優於全樣本mom_120；實際sub-train ICIR僅0.12，連stage1都未過。if_else條件不成立時訊號設為常數0，等於把近半樣本綁死同一值，破壞cs_rank排序資訊；short leg轉負(-0.051)顯示低關注股動能反而更差，未獲市場低估假說支持。",
+ "failure_type": "expression_bad",
+ "lesson": "if_else搭配常數fallback再cs_rank，會讓被排除的一半樣本失去排序資訊；條件式因子應改用連續交互(如乘以流動性排名倒數)而非硬分組+常數填補。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0116",
+ "ts": "2026-07-19T17:59:13"
+}

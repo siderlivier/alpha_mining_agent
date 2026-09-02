@@ -1,0 +1,87 @@
+{
+ "round": 53,
+ "category": "biotech_cash_discipline_trend",
+ "hypothesis": "生技公司現金流對淨利比率漸進式改善(而非單期水準)，代表其從燒錢研發轉向可持續營運的轉骨過程可被驗證，市場往往要等到明確轉正訊號才重新評價，因此『趨勢』比『水準』更早反映在後續報酬。",
+ "prediction": "sub-train ICIR>0.45；生技產業industry_icir應為四產業最高；多頭腿年化超額報酬顯著>0。",
+ "formula": "cs_rank(ts_slope(ocf_ratio, 12))",
+ "name_zh": "生技燒錢轉骨",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(ocf_ratio, 12))",
+  "fhash": "df7f6e9bc413f841",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.25
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.029,
+    "盤整"
+   ],
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    -0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.12,
+   "半導體": -0.06,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR為-0.25，方向與預測(pos)完全相反，四個產業ICIR全數為負(含生技-0.12)，預測生技業效應最強也未成立，現金流轉骨的「趨勢優於水準」假設在資料中找不到支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技燒錢轉骨假設在此樣本期完全不成立；此類「經營轉折點」敘事型因子若缺乏明確事件觸發設計(如轉正後N月)，光用12個月斜率難以捕捉真正轉折訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0810",
+ "ts": "2026-08-15T11:33:03"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 38,
+ "category": "trend_smoothness_quality",
+ "hypothesis": "依據漸進資訊擴散理論，價格趨勢平滑程度反映資訊消化方式：平穩、低雜訊的上升趨勢代表資訊被廣泛投資人群體逐步吸收（如法人分批建倉），趨勢延續性強；同幅度但劇烈震盪的上漲多由單一事件或散戶追價造成，較易反轉。限定高ROE公司可過濾投機性強、基本面薄弱標的的雜訊行情。",
+ "prediction": "sub-train ICIR > 0.45；因子值最高組的月報酬波動度應低於全市場平均；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_rank(ts_rsq(mom_60,6)), cs_rank(roe))",
+ "name_zh": "平穩趨勢優質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_60",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_rsq(mom_60,6)), cs_rank(roe))",
+  "fhash": "00809c05afad249e",
+  "sub_train": {
+   "mean_ic": 0.042,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.043,
+   "icir": 0.62,
+   "decay_pct": -47.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.1,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.015,
+    "盤整"
+   ],
+   "2019": [
+    0.071,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.041,
+   "down_months": 0.044
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.45,
+   "半導體": 0.27,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.47,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.6,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.42、validation 0.62皆屬中上表現，方向正確且逐年穩定，最終在stage2因與F-002(金融品質價值)ρ=0.60陣亡——這是本輪第三次(C-2/C-12/C-15)命中同一F-002，確立「cs_rank(roe)或獲利品質代理 x 任意方向性訊號」是穩定的紅海邊界，而非個案巧合。",
+ "failure_type": "duplicate",
+ "lesson": "任何要用ROE做品質閘門的因子，應先與F-002做預篩相關性，或改用非財務面的品質代理（如趨勢平穩度本身即可獨立使用，不必再疊加roe）。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0593",
+ "ts": "2026-07-30T01:16:47"
+}

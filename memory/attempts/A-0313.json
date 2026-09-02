@@ -1,0 +1,84 @@
+{
+ "round": 20,
+ "category": "cashflow_quality_momentum",
+ "hypothesis": "現金流品質改善同時應計項偏低，代表獲利含金量真實提升而非會計操縱堆疊。市場對現金流量表的關注度低於損益表，對此類訊號的反應存在時間落差，形成持續性underreaction。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；與F-001、F-006相關係數 < 0.5。",
+ "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)), cs_rank(accruals))",
+ "name_zh": "淨化現金流動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)), cs_rank(accruals))",
+  "fhash": "0b87a30806b49a14",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.37,
+   "decay_pct": -182.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.013,
+    "多頭"
+   ],
+   "2015": [
+    0.024,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": 0.13,
+   "半導體": 0.11,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.006,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train僅0.13，多頭腿為負(-0.6%)，方向預測落空。validation ICIR上升到0.37(decay-182%)看似改善，但base(sub-train icir 0.13)過低使decay%本身不具參考意義，證據不足以判斷這是真訊號還是雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金流品質(ocf斜率)減應計項的複合訊號在本次測試中無穩定多頭腿報酬；當sub-train ICIR接近雜訊水準時，validation端的『改善』不應被當作確認證據。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0313",
+ "ts": "2026-07-21T13:24:55"
+}

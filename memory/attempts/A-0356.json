@@ -1,0 +1,90 @@
+{
+ "round": 23,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "以線性迴歸斜率(而非單純頭尾差)呈現的ROE長期趨勢改善，比delta更能過濾單季雜訊；扣除高應計項雜訊後，真正結構性獲利改善且盈餘品質良好的公司，因分析師目標價調整滯後而被低估。",
+ "prediction": "sub-train ICIR>0.45；與F-012相關係數需<0.5始具增量價值；下跌月IC不劣於上漲月。",
+ "formula": "sub(cs_rank(ts_slope(roe,12)), cs_rank(accruals))",
+ "name_zh": "淨化獲利趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(roe,12)), cs_rank(accruals))",
+  "fhash": "d058374cabfe2472",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.03,
+   "icir": 0.41,
+   "decay_pct": 8.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.054,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.081,
+    "盤整"
+   ],
+   "2016": [
+    0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.057,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.54,
+   "生技": 0.49,
+   "半導體": 0.25,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.064,
+   "short_excess_ann": 0.053
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.22,
+  "stage2_culprit": {
+   "factor": "F-012",
+   "rho": 0.82,
+   "factor_name": "淨化ROE動能",
+   "factor_desc": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-012 |ρ|=0.82 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.44 略低於0.45門檻，但validation僅衰減8%，是本輪最穩定的候選之一；down/up月幾乎打平(0.03 vs 0.031)。然而與F-012相關係數0.82，遠超預測<0.5門檻——「ROE趨勢扣應計項」無論用slope或delta表達，最終都收斂到同一個排序。",
+ "failure_type": "duplicate",
+ "lesson": "ROE趨勢×應計項淨化這個構念空間已飽和，換用不同的trend統計量(slope vs delta)不足以脫鉤；此為紅海邊界（另見learnings_additions）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0356",
+ "ts": "2026-07-21T14:03:28"
+}

@@ -1,0 +1,94 @@
+{
+ "round": 47,
+ "category": "dividend_safety_confirmation",
+ "hypothesis": "高股息殖利率可能是價格下跌造成的假象（股息陷阱），唯有現金流真正覆蓋股利發放（ocf_ratio高）的高殖利率股票才是可持續價值；市場對「高殖利率」定價往往一視同仁，未區分現金含金量。",
+ "prediction": "sub-train ICIR > 0.45；此因子IC應高於單獨div_yield水準排序；多頭腿年化超額報酬 > 0。",
+ "formula": "mul(cs_rank(ocf_ratio), cs_rank(div_yield))",
+ "name_zh": "現金覆蓋高息股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio), cs_rank(div_yield))",
+  "fhash": "cfe89fa5b7207256",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.072,
+   "icir": 1.04,
+   "decay_pct": -140.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.02,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.077,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.087,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.055,
+   "down_months": 0.042
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.4,
+   "半導體": 0.33,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.17,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.56,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.56 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45(實際0.43接近)、validation應更強(實際1.04遠超，機制確實存在)、產業ICIR全面偏強(電子0.5為四產業最高)，但多頭腿超額報酬預測為正，實際卻為負(-0.01)——高IC主要由空頭腿貢獻。最終死於stage2，與庫內F-019(現金含金價值股)相關係數0.56，本質是同一'現金真實性x便宜/殖利率'價值主軸的重複表達。",
+ "failure_type": "duplicate",
+ "lesson": "現金流品質(ocf_ratio) x 估值/殖利率的交叉確認結構已被庫內F-019覆蓋。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0717",
+ "ts": "2026-08-12T14:54:09"
+}

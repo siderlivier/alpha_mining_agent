@@ -1,0 +1,83 @@
+{
+ "round": 28,
+ "category": "margin_peak_reversion",
+ "hypothesis": "淨利率創下自身24個月新高的公司，市場容易線性外推「獲利能力持續提升」，但高獲利率通常會吸引競爭或成本上升壓力，具有均值回歸特性；越接近自身歷史高點的公司，未來淨利率越可能向下修正，導致股價修正。",
+ "prediction": "sub-train ICIR>0.4；此為neg方向因子，須確認訊號值低(遠低於自身高點)的多頭腿年化超額報酬>0，而非僅空頭腿有效，以確保台股放空限制下可交易。",
+ "formula": "cs_rank(sub(net_margin, ts_max(net_margin,24)))",
+ "name_zh": "淨利率見頂反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(net_margin, ts_max(net_margin,24)))",
+  "fhash": "695cc02a5761bd51",
+  "sub_train": {
+   "mean_ic": 0.065,
+   "icir": 0.69
+  },
+  "validation": {
+   "mean_ic": 0.064,
+   "icir": 1.0,
+   "decay_pct": -45.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.084,
+    "多頭"
+   ],
+   "2014": [
+    0.054,
+    "多頭"
+   ],
+   "2015": [
+    0.083,
+    "盤整"
+   ],
+   "2016": [
+    0.054,
+    "多頭"
+   ],
+   "2017": [
+    0.063,
+    "多頭"
+   ],
+   "2018": [
+    0.03,
+    "盤整"
+   ],
+   "2019": [
+    0.098,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.069,
+   "down_months": 0.056
+  },
+  "industry_icir": {
+   "電子": 0.86,
+   "生技": 0.53,
+   "半導體": 0.36,
+   "金融": 0.35
+  },
+  "legs": {
+   "long_excess_ann": 0.074,
+   "short_excess_ann": 0.08
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.22,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(+)與假設宣稱(neg)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "本案是本輪最大的預測落差：假設『淨利率創24個月新高會均值回歸』(neg方向)，實際sub-train ICIR達0.69、validation更高達1.0(decay -45%，驗證期不減反增)，且方向與宣稱完全相反——淨利率越接近自身歷史高點，未來報酬反而越高，顯示這是獲利動能/品質延續(quality momentum)而非均值回歸。多頭腿0.074、空頭腿0.08兩腿皆強且接近，是少數多頭腿本身就高度可交易的案例，只因方向標籤寫反而被stage1擋下。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "淨利率(或類似獲利能力指標)接近自身歷史高點不應預設均值回歸，本案顯示台股市場對獲利能力持續創高的公司存在顯著的延續性重新評價(市場對'獲利力創高'的反應不足而非過度)，這與C-9(毛利率落底期望反彈=另一種均值回歸假設，結果同樣未獲支持)共同指向：對『財務指標相對自身歷史極值的位置』做均值回歸類假設時，應優先測試持續性(動量)方向而非只測反轉方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0440",
+ "ts": "2026-07-28T19:19:09"
+}

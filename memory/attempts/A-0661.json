@@ -1,0 +1,90 @@
+{
+ "round": 43,
+ "category": "cash_return_deep_value",
+ "hypothesis": "營收市值比便宜且現金殖利率高的公司，代表用實際配息證明現金流真實性而非僅依賴財報數字（如ep/bp）計算的表面便宜；這類股票通常缺乏成長故事、不進入主流成長型或動能型篩選器，市場對「今天發得出真金白銀的便宜股」存在系統性低估。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC應優於上漲月（防禦特性）；與F-003、F-015相關度<0.5。",
+ "formula": "mul(cs_rank(sp), cs_rank(div_yield))",
+ "name_zh": "現金便宜股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(sp), cs_rank(div_yield))",
+  "fhash": "3e26a0ccdcf23601",
+  "sub_train": {
+   "mean_ic": 0.049,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.047,
+   "icir": 0.39,
+   "decay_pct": 8.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.007,
+    "多頭"
+   ],
+   "2014": [
+    0.045,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.13,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.043,
+    "盤整"
+   ],
+   "2019": [
+    0.052,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.046
+  },
+  "industry_icir": {
+   "電子": 0.88,
+   "生技": 0.62,
+   "半導體": 0.36,
+   "金融": -0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.051
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.1,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.53,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.53 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.43接近你預測的0.45門檻，validation 0.39且decay僅8%，穩定性佳；但cond_ic上漲月與下跌月幾乎相等(0.049 vs 0.046)，「防禦特質」的預測沒有明顯獲得驗證。真正死因是與F-019(現金含金價值股)相關度0.53——兩者本質上是同一套「便宜+高股息=真金白銀」敘事。",
+ "failure_type": "duplicate",
+ "lesson": "sp×div_yield這類「便宜+高殖利率」乘法組合已被F-019佔據，屬本輪多個現金/股息品質因子共通的紅海。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0661",
+ "ts": "2026-08-12T14:04:06"
+}

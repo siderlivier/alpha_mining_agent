@@ -1,0 +1,90 @@
+{
+ "round": 4,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "投資人對股價逼近52週高點存在錨定心理障礙，要求額外折價才敢追價；但當月營收年增同時轉正，代表基本面正在打破這個心理錨點，法人才有信心持續買進，形成動能延續而非均值回歸。",
+ "prediction": "sub-train ICIR>0.45；且限定rev_yoy>0子樣本內px_hi252與未來報酬的正相關應強於全樣本（rev_yoy≤0時訊號被歸零、應無顯著IC貢獻）",
+ "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, 0))",
+ "name_zh": "破高營收確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, 0))",
+  "fhash": "ad3dd563ea4ccbc4",
+  "sub_train": {
+   "mean_ic": 0.049,
+   "icir": 0.53
+  },
+  "validation": {
+   "mean_ic": 0.056,
+   "icir": 0.82,
+   "decay_pct": -55.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.059,
+    "盤整"
+   ],
+   "2016": [
+    0.071,
+    "多頭"
+   ],
+   "2017": [
+    0.066,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.062,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.82,
+   "生技": 0.42,
+   "半導體": 0.31,
+   "金融": 0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.115,
+   "short_excess_ann": 0.041
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.42,
+  "stage2_culprit": {
+   "factor": "F-003",
+   "rho": 0.72,
+   "factor_name": "風格孤兒股",
+   "factor_desc": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-003 |ρ|=0.72 > 0.5"
+ },
+ "diagnosis": "ICIR預測完全命中且超標(sub-train 0.53、validation 0.82，decay為負代表out-of-sample更強)，證明『破高+營收轉正』本身是有效訊號；但未進入子樣本驗證即死於stage2——與庫內F-003(風格孤兒股:便宜+成長被忽略)高度重疊(ρ=0.72)，說明『價格強度+基本面確認』的構造思路已被F-003從另一角度覆蓋掉大部分變異。",
+ "failure_type": "duplicate",
+ "lesson": "破高類因子只要疊加任何『便宜/成長』基本面確認，都很容易命中F-002/F-003這兩個庫內因子的變異來源；未來此類因子應先算與F-002/F-003的相關性再投入完整回測，省下計算成本。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0070",
+ "ts": "2026-07-19T17:21:03"
+}

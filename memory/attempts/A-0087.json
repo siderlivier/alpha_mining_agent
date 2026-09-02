@@ -1,0 +1,84 @@
+{
+ "round": 5,
+ "category": "earnings_quality_consistency",
+ "hypothesis": "當EPS年增率大幅超越營業利益年增率時，代表獲利成長主要來自業外收益、處分資產或一次性稅務調整而非本業真實改善，市場容易被headline EPS成長迷惑而給予過高評價；相反地op_income_yoy相對eps_yoy持平或更高，代表獲利成長源自本業，品質較高但因不顯眼而被低估。",
+ "prediction": "sub-train ICIR > 0.45；本因子與C-9(獲利品質×ROE趨勢)相關係數 < 0.5(機制不同)；下跌月IC應高於上漲月IC(業外灌水公司在回檔時最先被錯殺)。",
+ "formula": "cs_rank(neg(sub(op_income_yoy, eps_yoy)))",
+ "name_zh": "本業成長真實度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(op_income_yoy, eps_yoy)))",
+  "fhash": "ebbb8c0d487f8574",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.06
+  },
+  "validation": {
+   "mean_ic": 0.04,
+   "icir": 0.55,
+   "decay_pct": -749.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    -0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    -0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.06,
+   "半導體": 0.03,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.06，幾乎無訊號，headline EPS灌水的機制在樣本中完全不成立。次要預測（down_months IC > up_months）也方向相反(0.012<0.017)。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "以單期op_income_yoy與eps_yoy落差衡量獲利品質的做法在此樣本無可測得的橫截面報酬訊號，此類單快照獲利品質落差公式應降低優先度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0087",
+ "ts": "2026-07-19T17:32:31"
+}

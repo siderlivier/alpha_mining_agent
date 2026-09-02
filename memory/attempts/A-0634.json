@@ -1,0 +1,88 @@
+{
+ "round": 41,
+ "category": "biotech_milestone_regime_flip",
+ "hypothesis": "生技股常年燒錢，營運現金流由負轉正是罕見且不可逆的關鍵事件（通常對應藥證取得、授權金入帳或首次商轉獲利），用sign()捕捉這個離散的「翻轉」訊號、乘上營收年增率確認商轉是否真實發生；生技股分析師覆蓋率低，這種binary的體質轉變往往需要數季才被市場充分定價。",
+ "prediction": "sub-train ICIR>0.4；生技產業industry_icir應為四產業最高；多頭腿年化超額報酬>0；與F-011/F-022相關性|ρ|<0.5。",
+ "formula": "cs_rank(mul(sign(ocf_ratio), rev_yoy))",
+ "name_zh": "生技現金轉正",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(sign(ocf_ratio), rev_yoy))",
+  "fhash": "4b349a5f8f58314e",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.008,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.028,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    -0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.018
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": 0.11,
+   "半導體": 0.21,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.025,
+   "short_excess_ann": 0.026
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.47,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.33
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3; 月換手 0.47 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.36略低於預測的0.4門檻。核心機制預測『生技industry_icir應四產業最高』完全失敗——生技實際上是四產業中最低(0.11)，反而電子最高(0.32)；顯示『生技現金流轉正是罕見不可逆事件』的敘事，訊號其實廣泛存在於各產業，而非生技特有。死於stage4（ICIR未達門檻+換手0.47超標）。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『生技現金流轉正』的產業特定機制敘事未獲industry_icir支持，與C-5同樣屬於『預測特定產業最強、結果落空』的案例；顯示sign(ocf_ratio)×成長率這類構造可能是一般性的『轉虧為盈確認訊號』，不具生技特有性，若要重試應拿掉產業限定敘事、改在全市場測試，或改用生技股特有的關鍵事件變數（如藥證公告日）才能真正驗證生技特定機制。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0634",
+ "ts": "2026-08-12T09:31:55"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 34,
+ "category": "financial_value_short_confirmation",
+ "hypothesis": "金融股整體放空活動稀少（法規限制多、法人覆蓋密集），因此當淨值便宜(bp高)的金融股同時券資比異常偏低，代表市場並非因基本面疑慮而看空，可排除『價值陷阱』的可能性；此機制僅在金融產業成立，因其他產業放空活躍度高、券資比訊噪比低，無法做出同樣的『無疑慮』推論。",
+ "prediction": "金融產業industry_icir>0.5（產業限定門檻）；多頭腿(金融子樣本)年化超額報酬>0；全市場版本ICIR預期不達標(bp在其他產業雜訊過大)，作為產業限定候選提交。",
+ "formula": "mul(cs_rank(bp), cs_rank(neg(short_margin_ratio)))",
+ "name_zh": "金融無疑慮價值",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(neg(short_margin_ratio)))",
+  "fhash": "7df5f77200b38a52",
+  "sub_train": {
+   "mean_ic": 0.057,
+   "icir": 0.68
+  },
+  "validation": {
+   "mean_ic": 0.054,
+   "icir": 0.36,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.057,
+    "多頭"
+   ],
+   "2014": [
+    0.046,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.098,
+    "多頭"
+   ],
+   "2017": [
+    0.051,
+    "多頭"
+   ],
+   "2018": [
+    0.083,
+    "盤整"
+   ],
+   "2019": [
+    0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.066,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.52,
+   "生技": 0.46,
+   "半導體": 0.13,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.064,
+   "short_excess_ann": 0.054
+  },
+  "coverage": 0.57,
+  "turnover_m": 0.23,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.54,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "預測「金融產業限定，industry_icir>0.5」完全落空——金融產業icir僅0.2，反而電子(0.52)、生技(0.46)大幅領先，顯示「金融股放空稀少故bp x低券資比可排除價值陷阱」的產業限定敘事錯誤，真實優勢產業是電子/生技，與C-6、C-15呈同一模式。真正死因是Stage2與F-008相關(ρ=0.54)，本輪第二次(繼C-1後)因與F-008重疊被拒。",
+ "failure_type": "duplicate",
+ "lesson": "(1) 券資比清淨確認(neg(short_margin_ratio))作為腳位與任何主因子交乘，都容易撞上F-008「低調創高」家族，本輪第二次驗證(C-1、C-13)，應列為明確紅海邊界。(2)「金融股限定」敘事推理本身有問題——即便邏輯合理，實證上金融產業在本輪從未顯示突出industry_icir，反而電子/生技持續勝出，未來若無實證支持不應僅憑邏輯推理預設金融產業限定。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0531",
+ "ts": "2026-07-30T00:21:47"
+}

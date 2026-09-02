@@ -1,0 +1,90 @@
+{
+ "round": 67,
+ "category": "coverage_neglect_quality",
+ "hypothesis": "外資持股比率低的個股，賣方研究覆蓋與法人研究關注都稀少。一家 ROE 確實很高、卻落在這個乏人問津集合中的公司，因為投資人根本沒做功課去辨認其品質而被低估。這與把外資流向當『認證』訊號（已證偏弱）不同，重點是『分析性關注的缺席』；換用法人持股作為關注度代理，是既有交易活躍度代理已飽和後尚未探索的方向。",
+ "prediction": "sub-train ICIR > 0.3；多頭腿(高 ROE×低外資持股)年化超額 > 0；與 F-020、F-002、R-016 之 |ρ| < 0.5；效果在小型股較強；外資持股低組的 ROE-報酬斜率大於高組。",
+ "formula": "mul(cs_rank(roe), cs_rank(neg(frgn_ratio)))",
+ "name_zh": "無人覆蓋績優股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(roe), cs_rank(neg(frgn_ratio)))",
+  "fhash": "c75bf82b04d6bb97",
+  "sub_train": {
+   "mean_ic": 0.04,
+   "icir": 0.47
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.35,
+   "decay_pct": 24.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.074,
+    "盤整"
+   ],
+   "2016": [
+    0.053,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.04,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.041,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.45,
+   "生技": 0.65,
+   "半導體": 0.05,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.039,
+   "short_excess_ann": 0.043
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.14,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.56,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.56 > 0.5"
+ },
+ "diagnosis": "因子穩健：sub-train ICIR 0.47、val 0.35、生技0.65/電子0.45、多頭腿+3.9%。假設明白預期『用外資持股當關注度代理是未探索方向』——但與 F-020『冷門獲利股(成交清淡×高獲利率)』ρ=0.56，證明成交量代理與外資持股代理可互換。預測『與 F-020 ρ<0.5』直接落空。校準：把『換 neglect 代理』當新方向的直覺是錯的。",
+ "failure_type": "duplicate",
+ "lesson": "『關注度/覆蓋稀疏』的各種代理(低成交量、低外資持股、低法人持股)彼此 ρ>0.5、可互換；neglect × quality 已是紅海。要突破得換 quality 那一側，或找真正正交的分析性關注測度(分析師家數變化、財報後關注轉移)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-1028",
+ "ts": "2026-09-02T01:09:58"
+}

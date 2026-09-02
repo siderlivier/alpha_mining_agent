@@ -1,0 +1,90 @@
+{
+ "round": 38,
+ "category": "short_term_overreaction_reversal",
+ "hypothesis": "台股籌碼結構散戶為主，個股單月內因流動性衝擊或雜訊消息急跌時，若ROE維持高檔顯示基本面未變，過度反應會在下月修正回歸；同樣急跌若發生在低ROE公司則多為基本面惡化延續而非反轉。",
+ "prediction": "sub-train ICIR > 0.45；因子值最高兩成組合之後一個月多頭腿年化超額報酬須>0；效果應在大盤下跌月比上漲月更強。",
+ "formula": "mul(cs_rank(neg(mom_20)), cs_rank(roe))",
+ "name_zh": "優質股超跌反彈",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_20",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(mom_20)), cs_rank(roe))",
+  "fhash": "3338ccadb7dfd395",
+  "sub_train": {
+   "mean_ic": 0.051,
+   "icir": 0.64
+  },
+  "validation": {
+   "mean_ic": 0.072,
+   "icir": 0.68,
+   "decay_pct": -5.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.049,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.078,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.097,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.052,
+   "down_months": 0.069
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.72,
+   "半導體": 0.4,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": -0.003,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.6,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.59,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.59 > 0.5"
+ },
+ "diagnosis": "sub-train/validation ICIR（0.64/0.68）完全達標且方向正確，預測準確；但於stage2因與F-002（金融品質價值）ρ=0.59陣亡。多頭腿超額報酬為負(-0.003)顯示獲利主要來自空頭腿，交易化上也有隱憂。",
+ "failure_type": "duplicate",
+ "lesson": "cs_rank(roe)作為品質閘門與庫內既有ROE系因子高度共線；未來設計「反轉/動能 x 品質」類因子時應優先用正交化後的ROE殘差，或改用非ROE的品質代理變數。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0580",
+ "ts": "2026-07-30T01:16:47"
+}

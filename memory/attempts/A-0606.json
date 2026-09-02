@@ -1,0 +1,90 @@
+{
+ "round": 39,
+ "category": "financial_profitability_dividend_signal",
+ "hypothesis": "金融股若本業獲利率(利差/手續費收益能力)紮實，同時現金殖利率呈上升趨勢，代表股利提升由真實獲利能力支撐而非透支資本適足率的短視配息；市場常混淆『高股利』與『高股利可持續性』，對後者反應不足，僅在金融業成立因其資本適足率與配息政策受法規緊密連動。",
+ "prediction": "金融產業限定industry_icir>0.5；多頭腿(金融產業內)年化超額報酬>0；與F-023相關性<0.5",
+ "formula": "mul(cs_rank(op_margin),cs_rank(delta(div_yield,12)))",
+ "name_zh": "金融股利撐盤",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(op_margin),cs_rank(delta(div_yield,12)))",
+  "fhash": "f5dcd9d1919ca2ed",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.044,
+   "icir": 0.38,
+   "decay_pct": 14.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.059,
+    "多頭"
+   ],
+   "2015": [
+    0.028,
+    "盤整"
+   ],
+   "2016": [
+    0.047,
+    "多頭"
+   ],
+   "2017": [
+    0.059,
+    "多頭"
+   ],
+   "2018": [
+    0.035,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.046,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.49,
+   "半導體": 0.32,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.001,
+   "short_excess_ann": 0.035
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.19,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.51,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "預測金融產業限定ICIR>0.5，實際金融產業ICIR僅0.08，四產業最低，反而電子(0.5)與生技(0.49)最強，與C-11(半導體)呈現相同的「產業限定預測失敗」模式；sub-train ICIR 0.44也略低於0.45門檻，最終死於與F-002(金融品質價值)高相關(0.51)。",
+ "failure_type": "duplicate",
+ "lesson": "兩次獨立的產業限定假設(半導體C-11、金融C-13)都顯示：實際效應集中的產業與假設聲稱的「專屬產業」不一致，且都收斂到既有通用品質/價值因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0606",
+ "ts": "2026-08-12T09:06:34"
+}

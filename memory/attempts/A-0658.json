@@ -1,0 +1,87 @@
+{
+ "round": 43,
+ "category": "opex_investment_intensity",
+ "hypothesis": "毛利率與營益率之間的落差反映公司費用投入強度（研發/行銷），這類「先投資後收成」公司常因短期營益率被費用壓低而遭市場低估；只要毛利率具備競爭力，後續費用效率化將回饋到獲利成長，形成估值修正機會。",
+ "prediction": "sub-train ICIR>0.45；電子/半導體產業industry_icir應顯著高於金融（>0.5 vs <0.3）；與F-004相關度<0.5。",
+ "formula": "cs_rank(sub(gross_margin,op_margin))",
+ "name_zh": "費用投資股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(gross_margin,op_margin))",
+  "fhash": "b0b751fa87931268",
+  "sub_train": {
+   "mean_ic": -0.04,
+   "icir": -0.41
+  },
+  "validation": {
+   "mean_ic": -0.038,
+   "icir": -0.51,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.01,
+    "多頭"
+   ],
+   "2014": [
+    -0.029,
+    "多頭"
+   ],
+   "2015": [
+    -0.053,
+    "盤整"
+   ],
+   "2016": [
+    -0.069,
+    "多頭"
+   ],
+   "2017": [
+    -0.103,
+    "多頭"
+   ],
+   "2018": [
+    -0.008,
+    "盤整"
+   ],
+   "2019": [
+    -0.068,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.049,
+   "down_months": -0.015
+  },
+  "industry_icir": {
+   "電子": -0.33,
+   "生技": -0.34,
+   "半導體": -0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.026,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.06,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "你預測方向為正，但實際IC全年份、全產業一致為負且顯著(sub-train ICIR -0.41, validation -0.51)——這不是雜訊而是清晰的反向訊號。市場並未低估「先投資後收成」公司，毛利-營益缺口大反而正確地被定價為警訊，你的「投資→未來回饋」機制被證偽。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "毛利-營益缺口大應解讀為「費用侵蝕獲利品質」的負面訊號而非「先蹲後跳」的正面訊號；可反轉方向重新提交，但需檢查與F-004等既有獲利品質因子的相關度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0658",
+ "ts": "2026-08-12T14:04:06"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 35,
+ "category": "financial_conservative_provisioning_value",
+ "hypothesis": "金融業因會計原則賦予準備金提列較大裁量權，管理層若選擇保守增提準備(低應計)而非美化當期獲利，會壓低短期財報但代表資產品質與資本緩衝更紮實；市場常誤將保守增提解讀為獲利疲弱而非風險管理紀律，導致淨值便宜的保守型金融股被系統性低估。",
+ "prediction": "sub-train ICIR>0.45；金融產業industry_icir>0.55且高於其他產業；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(bp), cs_rank(neg(accruals)))",
+ "name_zh": "保守增提金控",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(neg(accruals)))",
+  "fhash": "cf522442d4710c1a",
+  "sub_train": {
+   "mean_ic": 0.045,
+   "icir": 0.49
+  },
+  "validation": {
+   "mean_ic": 0.04,
+   "icir": 0.44,
+   "decay_pct": 9.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.007,
+    "多頭"
+   ],
+   "2014": [
+    0.074,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.038,
+    "多頭"
+   ],
+   "2018": [
+    0.034,
+    "盤整"
+   ],
+   "2019": [
+    0.045,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.056,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.39,
+   "生技": 0.48,
+   "半導體": 0.22,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": 0.023,
+   "short_excess_ann": 0.023
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.16,
+  "stage2_max_rho": {
+   "factor": "F-019",
+   "rho": 0.4
+  },
+  "verdict": "passed"
+ },
+ "diagnosis": "sub-train ICIR 0.49勉強達標，validation 0.44、decay 9%穩定通過。但「金融產業ICIR應最高(>0.55)」再度落空——金融ICIR僅0.14為四產業最低(電子0.39/生技0.48/半導體0.22)，與C-3同樣模式：金融特定機制敘事系統性失準，真正驅動力是跨產業的「淨值便宜x低應計品質」因子。",
+ "failure_type": "none",
+ "lesson": "連續兩輪(C-3, C-10)「金融業特有機制」敘事在industry_icir檢驗上都落空，金融產業實際上是這類bp/roe/accruals組合因子中效果最弱的產業；未來若假設鎖定金融業特殊制度，應先檢查該機制是否其實是跨產業普適的品質因子。",
+ "lesson_confidence": "multi_case",
+ "verdict": "passed",
+ "id": "A-0543",
+ "ts": "2026-07-30T00:34:10"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 57,
+ "category": "financial_dividend_signal_underreaction",
+ "hypothesis": "金控/銀行股受金管會資本適足與配息政策隱性監管影響,股利調升代表資本水位與獲利能力真正改善,且調降股利需經嚴格審查,使股利增加成為高可信度的管理層信心訊號。金融股普遍被視為低成長殖利率股,市場對其股利政策變化反應速度慢於對成長股財報的反應。",
+ "prediction": "sub-train ICIR(金融子樣本)>0.4;多頭腿年化超額報酬>0;金融產業industry_icir需為四產業最高,若非最高應視為假設證偽(對照全域規則2)。",
+ "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+ "name_zh": "金融配息信號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+  "fhash": "e2ef4d198b38d0f7",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.16
+  },
+  "validation": {
+   "mean_ic": -0.013,
+   "icir": -0.2,
+   "decay_pct": 227.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.039,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.15,
+   "半導體": 0.01,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.16,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "研究者事先設計了可證偽判準(金融產業ICIR須為四產業最高)，結果金融產業icir=-0.05反而是四產業最差且為負值，直接推翻假設，並非強度不足問題(validation更變號、decay 227%)。這是一次校準良好的預先註冊式假設檢定，預測與實際明確不符，判斷清楚。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "金融股股利變化並未展現預期的監理背書資訊優勢；連同C-3的殖利率穩定度失敗，兩次獨立測試顯示股利政策類指標(殖利率穩定度、偏離中位數)在台股資訊含量薄弱，可暫列入禁忌方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0871",
+ "ts": "2026-08-19T00:11:01"
+}

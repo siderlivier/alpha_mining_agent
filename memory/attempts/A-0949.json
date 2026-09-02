@@ -1,0 +1,91 @@
+{
+ "round": 62,
+ "category": "semiconductor_margin_trough_recovery",
+ "hypothesis": "半導體業毛利率從12個月低點回升的幅度，反映庫存去化接近尾聲、產品價格止跌回升；庫存調整具產業周期性且財報揭露落後實際狀況約1-2季，市場對「離開谷底」訊號重新評價存在延遲，此結構(距自身低點距離)與F-025不同。",
+ "prediction": "sub-train ICIR>0.4；與F-025截面相關|ρ|<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(sub(op_margin, ts_min(op_margin,12)))",
+ "name_zh": "半導體谷底回升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(op_margin, ts_min(op_margin,12)))",
+  "fhash": "834554c93d71cc31",
+  "sub_train": {
+   "mean_ic": 0.021,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": -0.022,
+   "icir": -0.26,
+   "decay_pct": 232.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.115,
+    "盤整"
+   ],
+   "2013": [
+    0.056,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    -0.014,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.051,
+    "多頭"
+   ],
+   "2018": [
+    -0.035,
+    "盤整"
+   ],
+   "2019": [
+    -0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": 0.11,
+   "生技": -0.15,
+   "半導體": 0.17,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.013,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.17,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.46
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.2 < 0.45; validation ICIR -0.26 < 0.3; validation 衰減 232% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測ICIR>0.4，實得sub-train僅0.2已未達標，validation又翻負(-0.26，衰減232%)。2012年IC極端值(-0.115)可能是早期樣本雜訊拉動整體，半導體產業ICIR僅0.17偏弱，「離自身低點的距離」這個結構在跨期一致性上表現不佳，屬機制層面證據薄弱而非表達問題。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "半導體毛利率相對自身12個月低點的回升幅度(谷底回升距離)在跨期樣本中不穩定，不足以支持「谷底回升」這一結構性再評價的機制假設。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0949",
+ "ts": "2026-08-27T21:24:50"
+}

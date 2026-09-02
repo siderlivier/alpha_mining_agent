@@ -1,0 +1,92 @@
+{
+ "round": 3,
+ "category": "momentum_residual_term_structure",
+ "hypothesis": "長期動能（一年）扣除短期動能（一季）捕捉「法人尚未反應完的中期趨勢殘差」：若近一季報酬相對長期趨勢滯後，代表趨勢尚未被短期資金完全消化，後續可能補漲，此為動能延續的殘差型態，不同於單純長期動能。",
+ "prediction": "sub-train ICIR>0.45；與純mom_240因子相關性|ρ|<0.5；多頭腿超額報酬>0。",
+ "formula": "cs_rank(sub(mom_240, mom_60))",
+ "name_zh": "動能期限差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.45、與mom_240相關<0.5、多頭腿>0』。與F-002相關性僅0.24（確實與純動能區隔開），多頭腿0.022>0成立，但整體強度不足(sub-train 0.36，驗證0.19，decay 47%接近過擬合門檻)。訓練窗內2012年IC高達0.132為明顯離群值，驗證期(2018-2019)未重現類似極端值，推測是sub-train ICIR被單一年份撐高。",
+ "failure_type": "expression_bad",
+ "lesson": "動能期限差構造本身確實避開了與原始長期動能的重複(如預測)，但可能對訓練期單一極端年份(如本庫的2012年)敏感，導致ICIR估計失真。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0062",
+ "ts": "2026-07-19T17:08:22"
+}

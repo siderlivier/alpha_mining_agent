@@ -1,0 +1,91 @@
+{
+ "round": 9,
+ "category": "dividend_yield_capital_demand",
+ "hypothesis": "台股保險等法人在ALM與監理資本要求下長期需要穩定現金殖利率部位，高殖利率股票持續吸引法人資金緩步進場；此需求驅動再評價在金融業更明顯，因金融股同時是殖利率供給端與法人需求端的交集，形成自我強化資金流。",
+ "prediction": "sub-train ICIR > 0.4；金融產業內ICIR應為四產業最高且明顯高於生技；validation衰減 < 40%。",
+ "formula": "cs_rank(div_yield)",
+ "name_zh": "殖利率資金磁吸",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(div_yield)",
+  "fhash": "87bbfbedef9c69ca",
+  "sub_train": {
+   "mean_ic": 0.051,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.088,
+   "icir": 1.03,
+   "decay_pct": -146.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.026,
+    "盤整"
+   ],
+   "2013": [
+    0.032,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    0.074,
+    "盤整"
+   ],
+   "2016": [
+    0.092,
+    "多頭"
+   ],
+   "2017": [
+    0.058,
+    "多頭"
+   ],
+   "2018": [
+    0.088,
+    "盤整"
+   ],
+   "2019": [
+    0.087,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.065,
+   "down_months": 0.059
+  },
+  "industry_icir": {
+   "電子": 0.59,
+   "生技": 0.46,
+   "半導體": 0.31,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.12,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.49
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.42 < 0.45; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "sub-train ICIR 0.42僅略低於門檻，validation ICIR飆到1.03（decay -146%，異常強化，樣本量小、需謹慎），但關鍵是多空兩腿年化超額報酬皆為負（多頭-0.01、空頭-0.015），即使IC統計上很漂亮，也因台股難放空而判定不可交易。更重要的是產業預測完全被推翻：預期金融最高，實際金融0.22是四產業「最低」，電子0.59反而最高，直接證偽「保險法人ALM殖利率需求」的機制敘事。stage2也已逼近F-005重疊門檻（ρ=0.49）。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「金融業法人殖利率磁吸」敘事被產業分布資料直接推翻（金融最低而非最高），殖利率因子的alpha來源更像是全市場的一般價值/防禦性排序而非金融特定資金流；下次殖利率類因子應先做多空兩腿是否為正的檢查再看IC，且不必預設金融業專屬機制。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0152",
+ "ts": "2026-07-20T17:18:53"
+}

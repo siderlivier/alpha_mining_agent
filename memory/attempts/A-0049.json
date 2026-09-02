@@ -1,0 +1,88 @@
+{
+ "round": 2,
+ "category": "quiet_accumulation_volume_price_divergence",
+ "hypothesis": "當成交金額(amt_21)相對三個月前明顯放大，但價格動能(mom_60)仍為負或疲弱，顯示可能有大額資金正在低調布局吸籌，尚未反映在價格上，後續隨買盤持續會重新定價形成價量背離後的補漲。",
+ "prediction": "sub-train ICIR>0.3；量增價未漲組的未來1-2月報酬應顯著高於量增價也漲的對照組（排除追高效應）。",
+ "formula": "cs_rank(mul(delta(amt_21,3), neg(mom_60)))",
+ "name_zh": "量增價未表態",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(delta(amt_21,3), neg(mom_60)))",
+  "fhash": "ee4102771f1a4567",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.06
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.14,
+   "decay_pct": -114.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.007,
+    "盤整"
+   ],
+   "2013": [
+    -0.026,
+    "多頭"
+   ],
+   "2014": [
+    0.005,
+    "多頭"
+   ],
+   "2015": [
+    0.007,
+    "盤整"
+   ],
+   "2016": [
+    0.027,
+    "多頭"
+   ],
+   "2017": [
+    0.007,
+    "多頭"
+   ],
+   "2018": [
+    0.051,
+    "盤整"
+   ],
+   "2019": [
+    -0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.019,
+   "down_months": -0.024
+  },
+  "industry_icir": {
+   "電子": 0.21,
+   "生技": 0.18,
+   "半導體": 0.14,
+   "金融": -0.16
+  },
+  "legs": {
+   "long_excess_ann": -0.0,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.7,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.3且量增價未漲組應優於量增價漲組；實際sub-train僅0.06接近無效，上漲月(+0.019)與下跌月(-0.024)方向不一致，顯示此訊號可能只是被大盤beta/流動性帶動而非真正捕捉『安靜吸籌』，換手率也高達0.7。",
+ "failure_type": "expression_bad",
+ "lesson": "量價背離型訊號僅用連續相乘(neg(mom_60))而非明確雙重門檻，容易混入大盤beta效果；下次可用if_else明確界定『量增+價滯漲』的雙重門檻條件而非連續相乘。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0049",
+ "ts": "2026-07-19T09:53:03"
+}

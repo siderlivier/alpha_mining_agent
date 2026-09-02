@@ -1,0 +1,85 @@
+{
+ "round": 33,
+ "category": "revenue_trend_persistence",
+ "hypothesis": "台股月營收公告頻率高但分析師財測更新頻率低；若當月營收年增率長期處於自身24個月的高分位，代表成長趨勢具持續性，分析師對「已經很高」的成長股存在保守下修偏誤（錨定於歷史均值），導致持續型成長股重新定價滯後，機制與均值回歸方向相反。",
+ "prediction": "sub-train ICIR > 0.45；此為對「營收動能均值回歸」假設的反向驗證，若成立IC應為正，在電子/半導體中更明顯；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(ts_rank(rev_yoy,24))",
+ "name_zh": "營收高檔持續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(rev_yoy,24))",
+  "fhash": "a0ed93ed44c0396d",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.26,
+   "decay_pct": 50.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.047,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.28,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.061,
+   "short_excess_ann": 0.078
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-013",
+   "rho": 0.54,
+   "factor_name": "冷門成長股",
+   "factor_desc": "營收成長強但成交金額低，代表利多尚未被市場注意到。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-013 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR(0.52)勉強達到預測門檻，但validation衰減剛好落在50%紅線(icir 0.26)，穩健性不如預測宣稱。stage2相關度僅0.54(剛過門檻)，且F-013的故事(低調成長股/低週轉)與本候選(分析師錨定偏誤)概念不同，重疊較可能來自兩者都用rev_yoy趨勢量而非真正同一機制。",
+ "failure_type": "expression_bad",
+ "lesson": "'營收持續高檔=分析師低估'的反均值回歸假說可能仍成立，但ts_rank(rev_yoy,24)這種純排序表達與庫內既有rev_yoy衍生因子過於接近；應先對週轉/關注度做正交化再排序，以區隔F-013並檢驗機制是否獨立存在。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0507",
+ "ts": "2026-07-30T00:08:12"
+}

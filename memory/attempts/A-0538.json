@@ -1,0 +1,88 @@
+{
+ "round": 35,
+ "category": "attention_cash_quality_confirmation",
+ "hypothesis": "成交金額剛開始放大（delta(amt_21,6)為正）代表市場關注度剛啟動；若此時個股現金流含金量高（ocf_ratio高），代表這波關注是有真實獲利支撐、而非純題材炒作，此類『關注度起漲x真實現金流』的雙重確認較少被現有估值型現金流因子涵蓋。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(ocf_ratio))",
+ "name_zh": "關注現金確認股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(ocf_ratio))",
+  "fhash": "51990fb231268e47",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.04,
+   "decay_pct": 72.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.044,
+    "盤整"
+   ],
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    0.019,
+    "盤整"
+   ],
+   "2016": [
+    0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": 0.1,
+   "生技": -0.02,
+   "半導體": 0.11,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.011,
+   "short_excess_ann": 0.024
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.41,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.13，遠低於預測>0.45，validation更衰減至0.04(decay 72%)。兩個原始訊號(成交金額增速、OCF ratio)本身可能就偏弱，相乘後噪音疊加而非產生確認效果。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用cs_rank相乘表達「雙重確認」時，若任一原始成分訊號本身就弱，相乘反而放大噪音而非確認效應；雙重確認型公式應先驗證各單腳訊號本身有基本強度再組合。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0538",
+ "ts": "2026-07-30T00:34:10"
+}

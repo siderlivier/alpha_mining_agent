@@ -1,0 +1,87 @@
+{
+ "round": 7,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "用周轉率而非波動率縮放距52週高點的距離，可隔離出「接近前高但乏人問津(低周轉)」的錨定效應：股價接近前高卻沒有伴隨高周轉追價，代表突破動能是基本面驅動而非投機炒作，市場對此類低調接近新高的訊號反應不足。",
+ "prediction": "sub-train 產業內 ICIR>0.45；且換手率(訊號變動頻率)低於用vol_21縮放的版本，交易成本更低。",
+ "formula": "cs_rank(sdiv(px_hi252,turn_21))",
+ "name_zh": "低調接近新高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "px_hi252",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(px_hi252,turn_21))",
+  "fhash": "a304bb712de90b6b",
+  "sub_train": {
+   "mean_ic": 0.05,
+   "icir": 0.46
+  },
+  "validation": {
+   "mean_ic": 0.055,
+   "icir": 0.35,
+   "decay_pct": 25.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.068,
+    "多頭"
+   ],
+   "2014": [
+    0.067,
+    "多頭"
+   ],
+   "2015": [
+    0.039,
+    "盤整"
+   ],
+   "2016": [
+    0.059,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.082,
+    "盤整"
+   ],
+   "2019": [
+    0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.076,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": 0.37,
+   "生技": 0.41,
+   "半導體": 0.21,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.071
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.26,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.37
+  },
+  "verdict": "passed"
+ },
+ "diagnosis": "預測ICIR>0.45且換手應優於vol_21縮放版本；實際sub-train ICIR0.46剛好越過門檻，validation0.35、decay25%溫和，換手僅0.26屬低換手，多空兩腿皆正(0.019/0.071)可交易，分產業ICIR穩健(0.21-0.41)。預測與實際高度吻合。",
+ "failure_type": "none",
+ "lesson": "用周轉率而非波動率縮放距高點距離的'低調接近新高'訊號在台股有效，驗證了'低關注度追價力道不足但基本面驅動'的機制。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed",
+ "id": "A-0123",
+ "ts": "2026-07-19T17:59:13"
+}

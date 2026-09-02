@@ -1,0 +1,94 @@
+{
+ "round": 52,
+ "category": "dividend_capacity_quality",
+ "hypothesis": "市場對高殖利率股常一視同仁定價，未區分股利是靠真實營運現金流支撐、還是靠盈餘品質差甚至舉債配息；現金流含金量高(ocf_ratio高)的高股息股，股利可持續性更強但因缺乏成長故事被機構篩選器忽略，屬於價值面被低估的殘餘訊號。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；剔除電子產業後在傳產/金融子樣本仍為正向IC",
+ "formula": "mul(cs_rank(div_yield), cs_rank(ocf_ratio))",
+ "name_zh": "含金股息股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(div_yield), cs_rank(ocf_ratio))",
+  "fhash": "cfe89fa5b7207256",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.072,
+   "icir": 1.04,
+   "decay_pct": -140.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.02,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.077,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.087,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.055,
+   "down_months": 0.042
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.4,
+   "半導體": 0.33,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.17,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.56,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.56 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.43接近預測門檻，validation ICIR暴衝至1.04(衰減-140%)，IC強度預測方向正確且被大幅印證。但預測『多頭腿年化超額>0』完全落空：long_excess=-0.01、short_excess=-0.007，代表rank IC雖強但多空兩端都不賺錢，可能是報酬分布非單調或极端值驅動。最終在stage2因與F-019(現金含金價值股)相關係數0.56被剔除，兩者本質都是『股利/便宜x現金流品質』的價值面訊號。",
+ "failure_type": "duplicate",
+ "lesson": "股利殖利率x現金流品質類複合因子與庫內F-019高度重疊；同時本案顯示IC/ICIR再強也不能省略腿部報酬檢查——多頭腿為負代表即使IC通過, 台股受限放空下該因子仍不可交易。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0790",
+ "ts": "2026-08-14T01:18:09"
+}

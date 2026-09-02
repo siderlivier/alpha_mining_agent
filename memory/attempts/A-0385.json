@@ -1,0 +1,84 @@
+{
+ "round": 25,
+ "category": "short_interest_motive_disentanglement",
+ "hypothesis": "台股融券常用於可轉債/權證避險而非單純看空；外資同時淨買超時，高券資比更可能是避險性放空而非知情放空，此類股票被錯殺後隨避險平倉修正；外資淨賣超時的高券資比才是真正知情放空。市場未區分放空動機造成系統性誤判。",
+ "prediction": "sub-train ICIR > 0.45；外資淨買超子集中高券資比股票IC顯著為正，外資淨賣超子集中高券資比股票IC為負，兩子集方向相反。",
+ "formula": "cs_rank(if_else(greater(frgn_net_21,0), short_margin_ratio, neg(short_margin_ratio)))",
+ "name_zh": "券資避險錯殺",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(frgn_net_21,0), short_margin_ratio, neg(short_margin_ratio)))",
+  "fhash": "5b734e5fbbf487dc",
+  "sub_train": {
+   "mean_ic": 0.006,
+   "icir": 0.07
+  },
+  "validation": {
+   "mean_ic": 0.007,
+   "icir": 0.08,
+   "decay_pct": -8.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.03,
+    "多頭"
+   ],
+   "2015": [
+    -0.015,
+    "盤整"
+   ],
+   "2016": [
+    -0.011,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.016,
+    "盤整"
+   ],
+   "2019": [
+    -0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.013,
+   "down_months": -0.011
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": -0.03,
+   "半導體": 0.02,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.033,
+   "short_excess_ann": 0.047
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.55,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR預測>0.45，實際0.07未達標。診斷未拆分外資買超/賣超子集各自IC，無法直接驗證『兩子集方向相反』的核心預測；金融業industry_icir最高(0.11)方向上與避險敘事可疑相符但非決定性證據。覆蓋率0.62偏低。",
+ "failure_type": "expression_bad",
+ "lesson": "條件式(if_else)因子若不附帶依條件分組的IC拆解，就無法判斷核心分岔假說是否成立；此類因子應先用兩個獨立子集因子分別測IC再合併判斷。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0385",
+ "ts": "2026-07-28T18:41:52"
+}

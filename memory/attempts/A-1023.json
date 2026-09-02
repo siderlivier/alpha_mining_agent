@@ -1,0 +1,90 @@
+{
+ "round": 67,
+ "category": "quality_confirmed_breakout",
+ "hypothesis": "股價逼近 52 週高點時，若同時應計項偏低（盈餘乾淨），代表這波創高有真實現金獲利支撐而非炒作或盈餘美化。市場對『創高』有錨定與追高偏誤但不區分品質，對『品質確認過的創高』定價不足；這類股回檔較抗跌、續航力較強。",
+ "prediction": "sub-train ICIR > 0.35；多頭腿年化超額 > 0；與 F-016、F-008、F-006 之 |ρ| < 0.5；下跌月 IC 為正。",
+ "formula": "mul(cs_rank(px_hi252), cs_rank(neg(accruals)))",
+ "name_zh": "乾淨創高股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(px_hi252), cs_rank(neg(accruals)))",
+  "fhash": "ce3be0eda19d5410",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.059,
+   "icir": 0.61,
+   "decay_pct": -56.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.009,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.079,
+    "盤整"
+   ],
+   "2016": [
+    0.038,
+    "多頭"
+   ],
+   "2017": [
+    0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.078,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.063,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.42,
+   "半導體": 0.23,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.066,
+   "short_excess_ann": 0.031
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.28,
+  "stage2_culprit": {
+   "factor": "R-020",
+   "rho": 0.67,
+   "factor_name": "距年高點",
+   "factor_desc": "股價 / 252 日高點 − 1，越接近新高越大"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 R-020 |ρ|=0.67 > 0.5"
+ },
+ "diagnosis": "因子強：sub-train ICIR 0.39、val 0.61、逐年穩定、多頭腿+6.6%>短腿，預測的品質面幾乎全中，唯 cond_ic 跌月僅 0.014 未達『跌月為正且顯著』。死於與 R-020『距年高點』ρ=0.67：rank 相乘讓 px_hi252 主導，neg(accruals) 疊加沒把複合體拉離裸 52 週高點因子。假設(品質確認過的創高)可能仍成立，只是被錨定因子稀釋。",
+ "failure_type": "expression_bad",
+ "lesson": "用『強錨定因子 rank × 品質 rank』相乘做複合，複合體會維持與錨定因子 ρ≈0.65；要保留品質維度的增額資訊，須在錨定因子高分池內單獨排品質，或先對錨定因子殘差化再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-1023",
+ "ts": "2026-09-02T01:09:58"
+}

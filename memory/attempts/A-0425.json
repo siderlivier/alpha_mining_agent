@@ -1,0 +1,87 @@
+{
+ "round": 27,
+ "category": "volume_surge_reversal",
+ "hypothesis": "成交金額相對自身12個月均值大幅放大，多半反映短期投機性關注度暴增（消息面炒作、社群討論發酵），而非長期資金的理性布局；台股以散戶為交易主力，此類注意力驅動的爆量行為常在短期內快速消退，隨後價格向爆量前的正常水準修正，形成放量後的均值回歸。",
+ "prediction": "sub-train ICIR>0.45；爆量分組（比值最高）後續一個月報酬應顯著低於正常量分組；此負向關係應在四大產業方向一致。",
+ "formula": "cs_rank(sdiv(amt_21, ts_mean(amt_21,12)))",
+ "name_zh": "爆量後回歸",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(amt_21, ts_mean(amt_21,12)))",
+  "fhash": "99a5cbe94c5d07cb",
+  "sub_train": {
+   "mean_ic": -0.017,
+   "icir": -0.16
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.12,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.031,
+    "盤整"
+   ],
+   "2013": [
+    -0.024,
+    "多頭"
+   ],
+   "2014": [
+    -0.049,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    -0.001,
+    "多頭"
+   ],
+   "2018": [
+    0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.009,
+   "down_months": -0.016
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": -0.16,
+   "半導體": -0.09,
+   "金融": -0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.025,
+   "short_excess_ann": 0.03
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45、爆量分組後續報酬顯著更差、四產業方向一致；實際四產業確實全部同向為負(電子-0.04、生技-0.16、半導體-0.09、金融-0.04)，方向預測命中，但強度普遍過弱(sub-train icir僅-0.16)不足以通過門檻。驗證期icir轉正0.12，方向不穩定。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "爆量後均值回歸方向在四產業一致但強度過弱且訓練/驗證方向不穩定，屬「方向對但強度不足」的弱訊號，非公式表達問題（amt_21/ts_mean(amt_21,12)已是標準表達），不建議重試同一表達方式。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0425",
+ "ts": "2026-07-28T19:08:22"
+}

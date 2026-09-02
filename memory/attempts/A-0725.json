@@ -1,0 +1,90 @@
+{
+ "round": 47,
+ "category": "sustainable_earnings_growth_confirmation",
+ "hypothesis": "EPS年增率高可能來自業外一次性損益，若同時淨利率呈現持續改善趨勢，代表獲利成長來自本業結構性改善而非一次性項目；市場對EPS數字反應直接，卻未充分區分成長來源的品質差異。",
+ "prediction": "sub-train ICIR > 0.45；此因子IC應優於單獨eps_yoy排序；多頭腿年化超額報酬 > 0。",
+ "formula": "mul(cs_rank(eps_yoy), cs_rank(ts_slope(net_margin,6)))",
+ "name_zh": "本業成長確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(eps_yoy), cs_rank(ts_slope(net_margin,6)))",
+  "fhash": "c484539d91b2505b",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.53
+  },
+  "validation": {
+   "mean_ic": 0.047,
+   "icir": 0.8,
+   "decay_pct": -51.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.046,
+    "多頭"
+   ],
+   "2014": [
+    0.04,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    0.036,
+    "多頭"
+   ],
+   "2017": [
+    0.029,
+    "多頭"
+   ],
+   "2018": [
+    0.039,
+    "盤整"
+   ],
+   "2019": [
+    0.055,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.047,
+   "down_months": 0.029
+  },
+  "industry_icir": {
+   "電子": 0.65,
+   "生技": 0.46,
+   "半導體": 0.14,
+   "金融": 0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.068
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.31,
+  "stage2_culprit": {
+   "factor": "F-022",
+   "rho": 0.64,
+   "factor_name": "生技穩健成長",
+   "factor_desc": "生技股EPS成長相對自身波動穩定，代表已脫離燒錢賭博期、進入穩定收成階段。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-022 |ρ|=0.64 > 0.5"
+ },
+ "diagnosis": "預測全部成立：sub-train ICIR 0.53(>0.45)、優於單獨eps_yoy(電子產業ICIR達0.65)、多頭腿正(0.046)。獲利成長品質確認機制獲驗證，但死於stage2，與庫內F-022(生技穩健成長)相關係數0.64——通用市場版'EPS成長x淨利率趨勢'已被生技利基版本覆蓋。",
+ "failure_type": "duplicate",
+ "lesson": "通用市場版的獲利成長品質確認因子與庫內生技利基版本(F-022)高度重疊，該主題的訊號空間可能已被特定產業版本占滿。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0725",
+ "ts": "2026-08-12T14:54:09"
+}

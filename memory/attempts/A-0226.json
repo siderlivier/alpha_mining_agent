@@ -1,0 +1,87 @@
+{
+ "round": 14,
+ "category": "neglected_firm_attention_decay",
+ "hypothesis": "經典『被忽略公司效應』：成交金額相對自身年均值持續下滑，代表市場關注度與法人覆蓋度下降，資訊擴散速度變慢；一旦基本面訊息浮現，重新評價會滯後但幅度更大，此機制以成交金額（關注度）為核心，不同於低波動異常(F-005)聚焦於價格變異度。",
+ "prediction": "formula數值越高（近期成交金額高於自身年均值）預期報酬越低，即direction=neg；sub-train ICIR > 0.4；decay < 30%",
+ "formula": "cs_rank(sub(amt_21, ts_mean(amt_21,12)))",
+ "name_zh": "冷落股回神",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(amt_21, ts_mean(amt_21,12)))",
+  "fhash": "092149b4550a960e",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.081,
+    "盤整"
+   ],
+   "2013": [
+    0.007,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    -0.02,
+    "多頭"
+   ],
+   "2017": [
+    -0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.015,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": -0.03,
+   "半導體": -0.03,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": 0.067
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.43,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向neg（高成交金額→低報酬，即冷落股補漲），實際long leg（低關注度股票）僅-0.01近乎持平，並未出現預測的補漲正向超額報酬；反而short leg（高關注度股）超額報酬達6.7%，代表『高關注度股票被過度追捧後修正』的空頭腿成立，但『被忽略股票補漲』那一半沒有發生。cond_ic在漲跌月符號還相反(0.012 vs -0.035)，方向不穩定。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『被忽略公司效應』的補漲腿本輪未獲驗證，只有『高關注度股超漲後修正』的空頭腿有訊號，但台股放空限制使該半邊機制難以直接交易；下次測關注度類因子應把驗證重心放在多頭腿是否獨立為正，而非看整體ICIR。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0226",
+ "ts": "2026-07-21T12:11:51"
+}

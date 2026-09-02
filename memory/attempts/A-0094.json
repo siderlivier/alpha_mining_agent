@@ -1,0 +1,87 @@
+{
+ "round": 5,
+ "category": "neglected_firm_liquidity_effect",
+ "hypothesis": "週轉率相對自身兩年中位數大幅下降，代表市場對該股票的關注度正在消退，成為「被遺忘的股票」(neglected firm effect)；當這類股票未來出現任何正面訊息時，由於交易不活躍、法人研究覆蓋少，資訊擴散速度慢，價格對利多消息反應存在延遲，中期報酬容易偏高。",
+ "prediction": "sub-train ICIR > 0.45；此因子不得與F-005(低波動)混淆，相關係數應 < 0.5；月換手率應 < 0.5。",
+ "formula": "cs_rank(sub(ts_med(turn_21,12), turn_21))",
+ "name_zh": "被遺忘股效應",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ts_med(turn_21,12), turn_21))",
+  "fhash": "07c6968281fa5d6f",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": -0.007,
+   "icir": -0.1,
+   "decay_pct": 147.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.047,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    -0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.013,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.15,
+   "半導體": 0.07,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.042,
+   "short_excess_ann": 0.016
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.38,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": -0.15
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.21 < 0.45; validation ICIR -0.1 < 0.3; validation 衰減 147% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "這是本輪最決定性的失敗：IC符號在sub-train(0.21)到validation(-0.10)完全反轉，decay 147%，且可交易的多頭腿（週轉率下降股）超額報酬為負(-0.042)——即使效果真實存在，在台股不能放空的限制下也無法交易。『被遺忘股』機制在此完全不成立。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "週轉率下降/被遺忘股代理變數在此資料集沒有穩健可交易的邊際（IC符號不穩定、多頭腿為負），此機制應降為低優先。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0094",
+ "ts": "2026-07-19T17:32:32"
+}

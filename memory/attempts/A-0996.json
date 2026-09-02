@@ -1,0 +1,90 @@
+{
+ "round": 65,
+ "category": "attention_growth_confirmation_early_stage",
+ "hypothesis": "成交金額相對半年前明顯放大，代表市場關注度剛開始上升(尚處早期擴散階段)；若此時營收年增率同步為正，代表這波關注是被真實基本面驅動而非炒作雜訊，由於機構研究覆蓋與資金配置調整需要時間，關注度剛啟動、尚未充分擴散到全市場的階段仍存在資訊落差可供捕捉。",
+ "prediction": "sub-train ICIR > 0.4；訊號應在關注度上升後1-2個月內IC達峰後衰減；與F-013/F-017相關係數|ρ|<0.5。",
+ "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(rev_yoy))",
+ "name_zh": "早期關注度成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(rev_yoy))",
+  "fhash": "64e2592f525d263f",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.24,
+   "decay_pct": 21.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.044,
+    "盤整"
+   ],
+   "2016": [
+    0.037,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.032,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.48,
+   "生技": 0.02,
+   "半導體": 0.25,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": 0.051,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.46,
+  "stage2_culprit": {
+   "factor": "F-017",
+   "rho": 0.53,
+   "factor_name": "外資認證營收動能",
+   "factor_desc": "外資買超又逢營收成長，電子供應鏈的資金與基本面雙重確認訊號最可信。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-017 |ρ|=0.53 > 0.5"
+ },
+ "diagnosis": "預測 ICIR>0.4，實際 0.3 未達標；validation 0.24、多頭腿+5.1% 但底部腿+7.9% 更高(極端端倒掛)。ρ=0.53 撞 F-017(外資認證營收動能)。delta(amt_21,6)×rev_yoy『量能擴張+營收成長』與『外資買超+營收成長』重疊，成交量成長與外資買超本就高相關。",
+ "failure_type": "duplicate",
+ "lesson": "『關注度/量能成長 × 基本面確認』的雙確認組合庫內已有多個變體(F-013/F-017)，成交量成長≈外資買超；要進此空間需用更早期或另類的關注度代理(如券商研究覆蓋變化)並確認正交。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0996",
+ "ts": "2026-09-02T00:32:52"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 66,
+ "category": "cash_flow_quality_trend",
+ "hypothesis": "先前現金流品質假說皆敗於短窗（6 個月）差分捕捉到一次性應收/存貨時點效應。改用 12 個月營業現金流/淨利比的線性斜率過濾單期雜訊，捕捉盈餘含金量的趨勢性提升；市場對損益表獲利反應快、對現金流品質的緩慢改善長期忽視。單獨測 OCF 品質腿、不與 neg(accruals) 交乘以免退化為既有應計因子。",
+ "prediction": "sub-train ICIR > 0.4；decay < 20%；逐年 IC 至少 6/8 年為正；與 F-006、F-012、F-019 之 |ρ| < 0.5；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+ "name_zh": "現金品質斜率",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(ocf_ratio,12))",
+  "fhash": "df7f6e9bc413f841",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.25
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.029,
+    "盤整"
+   ],
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    -0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.12,
+   "半導體": -0.06,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 sub-train ICIR>0.4、6/8 年為正,實際 ICIR -0.25、多數年為負、產業全負、雙腿皆負。假說自陳先前現金流品質因子皆敗於短窗雜訊,改用 12 個月斜率仍失敗且轉為明確負向。累積證據(短窗差分、長窗斜率)一致不利,非單期時點問題。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金流品質的『趨勢/斜率』方向在台股已多次(短窗、長窗)證偽,建議此方向進禁忌、暫停投入。若日後仍要試,改測 ocf_ratio 的『水準』搭配產業中性化,並確認不與既有應計因子共線,而非再做各種差分/斜率變形。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-035",
+ "id": "A-1003",
+ "ts": "2026-09-02T00:51:49"
+}

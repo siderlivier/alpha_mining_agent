@@ -1,0 +1,87 @@
+{
+ "round": 16,
+ "category": "neglected_firm_liquidity",
+ "hypothesis": "成交金額長期偏低的股票因缺乏法人研究覆蓋與媒體關注，資訊擴散速度慢、監督誘因不足（Arbel & Strebel 1983忽略效應），導致基本面改善需要更久時間才被市場發現並修正定價，形成持續性的低關注溢價；此機制與F-008(px_hi252/turn_21，捕捉「非炒作式創高」)不同，本因子關注的是長期成交金額水準本身。",
+ "prediction": "sub-train ICIR>0.45；與F-005(低波動)、F-008相關係數需檢查|ρ|<0.5（風險：低amt常與低vol/低turn共線）；生技產業（小型股占比高）industry_icir應相對突出。",
+ "formula": "cs_rank(neg(amt_21))",
+ "name_zh": "冷門低關注股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(amt_21))",
+  "fhash": "ea7db6fa5fca037c",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": 94.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    -0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.4,
+   "半導體": -0.04,
+   "金融": -0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 1.0,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技產業(小型股占比高)應有突出industry_icir，實際生技0.4確實最高，符合忽略效應的產業預測；但sub-train ICIR僅0.11遠低於0.45門檻，且validation暴跌至0.01(decay 94%)。逐年IC從2012-2014持續正值(0.02-0.04)轉為2016年後歸零或轉負(2019 -0.034)，顯示忽略效應可能只存在於早期樣本，近年隨資訊取得成本下降(網路、App普及)而快速消失。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「低關注度溢酬」類假說需檢查其在樣本期內是否隨時間衰退——本次逐年IC從2012年正值系統性遞減到2019年歸零/轉負，暗示該機制在台股可能已隨資訊普及而結構性弱化；未來若再測試關注度類因子，應優先檢驗近3年子樣本而非依賴全期平均。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0252",
+ "ts": "2026-07-21T12:37:07"
+}

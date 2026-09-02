@@ -1,0 +1,92 @@
+{
+ "round": 56,
+ "category": "margin_improvement_attention_catchup",
+ "hypothesis": "當本業獲利率剛開始改善且成交金額同步放大，代表市場剛發現此改善、尚未完全反映在股價；與F-020/F-008類「乏人問津」邏輯相反，此因子捕捉的是剛被注意到、行情仍在早期階段的個股，適用於電子業因法人覆蓋密集、資訊擴散速度快但仍有數月落差。",
+ "prediction": "電子產業子樣本sub-train ICIR>0.4；多頭腿年化超額>0；與C-1/F-020相關係數需<0.5（機制互補而非重複）。",
+ "formula": "mul(cs_rank(delta(op_margin,6)), cs_rank(delta(amt_21,6)))",
+ "name_zh": "電子關注度剛起",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(op_margin,6)), cs_rank(delta(amt_21,6)))",
+  "fhash": "d4345fa6dfb38851",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.05,
+   "decay_pct": 77.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.054,
+    "盤整"
+   ],
+   "2013": [
+    -0.016,
+    "多頭"
+   ],
+   "2014": [
+    0.032,
+    "多頭"
+   ],
+   "2015": [
+    0.086,
+    "盤整"
+   ],
+   "2016": [
+    0.036,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.023,
+   "down_months": 0.013
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.13,
+   "半導體": 0.31,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.061,
+   "short_excess_ann": 0.091
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.45
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.24 < 0.45; validation ICIR 0.05 < 0.3; validation 衰減 77% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測電子業ICIR>0.4，實際sub-train僅0.24、validation崩至0.05且衰減77%（明確過擬合徵兆）；更關鍵的是多空腿方向與敘事相反——空頭腿（尚未被注意端）超額報酬0.091反而高於多頭腿（剛被注意端）0.061，暗示『剛被注意到』並非甜蜜點，反而與同批『冷門乏人問津』家族(如F-020)的邏輯更一致。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『關注度剛起、行情仍早期』的假說未獲支持，多空腿方向甚至相反；本輪證據較支持『持續乏人問津』優於『剛被發現』的敘事，兩者為互斥假設，不應同時假設成立。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0861",
+ "ts": "2026-08-18T23:55:52"
+}

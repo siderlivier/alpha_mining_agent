@@ -1,0 +1,83 @@
+{
+ "round": 15,
+ "category": "turnover_trend_conviction",
+ "hypothesis": "週轉率持續下降但股價仍維持相對高檔，代表短線投機性買盤已逐漸退場、剩下的持股者為信念較堅定的長期投資人，籌碼結構趨於安定；這種「降溫但不破位」的型態代表未來面臨強迫賣壓的風險較低，市場對這種安定性的重新定價通常滯後，因為多數技術面投資人只關注價格而非週轉率的變化速度。",
+ "prediction": "sub-train ICIR > 0.45；與F-008相關係數|ρ| < 0.5；四產業cond_ic至少3個為正；validation衰減 < 40%。",
+ "formula": "cs_rank(neg(ts_slope(turn_21,6)))",
+ "name_zh": "籌碼降溫安定",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_slope(turn_21,6)))",
+  "fhash": "43c26898572a14f9",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.19
+  },
+  "validation": {
+   "mean_ic": -0.005,
+   "icir": -0.09,
+   "decay_pct": 145.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.01,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.038,
+    "多頭"
+   ],
+   "2018": [
+    -0.015,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.14,
+   "半導體": 0.2,
+   "金融": -0.04
+  },
+  "legs": {
+   "long_excess_ann": -0.027,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.35,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.19，validation翻負(-0.09, decay145%)，多頭腿報酬-2.7%為負，直接推翻「籌碼降溫安定=較高報酬」的假設。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "週轉率下降不必然代表信念堅定的長期投資人留下，也可能代表交易熱度退燒後乏人問津（流動性枯竭而非籌碼安定），兩者在數據上難以區分，此形式的降溫指標不可靠。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0244",
+ "ts": "2026-07-21T12:24:47"
+}

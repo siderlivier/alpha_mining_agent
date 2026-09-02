@@ -1,0 +1,84 @@
+{
+ "round": 11,
+ "category": "cash_flow_quality_trend",
+ "hypothesis": "OCF/淨利比值持續改善代表獲利越來越靠真金白銀而非會計估計,這種品質提升不是財報頭條數字,市場消化慢;若同時應計項偏高則此趨勢不可信,需扣除應計項干擾才能抓到真實現金流品質改善的alpha。",
+ "prediction": "sub-train ICIR>0.45;下跌月IC不低於上漲月(現金流品質在空頭更受重視);與F-006相關係數<0.5",
+ "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)), cs_rank(accruals))",
+ "name_zh": "現金流淨化動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)), cs_rank(accruals))",
+  "fhash": "0b87a30806b49a14",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.37,
+   "decay_pct": -182.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.013,
+    "多頭"
+   ],
+   "2015": [
+    0.024,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": 0.13,
+   "半導體": 0.11,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.006,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且下跌月IC不低於上漲月，實際sub-train ICIR僅0.13未達門檻(stage1淘汰)，但validation ICIR反而更高(0.37,decay -182%代表後期變強)，顯示機制可能存在但訓練期雜訊蓋過訊號。下跌月IC=0.0不如上漲月0.016，與『空頭更重視現金流品質』方向相反。用兩個獨立rank相減(sub)的組合方式可能無法乾淨表達『扣除應計干擾後的現金流改善』。",
+ "failure_type": "expression_bad",
+ "lesson": "直接rank相減做正交化效果通常弱於條件式(if_else)或殘差化；且validation比sub-train強的個案值得換一個更貼近『現金流品質改善事件』的條件式表達重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0175",
+ "ts": "2026-07-21T11:33:49"
+}

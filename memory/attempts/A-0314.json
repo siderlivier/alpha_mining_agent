@@ -1,0 +1,83 @@
+{
+ "round": 20,
+ "category": "earnings_stability_quality",
+ "hypothesis": "EPS年增率波動度低代表公司獲利具高度可預測性與穩定的商業模式。分析師與散戶普遍偏好高波動、具故事性的成長股，對缺乏波動亮點的穩定獲利股缺乏關注，形成長期的『無聊股折價』行為偏誤。",
+ "prediction": "sub-train ICIR > 0.45；下跌月IC與上漲月IC皆為正（防禦特性）；與F-004相關係數 < 0.5。",
+ "formula": "cs_rank(neg(ts_std(eps_yoy,6)))",
+ "name_zh": "盈餘穩定溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(eps_yoy,6)))",
+  "fhash": "8efcb277e8b90a20",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.068,
+   "icir": 0.97,
+   "decay_pct": -578.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.047,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.031,
+    "盤整"
+   ],
+   "2016": [
+    0.026,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.081,
+    "盤整"
+   ],
+   "2019": [
+    0.054,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.037,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.13,
+   "半導體": 0.24,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45且防禦性(上漲/下跌月皆正)，實際sub-train僅0.14，但validation暴增到0.97(decay-578%)，同時多空兩腿報酬幾乎為零(-0.5%/-0.1%)。IC與leg報酬完全脫鉤，顯示這個validation端的高ICIR很可能是少數尾端月份或非單調排序造成的統計假象，而非真實可交易的溢價。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『無聊股折價』假說在leg層級找不到任何可交易報酬，即使rank IC在validation端异常升高；rank IC與leg報酬脫鉤時應優先信任leg報酬，不宜僅憑IC數字判斷因子有效。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0314",
+ "ts": "2026-07-21T13:24:55"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 53,
+ "category": "illiquidity_premium",
+ "hypothesis": "機構法人受規模與流動性限制，長期避開日均成交金額過低的股票，這類股票缺乏法人資金追捧與研究覆蓋，投資人需要流動性風險溢酬才願意持有；用12個月長窗平滑排除單月爆量雜訊，捕捉結構性而非暫時性的流動性缺口，此為獨立流動性風險定價機制，非如F-020/F-013僅作為確認腿使用。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(低量端)年化超額報酬顯著>0；此效應在金融產業最弱，因金融股法規要求高關注度與法人覆蓋密度高，流動性溢酬結構性較低。",
+ "formula": "cs_rank(ts_mean(amt_21, 12))",
+ "name_zh": "低量流動性溢酬",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(amt_21, 12))",
+  "fhash": "b9d2b30160dfc6ea",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.03
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.001,
+    "盤整"
+   ],
+   "2013": [
+    -0.028,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.039,
+    "盤整"
+   ],
+   "2019": [
+    0.035,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.024,
+   "down_months": 0.051
+  },
+  "industry_icir": {
+   "電子": -0.17,
+   "生技": -0.35,
+   "半導體": 0.07,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": -0.046,
+   "short_excess_ann": -0.065
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.04,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45完全落空(實際sub-train -0.03、validation -0.01，接近零)；預測金融業效應最弱，但實際金融業ICIR=0.23為四產業最高，「法規透明度高→溢酬低」的機制方向反了；多空腿超額報酬皆為負，顯示12個月超長平滑後幾乎無方向性訊號，amt水準可能已被規模效應主導。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "12個月超長窗平滑的「量能水準」類因子在台股容易被規模效應淹沒，且產業分佈常與法規/覆蓋度直覺相反；測流動性溢酬應先控制市值後看殘差，而非直接排序原始量能水準。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0804",
+ "ts": "2026-08-15T11:33:03"
+}

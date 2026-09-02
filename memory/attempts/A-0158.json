@@ -1,0 +1,84 @@
+{
+ "round": 9,
+ "category": "electronics_inventory_cycle_inflection",
+ "hypothesis": "電子/半導體供應鏈存在典型存貨去化/回補循環，月增率是偵測循環拐點最敏感的高頻指標，年增率因基期效應反應遲緩；當月增率排名大幅超前年增率排名時，代表通路端已出現急單回補、需求由谷底反轉，但市場與分析師模型多以落後的年增率趨勢外推，導致存貨回補初期的價格動能被低估，此機制僅在具庫存循環特性的電子供應鏈成立。",
+ "prediction": "整體sub-train ICIR > 0.4；電子/半導體產業內ICIR應 > 0.5且為四產業最高；訊號在年增率仍弱、月增率已回升的交叉期最強。",
+ "formula": "sub(cs_rank(rev_mom),cs_rank(rev_yoy))",
+ "name_zh": "存貨回補訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(rev_mom),cs_rank(rev_yoy))",
+  "fhash": "7e367a60409bed36",
+  "sub_train": {
+   "mean_ic": -0.034,
+   "icir": -0.54
+  },
+  "validation": {
+   "mean_ic": -0.011,
+   "icir": -0.19,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.026,
+    "多頭"
+   ],
+   "2015": [
+    -0.047,
+    "盤整"
+   ],
+   "2016": [
+    -0.036,
+    "多頭"
+   ],
+   "2017": [
+    -0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.017,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.026,
+   "down_months": -0.031
+  },
+  "industry_icir": {
+   "電子": -0.63,
+   "生技": -0.4,
+   "半導體": -0.36,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.053,
+   "short_excess_ann": -0.064
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.71,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測方向完全反轉且幅度顯著：預期rev_mom領先rev_yoy代表存貨回補訊號應為正，實際sub-train ICIR -0.54（全批最負之一），電子產業-0.63最負，驗證了「電子/半導體效果最強」的產業預測（半導體-0.36、金融+0.03），但方向徹底相反。這暗示月增率大幅超前年增率更可能代表急單拉貨/塞貨的短期異常，隨後容易均值回歸甚至反轉走弱，而非產業谷底翻轉的訊號，也可能反映市場對這類『月增率异常』已有效定價為警訊而非利多。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "月增率大幅領先年增率在電子供應鏈中是負面訊號（可能是拉貨透支/基期效應誤讀），而非存貨回補的利多訊號；下次可直接提交反向版本測試『急單透支後續走弱』假說，並嘗試用真實庫存周轉天數等資料替代營收增速交叉法去偵測循環拐點。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0158",
+ "ts": "2026-07-20T17:18:53"
+}

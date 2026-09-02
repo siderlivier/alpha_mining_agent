@@ -1,0 +1,92 @@
+{
+ "round": 20,
+ "category": "momentum_term_structure",
+ "hypothesis": "法人建倉是緩慢、跨季度分批進行的過程，會反映在較長窗口（半年到一年）的價格動能中；若長期動能明顯高於近一季動能，代表股價上漲並非近期追價造成，而是底層慢速資金流入的延續，此類非過熱的長期動能延續性被短視交易者忽略。",
+ "prediction": "sub-train ICIR > 0.45；validation期decay幅度 < 50%；與F-008相關係數 < 0.5。",
+ "formula": "cs_rank(sub(mom_240, mom_60))",
+ "name_zh": "長短動能價差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.25
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "預測ICIR>0.45、decay<50%，實際sub-train0.36/val0.19雖未達0.45絕對門檻，但decay 47%確實壓在50%門檻內、corr與F-012僅0.25不重複、上漲/下跌月同號且多頭腿仍為正(2.2%)。整體是本輪穩健性最符合預期、只是強度不足的案例。",
+ "failure_type": "expression_bad",
+ "lesson": "長短動能價差(mom_240-mom_60)在穩定性指標(decay、同號、可交易多頭腿)上全部符合預期，只是絕對IC強度不足，屬於視窗參數待調整而非機制證偽，值得換視窗組合重試而非放棄。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0312",
+ "ts": "2026-07-21T13:24:55"
+}

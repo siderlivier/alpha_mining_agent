@@ -1,0 +1,88 @@
+{
+ "round": 42,
+ "category": "dividend_capacity_upgrade",
+ "hypothesis": "投資人對股利政策存在習慣性錨定；淨值便宜公司的股利殖利率出現趨勢性上升，代表管理層對配息能力信心增強，但市場因錨定舊配息水準反應遲緩，此為配息能力升級被低估的訊號，強調趨勢變化而非靜態水準。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與庫內既有殖利率因子相關性|ρ|<0.5；上漲月與下跌月IC應接近(非防禦型敘事)。",
+ "formula": "mul(cs_rank(delta(div_yield,12)), cs_rank(bp))",
+ "name_zh": "股利能力升級",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp",
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(div_yield,12)), cs_rank(bp))",
+  "fhash": "6d4240cfaa6a581c",
+  "sub_train": {
+   "mean_ic": 0.031,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.068,
+   "icir": 0.59,
+   "decay_pct": -97.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.035,
+    "多頭"
+   ],
+   "2015": [
+    0.029,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.067,
+    "盤整"
+   ],
+   "2019": [
+    0.069,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.046,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": 0.46,
+   "半導體": 0.07,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.038,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.65,
+  "turnover_m": 0.17,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.44
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.3 < 0.45"
+ },
+ "diagnosis": "預測ICIR>0.45；sub-train僅0.30被stage4門檻淘汰，但validation達0.59（decay -97%），cond_ic上漲(0.046)與下跌(0.032)月相對平衡，符合『配息能力升級而非防禦型』的敘事，且與F-021相關性0.44已通過stage2。這是本輪第三例train弱、validation強的模式（同C-2、C-5、C-11）。",
+ "failure_type": "expression_bad",
+ "lesson": "與C-2/C-5/C-11共同構成train弱validation強的可重複模式，見全域規則記錄。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0646",
+ "ts": "2026-08-12T09:45:44"
+}

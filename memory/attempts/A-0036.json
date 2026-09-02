@@ -1,0 +1,83 @@
+{
+ "round": 1,
+ "category": "quality_value_financial",
+ "hypothesis": "金融業受資本適足率等監理限制，成長受限，市場慣以純淨值股價比（B/P）評價金控股，卻忽略ROE代表的資本使用效率差異；法人資金又偏好大型權值金控，使中小型高ROE、低估值金控股的重新評價存在延遲。",
+ "prediction": "產業內rank IC為正，sub-train ICIR>0.3，且效應應集中於金融產業內部（金融產業內IC顯著高於半導體，因半導體屬輕資產、B/P訊息量低）。",
+ "formula": "cs_rank(mul(bp, roe))",
+ "name_zh": "金融品質價值",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(bp, roe))",
+  "fhash": "3ad4fdd24a2a7b73",
+  "sub_train": {
+   "mean_ic": 0.071,
+   "icir": 0.57
+  },
+  "validation": {
+   "mean_ic": 0.098,
+   "icir": 0.91,
+   "decay_pct": -62.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.032,
+    "多頭"
+   ],
+   "2014": [
+    0.094,
+    "多頭"
+   ],
+   "2015": [
+    0.087,
+    "盤整"
+   ],
+   "2016": [
+    0.088,
+    "多頭"
+   ],
+   "2017": [
+    0.093,
+    "多頭"
+   ],
+   "2018": [
+    0.061,
+    "盤整"
+   ],
+   "2019": [
+    0.134,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.095,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.77,
+   "生技": 0.66,
+   "半導體": 0.36,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.069,
+   "short_excess_ann": 0.053
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.24,
+  "verdict": "passed"
+ },
+ "diagnosis": "整體強度預測保守：實際sub-train ICIR 0.57、validation 0.91遠超預測門檻0.3，decay為負代表樣本外更強。但核心敘事(效應應集中在金融產業內部)完全不成立——金融產業ICIR僅0.21為四產業最低，反而電子(0.77)、生技(0.66)最強。bp×roe實為跨產業普適的「品質價值」因子，通過只是因為公式本身穩健，並非驗證假設中的金融特定機制。",
+ "failure_type": "none",
+ "lesson": "見learnings_additions（規則C：passed不代表假設敘事被驗證）。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed",
+ "id": "A-0036",
+ "ts": "2026-07-18T21:37:41"
+}

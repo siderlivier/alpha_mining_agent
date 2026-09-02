@@ -1,0 +1,88 @@
+{
+ "round": 29,
+ "category": "liquidity_shock_reversal",
+ "hypothesis": "短期內(20日)價格大幅上漲但成交金額並未放大，代表這波漲勢缺乏交易量佐證、參與者稀少，可能是消息面雜訊或流動性稀薄造成的價格跳動，而非資金認可的趨勢。此類「量價背離式衝高」在缺乏成交量確認下持續性低，容易於下月回落，屬於低流動性環境下過度反應不易被套利力量快速修正的行為偏誤。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿（訊號低分端，即未出現此背離者）年化超額報酬 > 0。",
+ "formula": "cs_rank(neg(sdiv(mom_20,amt_21)))",
+ "name_zh": "量價背離衝高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(mom_20,amt_21)))",
+  "fhash": "3fd717662d19a089",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": 0.003,
+   "icir": 0.05,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.03,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    -0.012,
+    "多頭"
+   ],
+   "2018": [
+    -0.01,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.003,
+   "down_months": -0.007
+  },
+  "industry_icir": {
+   "電子": -0.19,
+   "生技": 0.09,
+   "半導體": 0.01,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.006,
+   "short_excess_ann": -0.066
+  },
+  "coverage": 0.99,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train ICIR僅-0.01，等同於零效果；逐年IC正負交錯無規律（2013年+0.039、2017年-0.012），產業別上電子甚至-0.19，看不出『量價背離致衝高回落』的系統性存在。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "20日動能與21日成交金額的比值型量價背離指標在台股全市場層級測不出訊號，此類『缺乏量能佐證的上漲』假說可能需要更極端的樣本篩選（如僅小型股/低流動性池）才有機會顯現，而非全市場線性排序。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0446",
+ "ts": "2026-07-29T23:14:31"
+}

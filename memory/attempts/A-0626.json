@@ -1,0 +1,90 @@
+{
+ "round": 41,
+ "category": "attention_breakout_confirmation",
+ "hypothesis": "成交金額相對6個月前明顯放大（而非單純維持高／低水準），代表市場正處於「從被忽略到被發現」的轉折點；若此時EPS年增率同步為正，代表這波關注度提升是基本面驅動而非投機炒作，屬於資訊剛開始擴散、尚未被充分定價的階段（漸進資訊擴散論），有別於F-008/F-020關注靜態水準、或F-016/F-017關注價格與獲利確認的既有因子。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；月換手率<0.4；與F-016/F-017相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(eps_yoy))",
+ "name_zh": "量能突破成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(amt_21,6)), cs_rank(eps_yoy))",
+  "fhash": "dcc0b326ca757898",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.34,
+   "decay_pct": -14.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.04,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": 0.016
+  },
+  "industry_icir": {
+   "電子": 0.35,
+   "生技": 0.1,
+   "半導體": -0.01,
+   "金融": 0.28
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.39,
+  "stage2_culprit": {
+   "factor": "F-022",
+   "rho": 0.6,
+   "factor_name": "生技穩健成長",
+   "factor_desc": "生技股EPS成長相對自身波動穩定，代表已脫離燒錢賭博期、進入穩定收成階段。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-022 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "預測大致準確：驗證期decay -14%（無衰減）、多頭腿+0.042為正、換手0.39<0.4，均命中；唯sub-train ICIR 0.30未達預測的0.45門檻。真正死因是stage2與F-022（生技穩健成長）相關性0.60，但候選當初只預防F-016/F-017，完全沒料到F-022才是元兇——顯示eps_yoy這個確認腿容易和既有『EPS成長穩定度』類因子撞在一起。",
+ "failure_type": "duplicate",
+ "lesson": "用EPS成長作為『非炒作確認腿』時，容易與庫內既有EPS穩定/成長類因子（如F-022）高度相關，即使主訊號（放量突破）不同；下次做相關性預測時不能只挑『表面主題相同』的因子，還要考慮『次要確認腿』本身是否已被庫內其他因子當作主訊號使用。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0626",
+ "ts": "2026-08-12T09:31:55"
+}

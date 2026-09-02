@@ -1,0 +1,84 @@
+{
+ "round": 19,
+ "category": "institutional_disagreement_signal",
+ "hypothesis": "外資與投信資金屬性不同——外資多為長線基本面驅動的知情交易，投信常受季底作帳、規模排名與績效追逐壓力影響而追高殺低；當外資買超而投信同期未跟進甚至賣超時，代表外資買盤更可能源自真實資訊優勢。",
+ "prediction": "sub-train ICIR>0.4；訊號應在外資買超但投信賣超的子集中最強，該子集多頭腿年化超額報酬>3%。",
+ "formula": "cs_rank(sub(frgn_net_21, trust_net_21))",
+ "name_zh": "外資投信分歧",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(frgn_net_21, trust_net_21))",
+  "fhash": "9818946cc9465001",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": -0.0,
+   "icir": -0.0,
+   "decay_pct": 102.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.008,
+    "多頭"
+   ],
+   "2017": [
+    -0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.015,
+    "盤整"
+   ],
+   "2019": [
+    -0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": 0.04,
+   "生技": 0.04,
+   "半導體": 0.06,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.54,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "假設核心主張訊號應在「外資買超但投信賣超」子集最強，但formula只是全樣本線性差值排序，並未真正isolate該子集，導致sub-train ICIR僅0.13且validation幾乎歸零(decay 102%代表方向已翻轉)，四產業ICIR全部低於0.06毫無差異，多頭腿為負(-2.2%)不可交易。表達方式沒有真正測試到假設核心主張的條件子集效果。",
+ "failure_type": "expression_bad",
+ "lesson": "當假設核心機制是「某條件子集下更強」，不能用簡單線性差值代理，必須用if_else/篩選明確isolate該子集再排序，否則等於沒有真正驗證假設。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0296",
+ "ts": "2026-07-21T13:13:10"
+}

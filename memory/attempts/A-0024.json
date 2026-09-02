@@ -1,0 +1,84 @@
+{
+ "round": 1,
+ "category": "revenue_yoy_acceleration",
+ "hypothesis": "台股月營收公告頻率為全球少見的高頻基本面訊號，但多數投資人僅關注單月YoY標題數字，忽略營收成長是否正在「加速」（二階動量）；此二階訊息需跨月比對才能察覺，屬資訊擴散慢的情境，加速中的公司會被系統性低估，隨後數月逐步重新評價。",
+ "prediction": "全樣本產業內rank IC為正，sub-train ICIR>0.4；效應在半導體/電子（分析師仍以單月數字為主）顯著強於金融（營收非核心指標）；下跌月IC不弱於上漲月（非純景氣循環代理）。",
+ "formula": "cs_rank(sub(rev_yoy, rev_yoy_ma3))",
+ "name_zh": "營收動能加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy",
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_yoy, rev_yoy_ma3))",
+  "fhash": "b4d10432315b7f6d",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.07,
+   "decay_pct": 74.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.01,
+    "多頭"
+   ],
+   "2014": [
+    0.006,
+    "多頭"
+   ],
+   "2015": [
+    0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.023,
+    "多頭"
+   ],
+   "2017": [
+    0.032,
+    "多頭"
+   ],
+   "2018": [
+    0.004,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": 0.36,
+   "生技": 0.03,
+   "半導體": 0.09,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.73,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測全樣本IC>0.4與半導體強效應均未成立；sub-train ICIR僅0.26，在stage1即因IC過低被拒，且validation衰減74%屬嚴重過擬合徵兆。唯一符合預期的是電子產業ICIR達0.36，明顯高於半導體0.09、生技0.03、金融0.10，顯示訊號可能只集中在電子次產業，但整體「加速度」定義(rev_yoy - MA3)訊噪比太低，無法通過全樣本門檻。上漲/下跌月IC差異不大(0.014 vs 0.01)，此點方向預測正確。",
+ "failure_type": "expression_bad",
+ "lesson": "二階動能類假設若只在單一產業(電子)顯著，應直接限縮樣本或加產業條件式表達，而非依賴全樣本rank IC，避免被其他無效產業稀釋訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0024",
+ "ts": "2026-07-18T21:37:41"
+}

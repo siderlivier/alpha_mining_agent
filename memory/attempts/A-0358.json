@@ -1,0 +1,83 @@
+{
+ "round": 23,
+ "category": "inventory_cycle_electronics",
+ "hypothesis": "電子業存貨週期性強，週轉率(turn_21)上升同時毛利率(gross_margin)同步改善，代表需求端真實回溫拉動出貨與訂價能力，而非殺價換量的假性回溫；此機制僅在電子業成立，因其存貨具明顯砍價出清或缺貨漲價的產業特性，金融、生技不具此存貨-定價聯動。",
+ "prediction": "電子產業industry_icir>0.5明顯高於其他產業；全市場sub-train ICIR>0.35；多頭腿超額報酬>0。",
+ "formula": "mul(cs_rank(delta(turn_21,3)), cs_rank(delta(gross_margin,6)))",
+ "name_zh": "電子存貨回溫",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(turn_21,3)), cs_rank(delta(gross_margin,6)))",
+  "fhash": "ff22e6102fc48222",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.28,
+   "decay_pct": -28.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.01,
+    "盤整"
+   ],
+   "2016": [
+    0.042,
+    "多頭"
+   ],
+   "2017": [
+    0.007,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": 0.013
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.17,
+   "半導體": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.034,
+   "short_excess_ann": 0.062
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.22遠低於預測>0.35；電子業industry_icir 0.29雖是四產業最高，但遠低於預測>0.5，且與生技(0.17)、半導體(0.11)差異不夠顯著，產業專屬性未獲確認。多頭腿0.034為正，符合預測，訊號方向未錯，但強度不足。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "存貨週轉率×毛利率同步改善的interaction假設，在3/6個月短視窗下訊號太弱；證據不足以完全判死，機制可能存在但需要更貼近庫存去化真實週期的長視窗才能顯現，值得換表達重試而非直接放棄整個方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0358",
+ "ts": "2026-07-21T14:03:28"
+}

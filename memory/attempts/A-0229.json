@@ -1,0 +1,87 @@
+{
+ "round": 14,
+ "category": "financial_capital_stability",
+ "hypothesis": "金融股受Basel資本適足規範約束，外資對其資本體質變化的評估需要較長時間消化財報與法規揭露；當外資持股比率呈現加速上升趨勢，反映外資對其資本適足性與ROE永續性轉趨樂觀，但以殖利率為主要決策依據的本土法人與散戶反應較慢，形成產業限定的資訊擴散延遲。",
+ "prediction": "金融產業industry_icir > 0.45且明顯高於其他產業；整體sub-train ICIR可能 < 0.3（產業限定屬性）",
+ "formula": "cs_rank(delta(frgn_ratio_d63,3))",
+ "name_zh": "外資佈局金融",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(frgn_ratio_d63,3))",
+  "fhash": "9f00489320a7b8a1",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.47,
+   "decay_pct": -74.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": -0.03,
+   "生技": 0.02,
+   "半導體": 0.08,
+   "金融": 0.37
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.016
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.4,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融產業industry_icir>0.45且明顯高於其他產業、整體ICIR可能<0.3——這個『產業限定』判斷方向完全正確：金融ICIR 0.37遠高於電子(-0.03)/生技(0.02)/半導體(0.08)，且validation ICIR達0.47（decay -74%，不降反升）。唯一落差是金融產業ICIR 0.37未達預測的0.45門檻，且系統用全市場sub-train ICIR(0.27)作stage1門檻，等於用不相關產業的雜訊拖累了本質只該在金融股評估的訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "對明確自陳『產業限定』的假說，應在stage1就用目標產業子樣本的IC做門檻判斷，而非全市場IC；本案是機制被驗證但評估流程用錯分母的案例。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0229",
+ "ts": "2026-07-21T12:11:51"
+}

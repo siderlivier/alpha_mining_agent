@@ -1,0 +1,84 @@
+{
+ "round": 22,
+ "category": "earnings_quality_divergence",
+ "hypothesis": "當EPS年增率大幅超過營業利益年增率時，代表獲利成長主要來自業外收益（處分資產、匯兌利益等一次性項目）而非本業經營改善；市場容易被headline EPS數字吸引而給予過高評價，未充分辨識獲利品質下降，此落差應在未來月份被逐步修正。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(落差小的一端)年化超額報酬>0；與F-006相關係數<0.5。",
+ "formula": "cs_rank(sub(eps_yoy, op_income_yoy))",
+ "name_zh": "業外墊高警訊",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(eps_yoy, op_income_yoy))",
+  "fhash": "c19c38bcb8a8124d",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.06
+  },
+  "validation": {
+   "mean_ic": 0.04,
+   "icir": 0.55,
+   "decay_pct": -749.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    -0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    -0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.06,
+   "半導體": 0.03,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "多頭腿方向命中預測(0.014>0，落差小的一端確實較優)，但sub-train ICIR僅0.06幾乎無訊號，validation ICIR卻達0.55(decay -749%，樣本內外落差極端)，逐年IC正負交錯(2013正、2015負、2017負、2019正)。診斷資訊不足以確認這是真訊號被訓練期雜訊掩蓋，還是validation表現純屬運氣；證據傾向訊號存在但太弱、未標準化，雜訊蓋過訊息。",
+ "failure_type": "expression_bad",
+ "lesson": "EPS年增率減營業利益年增率的原始落差未做波動度標準化，訊噪比過低導致跨年正負不穩定；可比照C-11的sdiv(x, ts_std(x,N))標準化手法重新表達此因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0350",
+ "ts": "2026-07-21T13:51:27"
+}

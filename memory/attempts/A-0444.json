@@ -1,0 +1,94 @@
+{
+ "round": 29,
+ "category": "borrowing_supply_confidence",
+ "hypothesis": "借券量相對融券餘額的比例高，代表借出證券主要用於套利/避險等中性策略而非方向性放空押注（若是看空押注，融券餘額會同步升高，比值不會偏高）。比值偏高反映機構認為個股風險可控、流動性佳、願意出借證券，是隱性的機構信心訊號。過去單獨測試lend_vol或short_margin單腳位均偏弱，兩者比值能分離「純粹放空押注」與「借券套利」兩種截然不同的意涵。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0（訊號需可交易，非僅空頭腿貢獻）。",
+ "formula": "cs_rank(sdiv(lend_vol_21,short_margin_ratio))",
+ "name_zh": "借券套利信心",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(lend_vol_21,short_margin_ratio))",
+  "fhash": "ec7f5f8e3d40146e",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.26,
+   "decay_pct": 19.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.069,
+    "盤整"
+   ],
+   "2013": [
+    0.04,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.039,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.2,
+   "半導體": 0.18,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.43,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.62,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.32，高估了訊號強度；但可交易性預測（多頭腿>0）命中（0.042）。真正死因不在IC強度而在stage2：與F-008(低調接近新高)|ρ|=0.62。兩者概念上都在描述『法人認可、籌碼風平浪靜』的同一群股票，只是一個從借券角度、一個從價量角度切入，本質是同一因子空間的不同包裝。",
+ "failure_type": "duplicate",
+ "lesson": "借券/融券比值類的『機構信心』因子，容易與『價格穩健接近高點但無炒作跡象』類價量因子在股票池上高度重疊，設計新因子前應先檢查是否與F-008同源。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0444",
+ "ts": "2026-07-29T23:14:31"
+}

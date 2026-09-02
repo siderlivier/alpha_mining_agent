@@ -1,0 +1,87 @@
+{
+ "round": 51,
+ "category": "financial_accruals_consistency",
+ "hypothesis": "金融股獲利認列涉及大量主觀判斷(利息收入認列時點、備抵呆帳提存迴轉)，若一家金控應計項目長期波動度低，代表其提存與認列政策穩健一致、不隨季度盈餘壓力任意調整；這種會計穩健度是盈餘品質可信賴的訊號，但因不涉及成長故事而常被市場忽略。",
+ "prediction": "sub-train ICIR > 0.45；金融產業industry_icir應為四產業最高；多頭腿(應計波動最低組)年化超額報酬>0。",
+ "formula": "cs_rank(neg(ts_std(accruals,12)))",
+ "name_zh": "金融提存穩定度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(accruals,12)))",
+  "fhash": "8b79ea0ac3daafc6",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": 0.042,
+   "icir": 0.69,
+   "decay_pct": -89.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.052,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.039
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.29,
+   "半導體": -0.04,
+   "金融": 0.41
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.02
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.13,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.37 < 0.45"
+ },
+ "diagnosis": "sub-train ICIR 0.37些微低於0.45門檻而遭拒，但驗證期ICIR反而提升至0.69(衰減-89%，樣本外變強)，產業別完全命中預測(金融0.41為四產業最高)，多頭腿也為正。逐年IC唯一負值落在2013年(-0.019)，其餘年份穩定正值；2013年恰為台灣上市公司強制採用IFRS首年，會計項目認列與可比性可能因準則轉換而失真，拖累sub-train均值。這是個假說對、產業對、樣本外更強，卻死在早期資料雜訊的案例。",
+ "failure_type": "expression_bad",
+ "lesson": "sub-train期間(2012-2017)涵蓋2013年IFRS強制採用轉換期，會計項目類因子(尤其應計/損益認列)在此年度可能特別雜訊化，拖低sub-train ICIR但不代表假說無效；評估會計品質類因子時應額外檢視『排除2013年』的sub-train ICIR做輔助判斷，避免單一轉換年度誤殺真訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0780",
+ "ts": "2026-08-14T01:05:54"
+}

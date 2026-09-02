@@ -1,0 +1,88 @@
+{
+ "round": 47,
+ "category": "smart_money_retail_divergence",
+ "hypothesis": "當散戶融資餘額下降（去槓桿退場）同時外資轉為淨買超，代表資訊優勢方（外資）與情緒交易方（融資散戶）出現方向分歧；缺乏散戶追捧下的機構買盤更可能反映基本面而非追高情緒，市場對這種「反向共識」訊號反應不足。",
+ "prediction": "sub-train ICIR > 0.45；下跌月IC應顯著高於上漲月IC（危機辨識/防禦特性）；多頭腿年化超額報酬 > 0。",
+ "formula": "cs_rank(sub(ts_mean(frgn_net_21,3), ts_mean(margin_d21,3)))",
+ "name_zh": "外資散戶背離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ts_mean(frgn_net_21,3), ts_mean(margin_d21,3)))",
+  "fhash": "63d5dff6c3b1c6f8",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.28,
+   "decay_pct": 11.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.044,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.25,
+   "生技": 0.19,
+   "半導體": 0.06,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.61,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.31 < 0.45; validation ICIR 0.28 < 0.3"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且下跌月IC應顯著高於上漲月(防禦特性)，實際sub-train僅0.31、validation 0.28未達門檻；且cond_ic方向與預測相反——上漲月IC(0.025)高於下跌月(0.011)，是順勢型而非避險型。但核心方向(外資買超同時融資去化=正報酬)8年全正、decay僅11%、與庫內相關性低(ρ=0.26，未死於stage2)，顯示機制可能成立，只是訊號強度不足跨過門檻。",
+ "failure_type": "expression_bad",
+ "lesson": "外資-融資背離的核心方向穩定為正(8年全正、低衰減)，但'避險/防禦'敘事未獲支持、實為順勢確認；訊號強度不足可能與21日/3月平滑窗口或coverage僅0.61偏低有關。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0715",
+ "ts": "2026-08-12T14:54:09"
+}

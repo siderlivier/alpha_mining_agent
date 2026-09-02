@@ -1,0 +1,83 @@
+{
+ "round": 15,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "相較於庫內F-009使用3月均線平滑後的營收年增率斜率（反應較慢但穩定），直接用單月營收年增率的短窗斜率能更早捕捉到剛開始加速的成長股，尤其電子供應鏈訂單能見度短、月營收公告頻率高，能提供比季頻財報更即時的資訊；由於多數法人仍以季頻財報為主要評估依據，這種高頻加速訊號存在系統性延遲反應窗口。",
+ "prediction": "sub-train ICIR > 0.45；電子/半導體產業industry_icir > 0.5；與F-009相關係數|ρ| < 0.5；月換手率 < 0.4。",
+ "formula": "cs_rank(ts_slope(rev_yoy,3))",
+ "name_zh": "營收急加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_yoy,3))",
+  "fhash": "3697d9e61e0f94e6",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.04,
+   "decay_pct": 83.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.027,
+    "多頭"
+   ],
+   "2017": [
+    0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.011,
+    "盤整"
+   ],
+   "2019": [
+    -0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.011,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": 0.27,
+   "生技": 0.08,
+   "半導體": 0.07,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.011,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.65,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.25，validation幾乎歸零(0.04, decay83%)，電子/半導體industry_icir僅0.27/0.07遠低於預測0.5門檻，月換手0.65遠高於預期；縮短窗口(3期斜率)並未比F-009的3月均線版本更早捕捉訊號，反而放大了月營收本身的雜訊。",
+ "failure_type": "expression_bad",
+ "lesson": "用更短窗口追求「更早」的訊噴，在月營收這種高雜訊資料上容易得不償失；縮窗策略應搭配額外平滑（如中位數而非原始斜率）而非單純減少期數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0240",
+ "ts": "2026-07-21T12:24:47"
+}

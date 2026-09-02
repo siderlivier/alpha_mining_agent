@@ -1,0 +1,83 @@
+{
+ "round": 28,
+ "category": "electronics_inventory_cycle_recovery",
+ "hypothesis": "電子/半導體供應鏈存在典型的去化-回補庫存循環；月營收年增率剛脫離自身過去12個月的低點，代表下游拉貨動能開始回升，但供應鏈能見度不透明、法人channel check更新慢，使市場對這個轉折點反應滯後。",
+ "prediction": "sub-train ICIR>0.45；電子/半導體industry_icir應明顯高於金融/生技；多頭腿年化超額報酬>0；與F-009相關係數<0.5。",
+ "formula": "cs_rank(sub(rev_yoy, ts_min(rev_yoy,12)))",
+ "name_zh": "電子營收落底反彈",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_yoy, ts_min(rev_yoy,12)))",
+  "fhash": "27125562036f3c20",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.28,
+   "decay_pct": 256.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.034,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    -0.029,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": -0.16,
+   "半導體": 0.36,
+   "金融": -0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.041,
+   "short_excess_ann": 0.076
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.39,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，sub-train僅0.18已明顯不足，且validation翻負(-0.28)、decay高達256%，訓練期與驗證期方向完全相反，顯示'脫離12個月營收低點=回補動能'這個訊號在2018-2019(電子業下行年)完全失效甚至反轉。多頭腿(0.041)雖為正但小於空頭腿(0.076)，交易性也偏弱。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "以ts_min/ts_max距離衡量'剛脫離循環底部/頂部'的因子(本案與C-9同類)在本資料集的train/valid切分點恰好跨越電子業2018年景氣轉折，容易出現train/valid方向反轉的高decay案例；這類週期底部反彈類假設對切分時間點特別敏感，需要更長樣本或跨多個景氣循環驗證才能判斷是否為真訊號。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0436",
+ "ts": "2026-07-28T19:19:09"
+}

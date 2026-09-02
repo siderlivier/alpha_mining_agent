@@ -1,0 +1,87 @@
+{
+ "round": 49,
+ "category": "cash_flow_consistency_underpricing",
+ "hypothesis": "現金流量表比損益表更難分析（需拆解營運/投資/融資三段並排除一次性項目），一般投資人因分析成本高而傾向直接使用淨利，忽略現金流相對淨利的長期穩定度。長期現金轉換穩定的公司代表盈餘真實可靠、管理層操縱空間小，此品質訊號因複雜度而被系統性低估。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；與F-006、F-004相關係數皆|ρ|<0.5；效應在低成交金額子集(amt_21後20%)應更強",
+ "formula": "cs_rank(neg(ts_std(ocf_ratio,12)))",
+ "name_zh": "現金流穩定溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(ocf_ratio,12)))",
+  "fhash": "2f394fcbceb70097",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.27,
+   "decay_pct": -29.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.087,
+    "盤整"
+   ],
+   "2013": [
+    0.026,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    -0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.02,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": 0.17,
+   "生技": 0.06,
+   "半導體": 0.1,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.003
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.12,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.21，方向正確但強度不足；validation改善至0.27(decay -29%，訊號穩定甚至略增強，非過擬合)，逐年方向大致一致。多頭腿超額報酬雖正但僅0.007，未達可交易門檻。預測中「低成交金額子集應更強」的交互作用未在本次診斷中被單獨檢驗。",
+ "failure_type": "expression_bad",
+ "lesson": "現金流穩定度品質訊號方向正確且穩定，但單獨使用強度不足；本輪多個籌碼/品質穩定度類因子(C-3/C-5/C-9/C-15)都卡在方向對但ICIR僅0.1-0.3的區間，顯示需要與其他維度交乘才有機會通過，不建議單獨送審。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0746",
+ "ts": "2026-08-14T00:36:43"
+}

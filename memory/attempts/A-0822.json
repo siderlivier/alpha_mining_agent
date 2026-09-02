@@ -1,0 +1,85 @@
+{
+ "round": 54,
+ "category": "revenue_momentum_continuation",
+ "hypothesis": "台股月營收是高頻獨有揭露，但法人預測更新慢；長期維持高分位營收年增率的公司代表成長趨勢已被市場證實卻仍未被完全反映在預估中，訊號應呈現動能延續而非均值回歸。",
+ "prediction": "sub-train ICIR>0.45；上漲月與下跌月IC同號（延續性而非反轉）；與F-009/F-013相關係數|ρ|<0.5。",
+ "formula": "cs_rank(ts_rank(rev_yoy,24))",
+ "name_zh": "營收長期動能股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(rev_yoy,24))",
+  "fhash": "a0ed93ed44c0396d",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.26,
+   "decay_pct": 50.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.047,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.28,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.061,
+   "short_excess_ann": 0.078
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-013",
+   "rho": 0.54,
+   "factor_name": "冷門成長股",
+   "factor_desc": "營收成長強但成交金額低，代表利多尚未被市場注意到。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-013 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.52達標；預測上漲/下跌月同號（延續性），實際0.035/0.015同號為正，此點判斷正確。但decay_pct剛好50%踩線，且與F-013 ρ=0.54小幅超標，最終仍因重複度被剔除。動能延續機制本身得到部分驗證，只是24月ts_rank表達法與F-013的营收成長排序過於接近。",
+ "failure_type": "duplicate",
+ "lesson": "營收年增率的時序排序（ts_rank）即便換了窗長，仍容易與F-013系列的成長因子高度相關；驗證延續性假說時應優先確認新表達法的數學結構（如改用累積動能或跨期比較）而非只調整窗口參數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0822",
+ "ts": "2026-08-18T21:21:48"
+}

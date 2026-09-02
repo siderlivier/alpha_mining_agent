@@ -1,0 +1,84 @@
+{
+ "round": 27,
+ "category": "short_squeeze_dynamics",
+ "hypothesis": "融券放空者多依賴滯後的財報與總經資訊，反應速度慢於即時揭露的月營收；當一檔股票同時具備高券資比（空方部位重）與轉強的月營收年增率，代表基本面已先行改善但空方尚未來得及回補，形成空單與基本面的背離壓力。當月營收持續強於預期，放空者被迫回補會產生額外的機械性買盤，疊加在基本面改善之上放大報酬。",
+ "prediction": "sub-train ICIR>0.45；高券資比+正營收年增組合的多頭腿超額報酬>0且高於單獨用rev_yoy分組的報酬；該效應在營收由負轉正的月份應比持續為正的月份更強。",
+ "formula": "add(cs_rank(short_margin_ratio), cs_rank(rev_yoy))",
+ "name_zh": "軋空基本面背離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_rank(short_margin_ratio), cs_rank(rev_yoy))",
+  "fhash": "49df984f7a29734b",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.09
+  },
+  "validation": {
+   "mean_ic": -0.011,
+   "icir": -0.12,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.026,
+    "多頭"
+   ],
+   "2014": [
+    -0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.01,
+    "盤整"
+   ],
+   "2016": [
+    -0.001,
+    "多頭"
+   ],
+   "2017": [
+    -0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.04,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.012,
+   "down_months": -0.0
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.23,
+   "半導體": -0.03,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.0,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.35,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45、方向為正，實際sub-train IC均值-0.008，方向偏負，stage1即被擋下。用add(cs_rank(short_margin_ratio), cs_rank(rev_yoy))表達「兩者同時高」的交集假設，但rank相加讓任一維度單獨高就能拉高總分，無法篩出真正的交集族群。對照C-10用mul(cs_rank,cs_rank)表達類似AND邏輯取得ICIR 0.66的強訊號，顯示乘法組合遠優於加法組合。",
+ "failure_type": "expression_bad",
+ "lesson": "假設本質是「A高且B高才有效」的AND邏輯時，應優先用mul(cs_rank(A), cs_rank(B))而非add/sub(cs_rank(A), cs_rank(B))——加減法讓單一維度就能拉高排名，稀釋交集族群；乘法才能放大兩者同時偏離的樣本。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0416",
+ "ts": "2026-07-28T19:08:22"
+}

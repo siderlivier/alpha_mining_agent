@@ -1,0 +1,84 @@
+{
+ "round": 39,
+ "category": "trust_flow_momentum_confirmation",
+ "hypothesis": "投信基於在地產業研究與實地訪查優勢，其買賣超動向對中小型非熱門股具有領先資訊價值；若投信近月持續買超又逢價格動能轉強，代表這是有基本面研究支撐的資金行為而非單純籌碼推砌，市場長期低估投信(相對外資)訊號的價值。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-017(外資x營收)相關性<0.5；月換手率<0.4",
+ "formula": "mul(cs_rank(mom_60),cs_rank(trust_net_21))",
+ "name_zh": "投信認證動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_60",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(mom_60),cs_rank(trust_net_21))",
+  "fhash": "b1a42515e366498e",
+  "sub_train": {
+   "mean_ic": -0.023,
+   "icir": -0.22
+  },
+  "validation": {
+   "mean_ic": -0.01,
+   "icir": -0.09,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.03,
+    "多頭"
+   ],
+   "2014": [
+    -0.057,
+    "多頭"
+   ],
+   "2015": [
+    -0.016,
+    "盤整"
+   ],
+   "2016": [
+    -0.003,
+    "多頭"
+   ],
+   "2017": [
+    -0.011,
+    "多頭"
+   ],
+   "2018": [
+    -0.024,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.01,
+   "down_months": -0.04
+  },
+  "industry_icir": {
+   "電子": -0.02,
+   "生技": 0.03,
+   "半導體": -0.27,
+   "金融": -0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.003
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.5,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測投信認證動能為正向訊號，但IC全期幾乎一致為負(sub -0.22、validation -0.09)，下跌月更負(-0.04)，與假設方向完全相反——投信買超x動能轉強的組合更像「追高/羊群」而非「基本面研究確認」；純多頭腿單獨看仍有小正報酬(0.022)，但整體被空頭端拖累轉負。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「法人買超確認動能」這類機構智慧敘事，本輪兩次(本案+C-5費用投資)實際IC方向都與假設完全相反，提示「市場對正面利多訊號反應不足」的預設樂觀假設應更謹慎。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0602",
+ "ts": "2026-08-12T09:06:34"
+}

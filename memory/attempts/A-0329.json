@@ -1,0 +1,87 @@
+{
+ "round": 21,
+ "category": "volume_shock_drift",
+ "hypothesis": "成交金額相對個股自身12個月中位數的異常放大，代表出現公司特定的新資訊事件（如合約、法說會、分析師關注），而非單純規模或流動性水準；由於處理能力有限，市場對放量當下的資訊消化不完全，將導致後續數月的報酬漂移。",
+ "prediction": "sub-train ICIR>0.45；與F-008相關係數<0.5；電子產業（新聞覆蓋密集、法人關注度分散）industry_icir應最高。",
+ "formula": "cs_rank(sdiv(amt_21, ts_med(amt_21,12)))",
+ "name_zh": "成交異常放量",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(amt_21, ts_med(amt_21,12)))",
+  "fhash": "e48361fce2e24f8d",
+  "sub_train": {
+   "mean_ic": -0.02,
+   "icir": -0.19
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.1,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.055,
+    "盤整"
+   ],
+   "2013": [
+    -0.017,
+    "多頭"
+   ],
+   "2014": [
+    -0.05,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    -0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.012,
+   "down_months": -0.014
+  },
+  "industry_icir": {
+   "電子": -0.11,
+   "生技": -0.14,
+   "半導體": -0.11,
+   "金融": -0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.038
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.43,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "假設方向為pos（放量代表資訊消化不足、應延續），但sub-train IC為-0.19，全部四個產業industry_icir都是負值，訊號存在且一致，只是方向與假設完全相反——放量後報酬呈現反轉而非延續，更接近短期過度反應後的均值回歸（與C-13機制類似）。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "相對成交量異常放量對報酬呈現顯著且全產業一致的負向關係，比較像短期過度反應後的反轉，而非資訊消化不足的延續；此類「方向錯但訊號存在」的案例應直接用neg方向重新提交，不必打入禁忌。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0329",
+ "ts": "2026-07-21T13:38:15"
+}

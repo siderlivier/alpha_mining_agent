@@ -1,0 +1,84 @@
+{
+ "round": 30,
+ "category": "short_squeeze_fundamental_divergence",
+ "hypothesis": "券資比高(空方部位重)同時營收年增強勁的股票，代表放空論點正被基本面數據推翻，空方最終須回補導致軋空行情；此與純粹券資比反轉不同，基本面成長是觸發回補的催化劑，形成短期內可預期的上漲壓力。",
+ "prediction": "sub-train ICIR>0.45；此訊號IC應集中在營收公布後1個月內最強；多頭腿(高券資比+高營收成長)年化超額報酬需為正。",
+ "formula": "mul(cs_rank(short_margin_ratio), cs_rank(rev_yoy))",
+ "name_zh": "軋空基本面背離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(short_margin_ratio), cs_rank(rev_yoy))",
+  "fhash": "c958879f87880c4d",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.04
+  },
+  "validation": {
+   "mean_ic": -0.003,
+   "icir": -0.04,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.022,
+    "多頭"
+   ],
+   "2014": [
+    -0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.007,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": -0.06,
+   "生技": -0.18,
+   "半導體": -0.01,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.002,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.36,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train與validation IC都接近零(-0.04)，逐年IC正負交錯無明顯規律，沒有任何有意義的方向性訊號，軋空機制未被證實存在。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "券資比高+營收成長強的組合並未產生預期的軋空回補效應，可能台灣放空者已根據基本面資訊調整部位，此「空方被打臉觸發回補」機制目前證據上不成立。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0468",
+ "ts": "2026-07-29T23:26:46"
+}

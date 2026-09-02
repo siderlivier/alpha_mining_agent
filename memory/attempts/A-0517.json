@@ -1,0 +1,88 @@
+{
+ "round": 33,
+ "category": "pullback_in_uptrend_reversal",
+ "hypothesis": "當股票半年動能強勁但近一個月動能轉弱，代表投資人因近期短期雜訊（大盤系統性回檔、乖離修正）過度反應而賣出，產生近因偏誤造成的短暫錯價；只要中期趨勢結構未破壞，這種回檔會被視為買點，價格將重新回歸原有中期趨勢。",
+ "prediction": "sub-train ICIR > 0.45；預期上漲月與下跌月IC方向一致（非純粹防禦型因子）；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(sub(mom_120,mom_20))",
+ "name_zh": "回檔買點訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_120",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_120,mom_20))",
+  "fhash": "4bc6b0bc0b154288",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.28,
+   "decay_pct": -153.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.003,
+    "盤整"
+   ],
+   "2013": [
+    0.016,
+    "多頭"
+   ],
+   "2014": [
+    -0.005,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.048,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.3,
+   "半導體": 0.07,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.058,
+   "short_excess_ann": 0.061
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR(0.11)遠低於預測(0.45)，機制在訓練期幾乎不存在，validation雖回升(0.28)但仍弱。多頭腿與空頭腿超額報酬相近且皆為正(0.058/0.061)，代表這個線性排序因子在分布中段缺乏區辨力，較像是'兩端都好、中間平庸'的非單調關係，而非單純訊號微弱。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "當因子兩端十分位報酬相近且都為正時，這是非單調/弱線性關係的特徵訊號，而非只是ICIR偏低；'回檔買點'這類需要'適度回檔'(不多不少)的假說，用線性rank差(mom_120-mom_20)這種單調表達本質上就抓不到，需要區間式/條件式表達才能真正檢驗假說。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0517",
+ "ts": "2026-07-30T00:08:12"
+}

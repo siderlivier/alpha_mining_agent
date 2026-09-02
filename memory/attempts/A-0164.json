@@ -1,0 +1,90 @@
+{
+ "round": 10,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "錨定效應使投資人對接近前高的股票給予過高期望，但唯有營收年增為正時這種動能才有基本面支撐；營收轉弱卻仍接近前高多屬純炒作，需用條件式而非線性疊加區分兩種情境。",
+ "prediction": "sub-train ICIR>0.45；rev_yoy>0子集內多頭腿年化超額報酬>0；與F-008、F-009之ρ<0.5。",
+ "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, neg(px_hi252)))",
+ "name_zh": "動能真偽過濾",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, neg(px_hi252)))",
+  "fhash": "dfe45faa4d1b7de4",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.043,
+   "icir": 0.79,
+   "decay_pct": -42.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.016,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.06,
+    "多頭"
+   ],
+   "2017": [
+    0.052,
+    "多頭"
+   ],
+   "2018": [
+    0.051,
+    "盤整"
+   ],
+   "2019": [
+    0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.048,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.68,
+   "生技": 0.37,
+   "半導體": 0.27,
+   "金融": 0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.115,
+   "short_excess_ann": 0.023
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.42,
+  "stage2_culprit": {
+   "factor": "F-003",
+   "rho": 0.7,
+   "factor_name": "風格孤兒股",
+   "factor_desc": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-003 |ρ|=0.70 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.55；validation達0.79，方向與產業覆蓋(電子0.68最強)全數命中，多頭腿超額報酬0.115也強。預測明確要求檢查F-008、F-009相關性且都做了，卻沒料到撞上F-003(風格孤兒股，rho=0.70)——條件式錨定動能與『便宜+成長股』本質上選出同一群被低估成長股。",
+ "failure_type": "duplicate",
+ "lesson": "52週高點錨定若用營收年增作真偽過濾條件，最終選股會與『低估值+高成長被忽略』因子高度重疊；未來設計此類條件式因子前，應把庫內所有『成長+價值/風格』標籤因子都納入初篩相關性掃描，而不只挑選同類別看似相關的比對對象。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0164",
+ "ts": "2026-07-21T11:22:51"
+}

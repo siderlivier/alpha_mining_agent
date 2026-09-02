@@ -1,0 +1,84 @@
+{
+ "round": 27,
+ "category": "distress_avoidance_composite",
+ "hypothesis": "應計項(accruals)反映盈餘品質，但單一應計項篩選(F-006已入庫)無法捕捉會計數字尚未惡化、但市場價格已開始緊張的雙重警訊組合；當一家公司同時具有低應計項品質但近期波動度明顯上升，代表除盈餘操縱風險外，市場正額外定價某種尚未被財報捕捉的不確定性（如訴訟、客戶流失、資金壓力傳聞）。排除同時具備兩種警訊的股票，比單用應計項篩選更能避開財報美化掩蓋不了的地雷股。",
+ "prediction": "sub-train ICIR>0.45；且應與F-006相關係數<0.5（因新增波動度維度做區隔）；多頭腿（低應計+波動平穩組）超額報酬>0，且下跌月的IC應高於上漲月。",
+ "formula": "sub(cs_rank(neg(accruals)), cs_rank(delta(vol_63,6)))",
+ "name_zh": "雙重地雷避開",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(neg(accruals)), cs_rank(delta(vol_63,6)))",
+  "fhash": "2f37cdd5b3fae5bb",
+  "sub_train": {
+   "mean_ic": 0.019,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.39,
+   "decay_pct": -44.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    -0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.029,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.15,
+   "生技": 0.24,
+   "半導體": 0.3,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.015,
+   "short_excess_ann": 0.021
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45、與F-006相關係數<0.5、下跌月IC應高於上漲月；實際sub-train icir僅0.27未達門檻，且下跌月IC(0.012)反而低於上漲月(0.025)，與「避險型因子下跌月更強」的預測方向相反。多頭腿超額為負(-0.015)，短腿為正(0.021)，alpha同樣集中在空頭腿。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "雙重地雷避開因子既未達強度門檻，避險特性(下跌月IC應更高)也未成立，且alpha集中空頭腿，是本輪「避開地雷型」因子共通弱點的又一案例。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0428",
+ "ts": "2026-07-28T19:08:22"
+}

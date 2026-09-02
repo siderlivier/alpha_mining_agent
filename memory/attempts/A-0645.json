@@ -1,0 +1,88 @@
+{
+ "round": 42,
+ "category": "electronics_supply_chain_diffusion",
+ "hypothesis": "電子供應鏈訂單訊息透過多層供應商逐步傳遞，具調查能力的專業投資人在營收月增率轉強初期即進場，成交金額同步放大；供應鏈資訊複雜，市場需數月才能完全消化，故兩者同時出現代表資訊擴散中但未反映完全。",
+ "prediction": "sub-train ICIR>0.45；industry_icir於電子應高於其他三產業；多頭腿年化超額報酬>0；與F-013相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(rev_mom), cs_rank(amt_21))",
+ "name_zh": "供應鏈擴散動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(rev_mom), cs_rank(amt_21))",
+  "fhash": "808fd62b03f1968a",
+  "sub_train": {
+   "mean_ic": -0.002,
+   "icir": -0.02
+  },
+  "validation": {
+   "mean_ic": 0.016,
+   "icir": 0.16,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.017,
+    "盤整"
+   ],
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.007,
+    "多頭"
+   ],
+   "2018": [
+    -0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.041,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.007,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": -0.16,
+   "生技": -0.35,
+   "半導體": 0.13,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": -0.031,
+   "short_excess_ann": -0.017
+  },
+  "coverage": 0.97,
+  "turnover_m": 0.66,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測電子業industry_icir應最高；實際電子-0.16，四產業中第二差，方向相反。sub-train ICIR接近零(-0.02)，多頭腿超額報酬-0.031，換手率高達0.66。rev_mom×amt_21未能捕捉資訊擴散，較可能只是把規模/流動性雜訊帶入訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "營收動能×成交金額的交乘構造本輪與C-1同樣失敗，兩者都用amt_21類流動性代理捕捉『關注度/資訊擴散』，結果都未成立——這類流動性代理較像是引入規模雜訊而非資訊訊號，短期內應避免再用amt_21做關注度proxy。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0645",
+ "ts": "2026-08-12T09:45:43"
+}

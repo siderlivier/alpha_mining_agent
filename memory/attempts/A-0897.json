@@ -1,0 +1,84 @@
+{
+ "round": 59,
+ "category": "attention_reawakening_confirmation",
+ "hypothesis": "投資人關注力有限，冷門股的基本面改善常被忽略；當週轉率由低轉高（重新進入雷達）同時營業利益成長確立時，代表市場才剛開始注意到真實的基本面改善，訊號會隨後續月份資訊持續擴散而延續，而非一次性反應完畢。",
+ "prediction": "sub-train ICIR > 0.4；訊號後3個月IC仍為正（緩慢擴散而非單月噴出即衰竭）；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(delta(turn_21,6)),cs_rank(op_income_yoy))",
+ "name_zh": "關注度甦醒股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(turn_21,6)),cs_rank(op_income_yoy))",
+  "fhash": "835c13d5d68bc2fa",
+  "sub_train": {
+   "mean_ic": 0.019,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": -0.001,
+   "icir": -0.02,
+   "decay_pct": 111.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.071,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.069,
+    "盤整"
+   ],
+   "2016": [
+    0.005,
+    "多頭"
+   ],
+   "2017": [
+    0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    -0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.04,
+   "半導體": 0.03,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.03,
+   "short_excess_ann": 0.035
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.41,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測訊號應緩慢擴散、sub-train ICIR>0.4，實際sub-train僅0.18，validation翻負(-0.02)且衰減111%；年度IC正負劇烈交替(2013:-0.071 vs 2015:+0.069)，顯示『關注度甦醒』假設在樣本內本身就不穩定，較可能是雜訊而非緩慢擴散的真實訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "週轉率突然放大(delta turn_21)作為『重新進入雷達』的代理變數，在台股年度間符號不穩定，不宜再用同一表達方式驗證『關注度』類敘事，除非有更穩健的關注度代理指標。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0897",
+ "ts": "2026-08-19T10:08:40"
+}

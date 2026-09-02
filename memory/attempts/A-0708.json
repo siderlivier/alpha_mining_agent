@@ -1,0 +1,79 @@
+{
+ "round": 46,
+ "category": "financial_provisioning_trend",
+ "hypothesis": "金控業的應計項變化反映其備抵呆帳與保險準備金政策的鬆緊；當金融股應計項呈現12個月的趨勢性下降（轉趨保守），代表管理層主動強化資產品質緩衝。這種轉趨保守的動態訊號通常先於信評機構或分析師調整評等出現，市場對趨勢性變化的反應速度慢於對單期水準的反應（F-021為靜態水準版本，此為動態趨勢版本）。",
+ "prediction": "金融產業限定：industry_icir(金融)>0.5；sub-train全市場ICIR>0.4；與F-021相關性<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(neg(delta(accruals,12)))",
+ "name_zh": "金控保守轉趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(accruals,12)))",
+  "fhash": "be57c4cd090c063a",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.05
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.15,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2014": [
+    0.009,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    -0.02,
+    "多頭"
+   ],
+   "2017": [
+    -0.013,
+    "多頭"
+   ],
+   "2018": [
+    0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": -0.13,
+   "半導體": 0.03,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融產業industry_icir>0.5，實際僅0.01(幾乎零訊號)，sub-train全市場ICIR也是-0.05接近零。通用『accruals』欄位很可能以一般產業營運資金定義計算，對銀行/壽險以放款、準備金為主的資產負債結構並不適用，欄位本身即為雜訊。",
+ "failure_type": "expression_bad",
+ "lesson": "通用會計欄位套用到金融業時，欄位定義與金融業真實財報結構脫節；此類產業限定假說需要金融業專屬欄位(如逾放比、備抵呆帳覆蓋率)才能有效驗證。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0708",
+ "ts": "2026-08-12T14:41:10"
+}

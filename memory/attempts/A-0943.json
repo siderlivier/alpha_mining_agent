@@ -1,0 +1,86 @@
+{
+ "round": 62,
+ "category": "margin_trend_linearity_quality",
+ "hypothesis": "毛利率12個月斜率代表趨勢方向，但唯有當此趨勢在24個月窗口內具高擬合度(高ts_rsq)才代表結構性轉變而非雜訊反彈；市場對高擬合度的緩慢趨勢反應不足，因為單季財報難以直接觀察斜率穩定性。",
+ "prediction": "sub-train ICIR>0.4；高rsq子集內斜率IC應顯著高於低rsq子集；與庫內品質類因子截面相關|ρ|<0.5。",
+ "formula": "mul(cs_rank(ts_slope(gross_margin,12)), cs_rank(ts_rsq(gross_margin,24)))",
+ "name_zh": "毛利趨勢真確度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_slope(gross_margin,12)), cs_rank(ts_rsq(gross_margin,24)))",
+  "fhash": "f0870504f3f3d2a8",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.49
+  },
+  "validation": {
+   "mean_ic": 0.007,
+   "icir": 0.12,
+   "decay_pct": 76.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.023,
+    "多頭"
+   ],
+   "2017": [
+    0.025,
+    "多頭"
+   ],
+   "2018": [
+    -0.004,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.36,
+   "生技": 0.45,
+   "半導體": -0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.037,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.17,
+  "stage2_max_rho": {
+   "factor": "F-025",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.12 < 0.3; validation 衰減 76% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR 0.49達標，stage2去重也過關(ρ=0.27)，但validation ICIR驟降至0.12，衰減76%，屬典型過擬合。mul(cs_rank(slope), cs_rank(rsq))這種雙重排序交乘在樣本內找到的組合可能對sub-train期特定股票分佈敏感，泛化能力差。預測未特別評估過擬合風險，屬校準不足。",
+ "failure_type": "expression_bad",
+ "lesson": "「趨勢斜率 × 擬合優度」這類雙cs_rank交乘的品質門檻設計，容易在樣本內過度配適；用門檻式gate(僅在高rsq子集內取slope排名)可能比連續交乘更穩健。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0943",
+ "ts": "2026-08-27T21:24:50"
+}

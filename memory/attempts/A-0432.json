@@ -1,0 +1,80 @@
+{
+ "round": 28,
+ "category": "fundamental_consistency_quality",
+ "hypothesis": "營收成長與ROE長期同步變動(相關性高)的公司，代表其營運槓桿穩定、成本結構可預測，是難以用單一財務比率捕捉的內生品質；因為不是顯眼的高成長或高獲利數字，市場對這種「一致性」缺乏定價誘因而長期低估。",
+ "prediction": "sub-train ICIR>0.4(訊號較隱性，門檻略低於標準0.45)；金融業因獲利結構與營收定義脫鉤，industry_icir應明顯低於電子/生技；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(ts_corr(rev_yoy, roe, 24))",
+ "name_zh": "營收獲利同步性",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(rev_yoy, roe, 24))",
+  "fhash": "351b9b6574e8508a",
+  "sub_train": {
+   "mean_ic": -0.019,
+   "icir": -0.41
+  },
+  "validation": {
+   "mean_ic": -0.03,
+   "icir": -0.47,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2014": [
+    -0.023,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    -0.015,
+    "多頭"
+   ],
+   "2017": [
+    -0.035,
+    "多頭"
+   ],
+   "2018": [
+    -0.03,
+    "盤整"
+   ],
+   "2019": [
+    -0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.029,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": -0.27,
+   "生技": -0.17,
+   "半導體": -0.04,
+   "金融": -0.38
+  },
+  "legs": {
+   "long_excess_ann": -0.009,
+   "short_excess_ann": -0.022
+  },
+  "coverage": 0.61,
+  "turnover_m": 0.13,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測pos方向、ICIR>0.4，實際sub-train ICIR -0.41、validation -0.47，且四個產業industry_icir全為負(電子-0.27到金融-0.38)，方向一致地反向，不是雜訊。這代表'營收與ROE同步性高=穩定品質被低估'的機制被證偽，反而更像是同步性越高的公司越成熟/越無成長彈性，市場給予正確的較低評價。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『財務一致性=被低估品質』這類敘事需要與『一致性=成熟/低成長性=該有的低評價』這類反向敘事對照检验；本案四產業一致反向的證據強度足以判定此假設方向錯誤,而非表達問題。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0432",
+ "ts": "2026-07-28T19:19:09"
+}

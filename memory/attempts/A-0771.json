@@ -1,0 +1,84 @@
+{
+ "round": 50,
+ "category": "momentum_earnings_quality_filter",
+ "hypothesis": "季度價格動能（mom_60）若伴隨低應計項（盈餘品質乾淨），代表動能是真實基本面驅動而非盈餘操縱堆疊出來的假象，這種動能更可能延續；市場對『高動能股是否為財報美化』的過濾不足，僅有基本面乾淨的動能股才會被市場充分重新評價。",
+ "prediction": "sub-train ICIR>0.45；與F-006相關係數應<0.5。",
+ "formula": "mul(cs_rank(mom_60), cs_rank(neg(accruals)))",
+ "name_zh": "乾淨動能股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(mom_60), cs_rank(neg(accruals)))",
+  "fhash": "763e9431cb798006",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.31,
+   "decay_pct": -139.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.036,
+    "多頭"
+   ],
+   "2014": [
+    0.019,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    0.019,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.011,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": 0.17,
+   "半導體": 0.06,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.035,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.37,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45並與F-006相關係數<0.5，實際sub-train ICIR僅0.13在stage1被拒，未進相關性檢驗；但validation ICIR反而較高(0.31，decay -139%驗證期轉強)，且多頭腿年化超額報酬0.035為正、上漲月IC(0.029)遠優於下跌月(-0.01)，顯示訊號可能存在但被2013年單一極端負值(-0.036)拖累了train期平均，現有診斷不足以完全確認是純雜訊還是單一年份污染。",
+ "failure_type": "expression_bad",
+ "lesson": "訊號在sub-train與validation期規模差異過大(0.13 vs 0.31)時，可能被單一極端年份拖累而非機制無效；建議在stage1門檻判定前先做「剔除單一最差年份後的ICIR」穩健性檢查，避免因單一年度雜訊誤判整個假設無效。診斷資訊有限，此為初步判斷。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0771",
+ "ts": "2026-08-14T00:51:32"
+}

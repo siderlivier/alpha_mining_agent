@@ -1,0 +1,88 @@
+{
+ "round": 19,
+ "category": "earnings_confirmed_momentum",
+ "hypothesis": "純價格動能常混雜投機性追價雜訊，但當公司當期EPS年增率為正（獲利實質支撐）時，其中期(60日)價格動能更可能反映基本面驅動的持續性資金流入，市場對「獲利確認後的動能」反應仍不足。",
+ "prediction": "sub-train ICIR>0.4；篩選後樣本多頭腿年化超額報酬應比未篩選mom_60高出至少2個百分點。",
+ "formula": "cs_rank(if_else(greater(eps_yoy,0), mom_60, 0))",
+ "name_zh": "獲利確認動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(eps_yoy,0), mom_60, 0))",
+  "fhash": "55d8b0ed3e355d7e",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.28
+  },
+  "validation": {
+   "mean_ic": 0.035,
+   "icir": 0.44,
+   "decay_pct": -55.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.02,
+    "盤整"
+   ],
+   "2019": [
+    0.05,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": 0.3,
+   "生技": 0.15,
+   "半導體": -0.07,
+   "金融": 0.35
+  },
+  "legs": {
+   "long_excess_ann": 0.054,
+   "short_excess_ann": 0.004
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.41,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.16
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.28 < 0.45; 月換手 0.41 > 0.4"
+ },
+ "diagnosis": "本輪最接近通過的案例之一：sub-train ICIR 0.28雖低於0.45，但validation ICIR達0.44且decay為-55%(樣本外表現優於樣本內，非過擬合)，電子(0.3)、金融(0.35)產業訊號皆不錯，多頭腿超額報酬5.4%為正可交易，僅因換手率0.41略超0.4門檻與sub-train強度不足被拒。",
+ "failure_type": "expression_bad",
+ "lesson": "獲利確認動能假設方向正確且樣本外穩健，主要卡在換手率略超標；應透過降低訊號更新頻率(如篩選條件改季頻或加平滑)壓低換手率，而非放棄假設。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0299",
+ "ts": "2026-07-21T13:13:10"
+}

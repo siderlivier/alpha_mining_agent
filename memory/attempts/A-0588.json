@@ -1,0 +1,88 @@
+{
+ "round": 38,
+ "category": "payout_ratio_stability_financial",
+ "hypothesis": "現金殖利率除以盈餘殖利率可概略還原股利發放率，發放率長期穩定的金控公司代表資本配置具紀律、股利政策可持續；市場投資人多只看當期殖利率高低選股，忽略發放率穩定性這項更能反映治理品質的訊號，此機制在金融業因監管資本要求特別顯著。",
+ "prediction": "sub-train ICIR > 0.45（formula值越低代表發放率越穩定、報酬越高）；金融產業industry_icir應高於其他三產業；多頭腿（formula值最低組）年化超額報酬須>0。",
+ "formula": "cs_rank(ts_std(sdiv(div_yield,ep),12))",
+ "name_zh": "穩定配息金控股",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "ep"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_std(sdiv(div_yield,ep),12))",
+  "fhash": "2266f43395b4e5a0",
+  "sub_train": {
+   "mean_ic": -0.007,
+   "icir": -0.09
+  },
+  "validation": {
+   "mean_ic": 0.007,
+   "icir": 0.12,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.194,
+    "盤整"
+   ],
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.013,
+    "多頭"
+   ],
+   "2015": [
+    -0.021,
+    "盤整"
+   ],
+   "2016": [
+    -0.008,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": 0.2,
+   "半導體": 0.01,
+   "金融": -0.28
+  },
+  "legs": {
+   "long_excess_ann": -0.039,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.08,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融產業應最強且formula低值組報酬佳，實際金融產業icir為-0.28，是四產業最差且方向與預期完全相反（電子0.24、生技0.20反而較好）；多空兩腿報酬皆為負，2012年-0.194的極端值可能扭曲早期均值。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "與C-8/C-11/C-12/C-13同型態，「金控股治理品質」的產業專屬敘事再次被數據推翻——金融產業反而最弱，顯示發放率穩定度可能不是金融股的定價缺口。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0588",
+ "ts": "2026-07-30T01:16:47"
+}

@@ -1,0 +1,94 @@
+{
+ "round": 26,
+ "category": "short_interest_supply_ratio",
+ "hypothesis": "借券量相對於券資比（融券餘額）的比值，代表市場中「借券供給」相對於「已實現放空部位」的寬鬆程度；比值高代表借券供給充足但尚未被大量放空使用，隱含空方壓力偏低。本次為對前一輪neg方向通過結果的獨立複驗，改測pos方向確認訊號穩定性。",
+ "prediction": "sub-train ICIR>0.40；coverage（非缺值比例）需>0.5以確保借券資料品質；多頭腿超額報酬>0。",
+ "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+ "name_zh": "借券券資比值",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+  "fhash": "ec7f5f8e3d40146e",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.26,
+   "decay_pct": 19.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.069,
+    "盤整"
+   ],
+   "2013": [
+    0.04,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.039,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.2,
+   "半導體": 0.18,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.43,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.62,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "統計數字尚可（ICIR 0.32/0.26，decay 19%，多頭腿可交易），但coverage 0.43未達候選自訂的>0.5門檻（借券資料稀疏），且與F-008（低調接近新高）相關係數0.62被判重複——兩者敘事機制不同（借券供需 vs 低調爬高），但實際訊號高度重疊，暗示借券資料齊全的股票子集本身就與F-008鎖定的低換手股高度重合。",
+ "failure_type": "duplicate",
+ "lesson": "借券/券資比類資料coverage本身偏低，且容易與既有「低調/低換手」類因子（F-008）在樣本子集上重疊，即使機制敘事不同也可能因資料可得性偏差導致統計重複。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0411",
+ "ts": "2026-07-28T18:54:36"
+}

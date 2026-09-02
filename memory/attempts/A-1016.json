@@ -1,0 +1,80 @@
+{
+ "round": 67,
+ "category": "biotech_cashflow_persistence_premium",
+ "hypothesis": "市場把生技公司營業現金流單季轉正視為『轉骨里程碑』而過度追捧，但單期轉正常只是應收/存貨時點效應。真正跨過可重複獲利門檻的是連續多月營業現金流站穩自身兩年常態者；由於初次轉正的關注熱潮已過，這種『持續性』訊號反被冷落。生技類股標籤黏著，市場不願為尚未爆紅的穩定獲利重新定價。",
+ "prediction": "sub-train ICIR > 0.3；industry_icir 在生技最高；一次性跳增組(高 delta(ocf_ratio,6)、低 streak)報酬低於持續組；多頭腿年化超額 > 0。",
+ "formula": "streak_true(greater(ocf_ratio, ts_med(ocf_ratio,24)), 24)",
+ "name_zh": "生技現金流真轉正",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "streak_true(greater(ocf_ratio, ts_med(ocf_ratio,24)), 24)",
+  "fhash": "5b315cf10d989d75",
+  "sub_train": {
+   "mean_ic": -0.009,
+   "icir": -0.12
+  },
+  "validation": {
+   "mean_ic": 0.008,
+   "icir": 0.14,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2014": [
+    -0.073,
+    "多頭"
+   ],
+   "2015": [
+    0.004,
+    "盤整"
+   ],
+   "2016": [
+    -0.015,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.004,
+   "down_months": 0.001
+  },
+  "industry_icir": {
+   "電子": -0.08,
+   "生技": -0.07,
+   "半導體": -0.04,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.009,
+   "short_excess_ann": -0.012
+  },
+  "coverage": 0.57,
+  "turnover_m": 0.15,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技 industry_icir 最高、ICIR>0.3；實際 sub-train ICIR -0.12、生技 -0.07、2014 -0.073，全產業全年份為負或近零，方向與假設相反。這不是覆蓋率(0.57)問題——連續 24 月站穩兩年中位數的『真轉正』在生技不但沒有溢價，反而略負：生技定價由題材/管線驅動，穩定現金流不被重新定價，甚至被視為『沒有想像空間』。機制被證偽。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技股報酬不由現金流品質/持續性驅動；把一般會計品質溢酬套到生技產業標籤上方向可能反轉。針對生技要找的是管線事件、里程碑金流、授權合約類訊號，而非會計品質持續性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-009",
+ "id": "A-1016",
+ "ts": "2026-09-02T01:09:58"
+}

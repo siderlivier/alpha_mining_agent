@@ -1,0 +1,86 @@
+{
+ "round": 24,
+ "category": "semiconductor_inventory_cycle",
+ "hypothesis": "半導體產業具典型庫存/資本支出循環，毛利率通常領先營收年增率觸底反彈（稼動率與價格先於訂單能見度改善），但市場慣性聚焦仍為負值的營收年增率標題數字，對毛利率已脫離年度低點的早期回升訊號反應不足；此機制在資本密集、循環性強的半導體產業尤其明顯，在金融等非循環產業則不適用。",
+ "prediction": "sub-train ICIR > 0.4；半導體產業industry_icir應為四產業最高，金融產業ICIR應明顯較低甚至接近0。",
+ "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,12)))",
+ "name_zh": "半導體毛利築底",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(gross_margin, ts_min(gross_margin,12)))",
+  "fhash": "2c1724358309766b",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.12,
+   "decay_pct": 136.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.031,
+    "盤整"
+   ],
+   "2013": [
+    0.001,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": 0.11,
+   "生技": 0.07,
+   "半導體": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.032,
+   "short_excess_ann": 0.061
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際僅0.33；預測半導體industry_icir應為四產業最高，實際確實半導體0.12最高（電子0.11、生技0.07），這部分預測方向正確。但validation icir轉負(-0.12)，decay 136%且符號反轉，顯示sub-train期間的正向關係在驗證期完全消失甚至倒轉。診斷資訊本身不足以完全區分是『機制隨景氣循環階段變化而失效』還是『距離低點的絕對距離這個表達方式抓不到真正的築底轉折點』，證據偏薄弱。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "毛利率相對年度低點的『距離』不等於『築底反轉』，distance-from-min這種表達可能在下跌趨勢中期就已經很小、被誤判為底部，導致驗證期符號反轉；若半導體庫存循環假設仍想保留，需要更明確的轉折點定義（如連續N月止跌回升）而非單純距最低點距離。診斷證據薄弱，此判斷信心不高。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0373",
+ "ts": "2026-07-28T18:28:36"
+}

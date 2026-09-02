@@ -1,0 +1,84 @@
+{
+ "round": 7,
+ "category": "cash_flow_momentum_composite",
+ "hypothesis": "現金流品質改善的趨勢(OCF/NI比值上升)疊加低應計水準，代表公司盈餘含金量正在結構性提升且本身已經乾淨，這種「品質動能」比單純品質水準更能捕捉市場尚未消化的正面轉折。",
+ "prediction": "sub-train ICIR>0.45；且與F-006截面相關係數|ρ|<0.5。",
+ "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)),cs_rank(accruals))",
+ "name_zh": "現金流轉強品質",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)),cs_rank(accruals))",
+  "fhash": "0b87a30806b49a14",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.37,
+   "decay_pct": -182.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.013,
+    "多頭"
+   ],
+   "2015": [
+    0.024,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": 0.13,
+   "半導體": 0.11,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.006,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45；實際sub-train僅0.13近乎雜訊，validation反升至0.37(decay-182%)，但長短兩腿報酬都很小且方向不一致(-0.006/0.011)，屬train/validation反向擺盪的雜訊模式(與C-6、C-7同構)，現金流動能疊加低應計的複合假說在訓練期完全不成立。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "見全域規則(decay大幅為負+兩腿報酬趨零=雜訊)，此為第三個獨立案例，可列為通則。另本因子也是把ROE趨勢構造套用到ocf_ratio上失敗的一例。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0122",
+ "ts": "2026-07-19T17:59:13"
+}

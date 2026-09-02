@@ -1,0 +1,90 @@
+{
+ "round": 38,
+ "category": "electronics_asset_value_cash_orphan",
+ "hypothesis": "資本密集電子次產業（晶圓代工、面板等）淨值反映廠房設備的真實重置成本，淨值股價比便宜且營業現金流強勁代表資產品質與現金創造能力紮實，但機構選股工具多以營收成長或本益比篩選熱門標的，資本密集、成長性平淡的資產型價值股常被系統性排除在雷達之外。",
+ "prediction": "sub-train ICIR整體或電子產業industry_icir > 0.45；多頭腿年化超額報酬>0；與F-019相關性須<0.5方視為獨立訊號。",
+ "formula": "mul(cs_rank(bp), cs_rank(ocf_ratio))",
+ "name_zh": "電子資產價值股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(ocf_ratio))",
+  "fhash": "267a162390e85170",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.27,
+   "decay_pct": -6.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.01,
+    "盤整"
+   ],
+   "2016": [
+    0.044,
+    "多頭"
+   ],
+   "2017": [
+    0.039,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.036,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.47,
+   "半導體": 0.16,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.026
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.18,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.78,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.78 > 0.5"
+ },
+ "diagnosis": "預測電子產業應達0.45以上，實際電子(0.41)略低於門檻，且生技(0.47)才是四產業最高，敘事鎖定產業再度不是最強者；更關鍵的是與F-019(現金含金價值股)ρ高達0.78，屬強重疊——本質是「便宜淨值+真實現金流」既有價值因子換了電子產業敘事外衣。",
+ "failure_type": "duplicate",
+ "lesson": "bp x ocf_ratio這類組合已被F-019涵蓋(ρ=0.78遠超門檻)，換不同產業敘事包裝並不能製造獨立訊號；未來提出價值+現金流組合前應先與F-019做相關性預檢。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0591",
+ "ts": "2026-07-30T01:16:47"
+}

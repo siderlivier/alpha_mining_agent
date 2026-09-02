@@ -1,0 +1,86 @@
+{
+ "round": 65,
+ "category": "financial_value_momentum_gap",
+ "hypothesis": "金融股淨值股價比(B/P)持續上升(股價相對淨值走弱)，若同時維持高ROE，代表市場對其獲利能力的定價落後於淨值成長，這種便宜程度持續擴大但獲利力未減的動態訊號比B/P與ROE的靜態交乘更早捕捉到重新評價機會，因投資人多以絕對估值水準判斷而非估值趨勢。",
+ "prediction": "限金融產業，industry_icir(金融) > 0.4；與F-002(靜態bp×roe)相關係數|ρ|<0.6；多頭腿年化超額 > 0。",
+ "formula": "mul(cs_rank(delta(bp,12)), cs_rank(roe))",
+ "name_zh": "金融估值缺口擴大股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(bp,12)), cs_rank(roe))",
+  "fhash": "4223a62890814705",
+  "sub_train": {
+   "mean_ic": 0.058,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.066,
+   "icir": 0.59,
+   "decay_pct": -7.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.086,
+    "多頭"
+   ],
+   "2015": [
+    0.066,
+    "盤整"
+   ],
+   "2016": [
+    0.063,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.055,
+   "down_months": 0.076
+  },
+  "industry_icir": {
+   "電子": 0.75,
+   "生技": 0.51,
+   "半導體": 0.3,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.6,
+  "turnover_m": 0.25,
+  "stage2_culprit": {
+   "factor": "R-016",
+   "rho": 0.6,
+   "factor_name": "股東權益報酬率",
+   "factor_desc": "稅後淨利 / 股東權益"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 R-016 |ρ|=0.60 > 0.5"
+ },
+ "diagnosis": "預測金融 industry_icir>0.4，實際僅 0.21(連自身門檻都沒過)，因子反而在電子 0.75、生技 0.51 最強——並非金融專屬。standalone 佳(ICIR 0.55、decay -7%)但 ρ=0.60 撞 R-016(ROE)。delta(bp,12)×roe 的『估值趨勢』並未與『估值水準×獲利』正交。",
+ "failure_type": "duplicate",
+ "lesson": "宣稱產業專屬前先確認 industry_icir 確實在該產業最高；此因子金融最弱、電子最強。bp 趨勢×roe 仍被 ROE 因子吸收。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0993",
+ "ts": "2026-09-02T00:32:52"
+}

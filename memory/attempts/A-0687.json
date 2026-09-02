@@ -1,0 +1,93 @@
+{
+ "round": 45,
+ "category": "short_interest_information_signal",
+ "hypothesis": "台股融券門檻高（保證金、回補壓力等限制），能持續維持高券資比的放空者多具資訊優勢；券資比長期偏高反映尚未消化的負面資訊，偏低者則代表缺乏空方疑慮，未來報酬較佳。此為對『券資比正向框架已證偽』發現的直接反向驗證。",
+ "prediction": "sub-train ICIR>0.45；下跌月與上漲月IC方向一致（排除純恐慌代理）；多頭腿（低券資比端）年化超額報酬>0；與F-008相關性|ρ|<0.5。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "低券資比優選",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "ICIR預測>0.45，實際僅0.27，明顯低估難度。相關性門檻預測正確（|ρ|<0.5），但實際0.57仍失敗，且被點名的F-008是『低調接近新高』（周轉率低+接近前高），與券資比概念上並不直接重疊，顯示低券資比訊號本質上可能只是『低關注度/低周轉股』的另一種代理，而非真正的空方資訊優勢。down_months IC轉負（-0.017 vs up 0.049）也違反『反向框架下跌月更顯著』的隱含預期，弱化了資訊優勢假說。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『高門檻放空者具資訊優勢』的反向假說未通過驗證：低券資比因子的解釋力更像是低關注度/低周轉的一般性溢酬，而非借券市場特有的資訊訊號。此券資比方向（正向與反向）皆已檢驗過，可考慮列入低優先度方向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0687",
+ "ts": "2026-08-12T14:25:46"
+}

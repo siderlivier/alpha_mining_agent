@@ -1,0 +1,87 @@
+{
+ "round": 16,
+ "category": "dividend_yield_signal",
+ "hypothesis": "現金殖利率是台股散戶與存股族最重視的錨定指標，但殖利率提升往往滯後於EPS與現金流改善（配息政策調整需經董事會與股東會，有制度性延遲），因此殖利率近半年出現明顯上升趨勢時，代表公司資本回饋能力已實質轉強但價格尚未完全反映，形成訊息慢速擴散的延續報酬。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC不劣於上漲月（防禦特性，因殖利率提升股通常波動較低）；validation期decay<40%；多頭腿年化超額報酬>0（非僅靠空頭腿貢獻alpha）。",
+ "formula": "cs_rank(delta(div_yield,6))",
+ "name_zh": "股息殖利率提升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(div_yield,6))",
+  "fhash": "d4bebacfd56e8f8a",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.08
+  },
+  "validation": {
+   "mean_ic": 0.0,
+   "icir": 0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.011,
+    "盤整"
+   ],
+   "2013": [
+    -0.026,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    0.016,
+    "多頭"
+   ],
+   "2017": [
+    -0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.01,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.23,
+   "生技": 0.03,
+   "半導體": -0.15,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": -0.042,
+   "short_excess_ann": -0.036
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "完全違反預測方向——預測sub-train ICIR>0.45(正向防禦特性)，實際sub-train IC為負(-0.08)，多空兩腿超額報酬同為負值(long -4.2%, short -3.6%)，顯示delta(div_yield,6)上升的股票在兩端都跑輸大盤，代表這不是能分辨好壞股的訊號。推測div_yield=股利/股價，股價下跌會機械性推高殖利率，本因子很可能主要捕捉到「股價近期弱勢」的反向代理，而非制度性配息滯後的資訊擴散。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "殖利率類衍生指標(尤其是變化量)容易被股價分母的機械效應污染，上升的殖利率delta可能只是「股價下跌」的鏡像而非資本回饋能力增強的訊號；之後如果要重新測試股息類假說，應先用現金股利金額本身的變化(而非殖利率)來隔離價格分母干擾。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0250",
+ "ts": "2026-07-21T12:37:07"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 3,
+ "category": "earnings_quality_smoothed",
+ "hypothesis": "應計項的預測力主要來自結構性盈餘操縱傾向而非單期雜訊；將窗口拉長至24個月平滑可過濾如2013年極端事件造成的離群值干擾，使長期平均低應計（盈餘品質穩定）的公司獲得系統性重估。",
+ "prediction": "sub-train ICIR>0.45；與短窗口原始accruals因子相關性|ρ|<0.7，確保非純重複。",
+ "formula": "cs_rank(neg(ts_mean(accruals,24)))",
+ "name_zh": "長期應計品質",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(accruals,24)))",
+  "fhash": "619a778c305073c8",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.5,
+   "decay_pct": -26.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.045,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.027,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.022
+  },
+  "industry_icir": {
+   "電子": 0.28,
+   "生技": 0.64,
+   "半導體": 0.41,
+   "金融": -0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.011,
+   "short_excess_ann": 0.034
+  },
+  "coverage": 0.63,
+  "turnover_m": 0.05,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.17
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.45且與短窗口因子相關性<0.7』。實際sub-train 0.39接近門檻，驗證期反而提升至0.50（decay -26%，穩定不過擬合），與F-002相關性僅0.17，證實非重複因子。覆蓋率偏低(0.63)，推測24個月的長平滑窗口要求更長的財報歷史，篩掉部分樣本，可能是拉低IC統計檢定力的主因，而非機制本身無效。",
+ "failure_type": "expression_bad",
+ "lesson": "過長的平滑窗口(24個月)會犧牲覆蓋率換取降噪，即使驗證期表現穩定，覆蓋率下降本身也可能壓低量測到的IC；可嘗試中間窗口長度做取捨。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0061",
+ "ts": "2026-07-19T17:08:22"
+}

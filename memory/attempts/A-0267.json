@@ -1,0 +1,83 @@
+{
+ "round": 17,
+ "category": "electronics_inventory_cycle_confirmation",
+ "hypothesis": "電子業補庫存循環具有量價同時改善特徵——營收成長與毛利率同向變動代表訂單回溫且稼動率同步改善，是真實需求驅動而非塞貨衝量；市場只看營收頭條數字，忽略毛利率同步確認，對真實補庫存循環認知延遲，供應鏈長使此效應更明顯。",
+ "prediction": "電子產業industry_icir>0.5且高於其他三產業；全樣本sub-train ICIR>0.35",
+ "formula": "cs_rank(ts_corr(rev_yoy, gross_margin, 6))",
+ "name_zh": "電子補庫存確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(rev_yoy, gross_margin, 6))",
+  "fhash": "0d4ac39c4ef7cdfe",
+  "sub_train": {
+   "mean_ic": 0.006,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.26,
+   "decay_pct": -88.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.012,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    0.019,
+    "多頭"
+   ],
+   "2017": [
+    -0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.011,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": -0.0,
+   "生技": 0.18,
+   "半導體": 0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.0,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.41,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測電子產業industry_icir>0.5且為四產業最高。實際電子產業ICIR恰好是0.00，是四產業中最弱的，反而生技(0.18)、半導體(0.11)有微弱正效果，與「電子補庫存」的產業專屬敘事直接矛盾。全樣本sub-train ICIR僅0.14也未達門檻。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「電子業補庫存循環」的產業專屬機制被證偽——營收與毛利率同向變動在電子股沒有效果，反而在生技/半導體出現。產業敘事類假設應在ic_by_year之外，優先核對industry_icir是否真的指向假設鎖定的產業，而非事後為微弱全樣本訊號編故事。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0267",
+ "ts": "2026-07-21T12:47:40"
+}

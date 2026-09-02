@@ -1,0 +1,84 @@
+{
+ "round": 62,
+ "category": "financial_quality_conditioned_profitability",
+ "hypothesis": "金融股在應計項偏高(可能透過會計估計墊高獲利)時，高ROE反而是警訊而非利多，因獲利未必來自真實利差擴張；只有應計保守時高ROE才代表真實資本運用效率。用if_else條件反轉而非交乘，避免雙重排序稀釋，更貼近「有條件確認」的因果邏輯，異於F-002/F-021交乘結構。",
+ "prediction": "sub-train ICIR>0.4；accruals>0子集內IC應為負、accruals≤0子集內IC應為正；與F-002/F-021截面相關|ρ|<0.5。",
+ "formula": "cs_rank(if_else(greater(accruals,0), neg(roe), roe))",
+ "name_zh": "有條件真實獲利",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(accruals,0), neg(roe), roe))",
+  "fhash": "d36edae15aed06e2",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.24,
+   "decay_pct": -83.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.045,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    -0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.31,
+   "生技": 0.1,
+   "半導體": 0.06,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": -0.001,
+   "short_excess_ann": -0.009
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.17,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "假設宣稱應計品質對ROE的條件反轉在「金融股」尤其成立，但industry_icir顯示金融產業反而是四者中最弱(0.04)，電子產業(0.31)才是主要貢獻者——與宣稱的目標族群方向相反，說明不是formula沒gate的稀釋問題，而是機制本身在金融股不成立。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "應計品質條件反轉ROE的邏輯在金融股上證據最弱、反而在電子業較有效，「金融股應計品質」這一敘事本身可能與實際驅動產業不符，不建議針對金融股重測同一構型。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0952",
+ "ts": "2026-08-27T21:24:50"
+}

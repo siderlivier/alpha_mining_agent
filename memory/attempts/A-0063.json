@@ -1,0 +1,84 @@
+{
+ "round": 3,
+ "category": "earnings_consistency_quality",
+ "hypothesis": "先前「本業與帳面成長分歧代表訊號」的假設已被推翻（多次呈相反或零IC）。反向測試：本業獲利成長與稅後EPS成長高度一致（無業外雜訊分歧）代表獲利結構單純可信，市場對缺乏故事性、無業外驚奇的一致成長股關注不足，形成低估。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC應高於上漲月IC（防禦性品質特徵）。",
+ "formula": "cs_rank(neg(sub(op_income_yoy, eps_yoy)))",
+ "name_zh": "帳面本業一致",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(op_income_yoy, eps_yoy)))",
+  "fhash": "ebbb8c0d487f8574",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.06
+  },
+  "validation": {
+   "mean_ic": 0.04,
+   "icir": 0.55,
+   "decay_pct": -749.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    -0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    -0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.06,
+   "半導體": 0.03,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.45且下跌月IC較高』。實際sub-train ICIR僅0.06，於stage1即被拒。驗證期ICIR0.55、decay -749%看似大幅改善，但這是分母趨近於零時的統計假象，不代表真實訊號存在。此假設本身是對前一輪已證偽的『本業與帳面成長分歧』方向的反向嘗試，反向後同樣未展現訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "對已證偽的交乘假設單純反轉方向、且無新的經濟邏輯支撐時，同樣容易失敗；兩個方向都失敗可視為對該欄位交乘機制較強的證偽證據。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0063",
+ "ts": "2026-07-19T17:08:22"
+}

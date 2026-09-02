@@ -1,0 +1,92 @@
+{
+ "round": 32,
+ "category": "retail_capitulation_reversal",
+ "hypothesis": "散戶具外推偏誤，股價下跌時傾向恐慌性去槓桿（融資餘額21日變化率大幅下滑）。當股價已下跌且融資同步大幅減少時，代表籌碼出清接近尾聲（forced-selling exhaustion），為短期反轉訊號。此機制是「去槓桿完成後的均值回歸」，區別於「摩擦造成延續」的禁忌敘事（軋空/借券壓力延續）。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC應顯著高於上漲月（驗證此為下跌後反轉訊號而非全期普遍動能）；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(neg(margin_d21)), cs_rank(neg(mom_20)))",
+ "name_zh": "散戶去槓桿反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(margin_d21)), cs_rank(neg(mom_20)))",
+  "fhash": "7e8e3c3e5208024a",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.38
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.26,
+   "decay_pct": 32.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.076,
+    "盤整"
+   ],
+   "2013": [
+    0.077,
+    "多頭"
+   ],
+   "2014": [
+    0.062,
+    "多頭"
+   ],
+   "2015": [
+    -0.017,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.013,
+    "多頭"
+   ],
+   "2018": [
+    0.029,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": 0.047
+  },
+  "industry_icir": {
+   "電子": 0.31,
+   "生技": 0.37,
+   "半導體": 0.25,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.011,
+   "short_excess_ann": 0.004
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.78,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.23
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.38 < 0.45; validation ICIR 0.26 < 0.3; 月換手 0.78 > 0.4"
+ },
+ "diagnosis": "預測中『下跌月IC應顯著高於上漲月』被準確驗證（down 0.047 > up 0.03），顯示『去槓桿出清後反轉』的機制方向判斷正確，這是校準良好的一例。但整體訊號太弱太吵：ICIR 0.38/0.26未達門檻，且月換手0.78遠超0.4上限，最終敗於stage4的統計門檻而非相關性重疊或方向錯誤。",
+ "failure_type": "expression_bad",
+ "lesson": "『融資去槓桿出清後反轉』機制的條件IC方向正確、可能仍成立，但margin_d21/mom_20的日頻/週頻雜訊使換手過高、稀釋ICIR；應改用較長平滑窗或加入下跌幅度門檻篩選，只在真正的『恐慌去化』情境觸發訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0498",
+ "ts": "2026-07-29T23:57:20"
+}

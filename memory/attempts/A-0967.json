@@ -1,0 +1,84 @@
+{
+ "round": 63,
+ "category": "earnings_quality_divergence_masking",
+ "hypothesis": "當本業營業利益成長(op_income_yoy)明顯優於稅後EPS成長，代表業外損失、稅務認列或少數股權等非核心因素暫時壓低帳面獲利，掩蓋本業真實改善；投資人多以頭條EPS做第一層篩選，忽略本業已轉強的公司，待業外干擾消退EPS將補漲反映本業實力。",
+ "prediction": "sub-train ICIR>0.4；與F-024、F-012截面相關|ρ|<0.5；多頭腿(高op_income_yoy低eps_yoy組)年化超額報酬>0。",
+ "formula": "mul(cs_rank(op_income_yoy), cs_rank(neg(eps_yoy)))",
+ "name_zh": "本業優於帳面股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(op_income_yoy), cs_rank(neg(eps_yoy)))",
+  "fhash": "8e88277106a281a4",
+  "sub_train": {
+   "mean_ic": -0.0,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.03,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.029,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.037,
+    "盤整"
+   ],
+   "2016": [
+    -0.016,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    -0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.002,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.1,
+   "生技": 0.06,
+   "半導體": 0.04,
+   "金融": -0.08
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": -0.018
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.25,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4與多頭腿正超額報酬皆嚴重失準：sub-train ICIR僅-0.01，几乎零訊號，多頭腿(高營益成長低EPS成長組)超額報酬為負(-0.01)。『本業優於帳面、待業外雜訊消退後補漲』的機制在資料上完全不存在，八年間IC正負交錯無模式。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『營業利益成長優於EPS成長代表市場低估本業』這個敘事聽起來合理，但缺乏資料支持——業外損益的『暫時性』假設可能不成立（業外損失常是結構性而非一次性），敘事合理不代表訊號存在，需要更早做簡單相關性檢驗再投入完整流程。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0967",
+ "ts": "2026-08-27T21:36:00"
+}

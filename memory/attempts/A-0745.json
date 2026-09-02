@@ -1,0 +1,87 @@
+{
+ "round": 49,
+ "category": "dividend_policy_inflection",
+ "hypothesis": "現金殖利率緩步上升反映管理層基於私有資訊（對未來現金流有信心）主動調整配息政策，但投資人受限於錨定效應，仍以過去殖利率水準評價股票，導致股利政策轉向的訊息需數月才完全反映在股價中，尤其法規要求股利政策相對穩定的金融股此效應更明顯。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；金融產業industry_icir應高於全市場平均；與F-023相關係數|ρ|<0.5",
+ "formula": "cs_rank(ts_slope(div_yield,12))",
+ "name_zh": "股利政策轉向",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(div_yield,12))",
+  "fhash": "a7249117f79c8e3a",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.02
+  },
+  "validation": {
+   "mean_ic": -0.02,
+   "icir": -0.28,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.031,
+    "盤整"
+   ],
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.029,
+    "盤整"
+   ],
+   "2019": [
+    -0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.01,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": -0.2,
+   "生技": 0.03,
+   "半導體": -0.1,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.038,
+   "short_excess_ann": -0.024
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.14,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅-0.02（近乎雜訊），逐年正負交錯（2016正0.021，2018負-0.029），金融產業ICIR-0.02未如預期成為效應最強產業。台灣現金股利多為年度一次公告，12個月移動斜率在股利公布月附近會出現階梯式跳動而非連續趨勢，可能無法捕捉「管理層漸進式釋放私有資訊」的機制。",
+ "failure_type": "expression_bad",
+ "lesson": "台灣股利政策為年度離散事件，用連續12月斜率衡量「漸進式轉向」容易被公告當月的階梯跳動主導而稀釋成雜訊；驗證此類假設應改用相對去年同期的股利變動量，而非固定滾動斜率。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0745",
+ "ts": "2026-08-14T00:36:43"
+}

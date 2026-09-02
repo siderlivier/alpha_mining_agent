@@ -1,0 +1,83 @@
+{
+ "round": 35,
+ "category": "biotech_cash_runway_improvement",
+ "hypothesis": "生技股股價常由『燒錢速度』預期主導，當營業現金流相對淨利的比率（ocf_ratio）較一年前明顯改善，代表公司正逼近損益兩平里程碑；但生技分析師覆蓋率低、市場多用簡單燒錢速率外推舊有虧損印象，對現金流邊際改善反應遲鈍。",
+ "prediction": "sub-train ICIR>0.45；生技產業industry_icir應高於其他產業（>0.5）；多頭腿年化超額>0。",
+ "formula": "cs_rank(delta(ocf_ratio,12))",
+ "name_zh": "生技現金轉正",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,12))",
+  "fhash": "d3aa3559d6c6e7ce",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.17,
+   "半導體": 0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR為-0.13，方向與預測(正值>0.45)完全相反；生技產業ICIR(-0.17)是四產業中最差，直接推翻「生技覆蓋率低故訊號更有效」的核心假設，雙腿超額也全負。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「現金流改善代表逼近損益兩平」的敘事在生技股未觀察到正向定價效果，市場對OCF年增率改善並無明顯反應遲鈍現象，不宜再用delta(ocf_ratio)類公式測試生技覆蓋率假說。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0535",
+ "ts": "2026-07-30T00:34:10"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 15,
+ "category": "illiquidity_premium",
+ "hypothesis": "成交金額長期偏低的個股因不符法人最低流動性門檻（許多基金設有日均成交額篩選標準），被系統性排除在法人研究覆蓋與資金配置之外，導致資訊擴散速度慢、需求面結構性不足；投資人須承擔額外的流動性風險溢酬與資訊不對稱成本，因此低成交金額個股長期應享有較高的預期報酬，此為經典非流動性溢酬在台股的體現。",
+ "prediction": "sub-train ICIR > 0.45；四產業cond_ic全部同向為正；月換手率 < 0.3；validation衰減 < 30%。",
+ "formula": "cs_rank(neg(amt_21))",
+ "name_zh": "冷門流動性溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(amt_21))",
+  "fhash": "ea7db6fa5fca037c",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": 94.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    -0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.4,
+   "半導體": -0.04,
+   "金融": -0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 1.0,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.11，validation幾乎歸零(0.01)，下跌月IC轉負(-0.035)——訊號在多頭月出現、空頭月消失/倒扣，較符合「低流動性=高beta暴露」而非「資訊不對稱溢酬應普遍存在」的經典敘事。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "台股低成交金額股票的超額報酬只在多頭月出現、空頭月轉負，比起穩定的流動性風險溢酬，更像景氣循環beta代理；未來測流動性溢酬類假說應同時檢查是否只是市場beta的代理。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0238",
+ "ts": "2026-07-21T12:24:47"
+}

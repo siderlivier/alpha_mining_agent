@@ -1,0 +1,83 @@
+{
+ "round": 11,
+ "category": "semiconductor_order_cycle_turnover",
+ "hypothesis": "電子/半導體業訂單能見度變化(缺貨、搶單)會先反映在股票周轉率的趨勢上——消息靈通投資人提前進場交易使周轉率呈上升趨勢,而非價格本身先動。此『量先於價』現象在電子供應鏈結構下特別明顯,因為上下游庫存資訊(晶圓代工投片量、通路庫存去化)只有產業內人士能提前掌握。",
+ "prediction": "電子/半導體產業industry_icir>0.5(產業限定門檻);全池sub-train ICIR可能<0.3",
+ "formula": "cs_rank(ts_slope(turn_21,6))",
+ "name_zh": "電子周轉領先",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(turn_21,6))",
+  "fhash": "1b631cec7339779a",
+  "sub_train": {
+   "mean_ic": -0.017,
+   "icir": -0.19
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.09,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.041,
+    "多頭"
+   ],
+   "2014": [
+    -0.017,
+    "多頭"
+   ],
+   "2015": [
+    -0.01,
+    "盤整"
+   ],
+   "2016": [
+    0.007,
+    "多頭"
+   ],
+   "2017": [
+    -0.038,
+    "多頭"
+   ],
+   "2018": [
+    0.015,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.015,
+   "down_months": -0.0
+  },
+  "industry_icir": {
+   "電子": -0.12,
+   "生技": -0.14,
+   "半導體": -0.2,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": 0.026
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.34,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測電子/半導體industry_icir>0.5(全池可能<0.3)，實際方向完全相反：全池sub-train ICIR為-0.19，電子(-0.12)、半導體(-0.20)產業icir都是負的且比全池更負。『週轉率上升趨勢領先價格』假設方向錯誤——電子/半導體股週轉率快速上升更可能反映追高過熱、籌碼渙散，後續報酬反而較差，符合『高週轉=擁擠交易=之後反轉』的經典文獻而非資訊靈通者提前布局的敘事。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "電子/半導體股週轉率上升趨勢是反向(超買/過熱)訊號而非動能確認訊號；若想驗證『量先於價』的資訊擴散假設，應改用『週轉率上升但價格未創高』的背離條件，而非單純週轉率斜率，且方向應反向使用。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0188",
+ "ts": "2026-07-21T11:33:49"
+}

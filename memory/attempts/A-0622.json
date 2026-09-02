@@ -1,0 +1,83 @@
+{
+ "round": 40,
+ "category": "structural_margin_improvement",
+ "hypothesis": "F-001驗證ROE相對自身中位數改善有alpha，但ROE受財務槓桿與業外影響；改用op_margin的24個月絕對變化量捕捉更純粹的本業成本結構改善(規模經濟、產品組合優化)，長窗排除單季雜訊，市場對本業長期結構性改善重新定價滯後於短期營收動能反應。",
+ "prediction": "sub-train ICIR>0.45；與F-001相關係數|ρ|<0.5；多頭腿年化超額>0；月換手率<0.4(24月窗口已充分平滑)。",
+ "formula": "cs_rank(delta(op_margin,24))",
+ "name_zh": "結構性營益改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(op_margin,24))",
+  "fhash": "361707c6e9efe920",
+  "sub_train": {
+   "mean_ic": 0.041,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": -0.014,
+   "icir": -0.14,
+   "decay_pct": 132.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.103,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.034,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.027,
+   "down_months": 0.007
+  },
+  "industry_icir": {
+   "電子": 0.61,
+   "生技": 0.2,
+   "半導體": 0.12,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.034,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.61,
+  "turnover_m": 0.15,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.33
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.43 < 0.45; validation ICIR -0.14 < 0.3; validation 衰減 132% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.43，非常接近門檻，方向判斷大致正確；電子industry_icir達0.61，是四產業最強，也支持『本業結構性改善』的機制描述。但validation ICIR轉為-0.14、decay 132%，且coverage 0.61壓在門檻邊緣，最終因樣本外不穩定+coverage雙重原因被stage4擋下。多空兩腿都是正報酬（0.034/0.077），顯示這更像一個帶有系統性beta傾向的因子而非純alpha分域。",
+ "failure_type": "expression_bad",
+ "lesson": "24個月的op_margin絕對變化量在sub-train很接近門檻，顯示機制方向可能是對的，但長窗口對特定景氣循環（如2014-2017電子業結構性轉強）過度敏感，換一段驗證期就不穩定；下次應改用較短窗口（如12個月）或對窗口做滾動穩健性檢定，而不是直接採用單一24月切點。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0622",
+ "ts": "2026-08-12T09:17:43"
+}

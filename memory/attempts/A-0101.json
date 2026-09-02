@@ -1,0 +1,87 @@
+{
+ "round": 6,
+ "category": "cash_conversion_trend",
+ "hypothesis": "現金流量表的揭露顯著性與關注度遠低於損益表頭條EPS數字，當公司獲利品質從應計驅動轉為現金驅動(OCF/淨利比率持續改善)時，市場需要數個月才能完全消化此資訊；此為全新探索類別，聚焦現金含金量的『趨勢』而非F-006既有的『水準』篩選。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；且下跌月IC應不弱於上漲月IC(現金流品質改善在空頭期更具防禦價值)，與F-006(neg accruals水準因子)之截面相關度|ρ|<0.5。",
+ "formula": "cs_rank(ts_slope(ocf_ratio,6))",
+ "name_zh": "現金含金量提升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(ocf_ratio,6))",
+  "fhash": "ee99e721d2e65d7b",
+  "sub_train": {
+   "mean_ic": -0.0,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.049,
+    "盤整"
+   ],
+   "2013": [
+    -0.016,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.017,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": 0.001
+  },
+  "industry_icir": {
+   "電子": -0.13,
+   "生技": -0.05,
+   "半導體": -0.03,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.017,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "假設現金流品質趨勢應有PEAD式漸進反應，但sub-train ICIR僅-0.01，幾乎無訊號，各年IC正負交替無明顯規律，industry_icir多為負值(電子-0.13、生技-0.05、半導體-0.03)僅金融0.19；下跌月IC(0.001)並未如預期優於上漲月(0.005)，防禦性論點未獲支持。",
+ "failure_type": "expression_bad",
+ "lesson": "OCF/淨利比率的6個月斜率過於短窗、雜訊主導，導致訊號被淹沒；現金流品質異常(accruals型)文獻支持度高，建議下次改用『水準』而非『斜率』、或拉長窗口至12個月、並先與F-006做正交化後再測試，而非直接判定假設無效。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0101",
+ "ts": "2026-07-19T17:47:42"
+}

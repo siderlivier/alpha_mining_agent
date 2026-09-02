@@ -1,0 +1,83 @@
+{
+ "round": 24,
+ "category": "biotech_burn_rate_inflection",
+ "hypothesis": "生技公司多處於長期虧損燒錢階段，市場已習慣性忽略其絕對財務數字，僅關注管線與里程碑事件；但現金流品質的邊際改善（燒錢速度趨緩，OCF/淨利比率半年趨勢轉佳）往往是商轉能力提升或授權金入帳的早期訊號，這類邊際改善淹沒在普遍為負的財務比率中不易被察覺，此機制在多數已獲利穩定的產業（如金融）並不成立。",
+ "prediction": "sub-train ICIR > 0.4；生技產業industry_icir應為四產業最高。",
+ "formula": "cs_rank(delta(ts_mean(ocf_ratio,6),6))",
+ "name_zh": "生技燒錢趨緩",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ts_mean(ocf_ratio,6),6))",
+  "fhash": "429092442a74c11d",
+  "sub_train": {
+   "mean_ic": -0.016,
+   "icir": -0.24
+  },
+  "validation": {
+   "mean_ic": 0.003,
+   "icir": 0.08,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.031,
+    "多頭"
+   ],
+   "2014": [
+    -0.019,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    -0.005,
+    "多頭"
+   ],
+   "2017": [
+    -0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": -0.2,
+   "生技": -0.13,
+   "半導體": -0.06,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.002,
+   "short_excess_ann": -0.016
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向完全錯誤：預測sub-train ICIR>0.4（正），實際為-0.24（負，且符號與假設相反）。更關鍵的是，這個負向IC並非生技產業特有——四產業industry_icir全部為負（電子-0.2、生技-0.13、半導體-0.06、金融-0.06），生技甚至不是最負的產業。這代表『OCF改善邊際訊號在生技產業被市場忽略而低估』的機制完全不成立，反而更像是OCF比率6個月變化本身在全市場都帶輕微反向訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技燒錢趨緩→市場低估的機制未獲支持；且IC在四產業普遍為負顯示這不是產業特有效應，而可能是ocf_ratio短窗變化本身帶有跨產業的反向性質（改善速度快的公司也可能是基期低/一次性因素），此構造不適合再往生技產業特化方向延伸。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0374",
+ "ts": "2026-07-28T18:28:36"
+}

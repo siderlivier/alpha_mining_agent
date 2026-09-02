@@ -1,0 +1,89 @@
+{
+ "round": 53,
+ "category": "retail_overtrading_reversal",
+ "hypothesis": "台股散戶交易占比高，長期高週轉率反映散戶主導的過度交易與追高殺低行為(過度自信理論)，價格因雜訊交易系統性偏離基本面，事後需要時間修正；低週轉率個股資訊效率較高、價格較貼近真實價值。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC應高於上漲月(過度交易股下跌時修正更劇烈)；與F-008相關係數應<0.5（本因子為單腳位週轉率水準，非px_hi252/turn_21比值）。",
+ "formula": "cs_rank(ts_mean(turn_21, 6))",
+ "name_zh": "散戶過熱反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(turn_21, 6))",
+  "fhash": "ddcbe17d062cd398",
+  "sub_train": {
+   "mean_ic": -0.028,
+   "icir": -0.25
+  },
+  "validation": {
+   "mean_ic": -0.059,
+   "icir": -0.37,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.026,
+    "多頭"
+   ],
+   "2014": [
+    -0.044,
+    "多頭"
+   ],
+   "2015": [
+    -0.016,
+    "盤整"
+   ],
+   "2016": [
+    -0.036,
+    "多頭"
+   ],
+   "2017": [
+    -0.019,
+    "多頭"
+   ],
+   "2018": [
+    -0.108,
+    "盤整"
+   ],
+   "2019": [
+    -0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.061,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": -0.29,
+   "生技": -0.3,
+   "半導體": -0.13,
+   "金融": -0.1
+  },
+  "legs": {
+   "long_excess_ann": -0.062,
+   "short_excess_ann": -0.035
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.1,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": -0.88,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.88 > 0.5"
+ },
+ "diagnosis": "方向與強度預測大致正確(sub-train ICIR -0.25、validation -0.37，效應存在且增強)，但預測「與F-008相關<0.5」完全錯誤，實際rho=-0.88。散戶過度交易(高週轉)排序與F-008「量縮創高」的低週轉端本質上是同一套週轉率排序的鏡像。",
+ "failure_type": "duplicate",
+ "lesson": "任何以「週轉率水準」為核心排序的因子都極可能與F-008高度相關，因F-008排序主要由低週轉驅動；下次做週轉率類因子須先與F-008相關性預檢，或改用週轉率變化量/加速度而非水準規避重疊。",
+ "lesson_confidence": "cross_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0805",
+ "ts": "2026-08-15T11:33:03"
+}

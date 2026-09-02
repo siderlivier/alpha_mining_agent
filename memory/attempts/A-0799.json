@@ -1,0 +1,83 @@
+{
+ "round": 52,
+ "category": "institutional_herding_contrarian",
+ "hypothesis": "投信法人操作具動能追逐(herding)特性，買超集中的股票往往已上涨過多、進入獲利了結風險；先前已證實外資+投信同時買超的「共識」訊號實測為負向，顯示法人流量本身可能是擁擠指標而非資訊優勢，此候選直接測試投信賣超(而非買超)股票的反向alpha。",
+ "prediction": "sub-train ICIR>0.45(採neg方向)；上漲月與下跌月IC同號；多頭腿年化超額>0",
+ "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+ "name_zh": "投信追高反指標",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+  "fhash": "18a151d16911b800",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.33,
+   "decay_pct": -78.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.021,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": 0.09,
+   "半導體": 0.14,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.032,
+   "short_excess_ann": -0.023
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "反向方向的預測ICIR>0.45未達標(train僅0.18，stage1剔除)，儘管validation較高(0.33，衰減-78%)。假設文字提及先前『共識買超』(正向)已證偽為負，本次改測投信單獨賣超(反向)仍然太弱，顯示trust_net_21單獨使用(無論方向)信息量都不足以通過門檻。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信買賣超(trust_net_21)單獨使用、不搭配其他訊號(如外資流向或營收)時，無論追價或反向方向都難以通過IC門檻，顯示其邊際資訊量需要與其他訊號交互才能顯現。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0799",
+ "ts": "2026-08-14T01:18:09"
+}

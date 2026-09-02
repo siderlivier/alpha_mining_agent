@@ -1,0 +1,87 @@
+{
+ "round": 12,
+ "category": "foreign_ownership_accumulation",
+ "hypothesis": "外資對台股(尤其電子供應鏈)握有資訊與研究優勢，但受限於市場衝擊成本必須分批緩慢建倉；63日外資持股比率的上升趨勢反映的是尚未完全反映在價格中的緩慢資訊擴散過程，而非frgn_net_21代表的短期買賣超雜訊。",
+ "prediction": "sub-train ICIR > 0.45；半導體/電子產業industry_icir應顯著高於金融/生技；月換手率應 < 0.4",
+ "formula": "cs_rank(frgn_ratio_d63)",
+ "name_zh": "外資緩步吃貨",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(frgn_ratio_d63)",
+  "fhash": "4fc89c8705f36992",
+  "sub_train": {
+   "mean_ic": 0.001,
+   "icir": 0.01
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.07,
+   "decay_pct": -542.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.03,
+   "半導體": -0.01,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.004,
+   "short_excess_ann": 0.025
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且電子/半導體應顯著較強,但實際sub-train ICIR僅0.01,連預測最強的半導體都是-0.01,63日外資持股比率趨勢完全無預測力,可能是63日平滑窗口把緩慢資訊擴散訊號磨到趨近雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資「緩慢建倉」假說若用比率趨勢(而非流量或水位)構造,在覆蓋度已高的電子/半導體股中可能早已price-in;下次驗證外資資訊優勢應改用短窗意外流量或限定於外資覆蓋率仍低的股票池。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0190",
+ "ts": "2026-07-21T11:46:42"
+}

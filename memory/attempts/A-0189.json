@@ -1,0 +1,92 @@
+{
+ "round": 12,
+ "category": "dividend_yield_sustainability",
+ "hypothesis": "台股保守法人(保險資金、退休族群)習慣以殖利率作為核心篩選工具，但多數人只看當期殖利率高低，不會進一步查核配息是否有真實現金流支撐；用OCF/淨利佐證盈餘含金量的高殖利率股，配息可信度更高，會吸引穩定的法人資金持續流入而緩步重估，屬於資訊處理捷徑造成的低估。",
+ "prediction": "sub-train ICIR > 0.45；金融產業(保守法人集中度最高)的industry_icir應為四產業中最高；下跌月IC應高於上漲月IC，差距>0.1（防禦特性）",
+ "formula": "cs_rank(mul(cs_rank(div_yield), cs_rank(ocf_ratio)))",
+ "name_zh": "現金流佐證高息",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(cs_rank(div_yield), cs_rank(ocf_ratio)))",
+  "fhash": "b60ab52cdc91530c",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.072,
+   "icir": 1.04,
+   "decay_pct": -140.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.02,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.077,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.087,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.055,
+   "down_months": 0.042
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.4,
+   "半導體": 0.33,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": -0.007,
+   "short_excess_ann": -0.008
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.42
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.43 < 0.45; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測金融業industry_icir應最高、應具下跌月>上漲月的防禦特性,但實際金融是四產業最低(0.23),且上漲月IC(0.055)反而高於下跌月(0.042)。sub-train ICIR僅0.43未達0.45,驗證期雖暴衝到1.04,但多空兩腿超額報酬皆為負,顯示rank IC與可交易的選股報酬脫節。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「保守法人集中在金融業」的敘事被industry_icir直接證偽;同時IC存在但多空腿雙負時應懷疑是與大盤beta混雜而非真alpha,legs檢查與IC檢查缺一不可。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0189",
+ "ts": "2026-07-21T11:46:42"
+}

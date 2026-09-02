@@ -1,0 +1,83 @@
+{
+ "round": 30,
+ "category": "institutional_divergence",
+ "hypothesis": "投信法人有追漲殺跌與季底作帳傾向，近3個月持續買超的股票可能只是投信追價形成的擁擠部位，之後隨調節出場而回落；反之近期遭投信賣超的股票乃錯殺，之後容易修正回升，屬法人動能均值回歸機制。",
+ "prediction": "sub-train ICIR>0.45；季底(3/6/9/12月)後一個月IC應強於其他月份；多頭腿(近期遭投信賣超者)年化超額報酬>0。",
+ "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+ "name_zh": "投信追高反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(trust_net_21,3)))",
+  "fhash": "18a151d16911b800",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.33,
+   "decay_pct": -78.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.021,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": 0.09,
+   "半導體": 0.14,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.032,
+   "short_excess_ann": -0.023
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR(0.18)遠低於門檻，但逐年IC由負轉正(2013:-0.003→2019:0.022)，validation期間轉強(icir 0.33)，方向未被證偽只是強度不足。預測中「季底效應」未被驗證(診斷未提供分月數據)，用連續3個月均值的表達方式可能把季底轉折訊號和其他月份雜訊混在一起而稀釋。",
+ "failure_type": "expression_bad",
+ "lesson": "若假設核心機制是「季底作帳後修正」，用簡單rolling window(ts_mean(x,3))無法真正表達季節性轉折，應直接用季底月份的條件gate驗證，而非依賴平滑窗口隱含表達季節性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0463",
+ "ts": "2026-07-29T23:26:46"
+}

@@ -1,0 +1,91 @@
+{
+ "round": 44,
+ "category": "opex_investment_intensity",
+ "hypothesis": "毛利率與營業利益率的差距（費用侵蝕程度）擴大，代表管理層費用控管能力弱化，市場常誤將暫時性費用上升解讀為『重投資期』而給予過度樂觀估值，實則多反映競爭加劇或執行力下降，後續獲利下修風險高；反之費用缺口小的公司代表營運紀律紮實，尚未被市場充分定價。",
+ "prediction": "sub-train ICIR > 0.45；此為經驗庫opex_investment_intensity方向反轉後的確認結果（原始正向缺口與報酬穩定顯著負相關），此次用neg(gap)方向應為正；下跌月IC應高於上漲月。",
+ "formula": "cs_rank(neg(sub(gross_margin, op_margin)))",
+ "name_zh": "費用控管優勢股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(gross_margin, op_margin)))",
+  "fhash": "569e486e264c6f77",
+  "sub_train": {
+   "mean_ic": 0.04,
+   "icir": 0.41
+  },
+  "validation": {
+   "mean_ic": 0.038,
+   "icir": 0.51,
+   "decay_pct": -23.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.025,
+    "盤整"
+   ],
+   "2013": [
+    -0.01,
+    "多頭"
+   ],
+   "2014": [
+    0.029,
+    "多頭"
+   ],
+   "2015": [
+    0.053,
+    "盤整"
+   ],
+   "2016": [
+    0.069,
+    "多頭"
+   ],
+   "2017": [
+    0.103,
+    "多頭"
+   ],
+   "2018": [
+    0.008,
+    "盤整"
+   ],
+   "2019": [
+    0.068,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.33,
+   "生技": 0.34,
+   "半導體": 0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.009,
+   "short_excess_ann": 0.028
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.06,
+  "stage2_max_rho": {
+   "factor": "F-014",
+   "rho": 0.38
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.41 < 0.45; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "方向反轉後預測 ICIR>0.45；實際 sub-train ICIR 0.41（僅差一點未達門檻），但 validation ICIR 反而升至0.51、decay -23%，逐年 IC 六年中五年為正，顯示『費用缺口』機制方向確實成立且穩健，預測部分正確。但敗因是預測未考慮的維度：多頭腿(費用控管佳)超額為負(-0.009)，空頭腿(費用侵蝕嚴重)超額才是正的(0.028)，代表 alpha 全部來自『避開費用惡化股』而非『買進紀律股』，在台股放空受限下不可交易。",
+ "failure_type": "expression_bad",
+ "lesson": "此類品質/費用缺口型負向篩選因子，即使 IC 穩健，也常只在『壞公司跑輸』的空頭腿顯現，多頭腿未必有正超額；下次應把預測項目加入『多頭腿必須為正』的檢查，並嘗試將其設計為排除性過濾器（剔除高費用缺口股後疊加在其他正向因子上）而非獨立多空因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0670",
+ "ts": "2026-08-12T14:15:12"
+}

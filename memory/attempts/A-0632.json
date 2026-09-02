@@ -1,0 +1,85 @@
+{
+ "round": 41,
+ "category": "revenue_regime_persistence",
+ "hypothesis": "月營收年增率在自身24個月區間的百分位，衡量的是「成長持續性」而非單月數字：當一家公司營收年增率達到自身兩年新高百分位，代表可能出現結構性需求轉變（新產品放量、市佔提升），這種趨勢通常會延續數季，但投資人對「最新一月數字」的錨定效應會使其低估這種百分位所隱含的持續性資訊。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-013/F-017/F-018相關性需分別檢查，若|ρ|>0.5則證實為既有rev_yoy因子家族的重複表達而非獨立訊號。",
+ "formula": "cs_rank(ts_rank(rev_yoy,24))",
+ "name_zh": "營收動能排名",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(rev_yoy,24))",
+  "fhash": "a0ed93ed44c0396d",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.26,
+   "decay_pct": 50.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.047,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.28,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.061,
+   "short_excess_ann": 0.078
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-013",
+   "rho": 0.54,
+   "factor_name": "冷門成長股",
+   "factor_desc": "營收成長強但成交金額低，代表利多尚未被市場注意到。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-013 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.52超越預測的0.45門檻，多頭腿+0.061強勁，表現優異；驗證期衰減剛好卡在50%門檻。死因為stage2與F-013（冷門成長股）相關性0.54——這正是候選預先點名要檢查的對象之一，預測完全命中，顯示rev_yoy家族欄位無論用ts_rank百分位或原始值表達，都難逃與既有『冷門成長股』因子的高相關。",
+ "failure_type": "duplicate",
+ "lesson": "rev_yoy欄位系列（不論是原始值、24個月百分位、或加速度）在本庫已是紅海——F-013先佔據了『營收成長+低關注度』這個組合，任何以rev_yoy為核心單欄位的變體都應假設會撞上F-013/F-017/F-018家族，除非引入完全不同的第二維度（非成交量/關注度類）來做差異化。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0632",
+ "ts": "2026-08-12T09:31:55"
+}

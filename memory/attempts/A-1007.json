@@ -1,0 +1,87 @@
+{
+ "round": 66,
+ "category": "persistent_momentum_leadership",
+ "hypothesis": "個股當前中期動能相對其『自身過去一年』處於高位，代表這是一段已維持一段時間的持續性趨勢，而非剛啟動或已衰竭。處分效應使投資人在趨勢中途過早獲利了結，拉長持續型贏家的價格發現；時序自身排名可辨識『低絕對動能但相對自身強勢』的低 beta 穩健趨勢股，這類最易被純截面動能篩選漏掉。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿年化超額 > 0；與 cs_rank(mom_60)、mom_240、R-025 之 |ρ| < 0.5；下跌月表現不明顯較差（低 beta 特性）。",
+ "formula": "cs_rank(ts_rank(mom_60,12))",
+ "name_zh": "自身動能高位",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(mom_60,12))",
+  "fhash": "d6ccee1ceeec3463",
+  "sub_train": {
+   "mean_ic": -0.019,
+   "icir": -0.22
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.02,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.107,
+    "盤整"
+   ],
+   "2013": [
+    -0.041,
+    "多頭"
+   ],
+   "2014": [
+    -0.011,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.0,
+   "down_months": -0.05
+  },
+  "industry_icir": {
+   "電子": -0.08,
+   "生技": -0.17,
+   "半導體": -0.23,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.013,
+   "short_excess_ann": 0.017
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.5,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 ICIR>0.4、多頭腿為正、低 beta(下跌月不明顯較差)。實際 sub-train ICIR -0.22、2012 IC -0.107、下跌月 -0.05(比上漲月差很多),全面反向。個股自身動能時序高位在台股是反轉訊號,非持續性領先。與 C-2、C-3 三案獨立確認台股中期價格動能多頭方向無效。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『處分效應拉長持續型贏家價格發現』在台股中期尺度不成立。下次動能方向的因子在台股要預設為反轉友善:優先測短期(1 月)反轉、產業層級動能,或把動能當作風險控制/擁擠度訊號而非 alpha 來源。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1007",
+ "ts": "2026-09-02T00:51:50"
+}

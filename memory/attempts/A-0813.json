@@ -1,0 +1,83 @@
+{
+ "round": 53,
+ "category": "dividend_yield_breakout",
+ "hypothesis": "股息殖利率年度變動(現值減去12個月前)代表公司配息政策調升，因股利具半固定成本性質(管理層僅在確信可持續時才調升)，此為管理層對未來獲利信心的間接訊號，市場對突發的股東回饋改善存在系統性反應遲緩(定錨於過去低殖利率水準)。",
+ "prediction": "sub-train ICIR>0.45；此效應與F-010/F-021等既有金融品質因子相關係數應<0.5(本因子直接抓殖利率年度變動，非水準或波動度)。",
+ "formula": "cs_rank(sub(div_yield, delay(div_yield, 12)))",
+ "name_zh": "股利躍升訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(div_yield, delay(div_yield, 12)))",
+  "fhash": "4d47120e8b206109",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": -0.01,
+   "icir": -0.15,
+   "decay_pct": 159.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.002,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.04,
+   "生技": 0.21,
+   "半導體": 0.02,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.014,
+   "short_excess_ann": -0.009
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.17,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.25未達標，且validation翻負(-0.15，decay 159%)，方向不穩定。殖利率(股利/股價)的年變動機械上會被股價漲跌大幅稀釋，混淆了「管理層配息信心」與「純粹股價上漲」兩種驅動力。",
+ "failure_type": "expression_bad",
+ "lesson": "用殖利率年變動代理「配息政策調升」構造上有缺陷，分母(股價)波動會主導變動方向；更乾淨的表達應改用每股股利或配息率年變動，排除股價效應干擾。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0813",
+ "ts": "2026-08-15T11:33:03"
+}

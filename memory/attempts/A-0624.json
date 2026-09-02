@@ -1,0 +1,87 @@
+{
+ "round": 41,
+ "category": "trend_r_squared_quality",
+ "hypothesis": "毛利率若沿著近似直線穩定改善（ts_rsq高），代表成本結構或產品組合出現結構性轉變，而非單月雜訊波動；此類「緩慢但一致」的進步缺乏戲劇性、不易登上新聞或法說會焦點，分析師傾向對單期數字反應而非追蹤趨勢擬合優度，導致市場對這種漸進式資訊擴散反應遲緩（Hong-Stein有限注意力）。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；驗證期ICIR衰減<40%；預期在電子/半導體產業industry_icir相對突出（週期性產業更需結構轉變確認）。",
+ "formula": "cs_rank(ts_rsq(op_margin,12))",
+ "name_zh": "毛利趨勢一致性",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rsq(op_margin,12))",
+  "fhash": "1d2ea64b748ccaa0",
+  "sub_train": {
+   "mean_ic": 0.012,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.17,
+   "decay_pct": -55.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.033,
+    "盤整"
+   ],
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.035,
+    "多頭"
+   ],
+   "2015": [
+    0.041,
+    "盤整"
+   ],
+   "2016": [
+    -0.028,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    0.031,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": -0.3,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": -0.019,
+   "short_excess_ann": 0.002
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.31,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.11，差距懸殊；預測驗證期衰減<40%，實際-55%（驗證期不降反升，但兩期水準都太低無意義）；預測電子/半導體industry_icir突出，實際完全相反——電子-0.30、半導體-0.03，反而金融最高(0.21)，產業機制假設被證偽；多頭腿年化超額-0.019為負，不可交易；逐年IC正負交錯(2013 -0.011、2016 -0.028)顯示無穩定結構訊號，純雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「毛利率ts_rsq緩慢改善=市場低估」的機制在本地資料中不成立；ts_rsq型『趨勢線性度/擬合優度』特徵在此pipeline反覆測不出訊號（見learnings_additions），下次應優先驗證『趨勢方向/斜率』而非『趨勢平滑度』。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0624",
+ "ts": "2026-08-12T09:31:55"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 5,
+ "category": "margin_trend_underreaction",
+ "hypothesis": "毛利率的上升趨勢代表產品定價力或成本控制正在改善（如新產品組合優化、規模採購議價力提升），與F-004捕捉的「毛利率長期低波動」（穩定但不成長）機制不同，這裡強調趨勢方向而非穩定度；市場對半年期毛利率趨勢的反應通常落後於單季毛利率超預期與否的關注。",
+ "prediction": "sub-train ICIR > 0.45；此因子與F-004(neg std gross_margin)相關係數 < 0.5(驗證趨勢與穩定度是不同維度)；電子/半導體產業ICIR應高於金融業。",
+ "formula": "cs_rank(ts_slope(gross_margin,6))",
+ "name_zh": "毛利率轉強",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(gross_margin,6))",
+  "fhash": "0bc21e9676bc55ea",
+  "sub_train": {
+   "mean_ic": 0.032,
+   "icir": 0.57
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.22,
+   "decay_pct": 62.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.034,
+    "盤整"
+   ],
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.033,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.041,
+    "多頭"
+   ],
+   "2018": [
+    -0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.027,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.32,
+   "半導體": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.072
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.38
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.22 < 0.3; validation 衰減 62% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR 0.57超越預測，產業梯度電子>半導體大致成立，但validation ICIR崩到0.22、衰減62%——與C-2（另一個利潤率趨勢因子，op_margin/12mo）幾乎同一種『強sub-train、弱validation』failure signature。兩個獨立的利潤率斜率公式（不同窗口、不同利潤率定義）都出現同樣模式，暗示這不是單一案例的雜訊，而是類別性問題。",
+ "failure_type": "expression_bad",
+ "lesson": "ts_slope型利潤率趨勢因子（毛利率或營益率，各種窗口）持續呈現強sub-train IC但validation衰減>60%，疑似過擬合2015-2017特定利潤率擴張期，而非穩健的反應不足效應。",
+ "lesson_confidence": "cross_validated",
+ "verdict": "rejected_stage4",
+ "id": "A-0095",
+ "ts": "2026-07-19T17:32:32"
+}

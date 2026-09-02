@@ -1,0 +1,83 @@
+{
+ "round": 66,
+ "category": "semiconductor_margin_recovery_streak",
+ "hypothesis": "半導體有強烈庫存/景氣週期。毛利率連續多月改善（相對 3 個月前為正）代表去庫存近尾聲、進入回補與漲價階段；但市場因前幾季連續獲利下滑養成慣性看空，只反應最新一期數字、不對『改善已持續多久』的趨勢長度定價。此錨定偏誤在半導體最嚴重，故為半導體限定。",
+ "prediction": "半導體產業內 rank IC 月均 > 0.04 且為四大產業最高；整體 sub-train ICIR > 0.35（產業限定門檻）；多頭腿年化超額 > 0；與 F-025、F-009 之 |ρ| < 0.5。",
+ "formula": "cs_rank(streak(delta(gross_margin,3),12))",
+ "name_zh": "毛利連改月數",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(streak(delta(gross_margin,3),12))",
+  "fhash": "9a7048ca8382f5ec",
+  "sub_train": {
+   "mean_ic": -0.01,
+   "icir": -0.16
+  },
+  "validation": {
+   "mean_ic": -0.016,
+   "icir": -0.23,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    -0.037,
+    "多頭"
+   ],
+   "2015": [
+    -0.018,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    -0.002,
+    "多頭"
+   ],
+   "2018": [
+    -0.031,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.004,
+   "down_months": -0.029
+  },
+  "industry_icir": {
+   "電子": -0.27,
+   "生技": 0.0,
+   "半導體": -0.23
+  },
+  "legs": {
+   "long_excess_ann": -0.035,
+   "short_excess_ann": -0.033
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.45,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測半導體內 IC>0.04 且為四大產業最高、多頭腿為正,實際完全相反:半導體 ICIR -0.23、電子 -0.27、多頭腿年化 -3.5%。方向與『錨定偏誤使市場對改善持續度定價不足』假說反向——毛利率已連續多月改善時,通常代表週期已行進到中後段、接近高點,反轉在即,市場其實已經定價。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『報表科目連續改善月數』在半導體是反向訊號(改善越久越接近週期頂)。下次半導體毛利週期因子應捕捉『改善剛啟動』(如 delta 剛由負轉正 1-2 期、或毛利率相對 2 年低點的回升幅度),而非累積持續月數;或直接以反向假設重測連續改善月數。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-008",
+ "id": "A-1002",
+ "ts": "2026-09-02T00:51:49"
+}

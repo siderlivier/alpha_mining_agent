@@ -1,0 +1,83 @@
+{
+ "round": 16,
+ "category": "earnings_surprise_persistence",
+ "hypothesis": "EPS年增率的3個月變化經過再平滑後代表持續性(非單季雜訊)的盈餘加速，賣方分析師調整獲利預估的速度落後於財報公佈（PEAD盈餘公告後漂移效應），使得平滑後的EPS加速訊號在未來數月持續產生超額報酬；吸取先前sdiv/std標準化雜訊過大的教訓，本次改用ts_mean直接平滑delta，降低單季極端值影響。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4（平滑設計目標）；validation decay<40%；電子/半導體因分析師覆蓋密集，industry_icir應優於生技/金融。",
+ "formula": "cs_rank(ts_mean(delta(eps_yoy,3),3))",
+ "name_zh": "EPS加速漂移",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(delta(eps_yoy,3),3))",
+  "fhash": "06b2bf6d70ec5da8",
+  "sub_train": {
+   "mean_ic": 0.0,
+   "icir": 0.01
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.32,
+   "decay_pct": -4131.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.015,
+    "多頭"
+   ],
+   "2014": [
+    -0.002,
+    "多頭"
+   ],
+   "2015": [
+    -0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.013,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": 0.16,
+   "生技": -0.07,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.009,
+   "short_excess_ann": 0.012
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且換手率<0.4，換手率0.3確實達標，但sub-train ICIR幾乎為零(0.01)——雙重平滑(先delta再ts_mean)把訊號過度稀釋，抹去了原本的加速效果；validation期ICIR跳升到0.32(decay為-4131%，主要是sub-train分母趨近零造成的數學假象)。逐年IC正負交錯(2014 -0.002, 2015 -0.015)顯示更像雜訊而非穩定的PEAD漂移效應。",
+ "failure_type": "expression_bad",
+ "lesson": "對已是低頻(月頻)且雜訊大的EPS年增率做「delta再ts_mean」雙重平滑，容易把訊號和雜訊一起抹平，導致sub-train期幾乎無IC；若要再測PEAD類假說，應改用單次平滑，或改以相對分析師預期的surprise而非同比增速的二階變化來表達持續性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0255",
+ "ts": "2026-07-21T12:37:07"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 62,
+ "category": "revenue_confirmed_operating_growth",
+ "hypothesis": "本業獲利成長若缺乏營收成長佐證，可能來自成本削減等不可持續操作；用sign(rev_yoy)對op_income_yoy做連續加權(營收衰退時反轉為負分而非清零)，比if_else清零版本保留更多橫斷面排序資訊，避免同分並列稀釋訊號。",
+ "prediction": "sub-train ICIR>0.4；相較舊版(rank_nz清零)覆蓋率應提升且ICIR不劣化；多頭腿年化超額>0。",
+ "formula": "cs_rank(mul(op_income_yoy, sign(rev_yoy)))",
+ "name_zh": "營收佐證獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(op_income_yoy, sign(rev_yoy)))",
+  "fhash": "8fd724d0734ad51a",
+  "sub_train": {
+   "mean_ic": 0.001,
+   "icir": 0.02
+  },
+  "validation": {
+   "mean_ic": -0.006,
+   "icir": -0.1,
+   "decay_pct": 604.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.014,
+    "盤整"
+   ],
+   "2016": [
+    -0.015,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    -0.01,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.005,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": -0.01,
+   "生技": 0.08,
+   "半導體": -0.15,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.003,
+   "short_excess_ann": -0.003
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.38,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4且覆蓋率應優於舊版if_else清零版，但實得ICIR僅0.02，逐年正負交錯、cond_ic上漲月與下跌月符號相反，呈現典型雜訊而非結構性訊號。與C-3共享「sign()乘法加權」設計，同樣接近零，強化了表達方式問題而非個別產業機制錯誤的判斷。",
+ "failure_type": "expression_bad",
+ "lesson": "見C-3：sign()乘法加權模式(而非機制本身)可能是兩案共同失敗的根因，值得換一種驗證表達方式重測，而非直接判「營收驗證獲利成長」死刑。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0942",
+ "ts": "2026-08-27T21:24:50"
+}

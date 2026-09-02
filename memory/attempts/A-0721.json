@@ -1,0 +1,93 @@
+{
+ "round": 47,
+ "category": "short_margin_direct_fade",
+ "hypothesis": "券資比長期偏高代表市場對其存在系統性看空共識或炒作題材引發過度融資追高，兩者皆代表籌碼面不健康；不論用延續或反轉敘事包裝，券資比與報酬關係經驗上穩定為負，此候選直接測試該負向關係本身。",
+ "prediction": "sub-train ICIR > 0.45；neg轉換後IC應在漲跌月份皆穩定為正；多頭腿年化超額報酬 > 0。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "券資比降溫股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45(實際0.27未達)、漲跌月皆穩定為正(實際下跌月為負-0.017，違反預測)、多頭腿為正(實際0.053確為正)。機制方向大致成立(8年中6年正、decay僅6%極穩定)，但死於stage2，與庫內F-008(低調接近新高)相關係數0.57——'券資比降溫'與'未被炒作的價量特徵'本質是同一籌碼健康度主軸的不同切入。",
+ "failure_type": "duplicate",
+ "lesson": "券資比類籌碼因子容易與周轉率/關注度類因子(如F-008)結構性重疊，因兩者都在捕捉'未被投機炒作'這個底層維度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0721",
+ "ts": "2026-08-12T14:54:09"
+}

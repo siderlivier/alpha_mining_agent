@@ -1,0 +1,91 @@
+{
+ "round": 18,
+ "category": "dividend_defensive_downside_protection",
+ "hypothesis": "高殖利率股票通常財務體質穩健、盈餘波動度低，這類股票因現金流韌性在下跌月相對抗跌，但市場對『殖利率』的定價多集中於股息貼現本身而非其下跌保護特性，導致殖利率因子在正常時期溢酬不明顯，卻在系統性下跌時期因法人低估其防禦價值而展現超額報酬。",
+ "prediction": "下跌月IC需顯著高於上漲月IC(差值>0.05)；全樣本sub-train ICIR可低於0.45但下跌月單獨ICIR需>0.4",
+ "formula": "cs_rank(div_yield)",
+ "name_zh": "高息防禦價值",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(div_yield)",
+  "fhash": "87bbfbedef9c69ca",
+  "sub_train": {
+   "mean_ic": 0.051,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.088,
+   "icir": 1.03,
+   "decay_pct": -146.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.026,
+    "盤整"
+   ],
+   "2013": [
+    0.032,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    0.074,
+    "盤整"
+   ],
+   "2016": [
+    0.092,
+    "多頭"
+   ],
+   "2017": [
+    0.058,
+    "多頭"
+   ],
+   "2018": [
+    0.088,
+    "盤整"
+   ],
+   "2019": [
+    0.087,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.065,
+   "down_months": 0.059
+  },
+  "industry_icir": {
+   "電子": 0.59,
+   "生技": 0.46,
+   "半導體": 0.31,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.12,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.49
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.42 < 0.45; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測下跌月IC應顯著高於上漲月(差值>0.05)、下跌月獨立ICIR>0.4，實際上漲月(0.065)與下跌月(0.059)幾乎相同，『防禦價值』的核心差異化敘事並未成立——殖利率因子整體有效(sub-train 0.42接近門檻、validation 1.03很強)，但不是靠下跌抗跌的機制。真正rejection理由是sub-train ICIR未達0.45且多頭腿超額為負(-0.01)，不可交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『高殖利率在下跌月因防禦特性被低估』這個regime-dependent故事沒有被數據支持，上下月IC幾乎持平；殖利率因子本身可能有效，但『下跌保護』不是其定價不足的來源，之後測試殖利率類假設不應再假設下跌月才是關鍵驗證場景。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0290",
+ "ts": "2026-07-21T12:59:43"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 26,
+ "category": "cash_flow_quality_momentum",
+ "hypothesis": "營業現金流對淨利比率(OCF/NI)近6個月的上升趨勢代表獲利含金量正在改善，市場對現金流品質變化反應慢於對淨利數字本身；若同時應計項偏低，此改善訊號更可信。",
+ "prediction": "sub-train ICIR>0.45；多頭腿超額報酬>0；與F-006、F-012相關係數<0.5。",
+ "formula": "add(cs_z(ts_slope(ocf_ratio,6)), cs_z(neg(accruals)))",
+ "name_zh": "現金流淨化動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_z(ts_slope(ocf_ratio,6)), cs_z(neg(accruals)))",
+  "fhash": "fbc2fb1fd9a2c64b",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.32,
+   "decay_pct": -51.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.013,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    0.024,
+    "盤整"
+   ],
+   "2016": [
+    0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.04,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.019,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.13,
+   "半導體": 0.13,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": -0.017,
+   "short_excess_ann": 0.026
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "與C-1同結構（slope+neg(accruals)），但把roe換成ocf_ratio後sub-train ICIR從0.46掉到0.21，且多頭腿轉負(-1.7%)。accruals本身即由OCF與淨利差距定義，與ocf_ratio的斜率放在同一加總公式中可能造成訊號部分重疊、互相稀釋而非互補確認。",
+ "failure_type": "expression_bad",
+ "lesson": "「品質確認」型公式（動能斜率+neg(accruals)）在ROE上有效不代表在OCF比率上同樣有效——accruals本身已是現金流相關指標，與ocf_ratio slope搭配可能產生公式內部的多重共線性；此類搭配應優先用於「非現金流」的獲利指標（如ROE、營益率），而非再疊加另一個現金流指標。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0404",
+ "ts": "2026-07-28T18:54:35"
+}

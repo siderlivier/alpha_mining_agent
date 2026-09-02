@@ -1,0 +1,88 @@
+{
+ "round": 15,
+ "category": "profitability_trend_underreaction",
+ "hypothesis": "分析師與一般投資人常用未經應計項調整的ROE變化評估獲利改善，若ROE上升主要來自應計操縱（如提前認列收入）而非現金獲利改善，市場初期仍會錯誤給予正面評價，導致「真實」（應計調整後）ROE改善的個股訊號被大量假性ROE改善雜訊淹沒；直到後續季度應計反轉、真假分明後才緩慢修正定價，形成系統性延遲反應。",
+ "prediction": "sub-train ICIR > 0.45；四產業中至少3個產業cond_ic為正；validation期ICIR相對sub-train衰減 < 40%；多頭腿年化超額報酬 > 0。",
+ "formula": "sub(cs_rank(ts_slope(roe,6)), cs_rank(accruals))",
+ "name_zh": "淨化ROE動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(roe,6)), cs_rank(accruals))",
+  "fhash": "f05db3d7604eb5b0",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.32,
+   "decay_pct": 29.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.029,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.032,
+   "down_months": 0.008
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.33,
+   "半導體": 0.35,
+   "金融": 0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.051
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.3,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.49
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.44 < 0.45"
+ },
+ "diagnosis": "多數預測命中：decay 29%(<40%)、3/4產業cond_ic正(電子.38/生技.33/半導體.35)、多頭腿+4.6%為正、上下月cond_ic皆正，唯獨sub-train ICIR 0.44僅差0.01未達0.45門檻。與F-001相關係數0.49也已逼近重複線。整體看機制方向判斷正確，只是訊噴強度與獨立性都卡在邊緣。",
+ "failure_type": "expression_bad",
+ "lesson": "機制可能成立但表達力與獨立性都卡在門檻邊緣（ICIR 0.44 vs 0.45；rho 0.49 vs 0.5上限）；下次可嘗試拉長ts_slope窗口或改用累積排名放大訊噴比，並對F-001做殘差正交化再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0234",
+ "ts": "2026-07-21T12:24:47"
+}

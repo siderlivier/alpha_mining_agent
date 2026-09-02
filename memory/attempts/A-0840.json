@@ -1,0 +1,90 @@
+{
+ "round": 55,
+ "category": "financial_capital_return_value",
+ "hypothesis": "金融控股公司同時具備低淨值股價比與高股利殖利率時，代表管理層對資本適足與盈餘品質有信心（股利作為昂貴訊號理論），但市場常將「便宜+高殖利率」直接貼上「價值陷阱/成熟無成長」標籤而過度折價，忽略了這其實是資本紀律良好的訊號。",
+ "prediction": "金融限定industry_icir>0.45；多頭腿年化超額報酬>0；與F-002、F-021相關性均需|ρ|<0.5。",
+ "formula": "mul(cs_rank(bp), cs_rank(div_yield))",
+ "name_zh": "資本紀律金控股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(div_yield))",
+  "fhash": "6425b3bfba55070c",
+  "sub_train": {
+   "mean_ic": 0.06,
+   "icir": 0.58
+  },
+  "validation": {
+   "mean_ic": 0.12,
+   "icir": 0.85,
+   "decay_pct": -46.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.075,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    0.086,
+    "多頭"
+   ],
+   "2017": [
+    0.049,
+    "多頭"
+   ],
+   "2018": [
+    0.129,
+    "盤整"
+   ],
+   "2019": [
+    0.111,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.095,
+   "down_months": 0.037
+  },
+  "industry_icir": {
+   "電子": 1.03,
+   "生技": 0.61,
+   "半導體": 0.32,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": 0.057
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-005",
+   "rho": 0.54,
+   "factor_name": "低波動異常",
+   "factor_desc": "長期波動度低的穩定股因散戶偏好高波動股而被低估"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-005 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "訓練/驗證ICIR遠超預期(0.58→0.85)，但「金融限定」敘事完全落空——金融產業ICIR僅0.21為四組最低，電子產業反而高達1.03，顯示資本紀律訊號可能不是金融業特有機制。死因是與F-005（低波動異常）相關0.54，指向這其實是低波動穩健股的另一種包裝。",
+ "failure_type": "duplicate",
+ "lesson": "產業限定假說在提出前應先核對目標產業的industry_icir是否真的是四組最高，本輪金融/半導體限定候選常見敘事與資料不符。",
+ "lesson_confidence": "cross_validated",
+ "verdict": "rejected_stage2",
+ "id": "A-0840",
+ "ts": "2026-08-18T23:46:33"
+}

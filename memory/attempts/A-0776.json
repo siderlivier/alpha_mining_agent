@@ -1,0 +1,87 @@
+{
+ "round": 51,
+ "category": "securities_lending_supply_tightness",
+ "hypothesis": "借券量是機構主動出借股票的決策結果，當某股可借券量相對過去半年持續萎縮，代表握有大部位的機構法人主動收回股源、不願讓避險或放空需求借入，隱含其對後市轉趨保守樂觀；此資訊來自機構實際部位行為而非公開籌碼統計，比融資融券更難被散戶觀察與模仿。",
+ "prediction": "sub-train ICIR > 0.45；此訊號與F-008相關係數應<0.5(機制為借券供給收縮而非價格接近新高)；下跌月IC不應顯著高於上漲月IC。",
+ "formula": "cs_rank(neg(delta(lend_vol_21,6)))",
+ "name_zh": "借券收縮訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(lend_vol_21,6)))",
+  "fhash": "6edae6d569f2885c",
+  "sub_train": {
+   "mean_ic": 0.001,
+   "icir": 0.02
+  },
+  "validation": {
+   "mean_ic": -0.017,
+   "icir": -0.28,
+   "decay_pct": 1880.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.013,
+    "盤整"
+   ],
+   "2013": [
+    0.012,
+    "多頭"
+   ],
+   "2014": [
+    -0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.016,
+    "多頭"
+   ],
+   "2018": [
+    -0.021,
+    "盤整"
+   ],
+   "2019": [
+    -0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.0,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.03,
+   "半導體": -0.04,
+   "金融": 0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": -0.005
+  },
+  "coverage": 0.49,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train IC幾乎為0(0.001)，覆蓋率僅0.49，明顯低於其他候選(多在0.7-0.99)，借券資料涵蓋不到一半月度樣本，稀釋橫斷面排名的統計檢定力；validation衰減達1880%更可能是低覆蓋造成的雜訊放大，而非假說本身被證偽。診斷資訊不足以判斷機制真偽，僅能確認資料稀疏是主因之一。",
+ "failure_type": "expression_bad",
+ "lesson": "借券量資料覆蓋率過低(0.49)會使全市場cs_rank的統計力大幅衰減；未來測借券類因子應先限定在「有借券活動歷史」的股票子集內排序評估，而非對全市場做rank，才能公平檢驗假說。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0776",
+ "ts": "2026-08-14T01:05:54"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 56,
+ "category": "dividend_stability_income",
+ "hypothesis": "現金殖利率長期波動度低的公司代表股利政策穩定、管理層對未來現金流有把握；此類「無聊」收息股缺乏題材性，常被成長導向的台股散戶資金忽略，估值修正因此緩慢。",
+ "prediction": "sub-train ICIR>0.4；多頭腿（股利最穩定端）年化超額>0；與F-004、F-010相關係數需<0.5。",
+ "formula": "cs_rank(neg(ts_std(div_yield,24)))",
+ "name_zh": "穩定配息股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(div_yield,24)))",
+  "fhash": "9b921044fa3c41ed",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.1
+  },
+  "validation": {
+   "mean_ic": -0.004,
+   "icir": -0.07,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.0,
+    "多頭"
+   ],
+   "2014": [
+    0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.007,
+    "盤整"
+   ],
+   "2016": [
+    -0.024,
+    "多頭"
+   ],
+   "2017": [
+    -0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.005,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.21,
+   "生技": -0.39,
+   "半導體": -0.08,
+   "金融": 0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": -0.018
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.03,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4正向，實際sub-train為-0.10，多空腿超額報酬皆趨近於零（+0.3% / -1.8%），逐年IC正負交錯無明確型態，『存股族尚未進場』的資訊傳導落差故事未獲數據支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金殖利率波動度低（配息穩定）本身不足以構成超額報酬來源；穩定配息公司更可能只是成熟低成長股，而非被錯價的冷門收息股。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0854",
+ "ts": "2026-08-18T23:55:52"
+}

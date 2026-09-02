@@ -1,0 +1,131 @@
+{
+ "pending": [],
+ "rejected_log": [
+  {
+   "proposal": {
+    "name": "qtr_only",
+    "signature": "(x)",
+    "semantics": "僅在日曆季底月(3/6/9/12月)保留x原值，其餘月份設為NaN，用於構造事件視窗式(季底效應)因子而不需連續滾動窗口近似",
+    "pseudocode": "function qtr_only(x):\n  result = full_array(NaN)\n  for t in timestamps:\n    if month(t) in {3,6,9,12}:\n      result[t] = x[t]\n  return result",
+    "evidence": [
+     "A-0191",
+     "A-0231",
+     "A-0421"
+    ],
+    "example": "cs_rank(ts_mean(qtr_only(trust_net_21), 4))",
+    "why": "目前只有ts_*滾動窗口運算子，無法標記或篩選特定日曆月份(如季底)，導致『僅在季底後N個交易日觸發』類日曆事件假說只能用粗略滾動窗口近似，三個獨立attempt都提到此限制",
+    "status": "pending_review",
+    "proposed_at": "2026-07-29T23:35:40"
+   },
+   "rejected": "人工否決（2026-08-19）：語意在本專案的月頻面板上不可用。季底月只佔 1/3 樣本，而 dsl.MIN_PERIODS_FRAC=2/3，ts_mean(qtr_only(x), n) 在 n=3/6/12/24 下實測結果皆為 100% NaN；單獨使用則覆蓋率僅 33%，低於 config.funnel.stage4.min_coverage=0.60，必被 Stage 4 拒絕。另：提案範例 ts_mean(...,4) 的窗口 4 不在白名單 [3,6,12,24]，機械驗證未涵蓋範例公式的合法性。若要重提，請改為覆蓋率 100% 的變體（例如 qtr_ffill：季底值向前填補）。",
+   "rejected_at": "2026-08-19T10:13:44",
+   "rejected_by": "human"
+  },
+  {
+   "proposal": {
+    "name": "streak",
+    "signature": "(cond, n)",
+    "semantics": "回傳截至當期為止，布林條件cond連續為真的期數；一旦中斷即重置為0；上限為n",
+    "pseudocode": "count = 0\nfor t in 0..n-1:\n    if cond[today - t] == True:\n        count += 1\n    else:\n        break\nreturn count",
+    "evidence": [
+     "A-0913",
+     "A-0915",
+     "A-0918"
+    ],
+    "example": "cs_rank(streak(greater(eps_yoy, 0), 12))",
+    "why": "三個獨立假設(獲利連增/現金流連續品質/ROE連續韌性)都想表達「連續N期同向條件成立」，但streak()目前簽名要求數值型輸入而非greater()等條件式產生的布林輸出，型別不符導致全部語法失敗；ts_sum(greater(x,0),n)只能算N期內true出現總次數，無法區分連續6期為真與6期中零散出現6次為真，仍留有真正的表達力缺口"
+   },
+   "rejected": "簽名 '(cond, n)' 不在純函數白名單 ('(x)', '(x, n)', '(x,n)', '(x, y, n)', '(x,y,n)')"
+  }
+ ],
+ "implemented": [
+  {
+   "name": "rank_nz",
+   "signature": "(x)",
+   "semantics": "對x做橫截面百分位排名，但把x等於0或缺值的樣本排除在排名之外（結果設為NaN），避免if_else條件填0造成的大量同分並列稀釋IC/ICIR",
+   "pseudocode": "function rank_nz(x):\n  mask = (x != 0) and not isnan(x)\n  ranked = cross_sectional_percentile_rank(x[mask])\n  result = full_array(NaN)\n  result[mask] = ranked\n  return result",
+   "evidence": [
+    "A-0116",
+    "A-0143",
+    "A-0281",
+    "A-0353",
+    "A-0361",
+    "A-0433"
+   ],
+   "example": "rank_nz(if_else(greater(rev_yoy,0), px_hi252, 0))",
+   "why": "現有if_else(cond,X,0)配合cs_rank會把未通過條件的樣本全部並列為0分，稀釋排序資訊；DSL缺少『只在非零/有效子集內排名，其餘設NaN由後續運算自動排除』的原生運算子，六個獨立attempt都指出此為表達力瓶頸",
+   "status": "implemented",
+   "proposed_at": "2026-07-29T23:35:40",
+   "reviewed_at": "2026-08-19T10:13:44",
+   "review_note": "人工核准並實作於 src/dsl.py；前瞻測試與正確性測試已補於 tests/"
+  },
+  {
+   "name": "industry_demean",
+   "signature": "(x)",
+   "semantics": "在既有4類產業分類(電子/生技/半導體/金融，系統已用於industry_icir計算)下，對每期橫斷面內同產業股票做x的產業內去均值。",
+   "pseudocode": "for each date t:\n  for each industry group g in existing_4_categories:\n    for each stock i in g at t:\n      industry_demean(x)[t,i] = x[t,i] - mean(x[t,j] for j in g at t)",
+   "evidence": [
+    "A-0180",
+    "A-0181",
+    "A-0257",
+    "A-0615",
+    "A-0652"
+   ],
+   "example": "cs_rank(industry_demean(op_margin))",
+   "why": "多次假設需要『產業內相對比較』或『去除產業共同driver後的殘差』，但目前只有全市場cs_rank，無industry_mask（會引入產業名稱這一新增常數參數，不合規），也無殘差化運算子；只能靠事後industry_icir側面驗證，無法在公式層面真正編碼產業限定或產業中立化邏輯。industry_demean複用既有產業分類元資料，不引入新常數，是合規的部分解法。",
+   "status": "implemented",
+   "proposed_at": "2026-08-18T18:44:10",
+   "reviewed_at": "2026-08-19T10:13:44",
+   "review_note": "人工核准並實作於 src/dsl.py；前瞻測試與正確性測試已補於 tests/"
+  },
+  {
+   "name": "streak",
+   "signature": "(x, n)",
+   "semantics": "計算截至當期、x的日/月變化方向與當期方向連續相同的期數（最多n期），用於區分『多期一致趨勢』與『單期孤立跳升』。",
+   "pseudocode": "d = sign(delta(x,1))\ncount = 0\nfor k in 0..n-1:\n  if d[t-k] == d[t]:\n    count += 1\n  else:\n    break\nreturn count",
+   "evidence": [
+    "A-0537",
+    "A-0694",
+    "A-0765"
+   ],
+   "example": "cs_rank(mul(streak(op_margin,6), delta(op_margin,1)))",
+   "why": "三次獨立卡點都指向同一缺口：無法表達『改善是否有持續性』(A-0694)、『連續兩季同向變化才算確認』(A-0537)、『區分平滑趨勢與事件型單期跳升』(A-0765)。現有ts_slope/delta/ts_mean只能算平滑趨勢或單期差分，無法量化『連續同向期數』這個持續性訊號，streak(x,n)用既有窗口白名單n即可補上，不需新增常數。",
+   "status": "implemented",
+   "proposed_at": "2026-08-18T18:44:10",
+   "reviewed_at": "2026-08-19T10:13:44",
+   "review_note": "人工核准並實作於 src/dsl.py；前瞻測試與正確性測試已補於 tests/"
+  },
+  {
+   "name": "clip_std",
+   "signature": "(x, n)",
+   "semantics": "將x截尾至其自身於過去n期的均值±3倍標準差範圍內，抑制極端值放大雜訊",
+   "pseudocode": "mean_n = ts_mean(x, n)\nstd_n = ts_std(x, n)\nreturn clip(x, mean_n - 3*std_n, mean_n + 3*std_n)",
+   "evidence": [
+    "A-0522",
+    "A-0823",
+    "A-0902"
+   ],
+   "example": "cs_rank(sdiv(rev_mom, clip_std(ts_std(rev_mom,24), 24)))",
+   "why": "sdiv/yoy類欄位在低基期分母下比值容易爆量，反覆造成訊號被少數離群樣本主導；現有DSL缺乏winsorize/clip機制，sdiv雖避免除零報錯但無下限保護，三次獨立attempt皆因此類極端值稀釋或扭曲排序而以expression_bad失敗",
+   "status": "implemented",
+   "proposed_at": "2026-08-20T08:48:48",
+   "reviewed_at": "2026-08-27T21:20:00",
+   "review_note": "人工核准並實作於 src/dsl.py。⚠️ 刻意偏離提案偽代碼：邊界改用「前 n 期（shift(1)）」而非含當期的 ts_mean/ts_std——含當期時離群值會撐高自己的上界而截不到（實測上界 949.9，1000 毫髮無傷）。另加歷史零變異保護。提案範例公式 cs_rank(sdiv(rev_mom, clip_std(ts_std(rev_mom,24),24))) 深度為 4，超過 max_depth=3，已不採用該範例。"
+  },
+  {
+   "name": "streak_true",
+   "signature": "(cond, n)",
+   "semantics": "回傳截至當期為止，布林條件 cond 連續為真的期數；中斷即重置為 0；上限 n",
+   "evidence": [
+    "A-0913",
+    "A-0915",
+    "A-0918"
+   ],
+   "example": "cs_rank(streak_true(greater(roe, 0), 12))",
+   "why": "模型三次用 streak(布林, n) 撞 type_error（streak 是數值版：變化方向連續同號）。語意不同故另立新名，不放寬 VALID_SIGNATURES 白名單。",
+   "status": "implemented",
+   "reviewed_at": "2026-08-27T21:20:00",
+   "review_note": "原提案 streak(cond,n) 因簽名 (cond,n) 不在純函數白名單而被機械驗證拒絕（見 rejected_log）；人工判定為真實需求，改名實作。"
+  }
+ ]
+}

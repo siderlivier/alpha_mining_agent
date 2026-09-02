@@ -1,0 +1,87 @@
+{
+ "round": 49,
+ "category": "leverage_overhang_relief",
+ "hypothesis": "融資餘額持續下降代表散戶去槓桿已近尾聲，未來因融資斷頭而產生的強迫性賣壓風險大幅降低。市場對「賣壓解除」這種消極性利多訊息反應遲鈍，因為它不像營收/獲利成長具故事性，需要價格穩定一段時間後才被重新定價。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；多頭腿年化超額>0；與C-4及既有券資比類因子相關係數|ρ|<0.5",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,6)))",
+ "name_zh": "融資去化解套",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,6)))",
+  "fhash": "644251112a5cce0b",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.18,
+   "decay_pct": 20.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.004,
+    "盤整"
+   ],
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.011,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.14,
+   "半導體": 0.0,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.22，方向正確且8年全數為正（本輪最穩定的一組），但強度不足未過門檻。上漲月IC(0.021)明顯高於下跌月(0.005)，與「消極性利多需時間重新定價」部分吻合，但整體效應太弱，多頭腿超額報酬0.028為正但不足以達標。",
+ "failure_type": "expression_bad",
+ "lesson": "見C-3同群組：方向正確但ICIR僅0.1-0.3的弱訊號家族；去槓桿/賣壓解除敘事可能需要更長視窗或與成交量能否放大同時發生的條件疊加才會顯著。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0748",
+ "ts": "2026-08-14T00:36:43"
+}

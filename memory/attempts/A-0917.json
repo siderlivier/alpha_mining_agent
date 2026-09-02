@@ -1,0 +1,89 @@
+{
+ "round": 60,
+ "category": "biotech_commercialization_inflection/生技限定",
+ "hypothesis": "生技公司從研發階段轉入商業化階段時毛利率會出現結構性躍升，但市場對長期虧損公司存有悲觀慣性偏誤(過去燒錢記錄造成的代表性捷思)，導致對毛利躍升+EPS轉正雙重確認訊號反應遲緩；僅生技業具有明確的燒錢轉商轉階段轉換特徵，電子/金融業無此結構。",
+ "prediction": "生技子樣本sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-011(gross_margin×rev_yoy)相關度|ρ|<0.5。",
+ "formula": "mul(cs_rank(delta(gross_margin,12)), cs_rank(eps_yoy))",
+ "name_zh": "生技轉商轉獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(gross_margin,12)), cs_rank(eps_yoy))",
+  "fhash": "78de2a2cf6e17f1b",
+  "sub_train": {
+   "mean_ic": 0.047,
+   "icir": 0.65
+  },
+  "validation": {
+   "mean_ic": 0.027,
+   "icir": 0.51,
+   "decay_pct": 21.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.054,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.047,
+    "盤整"
+   ],
+   "2016": [
+    0.034,
+    "多頭"
+   ],
+   "2017": [
+    0.049,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.041,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.69,
+   "生技": 0.52,
+   "半導體": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.058,
+   "short_excess_ann": 0.062
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.2,
+  "stage2_culprit": {
+   "factor": "F-022",
+   "rho": 0.66,
+   "factor_name": "生技穩健成長",
+   "factor_desc": "生技股EPS成長相對自身波動穩定，代表已脫離燒錢賭博期、進入穩定收成階段。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-022 |ρ|=0.66 > 0.5"
+ },
+ "diagnosis": "預測與F-022相關度<0.5，實際|ρ|=0.66，超標但幅度低於本輪其他duplicate案例(C-1/C-8/C-15皆0.78+)。共用eps_yoy作為輸入很可能是主要重疊來源，商轉毛利躍升(delta gross_margin)這個差異化成分本身未被充分驗證是否能獨立產生訊號。",
+ "failure_type": "duplicate",
+ "lesson": "與F-022的重疊幅度(0.66)明顯低於本輪其他duplicate案例，暗示問題可能出在共用eps_yoy這個次要成分而非核心假設；若要保留「毛利率結構性躍升」的機制，應換掉eps_yoy改用其他確認訊號(如rev_yoy)以降低與既有因子的輸入重疊。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0917",
+ "ts": "2026-08-20T08:30:15"
+}

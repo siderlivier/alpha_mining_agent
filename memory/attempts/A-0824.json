@@ -1,0 +1,91 @@
+{
+ "round": 54,
+ "category": "retail_leverage_overextension",
+ "hypothesis": "融資餘額快速成長代表散戶用槓桿追價，是行為面過度自信與從眾偏誤的典型表現；融資餘額成長平緩或下降的股票代表持股結構更健康，追高風險較低，未來報酬應優於融資快速膨脹的股票。",
+ "prediction": "sub-train ICIR>0.45；空頭腿（融資成長最快）跑輸多頭腿；上漲月IC負相關程度應大於下跌月（散戶追價集中在多頭階段）。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+ "name_zh": "融資降溫穩健股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+  "fhash": "8dcb62747ea222cf",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.21,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.041,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.22,
+   "半導體": 0.11,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.001
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45; validation ICIR 0.21 < 0.3"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45且上漲月negative程度大於下跌月，實際sub-train ICIR僅0.39、validation僅0.21，雙雙不達標；cond_ic上漲0.025 vs 下跌0.021，方向與強度都遠不如預期的『上漲月效應更明顯』。但IC在8年中從未翻負，顯示存在真實但很弱的訊號，可能是3月平滑或d21窗長選擇稀釋了效果。",
+ "failure_type": "expression_bad",
+ "lesson": "融資餘額變化的訊號方向正確但強度不足，全樣本8年IC從未翻負代表機制可能存在，只是ts_mean(margin_d21,3)這種粗略平滑法效果太弱，需要更精細的標準化（如相對於流通股本或成交量的融資餘額變化率）才能放大訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0824",
+ "ts": "2026-08-18T21:21:48"
+}

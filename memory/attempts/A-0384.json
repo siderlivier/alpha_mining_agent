@@ -1,0 +1,88 @@
+{
+ "round": 25,
+ "category": "leverage_quality_momentum_divergence",
+ "hypothesis": "台股散戶偏好用融資追價，靠融資堆疊出的動能隱含強制回補賣壓風險；若股價上漲但融資餘額未同步擴張，代表買盤來自現股/法人而非槓桿投機，這種漲勢較不脆弱。市場未區分漲勢的槓桿純度，造成定價效率不足。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；效應在法人持股較低的中小型電子/生技股中industry_icir應高於金融股。",
+ "formula": "sub(cs_rank(mom_60), cs_rank(margin_d21))",
+ "name_zh": "槓桿純度動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "margin_d21",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(mom_60), cs_rank(margin_d21))",
+  "fhash": "74c0fd11a88eb717",
+  "sub_train": {
+   "mean_ic": 0.011,
+   "icir": 0.1
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.06,
+   "decay_pct": 37.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.042,
+    "盤整"
+   ],
+   "2013": [
+    0.029,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    0.024,
+    "盤整"
+   ],
+   "2016": [
+    0.016,
+    "多頭"
+   ],
+   "2017": [
+    0.002,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.02,
+   "down_months": -0.018
+  },
+  "industry_icir": {
+   "電子": 0.13,
+   "生技": 0.07,
+   "半導體": 0.04,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.65,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR預測>0.45大幅高估，實際僅0.10。產業排序方向部分命中(電子0.13>金融0.04)但生技(0.07)未明顯優於半導體(0.04)，整體訊號量級遠低於預期。down_months IC轉負(-0.018)而up_months為正(0.02)，顯示因子在下跌月不具保護力，與『非脆弱漲勢』敘事不完全吻合。",
+ "failure_type": "expression_bad",
+ "lesson": "對全樣本(含下跌股)做mom-margin無條件價差會混入非目標樣本雜訊；『動能純度』假說應限定在正動能子集(mom_60>0)內計算槓桿排除度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0384",
+ "ts": "2026-07-28T18:41:52"
+}

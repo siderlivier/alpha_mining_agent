@@ -1,0 +1,91 @@
+{
+ "round": 35,
+ "category": "overlooked_profitability_liquidity",
+ "hypothesis": "機構研究資源與篩選器多集中在高成交金額（高關注度）的股票上，本業獲利率（op_margin）高但成交清淡的公司容易被排除在覆蓋範圍之外，這是一種制度性的關注配置扭曲，而非單純估值便宜或動能訊號。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(op_margin), cs_rank(neg(amt_21)))",
+ "name_zh": "冷門獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(op_margin), cs_rank(neg(amt_21)))",
+  "fhash": "91f066af99d74934",
+  "sub_train": {
+   "mean_ic": 0.061,
+   "icir": 0.48
+  },
+  "validation": {
+   "mean_ic": 0.078,
+   "icir": 0.69,
+   "decay_pct": -45.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.071,
+    "盤整"
+   ],
+   "2013": [
+    0.088,
+    "多頭"
+   ],
+   "2014": [
+    0.059,
+    "多頭"
+   ],
+   "2015": [
+    0.046,
+    "盤整"
+   ],
+   "2016": [
+    0.062,
+    "多頭"
+   ],
+   "2017": [
+    0.044,
+    "多頭"
+   ],
+   "2018": [
+    0.103,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.08,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.7,
+   "生技": 0.52,
+   "半導體": 0.3,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.058,
+   "short_excess_ann": 0.063
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.2,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.43
+  },
+  "verdict": "passed"
+ },
+ "diagnosis": "完全符合預測：sub-train ICIR 0.48達標，validation ICIR 0.69且decay為-45%(樣本外更強)，turnover 0.2<0.4達標，長腿超額0.058>0達標。制度性關注配置扭曲假說得到支持，電子(0.7)、生技(0.52)最強，金融(0.15)、半導體(0.3)較弱。",
+ "failure_type": "none",
+ "lesson": "低成交金額(低關注度)x高本業獲利率的組合因子驗證有效，制度性覆蓋率缺口是可持續開發的因子來源；產業分布上電子/生技效果最強，可作為同類因子的產業權重參考。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed",
+ "id": "A-0539",
+ "ts": "2026-07-30T00:34:10"
+}

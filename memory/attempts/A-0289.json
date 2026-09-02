@@ -1,0 +1,83 @@
+{
+ "round": 18,
+ "category": "operating_income_surprise_standardized",
+ "hypothesis": "營業利益年增率相對自身歷史波動標準化後的短期加速度，代表本業獲利出現SUE式意外驚喜；比EPS更能反映真實經營動能改善，因為法人與媒體多聚焦稅後EPS而較少關注營業利益的驚奇度，這類本業驚奇訊號存在資訊消化滯後，尚未被市場快速定價。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；與既有ROE/accruals類因子相關係數|ρ|<0.5",
+ "formula": "cs_rank(sdiv(delta(op_income_yoy,3), ts_std(op_income_yoy,12)))",
+ "name_zh": "營業利益驚奇度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(op_income_yoy,3), ts_std(op_income_yoy,12)))",
+  "fhash": "c168eb8d4d6672a6",
+  "sub_train": {
+   "mean_ic": -0.006,
+   "icir": -0.07
+  },
+  "validation": {
+   "mean_ic": -0.012,
+   "icir": -0.17,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.133,
+    "多頭"
+   ],
+   "2014": [
+    -0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.027,
+    "盤整"
+   ],
+   "2016": [
+    -0.031,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    -0.002,
+    "盤整"
+   ],
+   "2019": [
+    -0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": -0.013
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": -0.05,
+   "半導體": -0.07,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.42,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train僅-0.07接近雜訊。逐年IC呈現2013年異常高值(0.133)其後迅速衰減甚至翻負，加上coverage僅0.67(資料涵蓋率低於其他候選)，顯示這個『delta+ts_std標準化』的雙重微分可能在樣本早期因歷史窗口不足而產生不穩定的標準化分母，導致訊號被噪音主導而非真的被市場定價。",
+ "failure_type": "expression_bad",
+ "lesson": "對已經是YoY成長率的欄位再做delta(3)與ts_std(12)雙重時序處理，在歷史窗口不足或涵蓋率偏低時容易放大噪音；此類SUE式標準化因子應先確認底層欄位涵蓋率與历史深度足夠，並檢查是否有單一異常年份主導樣本內表現。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0289",
+ "ts": "2026-07-21T12:59:43"
+}

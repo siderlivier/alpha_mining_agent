@@ -1,0 +1,87 @@
+{
+ "round": 10,
+ "category": "biotech_cash_runway",
+ "hypothesis": "生技公司普遍燒錢，市場估值聚焦管線題材，對現金流品質(OCF/淨利)變化反應遲緩；當現金流品質相對自身過去一年處於高檔，代表燒錢速度趨緩或有授權金挹注，降低增資稀釋風險，需數月才被定價。",
+ "prediction": "生技產業限定sub-train ICIR>0.4；與F-006、F-010之ρ<0.5；資金緊縮期(可用下跌月近似)IC應強於寬鬆期。",
+ "formula": "cs_rank(ts_rank(ocf_ratio,12))",
+ "name_zh": "生技現金韌性",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(ocf_ratio,12))",
+  "fhash": "0c492836025d7ad6",
+  "sub_train": {
+   "mean_ic": -0.01,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.11,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.004,
+    "盤整"
+   ],
+   "2013": [
+    -0.028,
+    "多頭"
+   ],
+   "2014": [
+    -0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.004,
+   "down_months": -0.013
+  },
+  "industry_icir": {
+   "電子": -0.19,
+   "生技": -0.07,
+   "半導體": -0.1,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技現金流品質高檔=降低稀釋風險(pos)，實測sub-train IC -0.01、validation +0.004均接近零，cond_ic上漲/下跌月都偏負或持平，未支持『資金緊縮期訊號更強』的預測。訊號強度趨近不存在，而非方向錯誤，但診斷資訊薄弱(生技樣本可能過少)，無法完全排除是覆蓋率/樣本量問題。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技OCF品質相對自身歷史排名在台股樣本訊號強度接近零；若要重試需先確認生技子樣本數是否足夠支撐月頻回測，而非僅換公式表達。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0163",
+ "ts": "2026-07-21T11:22:51"
+}

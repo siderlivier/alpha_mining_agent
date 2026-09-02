@@ -1,0 +1,87 @@
+{
+ "round": 8,
+ "category": "illiquidity_premium",
+ "hypothesis": "成交金額低的股票乏人問津、法人研究覆蓋率低，承擔較高資訊不對稱與流動性風險，需要較高預期報酬補償；台股中小型冷門股尤其明顯，因外資與投信對流動性有硬性門檻不會進場，套利力量薄弱。",
+ "prediction": "sub-train ICIR > 0.45；因neg方向源於流動性而非放空限制，需驗證多頭腿（低流動性端，可正常做多）超額報酬 > 0。",
+ "formula": "cs_rank(neg(amt_21))",
+ "name_zh": "冷門流動性溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(amt_21))",
+  "fhash": "ea7db6fa5fca037c",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": 94.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    -0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.4,
+   "半導體": -0.04,
+   "金融": -0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 1.0,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.11，validation降到0.01（decay 94%），cond_ic上漲0.025、下跌-0.035方向相反；long/short腿超額報酬都是正的(0.052/0.044)但價差不明顯，顯示amt_21水準值排名並非乾淨的線性流動性溢酬代理，訊號薄弱且不穩定，預測的ICIR>0.45完全落空。",
+ "failure_type": "expression_bad",
+ "lesson": "流動性溢酬假說用單一水準值指標(amt_21)全樣本排名可能被規模/產業效應污染，導致上下漲月方向不一致；若要重測應先做規模中立化，或改用相對自身歷史的流動性變化而非絕對水準。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0131",
+ "ts": "2026-07-19T21:42:48"
+}

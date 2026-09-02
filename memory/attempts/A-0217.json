@@ -1,0 +1,92 @@
+{
+ "round": 13,
+ "category": "momentum_conditional_attention",
+ "hypothesis": "關注度(成交金額)對報酬的效應具狀態依賴性：當短期動能已明顯高於自身常態（過熱），此時關注度飆升代表散戶追高、資訊已過度反映，後續易反轉，此在缺乏穩定基本面錨定、情緒主導的生技類股最明顯；但動能平穩時，關注度上升代表資訊擴散初期，反而具正向後續效應。用條件式切換解讀方向，取代已知失敗的直接交乘(mom×amt乘積訊號在sub-train階段即接近零)。",
+ "prediction": "sub-train ICIR>0.4；生技產業industry_icir應為四大產業最高；換手率<0.4。",
+ "formula": "if_else(greater(mom_20, ts_med(mom_20,12)), neg(cs_rank(amt_21)), cs_rank(amt_21))",
+ "name_zh": "動能狀態關注度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "if_else(greater(mom_20, ts_med(mom_20,12)), neg(cs_rank(amt_21)), cs_rank(amt_21))",
+  "fhash": "32e3c6fbfec5d83c",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.11,
+   "decay_pct": 63.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.13,
+    "盤整"
+   ],
+   "2013": [
+    0.026,
+    "多頭"
+   ],
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.002,
+   "down_months": 0.071
+  },
+  "industry_icir": {
+   "電子": 0.25,
+   "生技": 0.26,
+   "半導體": 0.27,
+   "金融": -0.04
+  },
+  "legs": {
+   "long_excess_ann": -0.044,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.9,
+  "turnover_m": 0.61,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.05
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.3 < 0.45; validation ICIR 0.11 < 0.3; validation 衰減 63% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.61 > 0.4"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4、生技產業最高、換手率<0.4，皆未如預期：ICIR僅0.3剛好低標，validation降至0.11（衰減63%），生技0.26其實與半導體0.27、電子0.25相近而非明顯最高，換手率0.61遠超預測的<0.4。多頭腿超額為負(-0.044)而空頭腿才正(+0.042)，代表即使有訊號在台股也不可交易。",
+ "failure_type": "expression_bad",
+ "lesson": "if_else條件式方向切換型因子的換手率常被低估，因邊界附近會頻繁反轉；設計條件式因子時換手率估計要納入「條件切換頻率」本身。另外，多頭腿為負而空頭腿為正的結果在台股語境下應視為不可交易，需在prediction階段就把「多頭腿必須>0」列為與ICIR門檻同等重要的必要條件。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0217",
+ "ts": "2026-07-21T11:59:28"
+}

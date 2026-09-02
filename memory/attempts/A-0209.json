@@ -1,0 +1,92 @@
+{
+ "round": 13,
+ "category": "institutional_momentum_carryover",
+ "hypothesis": "長期動能仍強(mom_240高)但短期動能已降溫(mom_60較低)的股票，代表法人/長期資金在初升段後持續累積部位，短線獲利了結賣壓消化完畢，但長期資訊擴散尚未結束；長短動能差值可捕捉「整理後續漲」訊號，優於已知高雜訊的mom_240原始值。",
+ "prediction": "sub-train ICIR>0.45；與F-008(px_hi252/turn_21)相關係數|ρ|<0.5。",
+ "formula": "sub(mom_240, mom_60)",
+ "name_zh": "長短動能背離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "sub(mom_240, mom_60)",
+  "fhash": "a3052e71506b1605",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": 0.039
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.36；validation降至0.19（衰減47%，接近但未達50%過擬合門檻）。長短動能背離在2012整理期IC異常高(0.132)推升整體均值，但多數年份偏弱(2014:0.003, 2016:0.01)，顯示訊號主要由少數極端年份貢獻而非穩定持續存在。",
+ "failure_type": "expression_bad",
+ "lesson": "「整理後續漲」敘事尚未被證偽（validation並未劇烈翻負，只是不夠強），但簡單相減(mom_240-mom_60)可能被單一極端年份過度影響；下次可對兩腿做時間序列去極值或改用相對強度比而非絕對差值再測一次。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0209",
+ "ts": "2026-07-21T11:59:28"
+}

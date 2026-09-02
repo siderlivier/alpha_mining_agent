@@ -1,0 +1,94 @@
+{
+ "round": 64,
+ "category": "illiquid_overreaction_reversal",
+ "hypothesis": "成交金额低（缺乏套利资金关注）又近月价格大幅下跌的股票，因流动性提供者与统计套利资本不足以快速修正错价，容易出现超出基本面变化的过度反应式抛售；一旦抛压出清，这类低流动性个股的价格反转幅度往往更大，市场因忽略流动性对反应效率的影响而系统性低估此反转机会，此为全新流动性微结构类别，与F-008/F-020的距高点或获利关注度概念不同。",
+ "prediction": "全市场sub-train ICIR>0.4；多头腿年化超额报酬>0；amt_21最低20%且mom_20最低20%交集组未来1个月报酬应显著为正",
+ "formula": "mul(cs_rank(neg(mom_20)), cs_rank(neg(amt_21)))",
+ "name_zh": "低流动性超跌",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(mom_20)), cs_rank(neg(amt_21)))",
+  "fhash": "b4e274957d076f11",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.25,
+   "decay_pct": -13.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.045,
+    "盤整"
+   ],
+   "2013": [
+    0.054,
+    "多頭"
+   ],
+   "2014": [
+    0.045,
+    "多頭"
+   ],
+   "2015": [
+    -0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.017,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    0.05,
+    "盤整"
+   ],
+   "2019": [
+    -0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.027,
+   "down_months": 0.013
+  },
+  "industry_icir": {
+   "電子": 0.33,
+   "生技": 0.52,
+   "半導體": 0.13,
+   "金融": -0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.035,
+   "short_excess_ann": 0.02
+  },
+  "coverage": 0.99,
+  "turnover_m": 0.58,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.55,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.55 > 0.5"
+ },
+ "diagnosis": "sub-train0.22、validation0.25(decay為負，樣本外變強)，未達門檻但最終在stage2因與F-008相關性0.55被擋。「低流動性超跌反轉」的核心neg(mom_20)×neg(amt_21)與F-008「低調接近新高」同樣依賴低成交量做判別基礎，方向雖不同但底層維度重疊。",
+ "failure_type": "duplicate",
+ "lesson": "低流動性(amt_21低)類訊號無論搭配動能方向為何(追高或超跌)，都容易與F-008高度相關；「低流動性/低週轉」維度在庫內已被F-008佔據，新因子若仍以此做核心區別因子，很難繞開F-008。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0983",
+ "ts": "2026-08-27T21:49:57"
+}

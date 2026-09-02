@@ -1,0 +1,83 @@
+{
+ "round": 10,
+ "category": "earnings_surprise_momentum",
+ "hypothesis": "台股EPS僅季頻揭露且分析師覆蓋率低，市場對「相對自身歷史波動而言的意外程度」消化遲緩，形成PEAD式報酬漂移；用EPS年增變化相對自身12個月波動標準化，比單看EPS年增高低更能抓到真正的驚奇事件。",
+ "prediction": "sub-train ICIR>0.45；驚奇後未來月與訊號同號比例>60%；換手率<0.4。",
+ "formula": "cs_rank(sdiv(delta(eps_yoy,3), ts_std(eps_yoy,12)))",
+ "name_zh": "盈餘意外動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(eps_yoy,3), ts_std(eps_yoy,12)))",
+  "fhash": "422be603e02136d6",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": 0.023,
+   "icir": 0.45,
+   "decay_pct": -73.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.076,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    -0.007,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.016,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.22,
+   "生技": 0.14,
+   "半導體": 0.09,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.43,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.26明顯不足；但validation ICIR反升至0.45(decay -73%)，顯示訊號存在但很不穩定，coverage僅0.69偏低。以自身12月std標準化的立意正確，但可能在低波動股放大分母雜訊，導致訊號不乾淨。",
+ "failure_type": "expression_bad",
+ "lesson": "EPS意外的核心機制(相對自身波動的驚奇度)可能仍有效，但除以ts_std在低波動股會放大分母雜訊；下次可改用截面std取代時序std，並提高覆蓋率門檻篩掉財報稀疏股再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0160",
+ "ts": "2026-07-21T11:22:51"
+}

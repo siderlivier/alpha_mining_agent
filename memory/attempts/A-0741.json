@@ -1,0 +1,87 @@
+{
+ "round": 48,
+ "category": "earnings_yield_re_rating_lag",
+ "hypothesis": "盈餘殖利率(ep)持續上升的「趨勢」(而非絕對水準)代表獲利成長速度超越股價反應速度；由於ep絕對水準可能仍不便宜，這類「被低估的加速獲利」不會被傳統以水準為主的價值篩選器抓到，因而被市場錯過。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；此訊號與ep原始水準因子(F-015)相關性應<0.5。",
+ "formula": "cs_rank(ts_slope(ep,12))",
+ "name_zh": "盈餘殖利率加速股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ep"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(ep,12))",
+  "fhash": "13bf10cd89fc10a2",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": 0.029,
+   "icir": 0.37,
+   "decay_pct": -119.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.016,
+    "盤整"
+   ],
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.076,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.041,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.31,
+   "半導體": -0.15,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.044,
+   "short_excess_ann": 0.03
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.17未達標，但validation ICIR達0.37(大幅改善)、電子產業ICIR達0.56，訊號似乎存在但被2012-2014負值年份與半導體(-0.15)拖累而被全市場平均稀釋。與C-2類似的『早期樣本雜訊掩蓋真訊號』模式。",
+ "failure_type": "expression_bad",
+ "lesson": "ep水準的slope因子訊號可能集中在特定產業(電子)與特定期間，全市場無條件平均會被稀釋到不達標。若重測，建議先做產業分層或限縮測試窗口，確認訊號集中的來源再決定是否值得用全市場表達方式送測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0741",
+ "ts": "2026-08-14T00:25:09"
+}

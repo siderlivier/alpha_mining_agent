@@ -1,0 +1,29 @@
+{
+ "round": 33,
+ "category": "foreign_flow_revenue_confirmation",
+ "hypothesis": "半導體供應鏈同樣具備外資研究覆蓋密集、資訊傳遞快的特性，外資買超與營收年增同時出現時，理論上應與電子產業有類似的資金與基本面雙重確認效果；驗證此機制是否為電子供應鏈普遍現象而非電子產業獨有。",
+ "prediction": "半導體 industry_icir > 0.45，與電子產業(F-017已驗證約0.5+)量級相近；多頭腿年化超額 > 0；若半導體industry_icir明顯低於電子(<0.3)則證明機制非供應鏈普遍現象。",
+ "formula": "mul(cs_rank(frgn_net_21),cs_rank(rev_yoy))",
+ "name_zh": "半導體法人認證",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_net_21),cs_rank(rev_yoy))",
+  "fhash": "b2d71ee027ef4b82",
+  "verdict": "rejected_duplicate",
+  "reason": "與 F-017 代數等價"
+ },
+ "diagnosis": "此候選公式與F-017代數等價，等於重新提交同一因子去測試半導體子集表現。實際上F-017本就是全市場計算，其industry_icir早已可查，不需要新開一個因子條目來驗證半導體子產業的表現。",
+ "failure_type": "duplicate",
+ "lesson": "若目的是驗證某因子是否對特定產業更/更不有效，應先查詢該因子既有的industry_icir拆解，而非重新提交相同公式當作新候選。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_duplicate",
+ "id": "A-0506",
+ "ts": "2026-07-30T00:08:12"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 12,
+ "category": "foreign_ownership_endorsement",
+ "hypothesis": "外資持股比率的絕對水位(而非變化量)反映的是長期、經過深度基本面盡職調查後的機構認可度；長期高外資持股水位的公司通常治理與資訊揭露品質較佳，形成穩定的品質溢價，此效應在外資覆蓋度高的電子/半導體產業應更明顯。",
+ "prediction": "sub-train ICIR > 0.45；與C-2(frgn_ratio_d63變化量版本)相關係數應<0.7(驗證兩者非同一訊號)；電子/半導體industry_icir應高於金融/生技",
+ "formula": "cs_rank(frgn_ratio)",
+ "name_zh": "外資長期認證",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "frgn_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(frgn_ratio)",
+  "fhash": "8171b336ef7f5f4f",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.12
+  },
+  "validation": {
+   "mean_ic": 0.041,
+   "icir": 0.43,
+   "decay_pct": -243.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.009,
+    "盤整"
+   ],
+   "2013": [
+    -0.017,
+    "多頭"
+   ],
+   "2014": [
+    0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.032,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.059,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.035
+  },
+  "industry_icir": {
+   "電子": -0.07,
+   "生技": -0.04,
+   "半導體": 0.24,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.042
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.03,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測電子/半導體應優於金融/生技,實際只有半導體(0.24)支持,電子反而最弱(-0.07),金融同樣達0.22,結果一半對一半錯。整體sub-train ICIR僅0.12遠低於門檻,多空腿超額報酬皆為負(long -0.016, short -0.042),換手率極低(0.03)近乎靜態排序,無交易可行性。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資持股「水位」作為治理品質代理指標,僅在半導體/金融部分產業出現微弱訊號、電子業完全不支持,且無法轉換為正的多頭超額報酬;評估水位型/低換手因子時應同時檢視legs超額報酬,而非只看IC。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0201",
+ "ts": "2026-07-21T11:46:43"
+}

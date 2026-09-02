@@ -1,0 +1,89 @@
+{
+ "round": 24,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "月營收公布頻率高但單月雜訊大，投資人對短窗營收加速度的反應存在延遲，尤其加速度剛形成時容易被單月波動掩蓋；對3個月斜率再做3個月平滑，可保留真正持續性的加速度趨勢並濾除雜訊，讓訊號更貼近真實的營收動能轉折。",
+ "prediction": "sub-train ICIR > 0.45；相較過去未平滑斜率版本(validation衰減常>50%)，此版本decay應收斂至<30%。",
+ "formula": "cs_rank(ts_mean(ts_slope(rev_yoy,3),3))",
+ "name_zh": "平滑營收加速度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(ts_slope(rev_yoy,3),3))",
+  "fhash": "51a06ee6cbfa5d4a",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.44
+  },
+  "validation": {
+   "mean_ic": 0.032,
+   "icir": 0.6,
+   "decay_pct": -36.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.026,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.059,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.041
+  },
+  "industry_icir": {
+   "電子": 0.66,
+   "生技": 0.22,
+   "半導體": 0.4,
+   "金融": 0.1
+  },
+  "legs": {
+   "long_excess_ann": 0.046,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.42,
+  "stage2_culprit": {
+   "factor": "F-009",
+   "rho": 0.51,
+   "factor_name": "營收加速趨勢",
+   "factor_desc": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-009 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "預測校準相當準確：sub-train ICIR預測>0.45，實際0.44幾乎命中；預測decay應收斂至<30%，實際decay為-36%（驗證期比訓練期更強，遠優於預期）。核心假設（平滑3月斜率濾除雜訊）確實提升了穩定性。唯一失守點是stage2相關性檢查：與庫內F-009（『三月均線後的營收年增率斜率』）rho=0.51，本質上是同一構造思路的重複實作，預測時未評估此風險。",
+ "failure_type": "duplicate",
+ "lesson": "『對rev_yoy斜率做平滑以濾除單月雜訊』這個表達方向已被F-009佔據；本次驗證了假設本身很強（icir穩定甚至提升），但構造空間已飽和，若要再開發營收動能類因子需要換一個雜訊濾除機制（如改用分位數平滑、或改變基礎變量而非rev_yoy）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0375",
+ "ts": "2026-07-28T18:28:36"
+}

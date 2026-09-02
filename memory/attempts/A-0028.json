@@ -1,0 +1,87 @@
+{
+ "round": 1,
+ "category": "cashflow_quality_persistence",
+ "hypothesis": "營業現金流對淨利的比值（含金量）反映盈餘可持續性，但財報使用者多將注意力放在損益表而非現金流量表附註，導致長期能穩定把淨利轉換為現金的公司被系統性低估，尤其在景氣轉弱時市場才重新認識其防禦價值。",
+ "prediction": "產業內rank IC為正，sub-train ICIR>0.3；下跌月IC顯著高於上漲月（防禦型品質因子特性）。",
+ "formula": "cs_rank(ts_mean(ocf_ratio,12))",
+ "name_zh": "盈餘含金量",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(ocf_ratio,12))",
+  "fhash": "ac0e5f66d284442e",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.35
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.2,
+   "decay_pct": 44.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.037,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    -0.0,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.2,
+   "半導體": 0.2,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.0,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.09,
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.35 < 0.45; validation ICIR 0.2 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "防禦特性預測命中：下跌月IC(0.027)>上漲月IC(0.018)符合預期，但整體強度不足，sub-train ICIR 0.35未達0.45門檻，且多頭腿超額幾乎為0(-0.0%)、空頭腿亦為負，無可交易多頭腿，於stage4被拒。機制方向對，強度與可交易性不足。",
+ "failure_type": "expression_bad",
+ "lesson": "同規則A：品質類正向因子若多頭腿報酬趨近於零，代表訊號強度不足以支撐長多部位，需提高訊號濃度而非只驗證方向正確性。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0028",
+ "ts": "2026-07-18T21:37:41"
+}

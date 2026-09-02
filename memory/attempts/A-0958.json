@@ -1,0 +1,87 @@
+{
+ "round": 63,
+ "category": "informed_short_selling_signal",
+ "hypothesis": "借券量(lend_vol_21)是機構法人放空的代理，不同於融券(散戶為主、易受軋空影響)；借券量上升代表相對知情的空方開始佈局，且早於市場公開資訊反映，故未來報酬偏弱。",
+ "prediction": "direction=neg，sub-train ICIR>0.4；下跌月IC顯著高於上漲月；不含px_hi252/turn_21組合，與F-008等借券冷卻類因子截面相關|ρ|<0.5。",
+ "formula": "cs_rank(delta(lend_vol_21,6))",
+ "name_zh": "借券攀升預警",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(lend_vol_21,6))",
+  "fhash": "a67d277cce6c30d5",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.02
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.28,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.013,
+    "盤整"
+   ],
+   "2013": [
+    -0.012,
+    "多頭"
+   ],
+   "2014": [
+    0.021,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    -0.02,
+    "多頭"
+   ],
+   "2017": [
+    -0.016,
+    "多頭"
+   ],
+   "2018": [
+    0.021,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.0,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.03,
+   "半導體": 0.04,
+   "金融": -0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.006,
+   "short_excess_ann": -0.032
+  },
+  "coverage": 0.49,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『下跌月IC應明顯高於上漲月』與sub-train ICIR>0.4皆落空：整體IC幾乎為零(icir -0.02)，上漲/下跌月IC都貼近0，看不出『知情放空』的機制訊號。值得注意coverage僅0.49，明顯低於其他候選（多在0.7~0.9），借券資料只覆蓋約一半股票，可能稀釋了截面排序的檢定力，不能完全排除假設仍成立但被稀疏資料掩蓋的可能。",
+ "failure_type": "expression_bad",
+ "lesson": "借券量(lend_vol_21)覆蓋率僅約49%，遠低於一般欄位；若要測試借券相關假設，應先確認資料覆蓋是否集中在特定產業/市值層，或考慮限縮至有借券活動的子樣本再算IC，避免被大量缺值稀釋訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0958",
+ "ts": "2026-08-27T21:36:00"
+}

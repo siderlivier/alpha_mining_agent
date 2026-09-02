@@ -1,0 +1,84 @@
+{
+ "round": 24,
+ "category": "institutional_divergence",
+ "hypothesis": "外資交易多為長線、資訊處理能力較強，投信則常受季底作帳、申購贖回壓力驅動而順勢操作；當外資淨買超明顯超過投信（兩者方向背離），代表外資正在對抗雜訊性賣壓進行知情建倉，市場需要時間才能認清外資判斷正確並跟進，形成緩慢兌現的可預測報酬。",
+ "prediction": "sub-train ICIR > 0.45；電子/半導體產業（外資持股集中、覆蓋度高）industry_icir應高於金融產業；月換手率<0.4。",
+ "formula": "cs_rank(sub(frgn_net_21, trust_net_21))",
+ "name_zh": "外資投信分歧度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(frgn_net_21, trust_net_21))",
+  "fhash": "9818946cc9465001",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": -0.0,
+   "icir": -0.0,
+   "decay_pct": 102.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.008,
+    "多頭"
+   ],
+   "2017": [
+    -0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.015,
+    "盤整"
+   ],
+   "2019": [
+    -0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": 0.04,
+   "生技": 0.04,
+   "半導體": 0.06,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.54,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "全面誤判：預測sub-train ICIR>0.45，實際僅0.13（mean IC 0.009），validation直接崩到~0（decay 102%，符號不穩）。預測電子/半導體industry_icir應高於金融也錯：實際半導體(0.06)=金融(0.06)>電子(0.04)。預測turnover<0.4也錯（實際0.54）。三項子預測全部落空。對照C-15單純neg(trust_net_21)反而有icir 0.27，比C-1的『外資-投信相減』構造更強，顯示兩序列相減放大了雜訊而非萃取分歧訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "法人流量類因子做『雙序列相減』來抓分歧，容易把兩邊雜訊疊加而非訊號疊加；下次應先驗證單一序列（如trust_net或frgn_net）的獨立訊號強度，若都弱則分歧構造大機率更弱，或改用更長窗口平滑後再相減。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0369",
+ "ts": "2026-07-28T18:28:36"
+}

@@ -1,0 +1,92 @@
+{
+ "round": 2,
+ "category": "volatility_compression_lottery_preference",
+ "hypothesis": "台股散戶偏好高波動、具「樂透」特性的股票（賭博偏誤），導致高波動股票長期超漲、低波動股票被冷落超跌；當近月波動率相對半年波動率出現壓縮（風險實際下降）但價格尚未重新定價，此錯價會在風險溢酬修正過程中逐步收斂。",
+ "prediction": "sub-train ICIR>0.3（方向為neg，比值越低預期報酬越高）；生技產業（散戶參與度高）ICIR應高於金融產業。",
+ "formula": "cs_rank(sdiv(vol_21, vol_126))",
+ "name_zh": "波動壓縮修正",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(vol_21, vol_126))",
+  "fhash": "049a250ece877053",
+  "sub_train": {
+   "mean_ic": -0.025,
+   "icir": -0.36
+  },
+  "validation": {
+   "mean_ic": -0.005,
+   "icir": -0.08,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    -0.039,
+    "多頭"
+   ],
+   "2014": [
+    -0.036,
+    "多頭"
+   ],
+   "2015": [
+    -0.032,
+    "盤整"
+   ],
+   "2016": [
+    -0.029,
+    "多頭"
+   ],
+   "2017": [
+    -0.023,
+    "多頭"
+   ],
+   "2018": [
+    -0.007,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.024,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": -0.43,
+   "生技": -0.34,
+   "半導體": -0.22,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.023,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.71,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.02
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.36 < 0.45; validation ICIR -0.08 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.71 > 0.4"
+ },
+ "diagnosis": "預測方向(neg，波動壓縮後修正)在sub-train獲得驗證(-0.36符合預期方向)，但validation大幅衰退至-0.08；更關鍵的是多頭腿超額報酬為負(-0.023)，代表alpha集中在放空高波動股(空頭腿)，台股放空受限下此訊號即使方向對也不可交易。",
+ "failure_type": "expression_bad",
+ "lesson": "波動壓縮/反轉類訊號的alpha常集中於空頭腿，需在stage4前加入多頭腿為正的可交易性檢查，而非只看整體ICIR。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0047",
+ "ts": "2026-07-19T09:53:03"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 15,
+ "category": "earnings_quality_divergence",
+ "hypothesis": "當EPS年增率遠高於營業利益年增率時，代表獲利成長主要來自業外收益（處分資產、匯兌、業外投資等一次性項目）而非本業經營改善；投資人常對EPS數字反應過度而忽略其成分，導致這類「灌水」個股短期被追捧、隨後因業外項目不可持續而回落，反之EPS與營業利益成長一致的公司獲利品質扎實，卻因缺乏亮眼headline數字而被低估。",
+ "prediction": "sub-train ICIR > 0.45；下跌月IC不低於上漲月IC；四產業cond_ic至少3個為正；validation衰減 < 40%。",
+ "formula": "cs_rank(neg(sub(op_income_yoy, eps_yoy)))",
+ "name_zh": "獲利成分純度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(op_income_yoy, eps_yoy)))",
+  "fhash": "ebbb8c0d487f8574",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.06
+  },
+  "validation": {
+   "mean_ic": 0.04,
+   "icir": 0.55,
+   "decay_pct": -749.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.034,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    -0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    -0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.027,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": 0.06,
+   "半導體": 0.03,
+   "金融": 0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.06幾近無訊號；validation暴衝至0.55（decay -749%）屬雜訊型反轉而非真實樣本外提升，逐年IC正負交錯(2015、2017為負)。獲利成分純度的核心機制在此specification下未獲訓練期支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用「原始年增率」相減(op_income_yoy - eps_yoy)雜訊過大，在train期把訊號洗掉；若要再測獲利成分純度方向，應改用更穩定的品質代理（如應計項或現金流缺口）而非headline成長率差。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0235",
+ "ts": "2026-07-21T12:24:47"
+}

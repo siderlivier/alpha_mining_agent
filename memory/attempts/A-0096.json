@@ -1,0 +1,90 @@
+{
+ "round": 5,
+ "category": "quality_value_financial",
+ "hypothesis": "高ROE同時成交金額龐大的股票，代表這是市場已充分關注、法人擁擠交易的「共識標的」，其品質溢酬早已被套利消化甚至過度定價；根據台股放空限制經驗（neg方向因子的alpha常集中在不可放空的空頭腿），此訊號預期難以在多頭腿產生正報酬，主要價值在於作為排除擁擠交易股的篩選/避險工具而非直接做多訊號。",
+ "prediction": "sub-train ICIR > 0.45(neg方向，訊號值越高、未來報酬越低)；重點驗證多頭腿(訊號最低一端)超額報酬是否顯著>0——若多頭腿超額≤0，則確認此因子只能用於篩選/避險，不可直接交易多頭部位。",
+ "formula": "cs_rank(mul(roe, neg(amt_21)))",
+ "name_zh": "擁擠品質股",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(roe, neg(amt_21)))",
+  "fhash": "7a73af706de11026",
+  "sub_train": {
+   "mean_ic": -0.042,
+   "icir": -0.35
+  },
+  "validation": {
+   "mean_ic": -0.057,
+   "icir": -0.53,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    -0.028,
+    "多頭"
+   ],
+   "2015": [
+    -0.077,
+    "盤整"
+   ],
+   "2016": [
+    -0.066,
+    "多頭"
+   ],
+   "2017": [
+    -0.044,
+    "多頭"
+   ],
+   "2018": [
+    -0.019,
+    "盤整"
+   ],
+   "2019": [
+    -0.095,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.039,
+   "down_months": -0.064
+  },
+  "industry_icir": {
+   "電子": -0.22,
+   "生技": -0.38,
+   "半導體": -0.14,
+   "金融": -0.29
+  },
+  "legs": {
+   "long_excess_ann": -0.061,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.16,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": -0.69,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.69 > 0.5"
+ },
+ "diagnosis": "方向性預測完全正確——這是neg因子、長腿確實為負(-0.061)，證實『擁擠品質股只能當篩選/避險工具』的框架。但還沒機會單獨驗證長腿假設就先在stage2陣亡：與既有F-002（金融品質價值）相關係數-0.69，本質上是同一種cheap valuation×高ROE機制，只是用amt_21取代淨值做擁擠度代理。",
+ "failure_type": "duplicate",
+ "lesson": "見C-14合併教訓：F-002對『便宜估值+獲利品質』類複合公式有很寬的相關性陰影。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0096",
+ "ts": "2026-07-19T17:32:32"
+}

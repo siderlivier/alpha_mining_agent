@@ -1,0 +1,89 @@
+{
+ "round": 58,
+ "category": "long_term_reversal_fundamental_confirmation",
+ "hypothesis": "投資人對過去一年表現不佳的股票存在錨定效應與處置效應(不願承認先前判斷錯誤而持續低配)，若這類股票的營收年增趨勢(3月移動平均)已經明顯轉強，代表基本面已經反轉但市場評價尚未跟上，形成純技術反轉與純基本面動能都無法單獨捕捉、須兩者疊加才顯著的機會。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿年化超額報酬 > 0；此訊號與純mom_240因子的相關性應 < 0.3，證明基本面疊加提供了增量資訊。",
+ "formula": "mul(cs_rank(neg(mom_240)), cs_rank(rev_yoy_ma3))",
+ "name_zh": "落難成長反轉股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_240",
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(mom_240)), cs_rank(rev_yoy_ma3))",
+  "fhash": "fcc079e464c0e7ed",
+  "sub_train": {
+   "mean_ic": 0.021,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.041,
+   "icir": 0.5,
+   "decay_pct": -54.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.021,
+    "多頭"
+   ],
+   "2014": [
+    0.024,
+    "多頭"
+   ],
+   "2015": [
+    0.009,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.089,
+    "盤整"
+   ],
+   "2019": [
+    -0.007,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.022,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.58,
+   "生技": 0.08,
+   "半導體": 0.31,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.02,
+   "short_excess_ann": 0.025
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-018",
+   "rho": 0.48
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.32 < 0.45"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "distill_failed": true,
+ "id": "A-0885",
+ "ts": "2026-08-19T00:25:17"
+}

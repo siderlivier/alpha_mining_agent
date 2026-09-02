@@ -1,0 +1,90 @@
+{
+ "round": 45,
+ "category": "style_box_orphan_stocks",
+ "hypothesis": "營收便宜（高S/P）同時提供現金殖利率的股票，因估值不夠極端無法進入深度價值篩選器，殖利率也不夠高無法進入高股息篩選器，落於兩類主流機構篩選風格夾縫中被系統性忽略，屬F-003/F-014/F-015的殖利率變體。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-003相關性|ρ|<0.6（第二腿改殖利率，預期部分但非完全重疊）。",
+ "formula": "mul(cs_rank(sp), cs_rank(div_yield))",
+ "name_zh": "便宜殖利孤兒股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(sp), cs_rank(div_yield))",
+  "fhash": "3e26a0ccdcf23601",
+  "sub_train": {
+   "mean_ic": 0.049,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.047,
+   "icir": 0.39,
+   "decay_pct": 8.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.007,
+    "多頭"
+   ],
+   "2014": [
+    0.045,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.13,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.043,
+    "盤整"
+   ],
+   "2019": [
+    0.052,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.046
+  },
+  "industry_icir": {
+   "電子": 0.88,
+   "生技": 0.62,
+   "半導體": 0.36,
+   "金融": -0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.051
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.1,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.53,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.53 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR預測>0.45，實際0.43接近但未達；決策關鍵仍是相關性：預測與F-019 |ρ|<0.6視為可接受，實際0.53超出真實的0.5門檻但低於候選人自訂的0.6緩衝，再次印證系統相關性硬門檻是0.5而非候選人自行假設的寬鬆帶。電子產業industry_icir 0.88很強，顯示機制本身有效，但被既有因子攔截。",
+ "failure_type": "duplicate",
+ "lesson": "sp×div_yield與F-019(sp×ocf_ratio)第一條腿相同（sp），僅換第二條腿（殖利率vs現金流）不足以脫鉤，且再度驗證相關性預測門檻應設在0.5而非自訂的0.6，避免重蹈同一預測校準錯誤。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0698",
+ "ts": "2026-08-12T14:25:46"
+}

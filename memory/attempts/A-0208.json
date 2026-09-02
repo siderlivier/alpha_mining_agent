@@ -1,0 +1,87 @@
+{
+ "round": 13,
+ "category": "foreign_ownership_acceleration",
+ "hypothesis": "外資持股比率變化的「加速度」（二階導數）代表外資建倉節奏正在加快，而非僅維持既有趨勢；外資因市場衝擊成本考量需分批多日執行交易，其加速建倉的訊息只能透過持股比率變化的變化率被觀察到，散戶與本土法人對此二階訊號反應遲鈍。",
+ "prediction": "sub-train ICIR>0.45；此二階加速度版本ICIR應高於單純frgn_ratio_d63水準趨勢版本（驗證二階優於一階）。",
+ "formula": "cs_rank(delta(frgn_ratio_d63,3))",
+ "name_zh": "外資建倉加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(frgn_ratio_d63,3))",
+  "fhash": "9f00489320a7b8a1",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.47,
+   "decay_pct": -74.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": -0.03,
+   "生技": 0.02,
+   "半導體": 0.08,
+   "金融": 0.37
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.016
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.4,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45落空（實際0.27，stage1即被擋），但validation ICIR達0.47且decay為負，呈現與C-3/C-7/C-9相同的「train弱validation強」模式。產業分布與直覺相反：金融0.37最高，外資最集中的電子反而-0.03負值，未驗證「外資分批建倉」的普遍機制，顯示二階加速度訊號可能只在少數產業（金融）成立而非廣泛現象。",
+ "failure_type": "expression_bad",
+ "lesson": "二階加速度類訊號在產業分布上出現反直覺結果（外資集中產業訊號反而負）時，代表機制可能只是產業特例而非普遍現象；下次應先用industry_icir篩出真正driving產業再決定是否做產業限定版本，而非全市場硬測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0208",
+ "ts": "2026-07-21T11:59:28"
+}

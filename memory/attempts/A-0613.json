@@ -1,0 +1,83 @@
+{
+ "round": 40,
+ "category": "cash_flow_quality_improvement",
+ "hypothesis": "ocf_ratio的12個月變化量捕捉「盈餘含金量正在改善」的動態轉折，比F-006單純應計項水準更貼近管理層近期營運資金與收款品質轉佳訊號；市場高頻關注EPS/營收成長，現金流品質改善通常要等下次年報才被完整定價。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；與F-006相關係數|ρ|<0.5；月換手率<0.4。",
+ "formula": "cs_rank(delta(ocf_ratio,12))",
+ "name_zh": "現金流轉強動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,12))",
+  "fhash": "d3aa3559d6c6e7ce",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.17,
+   "半導體": 0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際sub-train為-0.13（負值），validation卻轉為+0.29，兩期符號相反，屬於典型的不穩定/雜訊型結果而非穩定訊號延遲定價。『現金流品質改善要等年報才被定價』的假設若成立，應在sub-train與validation都呈現同向的正IC，而非隨機翻轉。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "ocf_ratio的12個月變化量本身雜訊過高（可能受季節性營運資金波動、單季認列時點影響），不足以穩定捕捉『現金流品質轉折被低估』的機制；此假設若要重試，應先對ocf_ratio做去季節化或改用TTM基礎的變化量，而非直接對原始比率取12月差分。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0613",
+ "ts": "2026-08-12T09:17:43"
+}

@@ -1,0 +1,93 @@
+{
+ "round": 6,
+ "category": "margin_trend_underreaction",
+ "hypothesis": "營益率變化被埋藏在季報財務數字中，資訊顯著性遠低於營收與EPS頭條數字，投資人系統性低估營益率改善的持續性；以cs_rank做產業內排名可濾除面板/DRAM等產業級價格循環的共同波動，分離出真正屬於公司執行力提升的訊號。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；因採用產業內排名而非全池排名，預期validation期衰減幅度<40%(優於過去全池版本C-2/C-12衰減>60%的紀錄)。",
+ "formula": "cs_rank(ts_slope(op_margin,6))",
+ "name_zh": "營益率改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(op_margin,6))",
+  "fhash": "931de0aefdb52c6c",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.02,
+   "decay_pct": 106.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.007,
+    "盤整"
+   ],
+   "2013": [
+    0.051,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.072,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    0.036,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": 0.022
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.18,
+   "半導體": 0.33,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.035,
+   "short_excess_ann": 0.084
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.28,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.51,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45與validation衰減<40%均落空：sub-train僅0.37，validation ICIR轉負(-0.02)、decay 106%，屬嚴重過擬合；同時在stage2即與庫內F-001(ROE趨勢改善)相關度0.51被淘汰，顯示營益率變化趨勢與ROE趨勢在截面上高度重疊，並非獨立資訊。",
+ "failure_type": "duplicate",
+ "lesson": "營益率(op_margin)的ts_slope趨勢因子與ROE趨勢因子(F-001)本質重疊(ρ>0.5)，且即使做了產業內排名，validation期仍嚴重反轉，顯示不只是重複因子問題，訊號本身也不穩定；未來應避免『獲利率類ts_slope』與『ROE類ts_slope』同時提案。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0100",
+ "ts": "2026-07-19T17:47:42"
+}

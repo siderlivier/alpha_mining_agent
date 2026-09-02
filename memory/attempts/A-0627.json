@@ -1,0 +1,87 @@
+{
+ "round": 41,
+ "category": "earnings_surprise_beyond_trend",
+ "hypothesis": "用ts_resi取毛利率相對「自身近6個月線性趨勢」的殘差，捕捉的是超出簡單線性外推的「二階變化」（例如成本控制方案一次到位、漲價正式生效），分析師習慣用簡單趨勢外推估計下一期毛利率，對這種偏離趨勢線的突增反應不足，需要數期財報確認後才會調高預期，形成緩慢的價格發現過程（PEAD類機制延伸到毛利率）。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；上漲月與下跌月IC同向；與C-1(ts_rsq版本)相關性|ρ|<0.7以確認為互補而非重複訊號。",
+ "formula": "cs_rank(ts_resi(op_margin,6))",
+ "name_zh": "毛利趨勢偏離",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_resi(op_margin,6))",
+  "fhash": "8ec99d67a789860d",
+  "sub_train": {
+   "mean_ic": 0.007,
+   "icir": 0.07
+  },
+  "validation": {
+   "mean_ic": -0.022,
+   "icir": -0.32,
+   "decay_pct": 571.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.061,
+    "盤整"
+   ],
+   "2013": [
+    -0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.044,
+    "多頭"
+   ],
+   "2015": [
+    0.019,
+    "盤整"
+   ],
+   "2016": [
+    -0.008,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    -0.024,
+    "盤整"
+   ],
+   "2019": [
+    -0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.009,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": -0.03,
+   "生技": 0.15,
+   "半導體": 0.01,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.011,
+   "short_excess_ann": 0.016
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.47,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.07；驗證期直接翻負至-0.32（衰減571%），逐年IC正負劇烈交錯（2012 -0.061→2014 +0.044→2017 +0.031→2018 -0.024），無一致結構；cond_ic方向也與『驚喜訊號應同向擴散』的預期相反（上漲月反而為負）。6個月短窗殘差很可能只是在抓短期均值回歸雜訊，而非真正的『二階驚喜』。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用短窗（6個月）ts_resi去抓『超出趨勢的毛利率驚喜』在本地資料上抓不到訊號，反而更像雜訊；PEAD類『分析師對偏離趨勢反應不足』的機制未獲支持，短窗殘差類表達暫不宜再嘗試於毛利率。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0627",
+ "ts": "2026-08-12T09:31:55"
+}

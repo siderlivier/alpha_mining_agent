@@ -1,0 +1,88 @@
+{
+ "round": 18,
+ "category": "volatility_term_structure_shift",
+ "hypothesis": "當短期波動度(vol_21)相對長期波動度(vol_126)顯著抬升時，反映該股正經歷資訊事件或籌碼結構變化的初期階段；市場對『波動結構轉變』這類非基本面訊號反應遲緩，波動抬頭初期常伴隨後續趨勢延續(因為事件後的價格發現需要時間)，而長短期波動皆低的股票代表資訊已被充分消化、缺乏後續驚奇空間。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；與F-005(neg vol_126水準因子)相關係數|ρ|<0.5",
+ "formula": "sub(cs_rank(vol_21), cs_rank(vol_126))",
+ "name_zh": "波動結構轉變",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(vol_21), cs_rank(vol_126))",
+  "fhash": "1d2a2fa3c0024c81",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.04
+  },
+  "validation": {
+   "mean_ic": 0.034,
+   "icir": 0.53,
+   "decay_pct": -1157.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.033,
+    "盤整"
+   ],
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    -0.002,
+    "盤整"
+   ],
+   "2016": [
+    0.002,
+    "多頭"
+   ],
+   "2017": [
+    -0.0,
+    "多頭"
+   ],
+   "2018": [
+    0.042,
+    "盤整"
+   ],
+   "2019": [
+    0.025,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": -0.03,
+   "半導體": -0.02,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.002,
+   "short_excess_ann": 0.003
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.64,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45，sub-train僅0.04接近無訊號，但validation卻達0.53，兩期表現落差極大且sub_train本身逐年IC在多頭年份幾乎為零、僅盤整年(2012:0.033, 2018:0.042)偏強，顯示效果可能與大盤狀態(盤整vs多頭)綁定而非穩定的橫斷面錯定價，證據尚不足以斷定機制錯誤還是純粹參數/窗口設計不當。",
+ "failure_type": "expression_bad",
+ "lesson": "vol_21/vol_126的簡單rank差在多頭年份訊號消失、僅盤整年出現效果，可能是窗口組合未捕捉到真正的『波動結構轉變事件』(如用差分而非水準差)，證據不足以直接判機制錯誤，值得先嘗試改用波動突增的事件式定義（如vol_21相對自身歷史zscore)再測。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0283",
+ "ts": "2026-07-21T12:59:43"
+}

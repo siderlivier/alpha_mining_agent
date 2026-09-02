@@ -1,0 +1,83 @@
+{
+ "round": 4,
+ "category": "post_earnings_drift",
+ "hypothesis": "EPS年增率的短期斜率比單期絕對值更能反映獲利動能的加速；因EPS為季頻資料，市場消化速度慢，類似美股PEAD（盈餘公告後漂移）現象，訊號公布後股價會持續緩步反映，而非立即一次到位。",
+ "prediction": "sub-train ICIR>0.45；且訊號形成後前3個月的IC應顯著大於第4-6個月的IC（驗證漂移隨時間衰減，屬PEAD式機制而非持續重估）",
+ "formula": "cs_rank(ts_slope(eps_yoy,6))",
+ "name_zh": "EPS動能漂移",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(eps_yoy,6))",
+  "fhash": "b2202af0a4cab82d",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.06
+  },
+  "validation": {
+   "mean_ic": 0.019,
+   "icir": 0.35,
+   "decay_pct": -493.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.04,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    -0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": -0.02,
+   "半導體": 0.01,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.011,
+   "short_excess_ann": 0.008
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.06幾乎無訊號，連PEAD式3個月衰減的子測試都沒機會做。validation ICIR 0.35但decay_pct為-493%（sub-train趨近零使比例失真，不代表真實改善），這種模式較像統計雜訊而非真訊號。EPS為季頻資料，若ts_slope(eps_yoy,6)以月頻計算，中間可能有多月數值持平（財報未更新期間）嚴重稀釋斜率訊號，但目前診斷資訊不足以確認此為根本原因。",
+ "failure_type": "expression_bad",
+ "lesson": "『財務數據頻率(季)與計算窗口(月)不匹配導致訊號稀釋』的可能性值得記錄，但需要更多案例才能確認為通則；下次可先確認資料更新頻率、用季度原生窗口計算斜率再重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0078",
+ "ts": "2026-07-19T17:21:03"
+}

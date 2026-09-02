@@ -1,0 +1,94 @@
+{
+ "round": 64,
+ "category": "informed_short_covering_divergence",
+ "hypothesis": "借券量高但融券余额相对低，代表机构透过借券执行避险、可转债套利等中性操作而非方向性看空，同时散户融券空方并未跟进押注下跌；这种「机构借券多、散户融券少」的分歧显示市场对该股真正的负面押注其实薄弱，下跌风险被投资人高估，此为A-0962发现原始方向为正后的direction修正重测。",
+ "prediction": "sub-train ICIR>0.4；全期间IC均值为正、逐年正负一致性>70%；多头腿年化超额报酬>0",
+ "formula": "mul(cs_rank(lend_vol_21), cs_rank(neg(short_margin_ratio)))",
+ "name_zh": "机构借券分歧",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(lend_vol_21), cs_rank(neg(short_margin_ratio)))",
+  "fhash": "99f038d8332e1f11",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.34
+  },
+  "validation": {
+   "mean_ic": 0.039,
+   "icir": 0.31,
+   "decay_pct": 7.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.044,
+    "盤整"
+   ],
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.03,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.04,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.055,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.046,
+   "down_months": 0.001
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.29,
+   "半導體": 0.13,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.51,
+  "turnover_m": 0.34,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.64,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.64 > 0.5"
+ },
+ "diagnosis": "統計預測完全命中(sub-train0.34/validation0.31/decay7%/多頭腿正)，但敗於stage2：與F-008(低調接近新高)相關性0.64。機構借券多、散戶融券少的分歧訊號本質上仍是「低週轉率=非炒作」邏輯，與F-008核心重疊。",
+ "failure_type": "duplicate",
+ "lesson": "借券/融券分歧類訊號若隱含「低週轉率=非炒作」邏輯，容易與F-008重疊，需要與價格位置/週轉率脫鉤才能算獨立訊號。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0971",
+ "ts": "2026-08-27T21:49:57"
+}

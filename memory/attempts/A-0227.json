@@ -1,0 +1,92 @@
+{
+ "round": 14,
+ "category": "momentum_information_diffusion",
+ "hypothesis": "長期動能（近一年）反映法人逐步建倉、資訊緩慢擴散的過程，而近三個月動能常摻雜短期反轉雜訊；扣除近期動能後的『純長期動能』能隔離出法人趨勢跟隨延續的部分，此為經典動能延續文獻在台股的變體，機制是機構逐步加碼而非單一事件驅動。",
+ "prediction": "sub-train ICIR > 0.45；十分位報酬需呈現單調遞增；上漲月與下跌月方向一致（皆為正貢獻）",
+ "formula": "cs_rank(sub(mom_240, mom_60))",
+ "name_zh": "長波動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.25
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "預測ICIR>0.45、十分位單調且上下漲月方向一致，實際上漲/下跌月方向確實一致且皆為正(0.035/0.023)，這點校準正確；但整體強度不足（sub-train 0.36）且validation衰減47%（0.36→0.19），2018年轉負(-0.033)。長期動能扣除短期動能的『純長期動能』方向對，但穩定性不足，可能是mom_240與mom_60重疊部分扣除後訊噪比仍不夠高。",
+ "failure_type": "expression_bad",
+ "lesson": "動能延續方向判斷正確但強度/穩定性不足時，可嘗試調整長短窗間距（如mom_180 vs mom_40）或加入產業中性化，而非放棄動能延續類假說；stage2_max_rho與F-011僅0.25，代表這個方向仍有和既有動能因子區隔的空間。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0227",
+ "ts": "2026-07-21T12:11:51"
+}

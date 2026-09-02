@@ -1,0 +1,90 @@
+{
+ "round": 44,
+ "category": "low_risk_growth_mismatch",
+ "hypothesis": "F-018（低波動x營收成長，電子限定）此前全市場版本因換手率超標於stage4被拒。改用季頻波動度(vol_63)取代月頻vol_21，波動度本身估計更穩定、換手率更低，同時對rev_yoy做3個月平滑降低單月雜訊，保留『低波動股被誤判無成長潛力』的認知失調機制，測試全市場可交易性。",
+ "prediction": "sub-train ICIR > 0.45；月換手率 < 0.4（較F-018原始版本顯著下降）；全市場（非僅電子）多頭腿年化超額 > 0。",
+ "formula": "mul(cs_rank(neg(vol_63)), cs_rank(ts_mean(rev_yoy, 3)))",
+ "name_zh": "低波動成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(vol_63)), cs_rank(ts_mean(rev_yoy, 3)))",
+  "fhash": "5359caa0fa40a7aa",
+  "sub_train": {
+   "mean_ic": 0.082,
+   "icir": 0.81
+  },
+  "validation": {
+   "mean_ic": 0.107,
+   "icir": 0.98,
+   "decay_pct": -22.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.082,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.09,
+    "盤整"
+   ],
+   "2016": [
+    0.091,
+    "多頭"
+   ],
+   "2017": [
+    0.092,
+    "多頭"
+   ],
+   "2018": [
+    0.125,
+    "盤整"
+   ],
+   "2019": [
+    0.089,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.1,
+   "down_months": 0.062
+  },
+  "industry_icir": {
+   "電子": 1.02,
+   "生技": 0.82,
+   "半導體": 0.54,
+   "金融": 0.39
+  },
+  "legs": {
+   "long_excess_ann": 0.068,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.27,
+  "stage2_culprit": {
+   "factor": "F-018",
+   "rho": 0.81,
+   "factor_name": "低波動隱藏成長股",
+   "factor_desc": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-018 |ρ|=0.81 > 0.5"
+ },
+ "diagnosis": "預測換手率<0.4、全市場多頭腿超額>0以繞開F-018的stage4問題。實際確實達成：turnover_m 0.27、多頭腿超額+0.068，且IC表現優異(icir 0.81/0.98)，機制層面預測完全正確。但只是把vol_21換成vol_63、rev_yoy加3月平滑，訊號本質未變，與F-018相關性高達0.81，被判定重複。",
+ "failure_type": "duplicate",
+ "lesson": "只調整既有高表現因子的時間窗口/平滑參數（月頻→季頻、加移動平均）而不改變核心邏輯，實務上仍會與原因子高度相關(ρ>0.8)，不能視為獨立alpha來源；下次要規避重複，需改變訊號的『資訊來源』而非只改『取樣頻率』。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0673",
+ "ts": "2026-08-12T14:15:12"
+}

@@ -1,0 +1,93 @@
+{
+ "round": 42,
+ "category": "semiconductor_margin_surprise_zscore",
+ "hypothesis": "半導體業因資本支出循環稼動率波動，營益率變動天生高波動，若僅看絕對變動量會被雜訊淹沒；用個股自身12月營益率標準差標準化變動量後的「風險調整驚奇」，能更精確捕捉結構性轉折，市場因建模複雜度反應不足。",
+ "prediction": "sub-train ICIR>0.45；industry_icir於半導體應高於其他三產業；多頭腿年化超額報酬>0；與F-001/F-012相關性|ρ|<0.5。",
+ "formula": "cs_rank(sdiv(delta(op_margin,6), ts_std(op_margin,12)))",
+ "name_zh": "半導體驚奇因子",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(op_margin,6), ts_std(op_margin,12)))",
+  "fhash": "15fb5c6771cd2033",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": -0.003,
+   "icir": -0.03,
+   "decay_pct": 108.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.008,
+    "盤整"
+   ],
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.016,
+    "多頭"
+   ],
+   "2017": [
+    0.042,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.041,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.39,
+   "半導體": 0.43,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.071,
+   "short_excess_ann": 0.073
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.36,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.54,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "預測半導體業industry_icir應最高；實際電子(0.53)高於半導體(0.43)，產業專屬性只部分成立。更關鍵的是validation ICIR崩至-0.03（decay 108%，符號翻轉），顯示過擬合；同時死於stage2與F-001（ROE趨勢改善）相關性0.54。標準化淨利率驚奇本質上重新導出了既有ROE趨勢因子。",
+ "failure_type": "duplicate",
+ "lesson": "用自身波動度標準化的『風險調整驚奇』變換，容易與既有ROE/營益率趨勢因子（F-001）本質重疊而非帶來新訊息——此正規化技巧應視為紅海模式，不宜視為新意來源。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0648",
+ "ts": "2026-08-12T09:45:44"
+}

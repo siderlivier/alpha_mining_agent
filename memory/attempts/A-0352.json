@@ -1,0 +1,84 @@
+{
+ "round": 22,
+ "category": "cash_flow_earnings_quality_composite",
+ "hypothesis": "多數分析師僅關注損益表淨利數字，較少交叉比對現金流量表；當公司同時具備「營業現金流對淨利比率高」與「應計項偏低」兩項獨立盈餘品質指標，代表獲利現金含金量獲雙重確認，此需跨報表交叉驗證才能發現的訊號市場定價效率較低，形成溢酬。",
+ "prediction": "sub-train ICIR>0.45；與F-006相關係數<0.5；多頭腿年化超額報酬>0。",
+ "formula": "sub(cs_rank(ocf_ratio), cs_rank(accruals))",
+ "name_zh": "現金流雙重確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ocf_ratio), cs_rank(accruals))",
+  "fhash": "60c7b35307ab1793",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.4,
+   "decay_pct": -62.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.03,
+    "多頭"
+   ],
+   "2015": [
+    0.035,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.039,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.019,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": 0.11,
+   "生技": 0.19,
+   "半導體": 0.24,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.006,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.25低於門檻，但validation ICIR達0.4(decay為負62%，樣本外更穩健)，逐年IC五勝二負方向大致一致，多頭腿超額0.006僅微幅為正、經濟意義有限。四產業industry_icir都在0.08-0.24之間，沒有特別強的產業聚集，顯示訊號可能是廣泛但稀薄的品質溢酬。簡單rank相減的線性組合可能稀釋了兩個原始訊號各自的資訊量。",
+ "failure_type": "expression_bad",
+ "lesson": "現金流比率與應計項的簡單rank相減，統計上稀薄且多頭腿經濟意義弱；可仿照C-8的非線性閘門手法(如僅在accruals為負時才採計ocf_ratio)，用條件式而非線性組合放大雙重確認的訊息含量。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0352",
+ "ts": "2026-07-21T13:51:27"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 49,
+ "category": "margin_cycle_inflection",
+ "hypothesis": "電子零組件產業具有明確的報價/庫存循環，客戶端因長約與議價慣性，毛利率觸底回升後通常維持數季的上升趨勢（合約重議存在時間落差）。市場過度聚焦當期營收年增率，對毛利率相對自身歷史的排名變化（觸底回升訊號）反應不足。",
+ "prediction": "sub-train ICIR>0.45；electron產業industry_icir應為四產業最高；validation decay<50%；與F-004相關係數|ρ|<0.5",
+ "formula": "cs_rank(ts_rank(gross_margin,6))",
+ "name_zh": "毛利率循環反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(gross_margin,6))",
+  "fhash": "db6054a4e5ae0bd7",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.63
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.27,
+   "decay_pct": 58.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.029,
+    "盤整"
+   ],
+   "2013": [
+    0.016,
+    "多頭"
+   ],
+   "2014": [
+    0.044,
+    "多頭"
+   ],
+   "2015": [
+    0.034,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.044,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": 0.03
+  },
+  "industry_icir": {
+   "電子": 0.53,
+   "生技": 0.35,
+   "半導體": 0.21
+  },
+  "legs": {
+   "long_excess_ann": 0.044,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.32,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.32
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR 0.27 < 0.3; validation 衰減 58% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45(實際0.63達標)且電子產業ICIR應為四產業最高(實際0.53確實最高，預測命中)。但validation ICIR驟降至0.27，衰減58%超過50%門檻，判定過擬合。方向與產業聚焦假設得到部分驗證，只是6個月短窗口的ts_rank可能對sub-train期間(2012-2017)電子業毛利率循環過度貼合。",
+ "failure_type": "expression_bad",
+ "lesson": "產業循環類假設（鎖定電子零組件毛利率循環）方向可能成立，但短窗口(6個月)ts_rank容易對特定歷史循環過擬合；下次可拉長視窗(12-18個月)或改用相對產業別而非全市場排名，以降低樣本外衰減。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0749",
+ "ts": "2026-08-14T00:36:43"
+}

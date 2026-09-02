@@ -1,0 +1,87 @@
+{
+ "round": 19,
+ "category": "illiquidity_attention_premium",
+ "hypothesis": "低成交金額股票因法人研究覆蓋不足、被動資金與量化篩選器普遍排除，資訊納入價格的速度較慢，形成流動性風險溢酬與關注度缺口的雙重補償。",
+ "prediction": "全市場sub-train ICIR>0.45；四產業中至少三個industry_icir>0.3；月換手率<0.4。",
+ "formula": "cs_rank(neg(amt_21))",
+ "name_zh": "冷門低量溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(amt_21))",
+  "fhash": "ea7db6fa5fca037c",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": 94.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.036,
+    "盤整"
+   ],
+   "2019": [
+    -0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": 0.19,
+   "生技": 0.4,
+   "半導體": -0.04,
+   "金融": -0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 1.0,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "全樣本sub-train ICIR僅0.11(方向正確但遠低於0.45門檻)，validation幾乎歸零且衰減94%；逐年IC訊號集中在2012-2014，2015年後幾乎消失甚至轉負，是已衰減的效果而非穩定溢酬。四產業中只有生技一項ICIR>0.3，未達「至少三個產業」的預測。neg(amt_21)本質上高度近似反向市值/流動性代理，很可能與規模因子高度共線，衰減時點與全球小型股溢酬式微時期吻合。",
+ "failure_type": "expression_bad",
+ "lesson": "用原始成交金額直接取負值代理「關注度缺口」，實際上與規模/流動性風險糾纏在一起，且該效果在2015年後系統性衰減；若要驗證真正的關注度不足機制，應設法與規模因子解耦(如同規模分組內比較，或用分析師覆蓋數/週轉率而非絕對成交金額)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0295",
+ "ts": "2026-07-21T13:13:10"
+}

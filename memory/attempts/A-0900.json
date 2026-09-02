@@ -1,0 +1,85 @@
+{
+ "round": 59,
+ "category": "revenue_momentum_continuation",
+ "hypothesis": "台股月營收為全球少見的高頻公開基本面資料，但多數投資人仍錨定季報EPS而非月營收趨勢；一檔股票的營收年增率相對自身兩年歷史的排名若持續處於高檔，代表其成長趨勢是結構性而非單月雜訊，此資訊會隨後續月份逐步被市場消化，形成動能延續而非均值回歸。",
+ "prediction": "sub-train ICIR > 0.4；下跌月與上漲月IC同號；多頭腿年化超額>0；與F-011/F-013/F-018相關性|ρ|<0.5（單欄位排名非交乘複合，預期較低）。",
+ "formula": "cs_rank(ts_rank(rev_yoy,24))",
+ "name_zh": "營收動能延續股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(rev_yoy,24))",
+  "fhash": "a0ed93ed44c0396d",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.26,
+   "decay_pct": 50.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.047,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.28,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.061,
+   "short_excess_ann": 0.078
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-013",
+   "rho": 0.54,
+   "factor_name": "冷門成長股",
+   "factor_desc": "營收成長強但成交金額低，代表利多尚未被市場注意到。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-013 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "預測大致命中：sub-train ICIR 0.52>0.4、cond_ic同號、多頭腿超額報酬佳(0.061)，唯一未預期到的是與F-013(冷門成長股) ρ=0.54重疊而被拒——原本假設『單欄位排名非交乘複合，相關性應較低』並不成立，rev_yoy的24期rank本質上與『成長強+關注度低』因子共享大部分訊息。",
+ "failure_type": "duplicate",
+ "lesson": "純營收動能排名(即使只是單一欄位rank而非交乘)仍可能與既有『冷門成長股』類因子高度重疊；日後評估相關性風險不能只靠『非交乘複合』這種結構性理由來預判低相關。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0900",
+ "ts": "2026-08-19T10:08:40"
+}

@@ -1,0 +1,92 @@
+{
+ "round": 26,
+ "category": "volatility_term_structure",
+ "hypothesis": "短期(21日)波動度相對長期(126日)波動度偏低，代表個股近期處於異常平靜的訊息真空期；此類個股缺乏話題性、不符合散戶偏好高波動炒作股的行為模式，容易被系統性低估。",
+ "prediction": "sub-train ICIR>0.45；與F-005、F-008相關係數<0.5；鑑於過去類似「波動壓縮」技術因子validation常大幅衰減，此案要求validation衰減<40%方視為穩健。",
+ "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+ "name_zh": "波動壓縮訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 月換手 0.67 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.36看似有希望，但validation崩至0.08（decay 78%），加上換手率0.67過高，正是候選假設自己在prediction中預先點名的已知風險模式（「過去類似波動壓縮因子validation常大幅衰減」）——這次再次被驗證發生。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "短窗/長窗波動度比值類技術因子（波動壓縮）在此pipeline反覆出現sub-train過關但validation大幅衰減、且換手率偏高的模式，本輪已是至少第二次確認。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0410",
+ "ts": "2026-07-28T18:54:36"
+}

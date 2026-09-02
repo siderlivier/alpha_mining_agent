@@ -1,0 +1,87 @@
+{
+ "round": 56,
+ "category": "cash_flow_quality_trend",
+ "hypothesis": "現金流轉換率（OCF/淨利）在過去12個月的相對歷史分位數持續處於高檔，代表公司獲利品質穩定優於自身歷史常態；此為時序自我比較而非橫斷面比較，降低不同產業會計慣例差異的干擾。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額>0；與F-006相關係數需<0.5。",
+ "formula": "cs_rank(ts_rank(ocf_ratio,12))",
+ "name_zh": "現金含金度趨勢",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(ocf_ratio,12))",
+  "fhash": "0c492836025d7ad6",
+  "sub_train": {
+   "mean_ic": -0.01,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.11,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.004,
+    "盤整"
+   ],
+   "2013": [
+    -0.028,
+    "多頭"
+   ],
+   "2014": [
+    -0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.022,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.004,
+   "down_months": -0.013
+  },
+  "industry_icir": {
+   "電子": -0.19,
+   "生技": -0.07,
+   "半導體": -0.1,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4正向，實際sub-train為-0.18，符號完全反轉；cs_rank(ts_rank(ocf_ratio,12))做了『時序自我比較』後再做『橫斷面排名』的雙重去趨勢，可能把跨公司間持續存在的現金流品質差異（cross-sectional信號）洗掉，只留下『相對自身歷史處於高/低檔』這種更接近均值回歸而非持續性的訊號，且回歸方向也與預期相反。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用ts_rank做自我歷史分位數再cs_rank，會把跨公司的水準差異訊息去除，若原始假說依賴的是水準而非趨勢，這種雙重排名容易得到符號相反或無意義的結果；下次驗證『現金流品質持續性』假說時應保留水準資訊（如cs_rank(ocf_ratio)本身或搭配delta），避免雙重去趨勢。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0862",
+ "ts": "2026-08-18T23:55:52"
+}

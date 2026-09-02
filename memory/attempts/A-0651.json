@@ -1,0 +1,94 @@
+{
+ "round": 42,
+ "category": "smart_money_confirmed_breakout",
+ "hypothesis": "股價近52週高不足以區分真假突破；股價創高同時券資比偏低，代表知情放空者未大舉挑戰這波漲勢，是較可信的真突破，反之創高但券資比同時偏高代表資訊面隱憂。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-008相關性|ρ|<0.5（用券資比而非周轉率過濾）；下跌月IC應仍維持正值。",
+ "formula": "mul(cs_rank(px_hi252), cs_rank(neg(short_margin_ratio)))",
+ "name_zh": "聰明錢認證突破",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(px_hi252), cs_rank(neg(short_margin_ratio)))",
+  "fhash": "3c517e6362a7e061",
+  "sub_train": {
+   "mean_ic": 0.05,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.069,
+   "icir": 0.42,
+   "decay_pct": -7.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.027,
+    "盤整"
+   ],
+   "2013": [
+    0.064,
+    "多頭"
+   ],
+   "2014": [
+    0.049,
+    "多頭"
+   ],
+   "2015": [
+    0.07,
+    "盤整"
+   ],
+   "2016": [
+    0.06,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.103,
+    "盤整"
+   ],
+   "2019": [
+    0.036,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.075,
+   "down_months": 0.002
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.37,
+   "半導體": 0.18,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.07,
+   "short_excess_ann": 0.07
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.3,
+  "stage2_culprit": {
+   "factor": "F-005",
+   "rho": 0.53,
+   "factor_name": "低波動異常",
+   "factor_desc": "長期波動度低的穩定股因散戶偏好高波動股而被低估"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-005 |ρ|=0.53 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.45且下跌月IC仍應為正；實際sub-train 0.39/validation 0.42（decay -7%，本輪泛化最穩定的候選之一），但下跌月IC僅0.002，幾乎沒有預測所稱的防禦力。死於stage2：與F-005（低波動異常）相關性0.53——創高股+低券資比組合本質上篩出的就是低波動穩健股，與F-005語意重疊。",
+ "failure_type": "duplicate",
+ "lesson": "52週高+券資比過濾的組合再次落入『低調/穩健』紅海（本輪第5例，見全域規則）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0651",
+ "ts": "2026-08-12T09:45:44"
+}

@@ -1,0 +1,92 @@
+{
+ "round": 56,
+ "category": "biotech_milestone_momentum_confirmation",
+ "hypothesis": "生技股常因臨床試驗或法規里程碑事件出現價格跳動（mom_60捕捉此類事件動能），若同期營益率同步改善，代表此次上漲有基本面追認、非單純消息面炒作，市場對「基本面確認的事件動能」反應不足，此機制僅在事件驅動特性強的生技業成立。",
+ "prediction": "生技產業子樣本sub-train ICIR>0.4；多頭腿年化超額>0；純mom_60（不搭配op_margin）版本ICIR應顯著低於此複合版本。",
+ "formula": "mul(cs_rank(delta(op_margin,6)), cs_rank(mom_60))",
+ "name_zh": "生技里程碑確認",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_60",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(op_margin,6)), cs_rank(mom_60))",
+  "fhash": "07a545ef12f8846c",
+  "sub_train": {
+   "mean_ic": 0.042,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.042,
+   "icir": 0.4,
+   "decay_pct": -32.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.154,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.122,
+    "盤整"
+   ],
+   "2016": [
+    0.048,
+    "多頭"
+   ],
+   "2017": [
+    -0.002,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.072,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.044,
+   "down_months": 0.037
+  },
+  "industry_icir": {
+   "電子": 0.36,
+   "生技": 0.23,
+   "半導體": 0.14,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.07,
+   "short_excess_ann": 0.059
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.48
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.31 < 0.45"
+ },
+ "diagnosis": "預測生技業ICIR>0.4，實際0.31小幅不足，主因2012年出現極端離群值IC=-0.154（生技早期樣本可能偏薄或雜訊大），排除該年後其餘各年IC多為正且相對一致（0.02~0.12）；stage2以0.48舒適通過，多空腿超額報酬也具吸引力（+7% / -5.9%），顯示機制本身可能成立，只是評估窗口涵蓋了一段品質不佳的早期資料。",
+ "failure_type": "expression_bad",
+ "lesson": "生技業早期樣本（約2012年附近）資料可能偏薄或雜訊大，導致單一極端年度拖累整體ICIR；針對生技子樣本因子，評估時可考慮排除或縮短過早的樣本區間。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0860",
+ "ts": "2026-08-18T23:55:52"
+}

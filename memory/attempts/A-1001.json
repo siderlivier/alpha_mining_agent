@@ -1,0 +1,84 @@
+{
+ "round": 66,
+ "category": "momentum_smoothness_quality",
+ "hypothesis": "12 個月價格走勢的線性擬合度（R²）越高，代表這段漲勢是低噪音、緩步累積而成，會持續吸引系統性/順勢資金加碼並自我強化；靠單一利多跳空堆出的動能 R² 低，消息消化後易回落。市場多數追價者只看漲幅、不看路徑品質，因此高 R² 動能被定價不足。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿（高動能且高 R²）年化超額 > 0 且逐年為正；decay < 20%；與 F-008、R-020、R-025 之 |ρ| < 0.5。",
+ "formula": "mul(cs_rank(mom_120), cs_rank(ts_rsq(mom_120,12)))",
+ "name_zh": "平順動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(mom_120), cs_rank(ts_rsq(mom_120,12)))",
+  "fhash": "4bf7ee32a79bcec4",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.03
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.031,
+    "多頭"
+   ],
+   "2017": [
+    -0.022,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": 0.01,
+   "半導體": -0.06,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.038,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 ICIR>0.4、多頭腿逐年為正,實際 sub-train ICIR -0.03、多頭年(2013/2014/2017)為負。因 base mom_120 在此樣本方向為負,cs_rank(R²) overlay 相乘只是把一個負向因子重新加權,無法檢驗『路徑品質溢價』本身。證據不足以單獨判定 R² 平順度假說對錯——但整體方向不利,且與 C-2/C-9 一致指向台股中期動能失效。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "在 base 因子方向未確認為正時,不要加品質 overlay(相乘會放大 base 的錯誤方向)。下次:先單測 R² 平順度對 raw momentum 的『殘差增量 IC』,確認 base 方向後再組合;或在動能有效的市場/產業子集內測試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-005",
+ "id": "A-1001",
+ "ts": "2026-09-02T00:51:49"
+}

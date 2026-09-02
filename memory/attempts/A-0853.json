@@ -1,0 +1,93 @@
+{
+ "round": 56,
+ "category": "informed_short_selling",
+ "hypothesis": "台股融券端相對融資端更多是專業投資人與避險部位，券資比高代表專業空方對該股基本面有較高疑慮，屬知情交易訊號；市場對空方傳遞的負面資訊消化緩慢。",
+ "prediction": "sub-train ICIR>0.45（direction=pos即券資比低端報酬較高，等同確認短短margin_ratio原始IC穩定為負）；多頭腿（低券資比端）年化超額>0。",
+ "formula": "cs_rank(neg(short_margin_ratio))",
+ "name_zh": "券資比示警",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(short_margin_ratio))",
+  "fhash": "b61bbf279376b6a1",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.034,
+   "icir": 0.27,
+   "decay_pct": 31.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.023,
+    "盤整"
+   ],
+   "2013": [
+    0.056,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.049,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    0.07,
+    "盤整"
+   ],
+   "2019": [
+    -0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.048,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.52,
+   "生技": 0.41,
+   "半導體": 0.15,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.04,
+   "short_excess_ann": 0.057
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.35,
+  "stage2_culprit": {
+   "factor": "F-024",
+   "rho": 0.66,
+   "factor_name": "成長無空頭疑慮",
+   "factor_desc": "EPS高成長且融券空方未大舉押注看空，雙重確認成長真實性，此訊號尚未被市場充分定價。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-024 |ρ|=0.66 > 0.5"
+ },
+ "diagnosis": "預測ICIR>0.45，實際sub-train0.39略低於門檻但validation尚可（0.27）；真正死因是stage2：cs_rank(neg(short_margin_ratio))與F-024「成長無空頭疑慮」相關係數0.66，顯示原始券資比訊號已被F-024用EPS成長交叉確認的組合形式捕捉。",
+ "failure_type": "duplicate",
+ "lesson": "單獨使用融券/券資比的原始訊號，容易與庫內已將其與成長指標交叉驗證的複合因子（F-024）重疊；未來若要用空方訊號，應尋找F-024未涵蓋的角度（如券資比的變化率而非水準）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0853",
+ "ts": "2026-08-18T23:55:52"
+}

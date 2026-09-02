@@ -1,0 +1,87 @@
+{
+ "round": 50,
+ "category": "financial_margin_inflection",
+ "hypothesis": "金融股淨利率的單季轉折（而非長期趨勢或創高）通常源自利率環境或信用循環的一次性轉折點（如升降息循環初期），市場對這類短期結構性轉折的消化速度慢於長期趨勢類指標（如F-023的創高邏輯），此處聚焦更即時的轉折訊號。",
+ "prediction": "sub-train ICIR>0.4（產業限定門檻）；與F-023相關係數應<0.5；金融產業industry_icir應為四產業最高。",
+ "formula": "cs_rank(delta(net_margin,6))",
+ "name_zh": "金控利差轉折",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(net_margin,6))",
+  "fhash": "27830292d4c7d9ea",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.03,
+   "icir": 0.66,
+   "decay_pct": -271.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.03,
+    "盤整"
+   ],
+   "2013": [
+    0.021,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    -0.029,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.51,
+   "生技": 0.13,
+   "半導體": 0.29,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.039,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.82,
+  "turnover_m": 0.27,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融限定門檻0.4、金融industry_icir應四產業最高，實際sub-train僅0.18在stage1被拒(儘管validation異常強達0.66，decay-271%)，金融industry_icir僅-0.03(四產業最低，接近零)、電子業反而最高(0.51)，與C-6、C-10構成同一模式的第三案例：金融股結構性議題假設持續找不到金融業本身的優勢，訊號來源在電子業且可能是通用淨利率轉折效應的巧合。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "金融股「利率環境/信用循環轉折」敘事第三度未能在金融業本身顯示優勢，net_margin短期delta在金融股是雜訊(icir -0.03)；此類「金融股專屬會計解讀落差」方向的可信度應調降，除非能提出金融業獨有的資料端(如利差、備抵覆蓋率)而非套用泛用淨利率指標。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0772",
+ "ts": "2026-08-14T00:51:32"
+}

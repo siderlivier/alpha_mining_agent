@@ -1,0 +1,92 @@
+{
+ "round": 53,
+ "category": "nonoperating_earnings_drag_warning",
+ "hypothesis": "淨利率與營益率差距(業外損益佔比)快速擴大代表獲利品質正在惡化，通常源自業外一次性收益消退或業外負擔增加而非本業成長驅動，市場對這種需要拆解損益表才能發現的結構性警訊反應不足。",
+ "prediction": "sub-train ICIR>0.45，方向為負(差距擴大預示低報酬)；下跌月IC應顯著高於上漲月；多頭腿(差距未擴大端)年化超額報酬須顯著>0，避免alpha僅集中空頭腿。",
+ "formula": "cs_rank(delta(sub(net_margin, op_margin), 6))",
+ "name_zh": "業外拖累預警",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(sub(net_margin, op_margin), 6))",
+  "fhash": "8ac138bab3bbd573",
+  "sub_train": {
+   "mean_ic": -0.026,
+   "icir": -0.28
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.04,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.047,
+    "盤整"
+   ],
+   "2013": [
+    -0.016,
+    "多頭"
+   ],
+   "2014": [
+    -0.069,
+    "多頭"
+   ],
+   "2015": [
+    -0.061,
+    "盤整"
+   ],
+   "2016": [
+    0.022,
+    "多頭"
+   ],
+   "2017": [
+    -0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.031,
+    "盤整"
+   ],
+   "2019": [
+    -0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.014,
+   "down_months": -0.028
+  },
+  "industry_icir": {
+   "電子": -0.1,
+   "生技": 0.0,
+   "半導體": -0.31,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.02,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.29,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.18
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.28 < 0.45; validation ICIR 0.04 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "機制部分驗證：下跌月IC(-0.028)確實比上漲月(-0.014)更負，符合「業外拖累在空頭時更致命」的預測；但sub-train ICIR(-0.28)未達門檻且validation翻正(0.04)不穩定，關鍵是多頭腿(業外未惡化組)超額報酬為負(-0.02)，訊號只在壞公司下跌時起作用，台股放空受限下純空頭端訊號難交易。",
+ "failure_type": "expression_bad",
+ "lesson": "業外拖累預警訊號常出現「只有空頭腿有效、長腿不賺」的結構，這類風險警示型因子上線前應優先檢查多頭腿是否單獨顯著為正，而非只看整體IC，否則多半死於可交易性檢查。",
+ "lesson_confidence": "cross_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0815",
+ "ts": "2026-08-15T11:33:03"
+}

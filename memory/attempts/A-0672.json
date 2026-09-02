@@ -1,0 +1,83 @@
+{
+ "round": 44,
+ "category": "dividend_policy_momentum",
+ "hypothesis": "現金股利殖利率的邊際變化（而非水準）反映管理層對未來現金流的信心與承諾，且股利政策具粘性（管理層不會輕易調降），故殖利率上升釋放的是可信的獲利穩定訊號；但多數投資人僅關注殖利率排行榜（水準），對『趨勢』反應較慢，因此存在尚未反映在靜態價值排名中的邊際訊息。",
+ "prediction": "sub-train ICIR > 0.45；pos方向；此訊號應與現有價值/殖利率類因子（如ep, bp相關組合）相關性 < 0.5，證明其捕捉的是邊際資訊而非水準重複。",
+ "formula": "cs_rank(delta(div_yield, 12))",
+ "name_zh": "股利政策轉強股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(div_yield, 12))",
+  "fhash": "67ee0fe11bf501aa",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.25
+  },
+  "validation": {
+   "mean_ic": -0.01,
+   "icir": -0.15,
+   "decay_pct": 159.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    -0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.001,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.002,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.04,
+   "生技": 0.21,
+   "半導體": 0.02,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": -0.014,
+   "short_excess_ann": -0.009
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.17,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 ICIR>0.45 且方向為正。實際 sub-train ICIR 僅0.25已不達預測門檻，validation ICIR 更翻負至-0.15（decay 159%，方向反轉），逐年IC在2018出現-0.022的明顯負值。股利政策『邊際變化具粘性訊號』的機制未獲支持，訊號極不穩定。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "股利殖利率的12個月delta訊號雜訊大於訊號，管理層股利决策的『邊際承諾』假說在資料上站不住腳；殖利率類因子若要有效，應優先測水準值而非變化率。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0672",
+ "ts": "2026-08-12T14:15:12"
+}

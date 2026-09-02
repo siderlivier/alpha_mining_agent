@@ -1,0 +1,84 @@
+{
+ "round": 32,
+ "category": "trust_quiet_accumulation",
+ "hypothesis": "投信法人具備基本面研究能力，若在股價尚未反應（近一個月動能持平或下跌）時就開始買超，代表投信搶先布局於市場尚未認知的價值，是「聰明錢先行、價格確認在後」的資訊落差訊號。此與F-017（外資買超×營收成長，資金與基本面同步確認）機制不同，本假設刻意要求價格「尚未」反映，捕捉的是資訊傳導的時間落差本身而非確認訊號。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；與C-6及F-017相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(trust_net_21), cs_rank(neg(mom_20)))",
+ "name_zh": "投信搶先布局",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_20",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(trust_net_21), cs_rank(neg(mom_20)))",
+  "fhash": "63940b9e4d6bc42e",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.09
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": 86.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.06,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    -0.041,
+    "盤整"
+   ],
+   "2016": [
+    0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.0,
+    "多頭"
+   ],
+   "2018": [
+    0.0,
+    "盤整"
+   ],
+   "2019": [
+    0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": 0.018
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.21,
+   "半導體": 0.1,
+   "金融": -0.09
+  },
+  "legs": {
+   "long_excess_ann": -0.024,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.76,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測嚴重落空：預期ICIR>0.45，實際sub-train僅0.09、validation僅0.01，decay高達86%。訊號幾乎沒有真實資訊含量（各年度IC多在0附近震盪，正負皆有且無明顯規律），而非單純方向錯誤。『法人搶先於價格反應前布局』的機制，用trust_net_21 x neg(mom_20)這個組合並未能分離出有效訊號，可能是因為投信買超本身雜訊大、且『價格尚未反應』這個條件在rank相乘下反而稀釋了兩個本就偏弱訊號各自的資訊量。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『聰明錢領先於價格確認』這類要求『訊號在前、價格反應在後』的時序分離假設，用簡單乘積rank(trust_net) x rank(neg(mom))來表達可能從根本上難以分離出真訊號，因為兩個弱訊號相乘會相互稀釋而非放大；證據雖僅一例，但decay幅度與近零ICIR的組合已相當乾淨地指向訊號不存在而非表達問題。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0503",
+ "ts": "2026-07-29T23:57:20"
+}

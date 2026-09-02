@@ -1,0 +1,94 @@
+{
+ "round": 48,
+ "category": "cash_covered_dividend_sustainability",
+ "hypothesis": "股息殖利率高且現金流量比(ocf_ratio，代表盈餘含金量)同時也高的公司，代表配息由真實營運現金流支撐、而非會計盈餘美化後勉強發放；市場常將高殖利率與成熟衰退股劃上等號而錯殺這類現金流紮實的配息股，此「現金掩護的股息」訊號比單純殖利率更具持續性。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC不劣於上漲月(非陷阱型高息股)；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(div_yield), cs_rank(ocf_ratio))",
+ "name_zh": "現金掩護高息股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(div_yield), cs_rank(ocf_ratio))",
+  "fhash": "cfe89fa5b7207256",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.072,
+   "icir": 1.04,
+   "decay_pct": -140.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.02,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.077,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.087,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.055,
+   "down_months": 0.042
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.4,
+   "半導體": 0.33,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.17,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.56,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.56 > 0.5"
+ },
+ "diagnosis": "預測全數命中：sub-train ICIR 0.43接近/達標、validation極強(1.04)、下跌月IC(0.042)與上漲月(0.055)相近符合『非陷阱型』預期，經濟邏輯與統計表現都很扎實。但被F-019(現金含金價值股)以ρ=0.56攔下；另外多頭腿超額同樣轉平/轉負(-0.01)，與C-5同型態的『高IC但頭部絕對報酬不佳』現象再度出現。",
+ "failure_type": "duplicate",
+ "lesson": "股息殖利率×現金流量比再次落入『現金流價值』紅海（與F-019重疊）。與C-5共同構成『高rank-IC但多頭腿絕對超額疲弱』的第二個實例，值得列入全域規則追蹤。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0743",
+ "ts": "2026-08-14T00:25:09"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 33,
+ "category": "revenue_surprise_drift",
+ "hypothesis": "台股月營收為高頻公告，分析師模型多以季/年為單位更新；短窗營收變動相對自身歷史波動度標準化的驚訝值代表真正的資訊衝擊而非例行季節波動，因缺乏即時分析師重新評估機制，需數月才被完全定價，形成類似盈餘公告後漂移(PEAD)的台股月營收版本。",
+ "prediction": "sub-train ICIR > 0.45；訊號應在公告後1-2月延續，月換手率 < 0.4；多頭腿年化超額 > 0。",
+ "formula": "cs_rank(sdiv(delta(rev_yoy,3),ts_std(rev_yoy,12)))",
+ "name_zh": "營收驚喜漂移",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(rev_yoy,3),ts_std(rev_yoy,12)))",
+  "fhash": "da68068b47fea870",
+  "sub_train": {
+   "mean_ic": 0.021,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.21,
+   "decay_pct": 31.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    -0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.042,
+    "多頭"
+   ],
+   "2017": [
+    -0.001,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.59,
+   "生技": 0.04,
+   "半導體": 0.29,
+   "金融": 0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.054,
+   "short_excess_ann": 0.051
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.65,
+  "stage2_max_rho": {
+   "factor": "F-013",
+   "rho": 0.32
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.31 < 0.45; validation ICIR 0.21 < 0.3; 月換手 0.65 > 0.4"
+ },
+ "diagnosis": "預測ICIR>0.45與換手率<0.4都嚴重失準：實際sub-train僅0.31、validation 0.21，換手率0.65超標。台股月營收版PEAD類比訊號強度不足，且用短窗delta(3月)除以trailing 12月std的標準化方式導致訊號變化過快，換手率過高、訊噪比不佳。",
+ "failure_type": "expression_bad",
+ "lesson": "用短窗delta除以trailing std做標準化，即使立意是抓'真正的資訊衝擊'，实际上會產生高换手、弱訊號的组合；若要重測'營收驚喜漂移'假說，應對delta本身做更長的平滑而非只調整分母。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0510",
+ "ts": "2026-07-30T00:08:12"
+}

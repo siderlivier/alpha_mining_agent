@@ -1,0 +1,90 @@
+{
+ "round": 48,
+ "category": "institutional_neglect_reversion",
+ "hypothesis": "外資持股比率(frgn_ratio)長期偏低的個股代表機構研究覆蓋度低、資訊不對稱程度高；當這類冷門股同時具備高ROE，代表基本面優勢尚未被機構資金定價，一旦逐步被外資發掘加碼，將出現價值重估。此機制與frgn_net_21等短期買賣超流量不同，捕捉的是持股「水位」代表的長期關注度缺口，而非交易行為。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(低frgn_ratio×高roe端)年化超額>0；此關係在frgn_ratio覆蓋率較低的中小型股子集應更強。",
+ "formula": "mul(cs_rank(neg(frgn_ratio)), cs_rank(roe))",
+ "name_zh": "外資冷門優質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_ratio",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(frgn_ratio)), cs_rank(roe))",
+  "fhash": "c75bf82b04d6bb97",
+  "sub_train": {
+   "mean_ic": 0.04,
+   "icir": 0.47
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.35,
+   "decay_pct": 24.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.074,
+    "盤整"
+   ],
+   "2016": [
+    0.053,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.04,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.041,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.45,
+   "生技": 0.65,
+   "半導體": 0.05,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.039,
+   "short_excess_ann": 0.043
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.14,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.56,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.56 > 0.5"
+ },
+ "diagnosis": "統計預測基本命中：sub-train ICIR 0.47>0.45、多頭腿超額 0.039>0 均達標，方向判斷正確。但敗在未預料到「冷門(低關注度)×獲利品質」這個概念軸已被庫內 F-020（用低週轉率代理冷門）佔據，換一個關注度代理變數(frgn_ratio vs 成交量)並未創造出經濟上獨立的訊號，ρ=0.56。",
+ "failure_type": "duplicate",
+ "lesson": "「機構關注度缺口 × 獲利品質」是紅海：不論用外資持股比率、週轉率、成交量何種代理變數做關注度缺口，只要疊加獲利指標，最終都收斂到高度相關的複合訊號。之後若要切入此軸，需先與 F-020 一族做相關性快篩，或改用非「關注度×獲利」的正交切角。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0729",
+ "ts": "2026-08-14T00:25:09"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 32,
+ "category": "low_risk_institutional_accumulation",
+ "hypothesis": "投信法人具備研究資源與相對穩定的中期部位邏輯（不同於外資可能受總體資金流影響），當投信在低波動、乏人問津的股票上累積買超，代表這是基於基本面研究而非動能追價的訊號；低波動股本身不吸引散戶眼球，投信買超訊號在此類股票上更少被搶先反應，資訊傳導更慢。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；與F-005(低波動)及既有法人流量因子相關性|ρ|<0.5。",
+ "formula": "mul(cs_rank(neg(vol_21)), cs_rank(trust_net_21))",
+ "name_zh": "低波投信悄然布局",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "trust_net_21",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(vol_21)), cs_rank(trust_net_21))",
+  "fhash": "0c883d9497a682d9",
+  "sub_train": {
+   "mean_ic": 0.054,
+   "icir": 0.62
+  },
+  "validation": {
+   "mean_ic": 0.062,
+   "icir": 0.63,
+   "decay_pct": -1.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.059,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.049,
+    "盤整"
+   ],
+   "2016": [
+    0.079,
+    "多頭"
+   ],
+   "2017": [
+    0.061,
+    "多頭"
+   ],
+   "2018": [
+    0.072,
+    "盤整"
+   ],
+   "2019": [
+    0.052,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.067,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.77,
+   "生技": 0.79,
+   "半導體": 0.17,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": 0.029,
+   "short_excess_ann": 0.044
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.55,
+  "stage2_culprit": {
+   "factor": "F-005",
+   "rho": 0.52,
+   "factor_name": "低波動異常",
+   "factor_desc": "長期波動度低的穩定股因散戶偏好高波動股而被低估"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-005 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "統計面達標且穩健（ICIR 0.62/0.63，decay僅-1%），符合預測中『多頭腿超額>0』（雖僅0.029、偏弱）。但與F-005相關性0.52，剛好越過0.5門檻——預測『<0.5』差之毫釐。顯示『低波動+法人買超』的組合訊號中，波動度那一腿的資訊權重過大，主導了與F-005的相關性，法人買超帶來的增量區別度不足以把整體相關性拉回0.5以下。",
+ "failure_type": "duplicate",
+ "lesson": "與C-1同一模式的再確認：只要因子含neg(vol_x)作為一腿，即使另一腿改用完全不同資料源（法人籌碼 vs 財務成長），相關性仍會被vol腿主導而難以與F-005/F-018脫鉤。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0494",
+ "ts": "2026-07-29T23:57:20"
+}

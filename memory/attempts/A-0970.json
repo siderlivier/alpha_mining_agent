@@ -1,0 +1,84 @@
+{
+ "round": 64,
+ "category": "cash_flow_quality_acceleration",
+ "hypothesis": "营业现金流对净利比率半年内加速改善、同时应计项维持低位，代表公司获利含金量正在结构性转好而非会计手法粉饰；市场分析师普遍聚焦损益表成长数字，对现金流量表边际改善的关注度低，这类盈余品质提升需数季才反映在评价上，形成系统性低估。",
+ "prediction": "全市场sub-train ICIR>0.4；与F-006、F-012截面相关性|ρ|<0.5；下跌月IC不低于上涨月（验证品质溢价具防御性）",
+ "formula": "mul(cs_rank(delta(ocf_ratio,6)), cs_rank(neg(accruals)))",
+ "name_zh": "现金品质加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(ocf_ratio,6)), cs_rank(neg(accruals)))",
+  "fhash": "cb0d07e2c6548d22",
+  "sub_train": {
+   "mean_ic": 0.012,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.02,
+   "icir": 0.38,
+   "decay_pct": -112.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.012,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    -0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.004,
+    "盤整"
+   ],
+   "2019": [
+    0.035,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": 0.02,
+   "生技": 0.1,
+   "半導體": 0.09,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.007,
+   "short_excess_ann": 0.0
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測全市場ICIR>0.4，sub-train僅0.18被stage1擋下，但validation ICIR反升至0.38(decay為負)，顯示現金流品質效應可能真實存在，只是delta(ocf_ratio,6)搭配accruals的表達在sub-train期訊號太弱。對照C-9(accruals類組合ICIR0.57)，accruals本身是有效品質過濾器，問題出在ocf_ratio的變化量表達。",
+ "failure_type": "expression_bad",
+ "lesson": "accruals/現金流品質因子用「6個月變化量」表達可能比水準值雜訊更大，導致樣本內外表現不一致；換用水準值或更長窗口平滑可能更貼近品質溢價的穩定核心。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0970",
+ "ts": "2026-08-27T21:49:57"
+}

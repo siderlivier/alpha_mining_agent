@@ -1,0 +1,87 @@
+{
+ "round": 50,
+ "category": "liquidity_risk_premium",
+ "hypothesis": "成交金額呈現長期下滑趨勢的個股代表市場流動性風險上升，投資人要求更高的流動性風險溢酬作為補償；這與『低成交=沒人關注=被忽略』(F-020)的機制不同，此處主張的是流動性風險定價機制，而非單純關注度不足。",
+ "prediction": "sub-train ICIR>0.45；與F-020相關係數應<0.5；月換手率<0.4。",
+ "formula": "cs_rank(neg(ts_slope(amt_21,12)))",
+ "name_zh": "流動性風險溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_slope(amt_21,12)))",
+  "fhash": "6a915dc7dab83dc5",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.08
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.08,
+   "decay_pct": -3.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.051,
+    "盤整"
+   ],
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    -0.026,
+    "盤整"
+   ],
+   "2016": [
+    0.03,
+    "多頭"
+   ],
+   "2017": [
+    0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.013,
+    "盤整"
+   ],
+   "2019": [
+    -0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.003,
+   "down_months": 0.018
+  },
+  "industry_icir": {
+   "電子": -0.01,
+   "生技": -0.07,
+   "半導體": -0.02,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.067,
+   "short_excess_ann": -0.002
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45且與F-020相關係數<0.5，實際sub-train ICIR僅0.08，年度符號正負交錯(2012+0.051、2015-0.026、2019-0.002)，且多頭腿年化超額報酬-0.067明顯為負，顯示成交金額長期下滑趨勢不構成穩定的流動性風險溢酬訊號，台股以散戶為主的市場中此機制可能不像成熟市場顯著。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「流動性風險溢酬」(成交量趨勢下滑要求更高預期報酬)在台股validation不成立，且多頭腿為負代表方向本身也可疑；用趨勢(slope)而非水準捕捉流動性風險可能是錯誤切角——水準效應已被既有低關注度因子(F-020)覆蓋，趨勢變化未額外增加訊息量。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0767",
+ "ts": "2026-08-14T00:51:32"
+}

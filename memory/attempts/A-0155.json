@@ -1,0 +1,84 @@
+{
+ "round": 9,
+ "category": "cashflow_quality_composite",
+ "hypothesis": "營運現金流對淨利比(OCF/NI)持續改善代表獲利成長是真金流入而非帳面認列；若同時應計項偏低，兩者共同確認獲利品質提升未被會計操作稀釋，此複合訊號比單獨的現金流趨勢或應計水準更難被市場一次定價。",
+ "prediction": "sub-train ICIR > 0.45；與F-001、F-006相關係數|ρ| < 0.5；月換手率 < 0.4。",
+ "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)),cs_rank(accruals))",
+ "name_zh": "現金流品質提升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(ts_slope(ocf_ratio,6)),cs_rank(accruals))",
+  "fhash": "0b87a30806b49a14",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.37,
+   "decay_pct": -182.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.014,
+    "多頭"
+   ],
+   "2014": [
+    0.013,
+    "多頭"
+   ],
+   "2015": [
+    0.024,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.038,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": -0.04,
+   "生技": 0.13,
+   "半導體": 0.11,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.006,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.13，rejected_stage1，未能進入decorrelation/turnover檢驗。validation ICIR 0.37同樣呈現訓練弱、驗證強的模式（decay -182%），與C-10情況類似。現金流品質與應計品質的複合表達（兩個cs_rank相減）可能因為兩個成分本身訊號都不夠強，相減後進一步稀釋，也可能是假說本身（OCF改善+低應計聯合確認）在台股樣本下就不明顯；證據不足以完全區分兩者，傾向認為假說偏弱但無法排除是複合表達稀釋所致。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金流品質與應計項的聯合驗證假說本輪證據偏弱，且與C-2同樣採用『兩個cs_rank相減』的複合表達方式，這類簡單線性相減容易把本已不強的個別訊號進一步稀釋；下次測複合品質因子時，可考慮先確認單一成分各自的ICIR是否都達到基本門檻，再決定是否值得組合，而非直接測試組合式。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0155",
+ "ts": "2026-07-20T17:18:53"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 29,
+ "category": "cross_investor_flow_divergence",
+ "hypothesis": "外資與投信代表兩種不同資訊來源與交易動機（外資：國際同業比較與中長線視角；投信：內部研究與短線績效壓力）。當外資買超同時投信賣超，代表兩者對後市看法出現分歧，而外資通常具有較完整的國際比較基礎與較長線邏輯，此分歧情境下外資判斷的資訊含量更高。過去單獨測試外資或投信流量皆偏弱，交乘構造能篩出兩者觀點真正分歧、外資看多的子集，訊號應更純粹。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿（外資買超+投信賣超同時發生）年化超額報酬 > 5%。",
+ "formula": "mul(cs_rank(frgn_net_21),cs_rank(neg(trust_net_21)))",
+ "name_zh": "外資投信分歧",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_net_21),cs_rank(neg(trust_net_21)))",
+  "fhash": "161ea3fb9a06e8fd",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.15
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.08,
+   "decay_pct": 48.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    -0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.002,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    -0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.016,
+   "down_months": -0.008
+  },
+  "industry_icir": {
+   "電子": 0.0,
+   "生技": 0.01,
+   "半導體": 0.03,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": -0.018,
+   "short_excess_ann": 0.008
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.62,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45、多頭腿超額>5%，實際sub-train ICIR僅0.15，且多頭腿超額為-0.018（方向與預測相反）。逐年IC正負不一（2016年-0.001、2019年-0.028），外資與投信『分歧』的交乘構造沒有捕捉到穩定的資訊不對稱效果。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『外資買超×投信賣超』的分歧交乘設計本意是篩出兩方觀點真正對立的子集，但實測顯示外資在此子集中的判斷並未展現優於平均的資訊含量，此機制目前證據不支持。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0447",
+ "ts": "2026-07-29T23:14:31"
+}

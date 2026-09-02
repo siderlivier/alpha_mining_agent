@@ -1,0 +1,87 @@
+{
+ "round": 30,
+ "category": "foreign_ownership_acceleration",
+ "hypothesis": "外資持股比率63日變化的3個月加速度，捕捉外資態度從緩慢加碼轉為積極加碼(或反向)的轉折點；相較於持股水準或單純趨勢，加速度能篩掉已被市場充分定價的持續趨勢，只保留真正的資訊性轉折，市場反應偏慢。",
+ "prediction": "sub-train ICIR>0.45；訊號強度應集中在外資轉向後1個月內，第2個月起IC明顯衰減；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(delta(frgn_ratio_d63,3))",
+ "name_zh": "外資加碼加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(frgn_ratio_d63,3))",
+  "fhash": "9f00489320a7b8a1",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.47,
+   "decay_pct": -74.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": -0.03,
+   "生技": 0.02,
+   "半導體": 0.08,
+   "金融": 0.37
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.016
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.4,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR(0.27)未達門檻，validation回升至0.47(decay -74%，變好)。cond_ic顯示訊號集中在上漲月(0.028 vs -0.001)，industry_icir集中在金融(0.37)其餘產業近0——訊號似乎主要是金融股+多頭環境的產物，而非全市場普遍的資訊擴散機制，全樣本ICIR被其餘產業/空頭月雜訊稀釋。",
+ "failure_type": "expression_bad",
+ "lesson": "外資持股加速度訊號集中在金融股+多頭月，與C-1(電子集中)、C-6(多頭集中)呈現同型態——全樣本ICIR被稀釋不代表機制不存在，應同時檢視產業別與regime-conditional ICIR。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0467",
+ "ts": "2026-07-29T23:26:46"
+}

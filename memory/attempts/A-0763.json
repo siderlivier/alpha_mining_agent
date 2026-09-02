@@ -1,0 +1,84 @@
+{
+ "round": 50,
+ "category": "operating_leverage_realization",
+ "hypothesis": "當電子業營益率成長斜率超前於營收成長斜率時，代表規模經濟真正發揮、費用控管優於營收擴張速度；市場對『營收成長』這種頭條數字反應過度，卻對幕後利潤率結構性改善（真正的營運槓桿兌現）反應不足，此背離尚未完全反映在股價中。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(top20%)年化超額報酬應顯著>0；電子產業industry_icir應為四產業最高。",
+ "formula": "cs_rank(sub(ts_slope(op_margin,6), ts_slope(rev_yoy,6)))",
+ "name_zh": "營運槓桿兌現",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ts_slope(op_margin,6), ts_slope(rev_yoy,6)))",
+  "fhash": "57e1b5e6faf6d458",
+  "sub_train": {
+   "mean_ic": -0.047,
+   "icir": -0.44
+  },
+  "validation": {
+   "mean_ic": -0.031,
+   "icir": -0.3,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.014,
+    "多頭"
+   ],
+   "2014": [
+    -0.078,
+    "多頭"
+   ],
+   "2015": [
+    -0.017,
+    "盤整"
+   ],
+   "2016": [
+    -0.046,
+    "多頭"
+   ],
+   "2017": [
+    -0.07,
+    "多頭"
+   ],
+   "2018": [
+    -0.052,
+    "盤整"
+   ],
+   "2019": [
+    -0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.045,
+   "down_months": -0.035
+  },
+  "industry_icir": {
+   "電子": -0.74,
+   "生技": -0.17,
+   "半導體": -0.38,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": -0.081,
+   "short_excess_ann": -0.061
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.37,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測多頭方向(pos)，實際 sub-train ICIR -0.44、validation -0.30，8年全數為負、四產業industry_icir全負(電子-0.74最極端)，符號高度一致地與假設相反——這是穩定的反向訊號而非雜訊，代表「營益率斜率超前營收斜率=被低估的營運槓桿」的因果方向判斷錯誤，市場可能將此背離解讀為成長動能見頂的警訊而非兌現訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「營益率斜率-營收斜率」背離在台股是穩定的負向訊號(尤其電子業)，不應再以「營運槓桿被低估」敘事提交同方向假設；但其量級(|ICIR|0.44)顯示訊息量真實存在，值得直接以反向邏輯(營益率超前營收成長=成長見頂警訊)重新提交負向版本。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0763",
+ "ts": "2026-08-14T00:51:32"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 61,
+ "category": "fundamentally_confirmed_momentum",
+ "hypothesis": "用ts_corr衡量ROE水準與季度價格動能(mom_60)的同步程度，當兩者正相關時，代表股價上漲是被獲利能力趨勢支撐的「基本面認證動能」，而非純粹籌碼推動的投機行情；市場習慣將動能與基本面分開評估，低估兩者共振時的訊號強度，此為全新的動能確認類別。",
+ "prediction": "sub-train ICIR > 0.4；多頭腿年化超額報酬 > 0；換手率 < 0.4",
+ "formula": "cs_rank(ts_corr(roe,mom_60,12))",
+ "name_zh": "基本面認證動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_60",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(roe,mom_60,12))",
+  "fhash": "0718d67e2cd68e70",
+  "sub_train": {
+   "mean_ic": 0.005,
+   "icir": 0.09
+  },
+  "validation": {
+   "mean_ic": 0.007,
+   "icir": 0.13,
+   "decay_pct": -33.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.064,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.026,
+    "盤整"
+   ],
+   "2016": [
+    0.016,
+    "多頭"
+   ],
+   "2017": [
+    -0.025,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.49,
+   "生技": 0.06,
+   "半導體": 0.01,
+   "金融": -0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.015,
+   "short_excess_ann": 0.014
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.22,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4且長腳超額>0、換手率<0.4：換手率(0.22)與長腳(0.015>0)勉強達標，但整體ICIR僅0.09遠低於預期。值得注意的是電子產業內ICIR達0.49，其餘產業普遍偏弱甚至為負，顯示「ROE與動能同步視為基本面認證」這個機制若成立也只侷限於電子業，全市場層級的假設本身站不住腳。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「ROE與價格動能同步程度」作為全市場的基本面認證動能訊號不成立，但電子業內ICIR達0.49，若要延續這個方向應直接把假設縮小為電子業專屬命題重新測試，而非用全池版本。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0937",
+ "ts": "2026-08-27T10:25:20"
+}

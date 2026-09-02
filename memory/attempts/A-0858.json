@@ -1,0 +1,92 @@
+{
+ "round": 56,
+ "category": "foreign_accumulation_quality_confirmation",
+ "hypothesis": "外資持股比率63日變化為正代表外資正在建倉過程中（而非已完成建倉的frgn_ratio水準，也非短期淨額frgn_net_21），搭配電子業本業獲利率高，代表外資聰明錢正在確認基本面轉強的初期，訊息傳遞需數月才完全反映於股價。",
+ "prediction": "電子產業子樣本sub-train ICIR>0.45；多頭腿年化超額>0；與F-017相關係數需<0.5。",
+ "formula": "mul(cs_rank(frgn_ratio_d63), cs_rank(op_margin))",
+ "name_zh": "外資悄悄佈局股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio_d63",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(frgn_ratio_d63), cs_rank(op_margin))",
+  "fhash": "cc039e5cea9617b5",
+  "sub_train": {
+   "mean_ic": 0.047,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.058,
+   "icir": 0.56,
+   "decay_pct": -44.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.034,
+    "盤整"
+   ],
+   "2013": [
+    0.033,
+    "多頭"
+   ],
+   "2014": [
+    0.058,
+    "多頭"
+   ],
+   "2015": [
+    0.059,
+    "盤整"
+   ],
+   "2016": [
+    0.056,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.01,
+    "盤整"
+   ],
+   "2019": [
+    0.106,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.062,
+   "down_months": 0.019
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.35,
+   "半導體": 0.3,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.027,
+   "short_excess_ann": 0.055
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.28,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.49
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45"
+ },
+ "diagnosis": "預測電子業ICIR>0.45，實際sub-train僅0.39略低於門檻而在stage4被拒；但validation ICIR反而升至0.56（decay為負，代表out-of-sample優於in-sample），stage2相關性也僅0.49安全通過。此型態（sub-train偏弱、validation偏強、且相關性過關）較不像雜訊型假訊號，較像是被單月雜訊拖累的真實訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "當validation ICIR明顯優於sub-train且stage2相關性有餘裕時，值得先嘗試對訊號做平滑降噪再重測，而非直接視為假設證偽。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0858",
+ "ts": "2026-08-18T23:55:52"
+}

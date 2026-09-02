@@ -1,0 +1,83 @@
+{
+ "round": 16,
+ "category": "institutional_flow_contrarian",
+ "hypothesis": "投信基金規模相對集中、持股高度重疊，近月大幅買超同一檔股票容易形成短期的自我實現式推升（追價效應），而非基於獨佔資訊的建倉；這種羊群買盤造成的價格偏離會在資金動能減弱後修正，故投信近月買超程度越高，短期反而預示回落（此為經驗庫中待驗證的反向假說）。",
+ "prediction": "sub-train ICIR>0.45；空頭腿（投信近月大買股）需顯著跑輸（此為反向邏輯的核心驗證點）；多頭腿（投信淨賣超股）年化超額報酬必須為正，以確保可交易性。",
+ "formula": "cs_rank(neg(trust_net_21))",
+ "name_zh": "投信追高反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(trust_net_21))",
+  "fhash": "5b1202e4dbb03ae6",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.32,
+   "decay_pct": -18.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.0,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.044,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.05,
+   "生技": 0.01,
+   "半導體": 0.29,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.008,
+   "short_excess_ann": 0.009
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測「空頭腿(投信買超股)需顯著跑輸」以驗證反轉假說，但實際空頭腿(trust_net高的股票)超額報酬為正(+0.9%)，長腿(投信賣超股)反而超額報酬為負(-0.8%)——兩腿方向都與預測相反，顯示投信買超後股票並未反轉下跌，反而延續上漲；sub-train ICIR 0.27仍不達門檻，但validation上升至0.32(decay -18%顯示尚稱穩定)，整體指向「投信流向具動能延續性」而非本次假設的「追價羊群後反轉」。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信近月買超的反轉(fade)方向本次證據不支持，兩腿報酬方向皆與假說相反，指向的其實是動能延續(投信買超股續強)；未來若仍想利用投信流量做訊號，應改測正向動能方向(cs_rank(trust_net_21))而非反向。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0259",
+ "ts": "2026-07-21T12:37:07"
+}

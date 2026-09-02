@@ -1,0 +1,92 @@
+{
+ "round": 7,
+ "category": "momentum_term_structure",
+ "hypothesis": "長期動能(一年)相對短期動能(一季)偏強，代表法人正在緩慢建倉而非短線客追價；這種慢動能反映基本面認知擴散尚未走完，具延續性，短期動能過熱但缺乏長期支撐者則多為短線炒作，容易反轉。",
+ "prediction": "sub-train 產業內 ICIR>0.45；且該訊號在下跌月的IC不易轉負，優於單獨使用mom_60的動能崩表現。",
+ "formula": "cs_rank(sub(mom_240,mom_60))",
+ "name_zh": "動能結構強度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240,mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "預測ICIR>0.45且下跌月不易轉負；下跌月IC(0.023)確實未轉負，方向直覺部分正確，但整體強度不足(sub-train0.36<0.45，validation0.19<0.3)，decay 47%逼近過擬合警戒線，逐年IC也不穩定(2014僅0.003、2018轉負)。屬強度不足而非機制完全被證偽。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "動能期限結構的防禦特性(下跌月不崩)得到部分支持但強度不足；若重測應限縮到具備法人慢建倉特徵的子族群(如高機構持股)，而非全市場。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0115",
+ "ts": "2026-07-19T17:59:13"
+}

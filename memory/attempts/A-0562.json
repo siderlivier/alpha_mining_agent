@@ -1,0 +1,90 @@
+{
+ "round": 36,
+ "category": "domestic_flow_value_confirmation",
+ "hypothesis": "台灣投信法人操作風格偏動能與熱門題材追價，鮮少主動買進淨值便宜(高bp)的冷門股；若投信罕見買超便宜股，代表這是經基本面研究後的由下而上價值發掘而非動能追價，市場對這種非典型投信行為的解讀存在系統性滯後。",
+ "prediction": "sub-train ICIR > 0.45；bp前20%子集內IC應顯著高於後80%子集，差距 > 0.15；與F-002相關性 |ρ| < 0.5。",
+ "formula": "mul(cs_rank(bp), cs_rank(trust_net_21))",
+ "name_zh": "投信慧眼撿便宜",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(trust_net_21))",
+  "fhash": "d4e118033cefb46f",
+  "sub_train": {
+   "mean_ic": 0.029,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.07,
+   "decay_pct": 76.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.046,
+    "多頭"
+   ],
+   "2014": [
+    0.0,
+    "多頭"
+   ],
+   "2015": [
+    -0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.07,
+    "多頭"
+   ],
+   "2017": [
+    0.039,
+    "多頭"
+   ],
+   "2018": [
+    -0.009,
+    "盤整"
+   ],
+   "2019": [
+    0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.02,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.49,
+   "半導體": -0.08,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.034,
+   "short_excess_ann": 0.023
+  },
+  "coverage": 0.71,
+  "turnover_m": 0.26,
+  "stage2_culprit": {
+   "factor": "F-021",
+   "rho": 0.54,
+   "factor_name": "保守增提金控",
+   "factor_desc": "淨值便宜又保守提列準備金的金融股，代表資產品質紮實但被誤讀為獲利疲弱。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-021 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "預測subtrain ICIR>0.45，實際僅0.31；validation decay高達76%（validation ICIR僅0.07，近乎失效），訊號本身不穩定；加上與F-021（保守增提金控）ρ=0.54重複，弱訊號、嚴重衰減、重複三項證據同時指向此假設難以成立。",
+ "failure_type": "duplicate",
+ "lesson": "bp×投信買超這類資金流×估值的交叉確認結構，驗證期表現極不穩定（decay 76%），即使沒有相關性問題也大概率通不過stage4；資金流交叉確認類假設對樣本外穩健性要求應更嚴格看待。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0562",
+ "ts": "2026-07-30T00:46:50"
+}

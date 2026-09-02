@@ -1,0 +1,85 @@
+{
+ "round": 67,
+ "category": "operating_leverage_underreaction",
+ "hypothesis": "當營業利益成長快於營收成長，代表正向營運槓桿發威——固定成本被更大量能攤薄，這種營益率擴張比單純營收成長更持久。市場把這類公司歸為普通『成長股』，套用對營收驅動成長的同等質疑與折價，對更高品質、更耐久的獲利軌跡反應不足。此效應在固定成本基礎高的電子業最明顯。",
+ "prediction": "sub-train ICIR > 0.35；多頭腿年化超額 > 0；電子業 industry_icir 最高；covered 樣本(營益成長>營收成長)約佔 40%；相較單純 cs_rank(eps_yoy) 有增額 IC。",
+ "formula": "rank_nz(if_else(greater(op_income_yoy, rev_yoy), eps_yoy, 0))",
+ "name_zh": "營運槓桿低估",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "rank_nz(if_else(greater(op_income_yoy, rev_yoy), eps_yoy, 0))",
+  "fhash": "99e0c5b44e2eb6f6",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": 87.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.057,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.0,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.16,
+   "生技": 0.11,
+   "半導體": -0.04,
+   "金融": -0.0
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.023
+  },
+  "coverage": 0.31,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 coverage≈0.4(實際0.31)、電子最高(實際僅0.16)、ICIR>0.35(實際0.17) 皆落空。ic_by_year 僅 2013 +0.057 貢獻，其餘近零，單年撐盤。公式 if_else(op_income_yoy>rev_yoy, eps_yoy, 0) 只在 31% 樣本上排 eps_yoy，既沒量化營運槓桿幅度(op_income_yoy − rev_yoy)，也可能與既有盈餘動能重疊。證據不足以證偽假設，但表達方式測到的是被遮的 eps_yoy 而非槓桿。",
+ "failure_type": "expression_bad",
+ "lesson": "要測『幅度型』假設就用連續差值排序(cs_rank(op_income_yoy − rev_yoy))，不要用布林閘門把資訊壓成二元遮罩再排另一個變數——後者測到的是被遮變數，不是假設本身。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1019",
+ "ts": "2026-09-02T01:09:58"
+}

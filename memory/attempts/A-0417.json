@@ -1,0 +1,79 @@
+{
+ "round": 27,
+ "category": "financial_capital_structure_shift",
+ "hypothesis": "金融控股公司受資本適足率、IFRS17等監理資本規範限制，其淨值成長主要透過盈餘保留而非股價波動；當淨值股價比(bp)出現12個月加速上升，往往反映公司主動提高保留盈餘、強化資本結構，這類資本結構調整訊息不若股利宣告醒目，散戶偏好殖利率headline而忽略資本累積訊號，導致市場重新評價存在滯後。",
+ "prediction": "sub-train ICIR>0.4；金融產業industry_icir應為四產業中最高（作為金融限定因子候選）；多頭腿超額報酬>0。",
+ "formula": "cs_rank(delta(bp,12))",
+ "name_zh": "金融資本累積",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(bp,12))",
+  "fhash": "09fa9d721b9b9645",
+  "sub_train": {
+   "mean_ic": 0.012,
+   "icir": 0.1
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.09,
+   "decay_pct": 16.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.07,
+    "多頭"
+   ],
+   "2015": [
+    -0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.032,
+    "多頭"
+   ],
+   "2017": [
+    -0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.031,
+    "盤整"
+   ],
+   "2019": [
+    -0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.0,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.09,
+   "生技": -0.02,
+   "半導體": 0.08,
+   "金融": 0.08
+  },
+  "legs": {
+   "long_excess_ann": 0.001,
+   "short_excess_ann": -0.028
+  },
+  "coverage": 0.6,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4、金融產業icir應最高，實際icir僅0.1，金融(0.08)並未高於電子(0.09)或半導體(0.08)。逐年IC正負交替(0.07,-0.001,0.032,-0.037...)顯示訊號不穩定。根本問題：delta(bp,12)上升可能來自淨值(分子)成長，也可能來自股價(分母)下跌，兩者經濟意義相反卻被公式混為一談，稀釋了機制假設的方向性訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "bp類比率因子做delta時，上升可能來自分子成長也可能來自分母下跌，兩者意義相反卻被混淆；若假設specifically關於「淨值主動成長」，應直接對淨值成長率取值而非對bp比率取delta。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0417",
+ "ts": "2026-07-28T19:08:22"
+}

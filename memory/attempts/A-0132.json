@@ -1,0 +1,89 @@
+{
+ "round": 8,
+ "category": "valuation_mean_reversion",
+ "hypothesis": "個股盈餘殖利率相對自身兩年均值的偏離，反映本益比相對自身歷史區間的壓縮/擴張，而非跨股票靜態便宜貴；台股本益比常因短期情緒（法人作帳、消息面）偏離正常區間後緩慢均值回歸，此為時序估值錨定而非橫斷面價值因子。",
+ "prediction": "sub-train ICIR > 0.45；下跌月與上漲月IC同向；與cs_rank(ep)橫斷面版本IC需顯著更高，證明時序錨定資訊有增量價值。",
+ "formula": "cs_rank(sub(ep, ts_mean(ep,24)))",
+ "name_zh": "本益比錨定回歸",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ep"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(ep, ts_mean(ep,24)))",
+  "fhash": "c6bef4d96420d223",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.49
+  },
+  "validation": {
+   "mean_ic": 0.029,
+   "icir": 0.47,
+   "decay_pct": 4.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.035,
+    "多頭"
+   ],
+   "2014": [
+    -0.0,
+    "多頭"
+   ],
+   "2015": [
+    0.067,
+    "盤整"
+   ],
+   "2016": [
+    0.056,
+    "多頭"
+   ],
+   "2017": [
+    0.034,
+    "多頭"
+   ],
+   "2018": [
+    0.003,
+    "盤整"
+   ],
+   "2019": [
+    0.055,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.048
+  },
+  "industry_icir": {
+   "電子": 0.64,
+   "生技": 0.39,
+   "半導體": 0.09,
+   "金融": 0.26
+  },
+  "legs": {
+   "long_excess_ann": 0.056,
+   "short_excess_ann": 0.055
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.22,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.67,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.67 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.49、validation ICIR 0.47（decay僅4%）完全命中預測門檻，機制（估值相對自身歷史錨定的均值回歸）在方向與穩健度上都驗證成功，是本輪表現最佳候選之一，卻因與庫內F-001(ROE趨勢改善)相關係數0.67過高被stage2淘汰。顯示「EP相對自身兩年均值」與「ROE相對自身兩年中位數」這兩個看似不同構面（估值 vs 獲利）的時序錨定因子，實際上都在捕捉同一種『公司體質改善帶動重新評價』的訊號。",
+ "failure_type": "duplicate",
+ "lesson": "「個股指標相對自身歷史窗口」的時序錨定構造(不論原始欄位是估值或獲利)容易彼此高度相關，因為共同捕捉的是『公司相對自身過去的改善程度』而非橫斷面靜態排名；替換庫內任一時序錨定因子的欄位前，應先預期高相關風險。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0132",
+ "ts": "2026-07-19T21:42:48"
+}

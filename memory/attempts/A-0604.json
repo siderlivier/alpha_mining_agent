@@ -1,0 +1,93 @@
+{
+ "round": 39,
+ "category": "cyclical_profit_stability_discount",
+ "hypothesis": "半導體產業因眾所皆知的景氣循環特性，投資人普遍對所有成分股套用『高波動、難預測』刻板印象進行折價，但少數淨利率實際維持穩定的公司(可能因產品組合或客戶結構特殊)未被市場區別對待，導致這些『偽週期股』的穩定性溢酬被系統性錯殺。",
+ "prediction": "半導體產業限定industry_icir>0.5(高於其餘三產業)；多頭腿年化超額報酬>0；與F-010相關性<0.5",
+ "formula": "cs_rank(neg(ts_std(net_margin,12)))",
+ "name_zh": "半導體穩定折價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(net_margin,12)))",
+  "fhash": "dac5611959b43ce0",
+  "sub_train": {
+   "mean_ic": 0.047,
+   "icir": 0.5
+  },
+  "validation": {
+   "mean_ic": 0.034,
+   "icir": 0.41,
+   "decay_pct": 18.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.127,
+    "盤整"
+   ],
+   "2013": [
+    0.0,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.069,
+    "盤整"
+   ],
+   "2016": [
+    0.06,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.025,
+    "盤整"
+   ],
+   "2019": [
+    0.044,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.042,
+   "down_months": 0.047
+  },
+  "industry_icir": {
+   "電子": 0.68,
+   "生技": 0.52,
+   "半導體": 0.16,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.016,
+   "short_excess_ann": 0.017
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-004",
+   "rho": 0.64,
+   "factor_name": "毛利穩定溢價",
+   "factor_desc": "毛利率長期波動度低的悶型績優股，缺乏故事性而長期被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-004 |ρ|=0.64 > 0.5"
+ },
+ "diagnosis": "整體ICIR尚可(sub 0.5、validation 0.41、decay 18%)，但預測的「半導體產業限定優勢(>0.5且高於其他產業)」完全不成立——半導體industry_icir僅0.16為四產業最低，反而電子(0.68)與生技(0.52)最強；最終因與庫內F-004(毛利穩定溢價)高相關(0.64)被拒，證實這只是通用「獲利穩定度溢價」因子的另一種參數化，並非半導體特有現象。",
+ "failure_type": "duplicate",
+ "lesson": "產業限定的「特定產業才成立」預測本輪兩次(本案半導體、C-13金融)都落空，實際效應反而集中在未被聲稱的產業，且收斂到既有通用品質因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0604",
+ "ts": "2026-08-12T09:06:34"
+}

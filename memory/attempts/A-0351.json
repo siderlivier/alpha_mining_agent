@@ -1,0 +1,79 @@
+{
+ "round": 22,
+ "category": "attention_dormancy_awakening",
+ "hypothesis": "行為財務學的投資人關注度不足理論指出，關注度低的股票資訊擴散速度較慢；當個股週轉率相對自身過去24個月中位數顯著偏低時，代表市場關注度處於長期冰點，基本面改善資訊尚未被充分定價，一旦關注度回升會出現補漲式重新評價。",
+ "prediction": "sub-train ICIR>0.45；與F-008相關係數<0.5；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sub(turn_21, ts_med(turn_21,24)))",
+ "name_zh": "冷門股甦醒",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(turn_21, ts_med(turn_21,24)))",
+  "fhash": "19751e096d00acc3",
+  "sub_train": {
+   "mean_ic": -0.015,
+   "icir": -0.15
+  },
+  "validation": {
+   "mean_ic": -0.019,
+   "icir": -0.3,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2014": [
+    -0.019,
+    "多頭"
+   ],
+   "2015": [
+    0.018,
+    "盤整"
+   ],
+   "2016": [
+    -0.049,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.031,
+    "盤整"
+   ],
+   "2019": [
+    -0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.018,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.36,
+   "生技": -0.18,
+   "半導體": -0.18,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.013,
+   "short_excess_ann": 0.031
+  },
+  "coverage": 0.64,
+  "turnover_m": 0.38,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測「多頭腿(冷門股)超額>0」與實際相反：長腿(低週轉端)超額-0.013為負，短腿(高週轉端)反而+0.031為正；四產業中三個industry_icir明顯為負(電子-0.36、生技-0.18、半導體-0.18)，僅金融微幅正0.07。sub-train與validation符號一致為負，並非隨機雜訊，證據指向低週轉股更可能持續乏人問津甚至走弱，而非蓄勢待發。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "相對自身歷史的超低週轉率預示補漲，在台股找不到支持，方向系統性相反(低週轉端反而較弱)；關注度不足類因子若要延續，應改測週轉率回升的當下而非仍在低檔作為進場訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0351",
+ "ts": "2026-07-21T13:51:27"
+}

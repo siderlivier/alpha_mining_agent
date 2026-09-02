@@ -1,0 +1,83 @@
+{
+ "round": 13,
+ "category": "dividend_yield_regime_shift",
+ "hypothesis": "殖利率因獲利成長而系統性墊高時，殖利率導向的法人資金（保險、退休基金等有最低配息覆蓋要求者）僅能在季度或半年度再平衡時點調整持股，形成制度性延遲；殖利率明顯高於自身兩年中位數代表配息能力已提升但資金尚未跟上，形成緩步正向漂移。金融股受監理資本與配息政策約束最強，預期此機制在金融產業最顯著。",
+ "prediction": "sub-train ICIR>0.45；金融產業industry_icir應為四大產業最高；下跌月IC不低於上漲月（防禦性驗證)。",
+ "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+ "name_zh": "殖利率體制躍升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+  "fhash": "e2ef4d198b38d0f7",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.16
+  },
+  "validation": {
+   "mean_ic": -0.013,
+   "icir": -0.2,
+   "decay_pct": 227.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.039,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.15,
+   "半導體": 0.01,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.16,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融產業因監理配息政策應是industry_icir最高者，實際卻是四產業中最差（-0.05，唯一負值）；防禦性預測（下跌月IC不低於上漲月）方向雖對(down 0.024 > up -0.006)但整體太弱太不穩定（sub-train ICIR僅0.16，validation翻負且decay 227%，年度IC正負交替）。「殖利率法人再平衡延遲」在金融產業的假設被直接證偽。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "殖利率相對自身歷史中位數的「體制躍升」在金融產業沒有找到預期的制度性再平衡延遲效應；不要在無額外機制證據下，再對「殖利率絕對水位變化」類指標套用金融產業專屬敘事。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0205",
+ "ts": "2026-07-21T11:59:28"
+}

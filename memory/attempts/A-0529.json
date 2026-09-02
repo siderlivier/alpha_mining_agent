@@ -1,0 +1,88 @@
+{
+ "round": 34,
+ "category": "margin_debt_crowding",
+ "hypothesis": "EPS年增率高的公司若同時融資餘額並未快速增加，代表其成長性尚未被槓桿性散戶資金發現、追捧，估值尚未被投機性買盤推高；相對地，EPS成長但融資已大幅攀升的公司，成長題材可能已被市場充分甚至過度定價，後續上檔空間有限。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(EPS成長且融資增幅低端)年化超額報酬>0；效果應在EPS年增率前1/3的成長股子樣本中IC顯著更高於後2/3子樣本。",
+ "formula": "mul(cs_rank(eps_yoy), cs_rank(neg(margin_d21)))",
+ "name_zh": "真成長未過熱",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(eps_yoy), cs_rank(neg(margin_d21)))",
+  "fhash": "5e976769bf53f8a9",
+  "sub_train": {
+   "mean_ic": 0.046,
+   "icir": 0.55
+  },
+  "validation": {
+   "mean_ic": 0.044,
+   "icir": 0.71,
+   "decay_pct": -30.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.071,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.041,
+    "盤整"
+   ],
+   "2016": [
+    0.042,
+    "多頭"
+   ],
+   "2017": [
+    0.047,
+    "多頭"
+   ],
+   "2018": [
+    0.047,
+    "盤整"
+   ],
+   "2019": [
+    0.042,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.045,
+   "down_months": 0.047
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.39,
+   "半導體": 0.17,
+   "金融": 0.36
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.007
+  },
+  "coverage": 0.62,
+  "turnover_m": 0.61,
+  "stage2_max_rho": {
+   "factor": "F-016",
+   "rho": 0.28
+  },
+  "verdict": "rejected_stage4",
+  "reason": "月換手 0.61 > 0.4"
+ },
+ "diagnosis": "訊號品質優異：sub-train ICIR 0.55與validation ICIR 0.71(decay -30%，變強)皆遠超預測門檻，且與庫內因子相關性最高僅0.28(F-016)，非重複因子——此部分預測完全正確。唯一死因是月換手0.61>0.4門檻，可交易性不足，屬於margin_d21類指標常見的高換手問題(與C-2、C-12同源)。",
+ "failure_type": "expression_bad",
+ "lesson": "「真成長未過熱」的機制驗證有效且與庫內因子區隔明確，只需解決換手率問題即可入庫；21日融資變化量作交乘腳雖訊號純度高但換手率過高不可交易，需換成更低頻表達(如更長平滑窗)。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0529",
+ "ts": "2026-07-30T00:21:47"
+}

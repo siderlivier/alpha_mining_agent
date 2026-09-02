@@ -1,0 +1,83 @@
+{
+ "round": 25,
+ "category": "margin_debt_overheat_reversal",
+ "hypothesis": "散戶申請融資需要時間與心理決策過程，當融資餘額短期成長速度相對自身歷史波動出現異常放大(標準化驚奇)，代表散戶正處於代表性捷思驅動的追價熱潮，此槓桿驅動追漲缺乏基本面支撐且潛藏維持率不足的強制賣壓風險，預期出現均值回歸式下跌。",
+ "prediction": "sub-train ICIR > 0.45(direction=neg)；月換手率 < 0.4(已預先以ts_mean/ts_std平滑降低換手)。",
+ "formula": "cs_rank(sdiv(ts_mean(margin_d21,3), ts_std(margin_d21,24)))",
+ "name_zh": "融資超熱反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(ts_mean(margin_d21,3), ts_std(margin_d21,24)))",
+  "fhash": "e87db888a18df64d",
+  "sub_train": {
+   "mean_ic": -0.019,
+   "icir": -0.23
+  },
+  "validation": {
+   "mean_ic": -0.007,
+   "icir": -0.09,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.017,
+    "多頭"
+   ],
+   "2014": [
+    -0.019,
+    "多頭"
+   ],
+   "2015": [
+    -0.003,
+    "盤整"
+   ],
+   "2016": [
+    -0.028,
+    "多頭"
+   ],
+   "2017": [
+    -0.028,
+    "多頭"
+   ],
+   "2018": [
+    -0.01,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.018,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": -0.1,
+   "生技": -0.03,
+   "半導體": -0.08,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.009
+  },
+  "coverage": 0.6,
+  "turnover_m": 0.39,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR預測>0.45(neg)，實際僅-0.23未達標。up_months(-0.018)強於down_months(-0.009)，方向上與『上漲月融資超熱更易反轉』的直覺相符，是本案唯一部分驗證預測方向的線索，但整體強度不足。覆蓋率0.60偏低。",
+ "failure_type": "expression_bad",
+ "lesson": "融資餘額標準化驚奇量測『異常放大速度』方向正確，但連續rank可能稀釋了該被捕捉的極端尾部效應；可改用門檻化二元指標聚焦極端觀測，或縮短std估計窗口。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0398",
+ "ts": "2026-07-28T18:41:52"
+}

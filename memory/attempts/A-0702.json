@@ -1,0 +1,93 @@
+{
+ "round": 46,
+ "category": "short_interest_information_diffusion",
+ "hypothesis": "台股放空受平盤下不得放空等制度限制，券源亦有限，使空頭部位的建立需要較強的資訊優勢與較高成本；當融券相對融資的比重（券資比）持續偏高，代表具資訊優勢的空方正在累積悲觀部位，但融券資訊僅日頻揭露且散戶不易解讀其含義，市場價格對此訊息的反應速度偏慢，導致券資比持續偏高的股票後續報酬偏弱。",
+ "prediction": "formula值（低券資比端）預期sub-train ICIR>0.45；下跌月|IC|大於上漲月|IC|；月換手率<0.4（6月平滑後）；多頭腿（formula值最高即券資比最低組）年化超額>0。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "券資比籌碼轉弱",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "ICIR未達0.45門檻(實際0.27)，但decay僅6%（穩定）、多空腿皆正、電子產業ICIR0.47，其餘表現健康。真正死因是與F-008『低調接近新高』相關性0.57於stage2陣亡：低券資比(未被空方關注)的股票，本質上與『未經炒作、悄悄走強』的股票高度重疊。",
+ "failure_type": "duplicate",
+ "lesson": "券資比反向指標與『安靜走強、周轉率不高』型態高度重疊——這是借券/融券類籌碼因子與價格型安靜強勢因子之間的紅海邊界。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0702",
+ "ts": "2026-08-12T14:41:10"
+}

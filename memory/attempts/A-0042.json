@@ -1,0 +1,87 @@
+{
+ "round": 2,
+ "category": "momentum_quality_weighted",
+ "hypothesis": "傳統動能因子在轉折點因符號離散化產生跳躍噪音；以趨勢擬合優度(R²)連續加權動能強度，可過濾台股散戶追高殺低造成的假突破雜訊，只保留趨勢明確的動能訊號。",
+ "prediction": "sub-train ICIR>0.4；相對原始mom_120因子換手率降低，且下跌月IC不低於上漲月IC均值的80%。",
+ "formula": "cs_rank(mul(mom_120, ts_rsq(mom_120,6)))",
+ "name_zh": "趨勢品質動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(mom_120, ts_rsq(mom_120,6)))",
+  "fhash": "8ea292ae9a3aa8a2",
+  "sub_train": {
+   "mean_ic": 0.003,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.13,
+   "decay_pct": -406.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.012,
+    "盤整"
+   ],
+   "2013": [
+    -0.009,
+    "多頭"
+   ],
+   "2014": [
+    -0.018,
+    "多頭"
+   ],
+   "2015": [
+    -0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.005,
+    "多頭"
+   ],
+   "2018": [
+    -0.0,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.017,
+   "down_months": -0.024
+  },
+  "industry_icir": {
+   "電子": 0.15,
+   "生技": 0.11,
+   "半導體": -0.06,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.054,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.89,
+  "turnover_m": 0.36,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測R²加權可過濾雜訊達ICIR>0.4且下跌月IC不應遠低於上漲月；實際sub-train ICIR僅0.03接近無效，且下跌月IC(-0.024)明顯劣於上漲月(0.017)，與預測方向相反，顯示R²加權不僅未過濾雜訊，反而放大動能崩潰風險。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "以趨勢擬合優度加權動能無法解決台股動能下跌段失效(momentum crash)問題，過濾雜訊的假設未觸及真正失效根因，可能源於系統性風險而非個股雜訊。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0042",
+ "ts": "2026-07-19T09:53:03"
+}

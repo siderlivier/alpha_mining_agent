@@ -1,0 +1,84 @@
+{
+ "round": 6,
+ "category": "earnings_quality_consistency",
+ "hypothesis": "當營業利益成長與EPS成長長期同步變動(相關性高)，代表獲利驅動力主要來自本業經營而非業外損益、股數變動或一次性項目調整，此類『乾淨』獲利公司因缺乏故事性與話題性，容易被市場忽略而低估；反之相關性低的公司代表獲利來源不透明，市場的低評價其實有其道理。此為全新探索類別，聚焦獲利來源的一致性而非成長率本身。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；且此訊號在會計項目複雜的金融產業之industry_icir應為四產業中最低(金融業本業與帳面獲利常態性分歧，訊號效力較弱)。",
+ "formula": "cs_rank(ts_corr(op_income_yoy, eps_yoy,12))",
+ "name_zh": "獲利來源一致性",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(op_income_yoy, eps_yoy,12))",
+  "fhash": "bf6fe2e7f1e7f8c1",
+  "sub_train": {
+   "mean_ic": -0.009,
+   "icir": -0.12
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.1,
+    "多頭"
+   ],
+   "2014": [
+    -0.021,
+    "多頭"
+   ],
+   "2015": [
+    -0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.002,
+    "多頭"
+   ],
+   "2018": [
+    -0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": -0.021
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": -0.36,
+   "半導體": -0.06,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.021,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR -0.12方向與預期完全相反，validation幾近於零(0.02)，『獲利來源一致性=被忽略的乾淨獲利』假設未獲任何支持；產業預測也落空，預測金融最低，實際生技最低(-0.36)、金融居中(0.05)，顯示ts_corr(op_income_yoy,eps_yoy)可能主要捕捉產業盈餘結構複雜度而非市場忽略程度。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『本業與帳面獲利成長相關性』作為關注度代理未在任何面向驗證成立(方向、產業分布皆不符)，且12個月相關係數本身雜訊高、對極端值敏感；此具體構造證據不足以支持繼續重試，但僅單一案例，不宜擴大為整個『獲利品質一致性』方向的禁區。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0107",
+ "ts": "2026-07-19T17:47:42"
+}

@@ -1,0 +1,87 @@
+{
+ "round": 50,
+ "category": "short_interest_rate_of_change",
+ "hypothesis": "券資比的『變化速度』而非『水準高低』才是資訊擴散的領先指標——券資比快速上升代表空方看法正在強化、負面資訊正在擴散中；而券資比近期下降的股票代表空方壓力正在減輕，後續報酬應優於券資比持續墊高的股票，此與F-008『低調非炒作』的靜態水準邏輯不同，聚焦動態變化。",
+ "prediction": "sub-train ICIR>0.45；與F-008相關係數應<0.5（需先做預檢，對應紅海邊界告誡）。",
+ "formula": "cs_rank(neg(delta(short_margin_ratio,6)))",
+ "name_zh": "券資比降溫",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(short_margin_ratio,6)))",
+  "fhash": "ae2d4b954e8fc219",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.17
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.21,
+   "decay_pct": -20.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.007,
+    "盤整"
+   ],
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.03,
+    "多頭"
+   ],
+   "2018": [
+    0.023,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.01,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.09,
+   "半導體": -0.02,
+   "金融": 0.21
+  },
+  "legs": {
+   "long_excess_ann": -0.053,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.43,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45且與F-008相關係數<0.5，實際sub-train ICIR僅0.17，年度符號正負交錯(2012-0.007、2015-0.011)，且多頭腿年化超額報酬-0.053明顯為負，「券資比降溫=空方壓力減輕」的動態變化假設未獲支持，訊號強度和穩定性皆不足。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "券資比短期變化速度(6個月delta)未展現出比水準值更強的資訊含量，且多頭腿持續為負，暗示台股融券規模小、此類訊號可交易多頭腿本質偏弱；若仍要探索券資比動態，應先檢查更長觀察窗(如12個月)以濾除雜訊，而非直接判定方向假設錯誤。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0770",
+ "ts": "2026-08-14T00:51:32"
+}

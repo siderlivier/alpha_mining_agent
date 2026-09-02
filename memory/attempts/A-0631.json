@@ -1,0 +1,93 @@
+{
+ "round": 41,
+ "category": "short_interest_informed_selling",
+ "hypothesis": "延續經驗庫已證實方向：券資比對報酬的影響穩定為負（非軋空延續、非回補反轉），因台股放空門檻高、成本高，願意持續維持高券資比部位的多為具資訊優勢的機構空方，而非雜訊交易者；經6個月平滑後的券資比水準若持續偏低，代表市場對該股尚無系統性看空共識。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-008相關性|ρ|<0.5（避免與「低調接近新高」紅海重疊，因本因子不含turn_21或px_hi252成分）。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "券資比偏空反向",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "多數預測命中：驗證期衰減僅6%（近乎完美泛化）、多頭腿+0.053為正、換手率0.11很低，品質是本輪最佳之一。死因是stage2與F-008（低調接近新高）相關性0.57——這正是候選事先預測要檢查的對象，只是相關性超出了預期的0.5門檻，方向判斷對了但強度估計錯了。",
+ "failure_type": "duplicate",
+ "lesson": "券資比/借券等『空方壓力』類欄位與turnover/px_hi252類『安靜/非炒作』確認腿在庫內因子中極易疊加相關（本輪F-008、F-022都出現在『安靜訊號』題材的死因中），即使主欄位不同，也應假設此類主題與F-008系列的相關性可能超過0.5，而非僅『<0.5門檻剛好擦邊』。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0631",
+ "ts": "2026-08-12T09:31:55"
+}

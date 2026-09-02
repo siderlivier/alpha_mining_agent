@@ -1,0 +1,90 @@
+{
+ "round": 34,
+ "category": "earnings_surprise_foreign_confirmation",
+ "hypothesis": "F-017僅在電子產業驗證『外資買超+營收成長』雙重確認訊號有效；本假設改用EPS年增率取代營收年增率作為基本面確認腳，並擴大至全市場：EPS是更貼近股東最終獲利的指標，外資買超提供資金面獨立確認，避免單一財報指標的雜訊，此組合訊號預期具跨產業普適性而非僅限電子供應鏈。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-017相關性須<0.5，證明EPS版本與營收版本提供增量而非重複資訊。",
+ "formula": "mul(cs_rank(eps_yoy), cs_rank(frgn_net_21))",
+ "name_zh": "EPS外資共振",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "frgn_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(eps_yoy), cs_rank(frgn_net_21))",
+  "fhash": "4aa97347a9e9337e",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.31,
+   "decay_pct": -33.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.015,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.004,
+    "多頭"
+   ],
+   "2018": [
+    0.039,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.01
+  },
+  "industry_icir": {
+   "電子": 0.37,
+   "生技": 0.24,
+   "半導體": -0.1,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": 0.015
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.5,
+  "stage2_culprit": {
+   "factor": "F-017",
+   "rho": 0.56,
+   "factor_name": "外資認證營收動能",
+   "factor_desc": "外資買超又逢營收成長，電子供應鏈的資金與基本面雙重確認訊號最可信。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-017 |ρ|=0.56 > 0.5"
+ },
+ "diagnosis": "預測與F-017相關性須<0.5的風險被準確命中——最終確實因與F-017(外資認證營收動能)相關0.56過高被拒，證明「用EPS取代營收作確認腳」判斷是同一底層邏輯的預判正確。sub-train ICIR 0.24本身也偏低。",
+ "failure_type": "duplicate",
+ "lesson": "「外資買超+基本面成長確認」模板換用不同成長指標(營收yoy→EPS yoy)不能有效降低與原始因子相關性，因兩者高度共線；此組合模板紅海範圍應涵蓋任何「frgn_net x 任一成長指標」的簡單相乘表達。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0527",
+ "ts": "2026-07-30T00:21:47"
+}

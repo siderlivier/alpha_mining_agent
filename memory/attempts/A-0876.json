@@ -1,0 +1,83 @@
+{
+ "round": 57,
+ "category": "gradual_information_diffusion_momentum",
+ "hypothesis": "「溫水煮蛙」(frog-in-the-pan)效應指出,同樣幅度的價格上漲,若由許多小幅、持續、線性的漲勢累積而成(而非少數幾天跳空大漲),更不易觸發投資人注意力與獲利了結賣壓,因不夠顯著而難引發媒體報導或散戶追價,導致資訊擴散更緩慢、動能延續性更強。",
+ "prediction": "sub-train ICIR>0.4;多頭腿(高線性度+正動能端)年化超額報酬>0;需與F-005相關性<0.5。",
+ "formula": "mul(cs_rank(ts_rsq(mom_120,12)), cs_rank(mom_120))",
+ "name_zh": "溫水煮蛙動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_rsq(mom_120,12)), cs_rank(mom_120))",
+  "fhash": "4bf7ee32a79bcec4",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.03
+  },
+  "validation": {
+   "mean_ic": 0.002,
+   "icir": 0.02,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.031,
+    "多頭"
+   ],
+   "2017": [
+    -0.022,
+    "多頭"
+   ],
+   "2018": [
+    -0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.031,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": 0.01,
+   "半導體": -0.06,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.038,
+   "short_excess_ann": 0.01
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4，但實際sub-train與validation均接近0(-0.03/0.02)，逐年正負交錯無規律，是本輪最接近純雜訊的結果。frog-in-the-pan效應以ts_rsq(mom_120,12)x mom_120操作化後，在台股個股橫截面未被觀察到；證據雖不強(icir接近0本身資訊量有限)，但方向與強度均未支持假設。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "此操作化方式下溫水煮蛙效應不成立；證據強度有限(近零而非反向)，不足以完全排除用更貼近原文獻定義的量測方式重試的可能性，但目前無足夠證據支持繼續投入。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0876",
+ "ts": "2026-08-19T00:11:01"
+}

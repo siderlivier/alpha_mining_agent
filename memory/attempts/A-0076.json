@@ -1,0 +1,92 @@
+{
+ "round": 4,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "52週高點的錨定效應在低關注度（低成交金額）股票中更強，因缺乏足夠分析師與法人套利消除此偏誤；用成交金額縮放取代波動率縮放，能隔離出真正因關注度稀缺而未被套利的錨定訊號，而非單純的低波動效應。",
+ "prediction": "sub-train ICIR>0.45；且此訊號與既有52週高點類因子（含F-005低波動）的截面相關性|ρ|應<0.5",
+ "formula": "cs_rank(sdiv(px_hi252, log1p_abs(amt_21)))",
+ "name_zh": "冷門股破高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(px_hi252, log1p_abs(amt_21)))",
+  "fhash": "d81cd06a90dfd967",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": 0.048,
+   "icir": 0.3,
+   "decay_pct": -17.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.032,
+    "盤整"
+   ],
+   "2013": [
+    0.062,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    0.049,
+    "盤整"
+   ],
+   "2016": [
+    0.037,
+    "多頭"
+   ],
+   "2017": [
+    0.038,
+    "多頭"
+   ],
+   "2018": [
+    0.059,
+    "盤整"
+   ],
+   "2019": [
+    0.037,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.063,
+   "down_months": -0.027
+  },
+  "industry_icir": {
+   "電子": 0.45,
+   "生技": 0.46,
+   "半導體": 0.09,
+   "金融": -0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.086,
+   "short_excess_ann": 0.075
+  },
+  "coverage": 0.93,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.34
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.26 < 0.45"
+ },
+ "diagnosis": "預測『與既有52週高點類因子(含F-005)相關性<0.5』命中(ρ=0.34)，證明用成交金額縮放確實隔離出不同於低波動效應的訊號；但整體強度不足(sub-train ICIR 0.26)，且cond_ic顯示強烈順週期不對稱(上漲月0.063 vs 下跌月-0.027，金融產業甚至-0.12)，說明『冷門股破高』訊號實質上更像一般價格動能/貝塔曝險，在下跌月直接失效，而非真正『低關注度套利不足』帶來的持續性錯價。",
+ "failure_type": "expression_bad",
+ "lesson": "用amt_21對數縮放代理『關注度稀缺』可能把訊號變成貝塔/動能曝險的代理，而非純粹關注度效應；若要重試『冷門股錨定』方向，應考慮用產業內成交金額百分位分組而非連續除法縮放，並檢查是否需對市場beta做正交化。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0076",
+ "ts": "2026-07-19T17:21:03"
+}

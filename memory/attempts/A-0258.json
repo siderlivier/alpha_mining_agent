@@ -1,0 +1,88 @@
+{
+ "round": 16,
+ "category": "volatility_term_structure",
+ "hypothesis": "個股波動度存在期限結構：當長期波動(vol_126)相對高但近期波動(vol_21)明顯降溫，代表引發不確定性的事件（財報、產業消息）已經過去且塵埃落定，市場對剩餘風險溢價的重新定價需要時間，此「降溫」訊號與F-005單純的低波動水準不同，捕捉的是波動狀態的轉變而非靜態水準。",
+ "prediction": "sub-train ICIR>0.45；與F-005相關係數|ρ|<0.5（需驗證，此為主要風險點）；下跌月IC不應顯著劣於上漲月（風險降溫應具跨市況穩定性）。",
+ "formula": "sub(cs_rank(vol_126), cs_rank(vol_21))",
+ "name_zh": "波動降溫訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(vol_126), cs_rank(vol_21))",
+  "fhash": "62f5ffe0a21112cd",
+  "sub_train": {
+   "mean_ic": -0.003,
+   "icir": -0.04
+  },
+  "validation": {
+   "mean_ic": -0.034,
+   "icir": -0.53,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.033,
+    "盤整"
+   ],
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.0,
+    "多頭"
+   ],
+   "2018": [
+    -0.042,
+    "盤整"
+   ],
+   "2019": [
+    -0.025,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": -0.12,
+   "生技": 0.03,
+   "半導體": 0.02,
+   "金融": -0.23
+  },
+  "legs": {
+   "long_excess_ann": -0.003,
+   "short_excess_ann": -0.002
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.61,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測vol_126-vol_21降溫訊號應有正向IC，且下跌月不該顯著劣於上漲月；實際方向完全相反：sub-train IC已是負值(-0.04)，validation惡化至-0.53，下跌月IC(-0.017)比上漲月(-0.008)更差，與「風險降溫後重新定價應具跨市況穩定性」的預測矛盾。證據顯示波動降溫並不代表風險解除後的價格修正，反而可能只是股票正處於高波動下跌趨勢的「假性平靜」階段。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "波動期限結構(長期vol高、短期vol降溫)未能驗證「不確定性消退後重新定價」假說，實證方向反而為負；若再測試波動狀態轉換類因子，應優先拆分降溫是發生在上漲後或下跌後段，本次未拆分故無法排除是下跌段末期的「假性降溫」。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0258",
+ "ts": "2026-07-21T12:37:07"
+}

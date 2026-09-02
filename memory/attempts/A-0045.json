@@ -1,0 +1,84 @@
+{
+ "round": 2,
+ "category": "limited_attention_liquidity",
+ "hypothesis": "台股中長期低關注度（周轉率長期偏低）股票，資訊擴散慢；一旦周轉率明顯放大（代表關注度被觸發，如公告、新聞曝光）且基本面確實改善，價格會在關注度提升後持續修正一段時間才反映完整資訊。",
+ "prediction": "sub-train ICIR>0.35；該因子在低amt_21（流動性較差）子樣本中的IC應顯著高於高amt_21子樣本。",
+ "formula": "cs_rank(mul(delta(turn_21,3), sign(rev_yoy)))",
+ "name_zh": "關注度觸發訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(delta(turn_21,3), sign(rev_yoy)))",
+  "fhash": "bc0356112c580508",
+  "sub_train": {
+   "mean_ic": -0.006,
+   "icir": -0.08
+  },
+  "validation": {
+   "mean_ic": -0.004,
+   "icir": -0.08,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.013,
+    "多頭"
+   ],
+   "2014": [
+    -0.017,
+    "多頭"
+   ],
+   "2015": [
+    -0.025,
+    "盤整"
+   ],
+   "2016": [
+    0.007,
+    "多頭"
+   ],
+   "2017": [
+    0.004,
+    "多頭"
+   ],
+   "2018": [
+    -0.006,
+    "盤整"
+   ],
+   "2019": [
+    -0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.007,
+   "down_months": -0.0
+  },
+  "industry_icir": {
+   "電子": -0.03,
+   "生技": -0.09,
+   "半導體": -0.22,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.023,
+   "short_excess_ann": 0.034
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.58,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測周轉率放大+營收確認的關注度觸發訊號應為正、低流動性子樣本更強；實際全期IC微負(-0.08)，各產業幾乎全負(半導體-0.22)，方向與預測相反。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "周轉率交乘營收方向的『關注度觸發』設計本輪與C-13呈現一致的反向/無效結果。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0045",
+ "ts": "2026-07-19T09:53:03"
+}

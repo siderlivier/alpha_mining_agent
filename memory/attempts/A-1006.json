@@ -1,0 +1,87 @@
+{
+ "round": 66,
+ "category": "fundamental_volatility_regime_shift",
+ "hypothesis": "月營收月增率的波動度相對半年前『下降』，代表企業從營收忽高忽低的不可預測狀態轉入穩定可預測狀態——通常來自客戶集中度改善、長約佔比提升或產品組合成熟。市場對『風險溢價下降』的重定價遠慢於對成長的反應，因為波動度收斂是慢變數、無單一事件觸發關注。",
+ "prediction": "direction neg（波動度變化越小/為負者未來報酬越高）；sub-train ICIR > 0.4；多頭腿（波動收斂股）年化超額 > 0；與 F-004、F-007 之 |ρ| < 0.5（此為變化量非水準，應可區隔）。",
+ "formula": "cs_rank(delta(ts_std(rev_mom,6),6))",
+ "name_zh": "營收波動收斂",
+ "direction": "neg",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ts_std(rev_mom,6),6))",
+  "fhash": "678bebd4ab66f170",
+  "sub_train": {
+   "mean_ic": -0.0,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": 0.003,
+   "icir": 0.05,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.117,
+    "盤整"
+   ],
+   "2013": [
+    0.008,
+    "多頭"
+   ],
+   "2014": [
+    -0.015,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    -0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.01,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.0,
+   "down_months": 0.003
+  },
+  "industry_icir": {
+   "電子": -0.36,
+   "生技": 0.03,
+   "半導體": -0.13,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": -0.043,
+   "short_excess_ann": -0.012
+  },
+  "coverage": 0.86,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 ICIR>0.4、多頭腿(波動收斂股)為正。實際 sub-train IC≈0、ICIR -0.01,僅 2012 盤整年出現 0.117 離群、其餘年份接近零,多頭腿年化 -4.3%。delta(ts_std(rev_mom,6),6) 是二階差分,訊噪比過低,無法檢驗『風險溢價緩慢重定價』假說。診斷資訊不足以斷言機制錯誤,但表達層先天不可用。",
+ "failure_type": "expression_bad",
+ "lesson": "波動度『變化量的變化』(雙重差分)雜訊過大,不可用於慢變數假說。下次改測營收波動度的『水準』(低波動溢價)或用更長窗(24 月)的單次比較(近端 std vs 遠端 std 的比值),先把訊號做出來再談重定價速度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-1006",
+ "ts": "2026-09-02T00:51:50"
+}

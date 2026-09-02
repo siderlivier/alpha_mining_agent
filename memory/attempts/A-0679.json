@@ -1,0 +1,90 @@
+{
+ "round": 44,
+ "category": "attention_inflection_growth_confirmation",
+ "hypothesis": "成交金額的『變化率』(而非水準)才是關注度轉折的訊號：當成交金額相對6個月前明顯放大，代表市場開始注意到這檔股票；若同時營收成長強勁，代表基本面確實支撐這波關注度上升，此為『資訊剛開始擴散、尚未完全定價』的中段時機訊號，與F-013（低關注度x成長）機制互補而非重複：F-013捕捉『尚未被注意』，此因子捕捉『剛被注意、訊息仍在擴散中』的階段。",
+ "prediction": "sub-train ICIR > 0.45；pos方向；若月換手率 ≥ 0.4 需列入待驗證佇列改用ts_mean平滑後重測；此訊號應與F-013相關性 < 0.5。",
+ "formula": "mul(cs_rank(delta(amt_21, 6)), cs_rank(rev_yoy))",
+ "name_zh": "關注度啟動成長股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(amt_21, 6)), cs_rank(rev_yoy))",
+  "fhash": "64e2592f525d263f",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.24,
+   "decay_pct": 21.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.044,
+    "盤整"
+   ],
+   "2016": [
+    0.037,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.032,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.48,
+   "生技": 0.02,
+   "半導體": 0.25,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": 0.051,
+   "short_excess_ann": 0.079
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.46,
+  "stage2_culprit": {
+   "factor": "F-017",
+   "rho": 0.53,
+   "factor_name": "外資認證營收動能",
+   "factor_desc": "外資買超又逢營收成長，電子供應鏈的資金與基本面雙重確認訊號最可信。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-017 |ρ|=0.53 > 0.5"
+ },
+ "diagnosis": "預測此訊號應與F-013相關性<0.5以證明是『剛被注意/擴散中』的獨立階段訊號。實際stage2揪出的是F-017(外資認證營收動能，ρ0.53)而非F-013，顯示amt_21的delta(關注度啟動)實際上跟外資買超進場時點高度同步，量能放大很大程度上就是外資資金流入的副產品，而非獨立的『注意力擴散』現象。",
+ "failure_type": "duplicate",
+ "lesson": "『成交金額變化=市場關注度』的代理指標容易與法人資金流向類因子重疊，因為多數放量事件本身就是外資/法人進場所致；下次要獨立驗證『注意力』機制，應先用成交金額變化扣除法人net flow的殘差再測試，而非直接用amt_21的delta。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0679",
+ "ts": "2026-08-12T14:15:12"
+}

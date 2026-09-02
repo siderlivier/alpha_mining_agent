@@ -1,0 +1,87 @@
+{
+ "round": 5,
+ "category": "revenue_growth_acceleration",
+ "hypothesis": "月營收年增率的「趨勢斜率」比年增率絕對水準包含更多訊息，但因財報週期慢及投資人偏好單一數字（YoY%）而非趨勢外插，市場對加速中的營收成長反應不足，尤其電子供應鏈存貨/訂單能見度高，趨勢確認後法人才逐步加碼，形成緩慢的價格發現過程。",
+ "prediction": "sub-train ICIR > 0.45（產業內）；此訊號在電子/半導體產業的ICIR應高於金融產業（金融業無「訂單能見度」機制）；validation期ICIR衰減幅度 < 30%（避免重蹈全市場排名式趨勢因子的過擬合模式）。",
+ "formula": "cs_rank(ts_slope(rev_yoy,6))",
+ "name_zh": "營收加速度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(rev_yoy,6))",
+  "fhash": "a7d8ae3cbf09cb94",
+  "sub_train": {
+   "mean_ic": 0.03,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.028,
+   "icir": 0.47,
+   "decay_pct": -12.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.018,
+    "盤整"
+   ],
+   "2016": [
+    0.067,
+    "多頭"
+   ],
+   "2017": [
+    0.022,
+    "多頭"
+   ],
+   "2018": [
+    0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.026,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.74,
+   "生技": 0.2,
+   "半導體": 0.39,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.058,
+   "short_excess_ann": 0.081
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.38,
+  "stage2_max_rho": {
+   "factor": "F-003",
+   "rho": 0.27
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.42 < 0.45"
+ },
+ "diagnosis": "sub-train ICIR 0.42 只差一點就過0.45門檻，但其他預測全部命中：產業梯度電子0.74>半導體0.39>金融0.09完全符合假設，且validation ICIR不但沒衰減反而升到0.47（decay -12%）。這是本輪對機制預測最準的一個案例，只是量級差一點點。",
+ "failure_type": "expression_bad",
+ "lesson": "當validation沒有衰減甚至改善、但sub-train剛好卡在門檻邊緣時，應視為表達式微調問題而非假設錯誤，值得換窗口/產業中性化再試一次，而非直接放棄。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0084",
+ "ts": "2026-07-19T17:32:31"
+}

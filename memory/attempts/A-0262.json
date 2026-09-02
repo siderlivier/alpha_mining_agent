@@ -1,0 +1,91 @@
+{
+ "round": 16,
+ "category": "long_term_momentum_continuation",
+ "hypothesis": "12個月動能反映機構投資人趨勢跟隨行為與基本面資訊在中小型、法人覆蓋不足個股中的緩慢擴散（Hong & Stein 1999資訊擴散模型），與短期(mom_20)的流動性驅動反轉（C-3）機制相反，在較長窗口下動能應呈現延續而非反轉；台股外資與投信的趨勢性加減碼行為可能強化此延續效果。",
+ "prediction": "sub-train ICIR>0.45；與C-3方向應近乎正交（相關係數接近0或小幅負值，驗證短期反轉與長期延續為不同機制）；半導體/電子因外資趨勢性資金流較活躍，industry_icir應相對突出；需檢查動能崩潰風險（下跌月IC是否大幅轉負）。",
+ "formula": "cs_rank(mom_240)",
+ "name_zh": "年度動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_240)",
+  "fhash": "30124ce2fa791c47",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.047,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.23,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.3
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.2 < 0.45; validation ICIR 0.09 < 0.3; validation 衰減 54% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測長期動能(mom_240)應與短期反轉(C-3)近乎正交，且在中小型股/法人覆蓋不足處更明顯；實際sub-train ICIR 0.2不達0.45門檻，validation 0.09且decay 54%超過過擬合門檻；cond_ic下跌月轉負(-0.004)符合文獻已知的「動能崩潰」風險，此風險預測中已列為待檢查項，屬預期內失敗模式。與F-011相關性0.3尚在安全邊際內，非重複問題。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "長期動能因子的下跌月負報酬(動能崩潰)在本次樣本中確實出現，且強度不足以通過閾值；這與短期反轉類因子(C-3)一樣都需要針對「近期是否下跌」分組檢驗穩健性，而非只看全期平均ICIR。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0262",
+ "ts": "2026-07-21T12:37:07"
+}

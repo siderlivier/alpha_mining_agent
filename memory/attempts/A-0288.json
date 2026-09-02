@@ -1,0 +1,90 @@
+{
+ "round": 18,
+ "category": "electronics_channel_stuffing",
+ "hypothesis": "電子供應鏈客戶為避免缺料常提前拉貨(pull-in)，造成當月營收月增率(rev_mom)大幅超前年增率(rev_yoy)所反映的成長基期；這種『短期噴出但年度基期未同步墊高』的型態代表需求被提前透支而非真實加速，後續營收與股價容易隨庫存回補結束而反轉。此機制在電子業尤其顯著，因其供應鏈存在明確拉貨/砍單庫存周期，生技/金融不具備此實體庫存驅動的月度營收波動結構。",
+ "prediction": "sub-train IC方向為負、絕對值ICIR>0.45；電子產業industry_icir絕對值應為四產業最大",
+ "formula": "cs_rank(sub(rev_mom, rev_yoy))",
+ "name_zh": "電子拉貨透支",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_mom",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(rev_mom, rev_yoy))",
+  "fhash": "af2e63ea4168dcb8",
+  "sub_train": {
+   "mean_ic": -0.04,
+   "icir": -0.58
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.34,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.037,
+    "多頭"
+   ],
+   "2015": [
+    -0.048,
+    "盤整"
+   ],
+   "2016": [
+    -0.048,
+    "多頭"
+   ],
+   "2017": [
+    -0.042,
+    "多頭"
+   ],
+   "2018": [
+    -0.026,
+    "盤整"
+   ],
+   "2019": [
+    -0.016,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.034,
+   "down_months": -0.036
+  },
+  "industry_icir": {
+   "電子": -0.69,
+   "生技": -0.42,
+   "半導體": -0.35,
+   "金融": -0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.079,
+   "short_excess_ann": -0.067
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.55,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": -0.52,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "預測方向為負、絕對值ICIR>0.45、電子產業應為四產業最負，三項全部命中：sub-train icir -0.58、electronics icir -0.69為四產業最負，機制在方向與強度上驗證良好。但stage2揪出與庫內F-011(生技轉骨訊號)|ρ|=-0.52，兩個敘事完全不同的因子(電子拉貨透支 vs 生技現金轉骨)卻高度相關，顯示兩者可能都在測同一種底層『營收成長加速度/品質』construct，只是套用在不同產業敘事上。",
+ "failure_type": "duplicate",
+ "lesson": "營收成長類因子(rev_mom/rev_yoy、營收+毛利率組合)即使套用完全不同的產業敘事，仍可能收斂到同一個底層『營收成長品質』construct而高度相關；跨產業、跨敘事的營收成長因子應優先做stage2相關性排查，不能因敘事不同就假設一定正交。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0288",
+ "ts": "2026-07-21T12:59:43"
+}

@@ -1,0 +1,94 @@
+{
+ "round": 50,
+ "category": "cash_backed_dividend_sustainability",
+ "hypothesis": "金融股股利政策常被市場質疑其永續性（獲利可能來自業外或一次性認列），但若同時具備高現金流對淨利比（ocf_ratio），代表配息有真實現金流支撐而非會計盈餘認列的假象；市場對『股利+現金流雙重確認』的金融股仍傾向低估其配息穩定性溢價。",
+ "prediction": "sub-train ICIR>0.4（產業限定門檻）；金融產業industry_icir應為四產業最高且>0.5；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_rank(div_yield), cs_rank(ocf_ratio))",
+ "name_zh": "現金支撐股息金控",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(div_yield), cs_rank(ocf_ratio))",
+  "fhash": "cfe89fa5b7207256",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.072,
+   "icir": 1.04,
+   "decay_pct": -140.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.02,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.077,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.087,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.055,
+   "down_months": 0.042
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.4,
+   "半導體": 0.33,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": -0.01,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.17,
+  "stage2_culprit": {
+   "factor": "F-019",
+   "rho": 0.56,
+   "factor_name": "現金含金價值股",
+   "factor_desc": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-019 |ρ|=0.56 > 0.5"
+ },
+ "diagnosis": "預測金融限定門檻0.4、金融industry_icir應四產業最高且>0.5，實際sub-train 0.43、validation 1.04(decay -140%大幅轉強)遠超預期，但金融industry_icir僅0.23是四產業最低(電子0.5最高)——「金融股股利現金流雙重確認」的產業專屬敘事不成立；更關鍵的是多空兩腿年化超額報酬皆為負(long -0.01, short -0.007)，代表高IC未能轉換成可交易的多空價差，最終因與F-019(現金含金價值股)相關係數0.56於stage2淘汰。",
+ "failure_type": "duplicate",
+ "lesson": "高IC/ICIR不保證可交易——當多頭腿年化超額報酬為負時(如本案-0.01)，即使ICIR達1.04也應優先懷疑是窄幅中段排序驅動而非極端分位可交易，應在stage2/相關性檢查前就加入多頭腿正值的早期篩選以節省算力。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0764",
+ "ts": "2026-08-14T00:51:32"
+}

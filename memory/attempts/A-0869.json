@@ -1,0 +1,92 @@
+{
+ "round": 57,
+ "category": "chip_free_new_high_breakout",
+ "hypothesis": "股價創高但融資餘額未同步增加,代表這波上漲由基本面或機構資金推動而非散戶追價炒作(散戶通常在追高時才顯著加碼融資,見C-2機制)。這種「健康型創高」品質較高、後續追價賣壓風險低,持續性優於單純創高。",
+ "prediction": "sub-train ICIR>0.4;多頭腿年化超額報酬>0;需與F-008/F-016相關性<0.5。",
+ "formula": "mul(cs_rank(px_hi252), cs_rank(neg(margin_d21)))",
+ "name_zh": "無融資創高股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(px_hi252), cs_rank(neg(margin_d21)))",
+  "fhash": "38a5e2b7fedfd94e",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.35
+  },
+  "validation": {
+   "mean_ic": 0.056,
+   "icir": 0.52,
+   "decay_pct": -50.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.022,
+    "盤整"
+   ],
+   "2013": [
+    0.077,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.061,
+    "盤整"
+   ],
+   "2016": [
+    0.032,
+    "多頭"
+   ],
+   "2017": [
+    0.047,
+    "多頭"
+   ],
+   "2018": [
+    0.056,
+    "盤整"
+   ],
+   "2019": [
+    0.055,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.061,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.22,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.049,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.59,
+  "stage2_max_rho": {
+   "factor": "F-016",
+   "rho": 0.43
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.35 < 0.45; 月換手 0.59 > 0.4"
+ },
+ "diagnosis": "預測方向正確且驗證良好：電子業icir最高(0.47)符合『無融資創高』敘事，雙腿皆正報酬，validation不降反升至0.52(decay -50%)。唯sub-train 0.35差臨界值0.45，且月換手0.59超過0.4上限，訊號本身健康但換手率過高侵蝕可交易性，屬於卡在stage4門檻而非機制問題。",
+ "failure_type": "expression_bad",
+ "lesson": "訊號經濟意義成立，敗在換手率過高；可對px_hi252或margin_d21做更長平滑(如21→63日)降低月換手，同時觀察ICIR是否仍維持在門檻附近。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0869",
+ "ts": "2026-08-19T00:11:01"
+}

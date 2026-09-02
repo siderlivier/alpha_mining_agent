@@ -1,0 +1,87 @@
+{
+ "round": 1,
+ "category": "momentum_consistency",
+ "hypothesis": "動能品質理論指出，走勢平滑、逐步上升（高R²）的動能反映資訊緩步擴散，較不易於一次性事件後被過度反應吃掉；跳躍式暴衝的動能常伴隨消息面炒作、續航力較差。台股半導體法說會與月營收分批釋出資訊的特性，使平滑動能更具持續性。",
+ "prediction": "產業內rank IC為正，sub-train ICIR>0.3；效應在半導體/電子最顯著（分批資訊釋出頻繁），在金融最弱（資訊事件稀疏）。",
+ "formula": "cs_rank(mul(sign(mom_60), ts_rsq(mom_60,12)))",
+ "name_zh": "平滑動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(sign(mom_60), ts_rsq(mom_60,12)))",
+  "fhash": "35e07910a3cda820",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.05
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.063,
+    "盤整"
+   ],
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    -0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.025,
+    "盤整"
+   ],
+   "2019": [
+    0.01,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.008,
+   "down_months": -0.014
+  },
+  "industry_icir": {
+   "電子": 0.26,
+   "生技": 0.12,
+   "半導體": -0.09,
+   "金融": -0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.056
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.44,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向與產業強弱幾乎都落空：sub-train ICIR僅-0.05(接近零、方向不明確)於stage1被拒；但validation卻轉正0.29，train/validation不一致；預測最強的半導體實際為負(-0.09)，與電子(0.26)相反。證據薄弱且不穩定，診斷資訊不足以完全定論是機制錯誤還是公式本身雜訊過大。",
+ "failure_type": "expression_bad",
+ "lesson": "複合形式(sign×R²)在訓練/驗證期間方向不一致時，優先懷疑公式本身對動能轉折點敏感，而非直接否證「平滑動能」機制；證據不足以支持強結論。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0031",
+ "ts": "2026-07-18T21:37:41"
+}

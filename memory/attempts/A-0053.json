@@ -1,0 +1,84 @@
+{
+ "round": 2,
+ "category": "oversold_quality_reversal",
+ "hypothesis": "當股價大幅偏離52週高點（處置效應，套牢投資人惜售、恐慌性認賠賣壓）但公司營收動能並未真正惡化(rev_yoy為正)時，代表下跌是過度悲觀情緒造成而非基本面驅動，這類「錯殺」股票在情緒消化後容易出現修正性反彈。",
+ "prediction": "sub-train ICIR>0.3；訊號多頭腿（遠離高點且營收健康）未來報酬應顯著高於遠離高點但營收惡化組（驗證基本面過濾有效性）。",
+ "formula": "cs_rank(if_else(greater(rev_yoy, 0), neg(px_hi252), 0))",
+ "name_zh": "錯殺體質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(rev_yoy, 0), neg(px_hi252), 0))",
+  "fhash": "348bf699ca9d770d",
+  "sub_train": {
+   "mean_ic": -0.049,
+   "icir": -0.53
+  },
+  "validation": {
+   "mean_ic": -0.056,
+   "icir": -0.82,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.027,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    -0.059,
+    "盤整"
+   ],
+   "2016": [
+    -0.071,
+    "多頭"
+   ],
+   "2017": [
+    -0.066,
+    "多頭"
+   ],
+   "2018": [
+    -0.058,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.062,
+   "down_months": -0.023
+  },
+  "industry_icir": {
+   "電子": -0.82,
+   "生技": -0.42,
+   "半導體": -0.31,
+   "金融": -0.27
+  },
+  "legs": {
+   "long_excess_ann": -0.044,
+   "short_excess_ann": -0.116
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.45,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測『遠離高點但營收健康』應觸發修正性反彈(正向)；實際結果極端且一致為負(-0.53→-0.82)，每一年、每個產業皆為負，且驗證期比訓練期更負，顯示此為高度穩定的反向訊號，『錯殺』假設整體被推翻。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『遠離52週高點+營收健康=錯殺被低估』在此表達下被大量一致的反向證據推翻；價格弱勢股即使營收尚可仍傾向持續走弱，可反向測試『接近高點+營收健康』的動能延續組合是否為正。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0053",
+ "ts": "2026-07-19T09:53:03"
+}

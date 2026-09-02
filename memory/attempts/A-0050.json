@@ -1,0 +1,89 @@
+{
+ "round": 2,
+ "category": "margin_stability_quality",
+ "hypothesis": "毛利率波動度低代表公司具備穩定定價權與成本轉嫁能力，但這類「悶型績優股」缺乏成長故事性，不易吸引主動型基金與散戶關注，導致長期存在關注度折價，直到穩定獲利持續兌現後市場才逐步重新定價。",
+ "prediction": "sub-train ICIR>0.3；該因子在生技/半導體（敘事性強產業）中ICIR應高於電子（競爭激烈毛利天然不穩）。",
+ "formula": "cs_rank(neg(ts_std(gross_margin,12)))",
+ "name_zh": "毛利穩定溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(gross_margin,12)))",
+  "fhash": "842e61fe9f3a9ea8",
+  "sub_train": {
+   "mean_ic": 0.045,
+   "icir": 0.6
+  },
+  "validation": {
+   "mean_ic": 0.049,
+   "icir": 0.8,
+   "decay_pct": -33.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.0,
+    "盤整"
+   ],
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.037,
+    "多頭"
+   ],
+   "2015": [
+    0.052,
+    "盤整"
+   ],
+   "2016": [
+    0.052,
+    "多頭"
+   ],
+   "2017": [
+    0.061,
+    "多頭"
+   ],
+   "2018": [
+    0.051,
+    "盤整"
+   ],
+   "2019": [
+    0.046,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.051,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.73,
+   "生技": 0.5,
+   "半導體": 0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.13,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.27
+  },
+  "verdict": "passed"
+ },
+ "diagnosis": "整體ICIR大幅超標(0.6/0.8)且驗證期比訓練期更強，主假設(毛利穩定=品質溢價)成立；但產業子假說(生技/半導體因敘事性強應比電子更明顯)未獲支持——電子(0.73)反而最高、半導體最低(0.11)，與預期相反。",
+ "failure_type": "none",
+ "lesson": "毛利率穩定度是強力且穩健的品質因子，但機制較可能是『基本面穩定度=低風險溢酬』的通用效應而非特定產業敘事關注度落差；對通過因子的產業子假說歸因應與整體結果分開評估，避免用錯誤機制解釋成功因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed",
+ "id": "A-0050",
+ "ts": "2026-07-19T09:53:03"
+}

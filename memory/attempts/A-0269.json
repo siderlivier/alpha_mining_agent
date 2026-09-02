@@ -1,0 +1,87 @@
+{
+ "round": 17,
+ "category": "dividend_growth_underreaction",
+ "hypothesis": "現金殖利率的持續上升趨勢(非單期跳升)反映股利政策持續加碼，是管理層對未來現金流信心的慢速釋放訊號；股利調整需經董事會與股東會等制度性程序，資訊擴散慢於財報數字，金融股受資本適足要求，股利提升更代表資本結構改善。",
+ "prediction": "sub-train ICIR>0.45；金融產業industry_icir應顯著高於其他產業；下跌月IC不劣於上漲月IC",
+ "formula": "cs_rank(ts_slope(div_yield,12))",
+ "name_zh": "殖利率成長動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(div_yield,12))",
+  "fhash": "a7249117f79c8e3a",
+  "sub_train": {
+   "mean_ic": -0.001,
+   "icir": -0.02
+  },
+  "validation": {
+   "mean_ic": -0.02,
+   "icir": -0.28,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.031,
+    "盤整"
+   ],
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.029,
+    "盤整"
+   ],
+   "2019": [
+    -0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.01,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": -0.2,
+   "生技": 0.03,
+   "半導體": -0.1,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.038,
+   "short_excess_ann": -0.024
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.14,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測金融產業ICIR顯著較高且下跌月不劣於上漲月。實際全樣本sub-train ICIR僅-0.02，金融產業ICIR-0.02也毫無差異化，未見任何產業專屬效果。div_yield=股利/股價，其斜率同時混入股價變動：股價下跌也會讓殖利率上升，兩者無法區分「股利政策加碼」與「股價下跌造成的被動殖利率上升(價值陷阱)」，訊號被這個混淆機制稀釋成雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "殖利率類比率的分母含股價，其「趨勢」訊號會混入股價下跌造成的被動上升，無法乾淨反映管理層股利政策意圖；若要驗證股利政策訊號，應直接用股利金額或配息率變化，避開股價作分母的欄位。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0269",
+ "ts": "2026-07-21T12:47:40"
+}

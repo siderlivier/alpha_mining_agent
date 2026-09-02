@@ -1,0 +1,92 @@
+{
+ "round": 64,
+ "category": "volatility_compression_regime",
+ "hypothesis": "短期波动度相对半年波动度显著收敛，反映市场对该股的分歧正在收敛、进入盘整蓄势阶段；投资人普遍以近期波动外推未来波动（波动持续性偏误），低估了波动压缩后常伴随的方向性突破机率，导致波动压缩股票的后续报酬被系统性低估，此为全新技术面波动结构类别，非既有低波动异常（F-005）的静态水准概念。",
+ "prediction": "sub-train ICIR>0.4；vol_21/vol_126比值最低20%组未来1-3个月报酬应显著高于最高20%组；与F-005截面相关性|ρ|<0.5",
+ "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+ "name_zh": "波动压缩蓄势",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21, vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_max_rho": {
+   "factor": "F-018",
+   "rho": 0.41
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 月換手 0.67 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.36僅小幅落後門檻，但validation暴跌至0.08、decay 78%明顯過擬合，月換手0.67偏高。波動壓縮的短窗比值(vol_21/vol_126)本身不穩定，可能是雜訊而非結構性訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "短窗波動比值換手率高又不穩定，過擬合風險高；波動壓縮類假說若保留，應改用更長/更平滑窗口組合以降低換手並提升穩定性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0975",
+ "ts": "2026-08-27T21:49:57"
+}

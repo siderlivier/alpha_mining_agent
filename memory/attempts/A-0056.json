@@ -1,0 +1,84 @@
+{
+ "round": 3,
+ "category": "cashflow_quality_growth_confirmation",
+ "hypothesis": "現金流品質（短窗口更即時的營業現金流/淨利比）與本業獲利成長方向一致時，代表獲利成長真實可持續、非應計堆砌。分析師傾向單獨檢視成長率或現金流，忽略兩者交乘訊號，市場對「成長+高含金量」組合反應不足。",
+ "prediction": "sub-train ICIR>0.45；該訊號在op_income_yoy為正的樣本中IC應顯著高於負成長樣本。",
+ "formula": "cs_rank(mul(ts_mean(ocf_ratio,3), sign(op_income_yoy)))",
+ "name_zh": "現金流確認成長",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(ts_mean(ocf_ratio,3), sign(op_income_yoy)))",
+  "fhash": "5847df79a0d38458",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.09,
+   "decay_pct": 146.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.019,
+    "多頭"
+   ],
+   "2014": [
+    -0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    0.034,
+    "多頭"
+   ],
+   "2017": [
+    0.019,
+    "多頭"
+   ],
+   "2018": [
+    0.002,
+    "盤整"
+   ],
+   "2019": [
+    -0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.009,
+   "down_months": 0.0
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.43,
+   "半導體": 0.02,
+   "金融": -0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.02,
+   "short_excess_ann": 0.011
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.45且正成長樣本IC較高』。實際sub-train ICIR僅0.20，驗證期崩至-0.09（decay 146%），逐年IC正負反覆（2014 -0.028、2016 +0.034、2019 -0.019），顯示現金流×成長方向的交乘訊號不穩定，較像雜訊而非結構性效應。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "sign(op_income_yoy)這類二元乘法閘門容易造成訊號在不同期間反覆翻轉，本身証據力薄弱（另見C-12的類似失敗）。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0056",
+ "ts": "2026-07-19T17:08:22"
+}

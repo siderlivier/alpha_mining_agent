@@ -1,0 +1,90 @@
+{
+ "round": 27,
+ "category": "operating_leverage_inflection",
+ "hypothesis": "半導體/電子製造具高固定成本特性（晶圓廠、產線折舊），營收成長對營益率的邊際貢獻呈非線性放大（營運槓桿）；當營益率與營收年增率同時轉強，代表公司正處於固定成本被稀釋、獲利加速釋放的拐點。賣方模型多採線性外推，容易低估這種非線性加速速度，造成電子/半導體股在此拐點附近的重新評價滯後。",
+ "prediction": "sub-train ICIR>0.45；電子與半導體產業industry_icir應為四產業最高；多頭腿超額報酬>0，且應高於單獨使用op_margin或rev_yoy排序的報酬。",
+ "formula": "cs_rank(mul(cs_rank(op_margin), cs_rank(rev_yoy)))",
+ "name_zh": "營運槓桿拐點",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(cs_rank(op_margin), cs_rank(rev_yoy)))",
+  "fhash": "af03efdb92a05d18",
+  "sub_train": {
+   "mean_ic": 0.079,
+   "icir": 0.66
+  },
+  "validation": {
+   "mean_ic": 0.08,
+   "icir": 0.9,
+   "decay_pct": -36.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.06,
+    "多頭"
+   ],
+   "2014": [
+    0.09,
+    "多頭"
+   ],
+   "2015": [
+    0.067,
+    "盤整"
+   ],
+   "2016": [
+    0.07,
+    "多頭"
+   ],
+   "2017": [
+    0.108,
+    "多頭"
+   ],
+   "2018": [
+    0.05,
+    "盤整"
+   ],
+   "2019": [
+    0.11,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.089,
+   "down_months": 0.056
+  },
+  "industry_icir": {
+   "電子": 0.69,
+   "生技": 0.46,
+   "半導體": 0.47,
+   "金融": 0.32
+  },
+  "legs": {
+   "long_excess_ann": 0.083,
+   "short_excess_ann": 0.077
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.32,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.78,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.78 > 0.5"
+ },
+ "diagnosis": "本輪表現最強者：sub-train icir 0.66、validation icir 0.9(decay -36%，驗證期更強)，多頭腿超額0.083顯著為正，完全印證「營運槓桿拐點」機制存在。產業預測部分命中電子最高(0.69)，但生技icir(0.46)意外與半導體(0.47)相當，這正預示了與庫內F-011(生技轉骨訊號，同為op_margin×rev_yoy式邏輯，只是框架成生技限定版)高度重疊(rho=0.78)。底層mul(cs_rank(op_margin), cs_rank(rev_yoy))是通用「獲利率×成長」交乘訊號，不論包裝成電子敘事或生技敘事，抓的是同一批股票。",
+ "failure_type": "duplicate",
+ "lesson": "「品質×成長」交乘訊號(mul(cs_rank(op_margin/gross_margin類), cs_rank(rev_yoy)))是庫內已高度開發的紅海，換產業故事包裝不足以規避重疊，因為底層數學結構相同；需在標的子集或加入第三維度（估值、關注度）做出真正差異化才可能通過查重。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0423",
+ "ts": "2026-07-28T19:08:22"
+}

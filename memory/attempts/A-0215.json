@@ -1,0 +1,87 @@
+{
+ "round": 13,
+ "category": "value_re_rating_momentum",
+ "hypothesis": "多數投資人僅看靜態S/P水準判斷便宜與否（已知台股純價值因子偏弱），但S/P持續上升（股價相對營收持續走弱）反映賣壓延續尚未反轉的階段；當此惡化速度達到極端，代表機構棄守已大致price in，後續便宜股再評價機率提高。市場對「價值惡化速度」這個二階資訊反應不足。",
+ "prediction": "sub-train ICIR>0.45；與F-003(sp×sign(rev_yoy))相關係數|ρ|<0.5（機制不同：靜態水準vs動態斜率）。",
+ "formula": "cs_rank(ts_slope(sp,12))",
+ "name_zh": "價值惡化速度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(sp,12))",
+  "fhash": "8f2e628f5a5ed5c3",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.006,
+   "icir": 0.06,
+   "decay_pct": 82.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.073,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.008,
+    "多頭"
+   ],
+   "2017": [
+    0.053,
+    "多頭"
+   ],
+   "2018": [
+    0.053,
+    "盤整"
+   ],
+   "2019": [
+    -0.041,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.14,
+   "生技": 0.0,
+   "半導體": -0.02,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": 0.002,
+   "short_excess_ann": -0.023
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.18,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.2
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.31 < 0.45; validation ICIR 0.06 < 0.3; validation 衰減 82% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.31；validation大幅衰退至0.06（衰減82%，明確過擬合徵兆），2019年IC甚至翻負(-0.041)。與本輪多數「train弱validation強」個案相反，本案是典型train強validation弱的真過擬合模式，「價值惡化速度」二階訊號假說未獲支持，可能只是捕捉到特定景氣循環下的均值回歸而非普適機構棄守機制。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "對S/P做ts_slope(12)這類斜率轉換，本案顯示是真實的train強validation弱過擬合（82%衰減），與C-3/C-5/C-7/C-9的train弱validation強模式正好相反；兩種衰減模式要分開處理——真過擬合（train強validation弱）應優先考慮方向本身有問題，而非表達修正。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0215",
+ "ts": "2026-07-21T11:59:28"
+}

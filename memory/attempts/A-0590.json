@@ -1,0 +1,94 @@
+{
+ "round": 38,
+ "category": "financial_earnings_quality_conviction",
+ "hypothesis": "金控公司現金流量表因保險浮存金、投資部位重分類等因素結構複雜，多數投資人僅關注EPS或ROE評價金融股，較少交叉比對現金流量表；當公司同時具高營業現金流與高淨利率，代表獲利非依賴一次性投資收益或準備金迴轉，而是本業真實賺錢能力強，此訊號因分析門檻較高被低估。",
+ "prediction": "sub-train ICIR整體或金融產業industry_icir > 0.5；金融產業industry_icir應高於電子、半導體、生技；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_rank(ocf_ratio), cs_rank(net_margin))",
+ "name_zh": "金控真獲利股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin",
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ocf_ratio), cs_rank(net_margin))",
+  "fhash": "91968381b1e6aa38",
+  "sub_train": {
+   "mean_ic": 0.046,
+   "icir": 0.42
+  },
+  "validation": {
+   "mean_ic": 0.066,
+   "icir": 0.74,
+   "decay_pct": -75.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.068,
+    "盤整"
+   ],
+   "2013": [
+    -0.005,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.085,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    0.02,
+    "盤整"
+   ],
+   "2019": [
+    0.113,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.051,
+   "down_months": 0.052
+  },
+  "industry_icir": {
+   "電子": 0.44,
+   "生技": 0.34,
+   "半導體": 0.35,
+   "金融": 0.28
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.02
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.13,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.58,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.58 > 0.5"
+ },
+ "diagnosis": "預測金融產業應最強，實際金融icir(0.28)反而是四產業最低（電子0.44最高），敘事再度與數據不符；sub-train 0.42略低於門檻但validation 0.74強勁，最終在stage2因與F-002(金融品質價值)ρ=0.58陣亡，與C-2、C-15同一culprit。",
+ "failure_type": "duplicate",
+ "lesson": "net_margin/ocf_ratio這類獲利品質變數即使不直接用roe，也會與F-002的ROE×價值组合高度共線；三次(C-2/C-12/C-15)命中同一F-002，顯示「泛用獲利品質代理 x 任意方向性訊號」是目前庫內最擁擠的紅海之一。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0590",
+ "ts": "2026-07-30T01:16:47"
+}

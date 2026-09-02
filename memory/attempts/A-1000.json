@@ -1,0 +1,85 @@
+{
+ "round": 66,
+ "category": "revenue_confirmed_momentum",
+ "hypothesis": "純價格動能混雜籌碼面過度反應雜訊；當同時有營收年增為正作為基本面背書時，動能反映的是尚未完成的盈餘價格發現過程。多數動能投資人不做基本面過濾，因此『營收確認過的動能』存在系統性滯後反應空間。rank_nz 只在有訊號的樣本內排名，避免零值填補製造同分並列壓低區辨度。",
+ "prediction": "sub-train ICIR > 0.4；在營收為正子集內多頭腿年化超額 > 0；下跌月 IC ≥ 上漲月 IC（動能崩盤時基本面過濾提供保護）；decay < 20%；與 F-016/F-017/F-018 之 |ρ| < 0.5。",
+ "formula": "rank_nz(if_else(greater(rev_yoy,0), mom_120, 0))",
+ "name_zh": "營收背書動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "rank_nz(if_else(greater(rev_yoy,0), mom_120, 0))",
+  "fhash": "3102da3dbd8000df",
+  "sub_train": {
+   "mean_ic": -0.007,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.007,
+    "多頭"
+   ],
+   "2014": [
+    -0.045,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.019,
+    "多頭"
+   ],
+   "2017": [
+    -0.032,
+    "多頭"
+   ],
+   "2018": [
+    -0.034,
+    "盤整"
+   ],
+   "2019": [
+    0.037,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": -0.031
+  },
+  "industry_icir": {
+   "電子": 0.07,
+   "生技": 0.23,
+   "半導體": -0.07,
+   "金融": -0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.048,
+   "short_excess_ann": 0.047
+  },
+  "coverage": 0.46,
+  "turnover_m": 0.4,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測全面落空:預期 sub-train ICIR>0.4,實際 -0.06(IC -0.007);預期下跌月 IC≥上漲月(基本面過濾提供崩盤保護),實際下跌月 -0.031 遠差於上漲月 0.006——基本面 gate 完全沒有保護作用。逐年在 2013/2014/2017 多頭年皆為負。核心問題:mom_120 本身在台股 2012-2019 就是負向/反轉的,對它加『營收為正』的 AND 過濾救不回來。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『營收確認過的中期動能存在系統性滯後』在台股被證偽——因為 base 中期動能本身無效。下次不要用『動能 AND 基本面』的結構去救一個方向不明的動能;若相信營收滯後反應,應獨立表達營收驚喜/修正,不要掛在價格動能上。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "from_queue": "Q-002",
+ "id": "A-1000",
+ "ts": "2026-09-02T00:51:49"
+}

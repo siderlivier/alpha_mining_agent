@@ -1,0 +1,84 @@
+{
+ "round": 35,
+ "category": "earnings_quality_divergence",
+ "hypothesis": "當EPS年增率明顯高於營業利益年增率時，代表獲利成長可能來自業外收益、稅務優化或一次性因素，而非本業真實動能；市場常誤把這種『灌水式』成長解讀為高品質成長股而追高，本業成長主導、無明顯業外貢獻的公司則相對被低估。",
+ "prediction": "sub-train ICIR>0.45；多頭腿（本業成長主導者）年化超額>0；下跌月與上漲月IC同向。",
+ "formula": "cs_rank(neg(sub(eps_yoy,op_income_yoy)))",
+ "name_zh": "獲利虛胖股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(eps_yoy,op_income_yoy)))",
+  "fhash": "63869bce533b668f",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.55,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR -0.06接近零，方向與預測(正值)相反，四產業ICIR全負，長短腿也未形成有效價差，「獲利虛胖」訊號完全未被驗證。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "EPS年增率減營業利益年增率的落差本身不具備可交易的資訊含量，市場可能已充分消化業外/稅務貢獻對獲利品質的影響，這類單純的成長來源分解型因子難以獨立產生alpha。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0541",
+ "ts": "2026-07-30T00:34:10"
+}

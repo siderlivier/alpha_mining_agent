@@ -1,0 +1,83 @@
+{
+ "round": 27,
+ "category": "biotech_cash_flow_inflection",
+ "hypothesis": "生技公司在臨床/研發階段普遍現金流燒錢、OCF/淨利比偏低或為負；當公司從燒錢期轉向商轉（藥證核准、授權金入帳、產品放量），OCF/淨利比會出現結構性、持續的改善趨勢，這是離散的階段轉換訊號。台灣生技股分析師覆蓋率低，多數投資人仍用燒錢股的舊思維定價，導致市場對商轉轉折的重新評價存在滯後。",
+ "prediction": "sub-train ICIR>0.4；生技產業industry_icir應顯著高於其他三產業（>0.5）；多頭腿超額報酬>0。",
+ "formula": "cs_rank(delta(ts_mean(ocf_ratio,6),12))",
+ "name_zh": "生技轉商轉訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ts_mean(ocf_ratio,6),12))",
+  "fhash": "f3a00c5aa7f9e8e8",
+  "sub_train": {
+   "mean_ic": -0.013,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.17,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.038,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    -0.021,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.014,
+   "down_months": 0.013
+  },
+  "industry_icir": {
+   "電子": -0.21,
+   "生技": -0.22,
+   "半導體": -0.02,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": -0.012,
+   "short_excess_ann": -0.006
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.15,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4、生技icir應最高(>0.5)，實際sub-train icir為-0.18（方向與預測相反），驗證期又翻正0.17，訓練/驗證方向不一致。生技產業icir本身為四產業最負(-0.22)，與「生技應最強」的預測直接矛盾。樣本量小（生技股數少、需18個月歷史致coverage僅0.73）使診斷證據偏薄弱。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技燒錢轉商轉假設在訓練/驗證正負不一致，且生技產業icir本身為負，方向性地不支持機制，證據雖薄弱但一致指向此路徑無效；若保留此方向需更精準的商轉事件代理（如營收結構性跳升），而非OCF比率趨勢。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0418",
+ "ts": "2026-07-28T19:08:22"
+}

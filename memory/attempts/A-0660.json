@@ -1,0 +1,93 @@
+{
+ "round": 43,
+ "category": "short_interest_overhang",
+ "hypothesis": "券資比長期偏高代表市場空方信念強、籌碼結構脆弱且潛藏融資斷頭與軋空雙向風險，這種結構性不穩定會被穩健資金迴避，導致長期報酬偏低；券資比持續偏低的股票籌碼穩定、資訊面較無疑慮，長期報酬較佳。",
+ "prediction": "sub-train ICIR>0.45（正向）；與F-008相關度<0.5（單一欄位，不涉turn_21/px_hi252）；月換手率<0.4。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "低券資比股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.27、validation 0.25，decay僅6%，穩定性佳，方向也與條件IC預測一致(上漲月0.049 vs 下跌月-0.017)，你的機制判斷基本正確。但公式與F-008相關度0.57，再度落入「低投機活動」訊號空間——這是C-1模式的第二次獨立驗證。",
+ "failure_type": "duplicate",
+ "lesson": "「低投機活動/籌碼穩定」類敘事(不論用turn_21或short_margin_ratio表達)都容易與F-008高度相關，這是已被充分挖掘的紅海邊界。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0660",
+ "ts": "2026-08-12T14:04:06"
+}

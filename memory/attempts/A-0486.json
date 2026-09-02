@@ -1,0 +1,90 @@
+{
+ "round": 31,
+ "category": "biotech_commercialization_inflection",
+ "hypothesis": "生技股常年虧損（負營業利益率），當營業利益率年度改善同時營收年增趨勢（3月平滑）加速，代表企業從燒錢研發階段轉向商業化放量的關鍵轉折點；生技股評價高度依賴主觀管線價值判斷，市場對實際財務轉骨證據的反應通常落後於基本面確認。",
+ "prediction": "生技產業限定 industry_icir > 0.5；與F-011相關性 |ρ| < 0.5（確認非重複F-011的水準型訊號）；多頭腿年化超額報酬 > 0。",
+ "formula": "mul(cs_rank(delta(op_margin,12)), cs_rank(rev_yoy_ma3))",
+ "name_zh": "生技轉骨拐點",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(op_margin,12)), cs_rank(rev_yoy_ma3))",
+  "fhash": "74e4c8cd322fd60a",
+  "sub_train": {
+   "mean_ic": 0.08,
+   "icir": 0.8
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.21,
+   "decay_pct": 74.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.054,
+    "多頭"
+   ],
+   "2014": [
+    0.102,
+    "多頭"
+   ],
+   "2015": [
+    0.083,
+    "盤整"
+   ],
+   "2016": [
+    0.052,
+    "多頭"
+   ],
+   "2017": [
+    0.103,
+    "多頭"
+   ],
+   "2018": [
+    -0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.053,
+   "down_months": 0.086
+  },
+  "industry_icir": {
+   "電子": 0.62,
+   "生技": 0.38,
+   "半導體": 0.34,
+   "金融": 0.32
+  },
+  "legs": {
+   "long_excess_ann": 0.077,
+   "short_excess_ann": 0.092
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.21,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.51,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.8看似強勁，但validation衰減74%（嚴重過擬合），且與F-011 rho=0.51（邊緣重疊）觸發stage2剔除。同時預測『生技產業限定』的機制也未獲industry_icir支持——生技僅0.38，低於電子的0.62，顯示『生技轉骨』敘事的訊號其實在非生技產業更強，產業限定假設站不住腳。此案例同時踩到『過擬合』與『重複』與『產業假設證偽』三個問題，屬於高sub-train表現掩蓋了脆弱樣本外穩定性與敘事錯位的典型案例。",
+ "failure_type": "duplicate",
+ "lesson": "sub-train ICIR很高不代表機制紮實，若同時伴隨validation嚴重衰減（>50%）與產業別證據矛盾，即使未被相關性剔除也大概率無法通過後續穩健性檢驗；op_margin改善x營收成長這個組合已被F-011佔據，且『生技特有』的敘事不成立，不建議再以生技限定版本重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0486",
+ "ts": "2026-07-29T23:46:18"
+}

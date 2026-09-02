@@ -1,0 +1,83 @@
+{
+ "round": 13,
+ "category": "liquidity_regime_index_flow",
+ "hypothesis": "個股成交金額相對其兩年長期基準顯著放大，代表流動性體制正在轉變，可能吸引被動型資金（ETF/指數）在季度調整時逐步關注並流入；此類慢動資金因僅能於固定再平衡時點反應，導致流動性躍升訊息只緩慢被價格吸收。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；與C-8(amt_21斜率版本)相關係數|ρ|<0.6（同源欄位但不同轉換）。",
+ "formula": "cs_rank(sdiv(amt_21, ts_mean(amt_21,24)))",
+ "name_zh": "流動性躍升溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(amt_21, ts_mean(amt_21,24)))",
+  "fhash": "2e2d46ad5c5f541d",
+  "sub_train": {
+   "mean_ic": -0.014,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.001,
+   "icir": 0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.021,
+    "多頭"
+   ],
+   "2014": [
+    -0.046,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    -0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.001,
+    "多頭"
+   ],
+   "2018": [
+    -0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.01,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": -0.12,
+   "生技": -0.13,
+   "半導體": -0.16,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.013,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.41,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際為負(-0.13)，方向完全不符預期，流動性相對兩年均值放大與被動資金流入的關聯未獲支持；validation回升至0.01但仍接近零，整體訊號強度不足以判斷方向對錯。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「流動性相對長期基準放大吸引被動資金」在個股層級的sdiv(amt_21,ts_mean(amt_21,24))表達下沒有觀察到訊號；本輪C-8的amt_21斜率版本也同樣落空，兩者共用amt_21欄位卻用不同轉換都未成功，暗示amt_21絕對/相對水位變化在個股層級訊息量可能整體不足。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0216",
+ "ts": "2026-07-21T11:59:28"
+}

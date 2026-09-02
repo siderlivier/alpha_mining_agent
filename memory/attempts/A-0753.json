@@ -1,0 +1,94 @@
+{
+ "round": 49,
+ "category": "dividend_value_confirmation",
+ "hypothesis": "盈餘殖利率便宜的股票中，部分是價值陷阱（獲利品質差、現金流無法支撐股利），部分是被低估的優質股。同時配發現金股利是管理層對未來現金流有信心的可信承諾（現金無法造假），能有效篩掉價值陷阱，因此便宜且有股利支撐的組合比單純便宜更能代表真實低估，此雙重篩選邏輯尚未被市場的單一風格標籤完整捕捉。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；與F-015相關係數|ρ|<0.5；與F-002相關係數|ρ|<0.5",
+ "formula": "mul(cs_rank(ep), cs_rank(div_yield))",
+ "name_zh": "殖利率價值雙確",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "ep"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ep), cs_rank(div_yield))",
+  "fhash": "3f4e8ac6b5c1ca35",
+  "sub_train": {
+   "mean_ic": 0.075,
+   "icir": 0.56
+  },
+  "validation": {
+   "mean_ic": 0.103,
+   "icir": 1.22,
+   "decay_pct": -117.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.06,
+    "盤整"
+   ],
+   "2013": [
+    0.049,
+    "多頭"
+   ],
+   "2014": [
+    0.039,
+    "多頭"
+   ],
+   "2015": [
+    0.112,
+    "盤整"
+   ],
+   "2016": [
+    0.113,
+    "多頭"
+   ],
+   "2017": [
+    0.074,
+    "多頭"
+   ],
+   "2018": [
+    0.089,
+    "盤整"
+   ],
+   "2019": [
+    0.117,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.087,
+   "down_months": 0.072
+  },
+  "industry_icir": {
+   "電子": 0.67,
+   "生技": 0.55,
+   "半導體": 0.38,
+   "金融": 0.36
+  },
+  "legs": {
+   "long_excess_ann": 0.036,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.18,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.83,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.83 > 0.5"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45(實際0.56達標)且與F-015/F-002相關係數<0.5，實際validation更強(1.22)，但與F-002「金融品質價值」相關係數高達0.83，遠超預期，說明「便宜+股利支撐」雙重篩選邏輯已被F-002「便宜+高ROE」邏輯大量涵蓋，且重疊是全市場性的而非僅限金融股。",
+ "failure_type": "duplicate",
+ "lesson": "「便宜×品質雙確認」複合因子是紅海：EP×股利(本輪)與應計×營益率(C-12)兩個獨立雙確認組合都各自撞上庫內既有品質價值因子(F-002 rho.83、F-012 rho.59)，此概念層級已飽和，新提案須換完全不同品質維度才可能正交。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0753",
+ "ts": "2026-08-14T00:36:43"
+}

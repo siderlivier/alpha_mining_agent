@@ -1,0 +1,87 @@
+{
+ "round": 21,
+ "category": "institutional_ownership_acceleration",
+ "hypothesis": "大型外資基金為降低市場衝擊成本通常分批緩慢建倉，其持股比率變化本身已是趨勢訊號，但變化的「加速度」（二階導數）代表法人才剛加快佈局節奏，尚未被市場完全定價，比單純一階趨勢更能捕捉未反映的資訊。",
+ "prediction": "sub-train ICIR>0.45；此為對frgn_ratio類先前失敗結果的二階延伸測試，須驗證加速度版本優於已知失敗的水準與一階趨勢版本。",
+ "formula": "cs_rank(delta(frgn_ratio_d63,3))",
+ "name_zh": "外資加碼加速度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_ratio_d63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(frgn_ratio_d63,3))",
+  "fhash": "9f00489320a7b8a1",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.47,
+   "decay_pct": -74.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.007,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.028,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.001
+  },
+  "industry_icir": {
+   "電子": -0.03,
+   "生技": 0.02,
+   "半導體": 0.08,
+   "金融": 0.37
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": 0.016
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.4,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.27不足0.45；validation反升至0.47（decay為-74%，樣本不穩定而非真穩健）。產業型態不支持「外資佈局節奏」敘事：電子為負(-0.03)，金融反而最高(0.37)，與外資通常集中電子/半導體的持股結構不符，暗示訊號可能來自金融股少數個股的雜訊而非普遍法人行為。這是本輪第二個二階導數(delta of delta/加速度)構造在sub-train表現不足或不穩定的案例（另一為C-3）。",
+ "failure_type": "expression_bad",
+ "lesson": "二階導數（加速度）類公式本輪兩次(C-3、C-9)都出現sub-train訊號不足或不穩定，可能是雙重差分放大雜訊而非捕捉真實轉折；未來構造加速度因子前應先確認一階效應本身存在，再疊加二階，且需搭配更長平滑窗。",
+ "lesson_confidence": "pattern",
+ "verdict": "rejected_stage1",
+ "id": "A-0332",
+ "ts": "2026-07-21T13:38:15"
+}

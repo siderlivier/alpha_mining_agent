@@ -1,0 +1,83 @@
+{
+ "round": 15,
+ "category": "dividend_policy_signal",
+ "hypothesis": "現金殖利率相對自身歷史中樞顯著墊高，且非單一年度波動，反映公司股利政策趨於穩健、股利承諾提升；這種資本紀律改善訊號不易被成長型/動能型投資人關注（偏好高波動、高故事性標的），導致法人與散戶對這類「悶」但紀律佳的公司關注度低、訊息擴散慢，使殖利率結構性墊高的個股需要較長時間才被市場重新定價。",
+ "prediction": "sub-train ICIR > 0.45；金融或電子產業中至少一個industry_icir > 0.5；validation衰減 < 40%。",
+ "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+ "name_zh": "股利紀律墊高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(div_yield, ts_med(div_yield,24)))",
+  "fhash": "e2ef4d198b38d0f7",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.16
+  },
+  "validation": {
+   "mean_ic": -0.013,
+   "icir": -0.2,
+   "decay_pct": 227.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.002,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.013,
+    "盤整"
+   ],
+   "2016": [
+    0.039,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.006,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": 0.024
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.15,
+   "半導體": 0.01,
+   "金融": -0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": -0.015
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.16,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "全面落空：sub-train ICIR僅0.16，validation直接翻負至-0.20（decay 227%），無一產業達0.5門檻（最高生技0.15），多空兩腿報酬皆負。預測全部落空。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "現金殖利率相對自身歷史墊高，可能只是股價下跌/基本面惡化的鏡像效應(分母縮小)，而非股利政策紀律改善被低估；未來測殖利率結構性變化需先控制price momentum以排除價值陷阱混淆。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0237",
+ "ts": "2026-07-21T12:24:47"
+}

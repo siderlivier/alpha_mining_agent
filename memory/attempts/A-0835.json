@@ -1,0 +1,87 @@
+{
+ "round": 55,
+ "category": "dividend_stability_premium",
+ "hypothesis": "市場對股利穩定性的定價效率不足，投資人偏好追逐股利殖利率「絕對水準」的故事性，卻忽略殖利率的穩定度；長期穩定發放股利、殖利率波動小的公司代表現金流與配息政策可預測性高，屬於被低估的「無聊但可靠」標的。",
+ "prediction": "sub-train ICIR>0.4；多頭腿（高殖利率且低波動組）年化超額報酬>0且優於單純高殖利率排序；金融業industry_icir應相對最高（配息政策最制度化）。",
+ "formula": "sub(cs_rank(div_yield), cs_rank(ts_std(div_yield,24)))",
+ "name_zh": "穩定殖利率股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "div_yield"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(div_yield), cs_rank(ts_std(div_yield,24)))",
+  "fhash": "1b2c0a69f8ac818f",
+  "sub_train": {
+   "mean_ic": 0.043,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.075,
+   "icir": 0.8,
+   "decay_pct": -87.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.009,
+    "多頭"
+   ],
+   "2014": [
+    0.038,
+    "多頭"
+   ],
+   "2015": [
+    0.07,
+    "盤整"
+   ],
+   "2016": [
+    0.064,
+    "多頭"
+   ],
+   "2017": [
+    0.026,
+    "多頭"
+   ],
+   "2018": [
+    0.083,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.056,
+   "down_months": 0.043
+  },
+  "industry_icir": {
+   "電子": 0.48,
+   "生技": 0.44,
+   "半導體": 0.29,
+   "金融": 0.31
+  },
+  "legs": {
+   "long_excess_ann": 0.001,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.09,
+  "stage2_max_rho": {
+   "factor": "F-005",
+   "rho": 0.36
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.43 < 0.45"
+ },
+ "diagnosis": "訓練期ICIR 0.43符合候選自訂>0.4的預測，但系統實際門檻是0.45，屬臨界miss；驗證期表現強勁（ICIR 0.8，decay反而-87%），顯示假設方向可能成立。但多空腿報酬雙雙趨近零（long 0.001, short 0.006），IC存在但尾端幾乎不可貨幣化。",
+ "failure_type": "expression_bad",
+ "lesson": "用cs_rank(A)-cs_rank(B)這種簡單相減構造，即使IC/ICIR達標，尾端價差可能被壓縮到趨近零；應在早期就檢查多頭腿報酬，而非只看ICIR是否過關。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0835",
+ "ts": "2026-08-18T23:46:33"
+}

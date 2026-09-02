@@ -1,0 +1,87 @@
+{
+ "round": 37,
+ "category": "biotech_burn_rate_deceleration",
+ "hypothesis": "未獲利生技股的營運現金流對淨損比率(ocf_ratio)若持續改善(燒錢速度趨緩)，代表公司離商轉獲利與現金流轉正更近一步，即使帳面仍虧損，這種邊際改善訊號常被市場忽略，因投資人習慣用『是否轉盈』的二元濾網篩選生技股，而非追蹤現金消耗速度的連續變化。",
+ "prediction": "sub-train ICIR>0.45；生技產業industry_icir應為四產業最高；多頭腿年化超額報酬>0；與F-011、F-022相關性|ρ|<0.5。",
+ "formula": "cs_rank(delta(ocf_ratio,6))",
+ "name_zh": "燒錢趨緩訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,6))",
+  "fhash": "783142a9647722c0",
+  "sub_train": {
+   "mean_ic": -0.011,
+   "icir": -0.19
+  },
+  "validation": {
+   "mean_ic": -0.001,
+   "icir": -0.01,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.041,
+    "盤整"
+   ],
+   "2013": [
+    -0.037,
+    "多頭"
+   ],
+   "2014": [
+    -0.008,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    -0.032,
+    "多頭"
+   ],
+   "2017": [
+    0.007,
+    "多頭"
+   ],
+   "2018": [
+    -0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": -0.26,
+   "生技": -0.19,
+   "半導體": -0.13,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": -0.025,
+   "short_excess_ann": -0.003
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "全面性失敗——sub-train IC接近零甚至為負(-0.011)，與預測的正向相反；生技產業industry_icir為-0.19而非預期最高，燒錢趨緩作為被忽略的確認訊號的假設未獲數據支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "對虧損中的生技公司而言，ocf_ratio(營運現金流/淨損)在淨利接近零時分母極不穩定，容易讓雜訊淹沒真實訊號；比率型現金品質指標對虧損子集應改用資產或營收為分母，而非淨利。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0572",
+ "ts": "2026-07-30T01:03:36"
+}

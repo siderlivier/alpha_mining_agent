@@ -1,0 +1,91 @@
+{
+ "round": 68,
+ "category": "relative_revenue_share_gain",
+ "hypothesis": "營收年增率（3月平滑）明顯高於同產業平均的公司正在搶市佔，通常源於產品週期領先或通路優勢，具持續性。市場容易把個股營收成長歸因於產業景氣（beta），在整體產業普漲時領先者的份額擴張被淹沒，對『相對同業的超額成長』反應不足。用industry_demean直接抓相對強弱，再做全市場排名。",
+ "prediction": "sub-train ICIR > 0.35；與F-009、F-011、F-013相關 |ρ| < 0.5；多頭腿年化超額 > 0；剔除生技後全市場ICIR仍 > 0.3。",
+ "formula": "cs_rank_all(industry_demean(rev_yoy_ma3))",
+ "name_zh": "同業搶市佔",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy_ma3"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank_all(industry_demean(rev_yoy_ma3))",
+  "fhash": "04c66503051f443b",
+  "sub_train": {
+   "mean_ic": 0.034,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.033,
+   "icir": 0.53,
+   "decay_pct": -35.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.028,
+    "多頭"
+   ],
+   "2014": [
+    0.015,
+    "多頭"
+   ],
+   "2015": [
+    0.052,
+    "盤整"
+   ],
+   "2016": [
+    0.044,
+    "多頭"
+   ],
+   "2017": [
+    0.031,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.034,
+   "down_months": 0.034
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.21,
+   "半導體": 0.33,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.039,
+   "short_excess_ann": 0.058
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.23,
+  "stage2_culprit": {
+   "factor": "F-017",
+   "rho": 0.54,
+   "factor_name": "外資認證營收動能",
+   "factor_desc": "外資買超又逢營收成長，電子供應鏈的資金與基本面雙重確認訊號最可信。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-017 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "from_queue": "Q-042",
+ "distill_failed": true,
+ "id": "A-1033",
+ "ts": "2026-09-02T01:25:25"
+}

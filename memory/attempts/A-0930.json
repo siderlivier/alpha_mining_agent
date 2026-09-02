@@ -1,0 +1,92 @@
+{
+ "round": 61,
+ "category": "volatility_term_structure_shift",
+ "hypothesis": "短期波動度相對長期波動度的比值下降，代表市場不確定性正在消退（波動收斂），但投資人對「近期是否還吵鬧」的記憶錨定滯後，尚未重新評價風險溢酬，此為全新的波動結構類別（非F-005單純波動水準）。",
+ "prediction": "sub-train ICIR > 0.4；與F-005(neg(vol_126)水準版)截面相關 |ρ| < 0.5",
+ "formula": "cs_rank(neg(sdiv(vol_21,vol_126)))",
+ "name_zh": "波動收斂訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_126",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(vol_21,vol_126)))",
+  "fhash": "9f7558a89331c24d",
+  "sub_train": {
+   "mean_ic": 0.025,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.08,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.024,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.036,
+    "多頭"
+   ],
+   "2015": [
+    0.032,
+    "盤整"
+   ],
+   "2016": [
+    0.029,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.34,
+   "半導體": 0.22,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.67,
+  "stage2_max_rho": {
+   "factor": "F-018",
+   "rho": 0.41
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 月換手 0.67 > 0.4"
+ },
+ "diagnosis": "預測全池ICIR>0.4且與F-005相關性<0.5：sub-train 0.36已接近門檻，相關性也過關(ρ=0.41)，但validation ICIR暴跌至0.08、decay 78%，且cond_ic呈現明顯順勢特徵（上漲月0.024 vs 下跌月0.009），顯示這個「波動收斂」訊號其實高度依賴2012-2017那段長多頭格局，一旦市場結構改變（2018-2019）就失效，屬於機制本身對特定景氣階段的依賴被過度解讀為結構性效應。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "短長期波動度比值(vol_21/vol_126)的「波動收斂」訊號在多頭延續期表現好、但不具跨景氣循環的穩健性，本質更接近偽裝的順勢因子而非獨立的風險溢酬重定價效應。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0930",
+ "ts": "2026-08-27T10:25:20"
+}

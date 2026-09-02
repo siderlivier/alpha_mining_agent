@@ -1,0 +1,85 @@
+{
+ "round": 23,
+ "category": "biotech_earnings_event_shock",
+ "hypothesis": "生技股常處於研發投入期，獲利參考意義低，但里程碑事件(藥證核准、海外授權金入帳)會直接反映在營收年增率的巨大跳升；相對兩年正常波動標準化後的意外程度，能篩出真正里程碑型驚奇而非財報雜訊，因生技股法人覆蓋薄、估值複雜，需較長時間才被市場完全定價。",
+ "prediction": "生技產業industry_icir>0.5明顯高於其他產業；全市場sub-train ICIR>0.4；下跌月與上漲月IC同向。",
+ "formula": "cs_rank(sdiv(delta(rev_yoy,6), ts_std(rev_yoy,24)))",
+ "name_zh": "生技營收驚奇",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(rev_yoy,6), ts_std(rev_yoy,24)))",
+  "fhash": "c190513616293d07",
+  "sub_train": {
+   "mean_ic": 0.02,
+   "icir": 0.28
+  },
+  "validation": {
+   "mean_ic": 0.025,
+   "icir": 0.35,
+   "decay_pct": -26.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    0.052,
+    "多頭"
+   ],
+   "2017": [
+    -0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    0.036,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.029,
+   "down_months": 0.004
+  },
+  "industry_icir": {
+   "電子": 0.64,
+   "生技": 0.19,
+   "半導體": 0.36,
+   "金融": -0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.071,
+   "short_excess_ann": 0.074
+  },
+  "coverage": 0.65,
+  "turnover_m": 0.55,
+  "stage2_culprit": {
+   "factor": "F-009",
+   "rho": 0.69,
+   "factor_name": "營收加速趨勢",
+   "factor_desc": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-009 |ρ|=0.69 > 0.5"
+ },
+ "diagnosis": "預測生技industry_icir>0.5為最突出，實際生技僅0.19，反而電子業0.64遠超預測方向，產業專屬假說方向錯誤。同時與F-009相關係數0.69，說明「用波動標準化營收意外」本質上仍是既有營收加速因子的變形，並非生技專屬的事件衝擊訊號。",
+ "failure_type": "duplicate",
+ "lesson": "用一般化的財務時間序列統計(delta/std)去標記「生技里程碑事件」，最終只會收斂到既有營收趨勢因子，且不會展現生技專屬效應；真正的事件驅動訊號需要事件層級資料(藥證公告日、授權金入帳)，純財務數字不夠。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0359",
+ "ts": "2026-07-21T14:03:28"
+}

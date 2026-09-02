@@ -1,0 +1,90 @@
+{
+ "round": 9,
+ "category": "profitability_earnings_quality_composite",
+ "hypothesis": "ROE高但由應計項灌水的公司獲利改善是假訊號；市場常只看帳面ROE水準而不聯合檢視盈餘含金量，真正高品質獲利（高ROE且低應計）才代表可持續股東報酬，此聯合篩選比單獨用ROE或應計項更難被市場一次定價。",
+ "prediction": "sub-train ICIR > 0.45，且與F-001、F-006相關係數|ρ| < 0.5；下跌月IC不應為負（品質因子應具防禦性）。",
+ "formula": "cs_rank(sub(roe,accruals))",
+ "name_zh": "真實獲利品質",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "accruals",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(roe,accruals))",
+  "fhash": "403249bdefa14922",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.47
+  },
+  "validation": {
+   "mean_ic": 0.041,
+   "icir": 0.6,
+   "decay_pct": -28.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.086,
+    "盤整"
+   ],
+   "2016": [
+    0.038,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.06,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.04,
+   "down_months": 0.034
+  },
+  "industry_icir": {
+   "電子": 0.46,
+   "生技": 0.44,
+   "半導體": 0.23,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.016,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.14,
+  "stage2_culprit": {
+   "factor": "F-006",
+   "rho": 0.56,
+   "factor_name": "低應計品質股",
+   "factor_desc": "應計項長期偏低的公司盈餘含金量高，市場常高估高應計公司獲利的持續性。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-006 |ρ|=0.56 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.47達標，下跌月IC也保持正值（0.034），符合防禦性預測；但decorrelation預測（|ρ|<0.5）落空，與F-006「低應計品質股」相關係數0.56，明確判定duplicate。ROE減應計項的組合本質上和「低應計」單一因子高度重疊——應計項這個共同成分主導了兩者的排序，加ROE並未帶來足夠增量資訊。",
+ "failure_type": "duplicate",
+ "lesson": "任何「獲利水準 × 應計項」形式的複合表達，都極可能與F-006（應計品質）撞車；下次要做真正的品質溢價因子，應該用不與應計項共用同一資料源的獲利品質代理（如毛利率穩定度、ROIC）取代ROE，或換一種應計項的定義方式（如營運現金流/淨利比而非傳統應計）以拉開與F-006的距離。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0145",
+ "ts": "2026-07-20T17:18:53"
+}

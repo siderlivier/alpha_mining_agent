@@ -1,0 +1,93 @@
+{
+ "round": 60,
+ "category": "industry_relative_risk_reduction",
+ "hypothesis": "一般低波動異常因子用全市場波動度比較，但不同產業結構性波動水準差異大(如生技本質高波動、金融本質低波動)；扣除產業平均後仍顯著偏低波動的個股，代表相對於同業的特殊穩定性(如公司治理、營運穩健)，此產業中性化訊號較少被純技術面低波動因子捕捉。",
+ "prediction": "全市場sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-005(全市場neg(vol_126))相關度|ρ|<0.5。",
+ "formula": "cs_rank_all(neg(industry_demean(vol_63)))",
+ "name_zh": "產業相對低波動股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank_all(neg(industry_demean(vol_63)))",
+  "fhash": "8a5460b9f9036850",
+  "sub_train": {
+   "mean_ic": 0.072,
+   "icir": 0.64
+  },
+  "validation": {
+   "mean_ic": 0.109,
+   "icir": 0.77,
+   "decay_pct": -21.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.073,
+    "盤整"
+   ],
+   "2013": [
+    0.065,
+    "多頭"
+   ],
+   "2014": [
+    0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.07,
+    "盤整"
+   ],
+   "2016": [
+    0.091,
+    "多頭"
+   ],
+   "2017": [
+    0.092,
+    "多頭"
+   ],
+   "2018": [
+    0.141,
+    "盤整"
+   ],
+   "2019": [
+    0.078,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.092,
+   "down_months": 0.056
+  },
+  "industry_icir": {
+   "電子": 0.76,
+   "生技": 0.57,
+   "半導體": 0.37,
+   "金融": 0.32
+  },
+  "legs": {
+   "long_excess_ann": 0.024,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.98,
+  "turnover_m": 0.21,
+  "stage2_culprit": {
+   "factor": "F-005",
+   "rho": 0.9,
+   "factor_name": "低波動異常",
+   "factor_desc": "長期波動度低的穩定股因散戶偏好高波動股而被低估"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-005 |ρ|=0.90 > 0.5"
+ },
+ "diagnosis": "預測與F-005相關度<0.5，實際|ρ|=0.90，判斷嚴重失準。industry_demean(vol_63)雖然做了產業中性化處理，但波動度本身的市場主導變異太強，扣除產業均值後仍與F-005(全市場neg(vol_126))高度重疊，中性化處理並未產生足夠的機制差異。",
+ "failure_type": "duplicate",
+ "lesson": "對單一既有因子的核心欄位做industry_demean()或改變時間窗口，通常不足以逃脫stage2相關性檢查——這類「處理手法變形」而非「機制本質變化」的改造，仍會收斂回同一根因子軸。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0916",
+ "ts": "2026-08-20T08:30:15"
+}

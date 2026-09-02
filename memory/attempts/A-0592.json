@@ -1,0 +1,90 @@
+{
+ "round": 38,
+ "category": "quality_confirmed_breakout",
+ "hypothesis": "股價接近52週新高時市場難以即時分辨這是獲利驅動的健康突破，還是激進會計認列（高應計項）製造的假突破；創高股若同時應計項偏低，代表盈餘含金量高、上漲有真實獲利品質背書，此組合聚焦盈餘品質而非既有『創高x獲利成長』或『創高x低週轉』所著重的成長速度或炒作程度。",
+ "prediction": "sub-train ICIR > 0.45；與F-016、F-008相關性須<0.5；多頭腿年化超額報酬>0。",
+ "formula": "mul(cs_rank(px_hi252), cs_rank(neg(accruals)))",
+ "name_zh": "品質確認創高股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "px_hi252"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(px_hi252), cs_rank(neg(accruals)))",
+  "fhash": "ce3be0eda19d5410",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.059,
+   "icir": 0.61,
+   "decay_pct": -56.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.009,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.079,
+    "盤整"
+   ],
+   "2016": [
+    0.038,
+    "多頭"
+   ],
+   "2017": [
+    0.042,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.078,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.063,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.42,
+   "半導體": 0.23,
+   "金融": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.066,
+   "short_excess_ann": 0.031
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.28,
+  "stage2_culprit": {
+   "factor": "F-012",
+   "rho": 0.61,
+   "factor_name": "淨化ROE動能",
+   "factor_desc": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-012 |ρ|=0.61 > 0.5"
+ },
+ "diagnosis": "sub-train 0.39不達門檻但validation 0.61較強（decay -56%，越測越強），下跌月與上漲月差距明顯(0.063 vs 0.014)顯示效果集中在多頭；最終因與F-012(淨化ROE動能)ρ=0.61陣亡，兩者都用「剔除應計項雜訊」的品質過濾，只是動能來源不同(52週高點 vs ROE動能)。",
+ "failure_type": "duplicate",
+ "lesson": "neg(accruals)這個應計項品質濾網已與F-012深度綁定，只要再乘上任何動能/趨勢型變數都容易撞見F-012；下次用應計項做品質過濾前，應先檢查與F-012的相關性，或改用現金盈餘比等其他盈餘品質代理。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0592",
+ "ts": "2026-07-30T01:16:47"
+}

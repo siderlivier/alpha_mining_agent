@@ -1,0 +1,87 @@
+{
+ "round": 5,
+ "category": "cash_flow_quality_highfreq",
+ "hypothesis": "現金流品質（ocf_ratio）反映盈餘含金量，但市場對單季現金流品質的反應存在滯後；縮短平滑窗口至3個月能更快捕捉現金流品質的邊際變化（如應收帳款周轉改善或存貨去化），比長窗口版本更即時反映管理層營運改善訊號，尤其適合景氣循環變化快的電子業。",
+ "prediction": "sub-train ICIR > 0.45；且應顯著高於12個月平滑版本在電子/半導體產業子樣本中的ICIR（驗證短窗口在高頻循環產業更具優勢）。",
+ "formula": "cs_rank(ts_mean(ocf_ratio,3))",
+ "name_zh": "現金流品質",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(ocf_ratio,3))",
+  "fhash": "73cefa551ea1c905",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.35,
+   "decay_pct": -144.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.012,
+    "盤整"
+   ],
+   "2013": [
+    -0.02,
+    "多頭"
+   ],
+   "2014": [
+    0.017,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.016,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.035,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.012,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.06,
+   "生技": 0.14,
+   "半導體": 0.14,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.015,
+   "short_excess_ann": -0.004
+  },
+  "coverage": 0.9,
+  "turnover_m": 0.19,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.14，遠低於門檻。假設『縮短窗口更快反應』忽略了ocf_ratio這類財報數字本質上是季頻更新，3個月滾動平均大部分時間只是重複同一筆季報數字加上少量lag雜訊，並未真正提高反應速度，反而稀釋了訊號。",
+ "failure_type": "expression_bad",
+ "lesson": "對於季頻更新的財報類變數，滾動窗口若短於實際資料更新週期（約3個月），無法真正加快反應速度，只會疊加平均雜訊——平滑窗口應對齊資料真實更新頻率，而非直接假設擴散速度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0090",
+ "ts": "2026-07-19T17:32:32"
+}

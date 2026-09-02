@@ -1,0 +1,90 @@
+{
+ "round": 33,
+ "category": "low_risk_growth_mismatch",
+ "hypothesis": "低波動且營收成長的公司常被系統性忽略，因為散戶偏好高波動高故事性股票（樂透型偏好），法人研究覆蓋也優先追蹤高beta個股；用3月均線平滑營收年增率降低單月雜訊後，這類「無聊股」的持續成長訊號在全市場（不限電子）都應存在定價滯後，而非電子供應鏈獨有。",
+ "prediction": "全市場 sub-train ICIR > 0.45；多頭腿(top20%)年化超額報酬 > 0；因用rev_yoy 3月均線平滑，月換手率應 < 0.4（優於原始電子限定版本）。",
+ "formula": "mul(cs_rank(neg(vol_21)), cs_rank(ts_mean(rev_yoy,3)))",
+ "name_zh": "低波動穩健成長",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_yoy",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(vol_21)), cs_rank(ts_mean(rev_yoy,3)))",
+  "fhash": "adad2ea1da515911",
+  "sub_train": {
+   "mean_ic": 0.084,
+   "icir": 0.92
+  },
+  "validation": {
+   "mean_ic": 0.096,
+   "icir": 1.03,
+   "decay_pct": -12.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.076,
+    "多頭"
+   ],
+   "2014": [
+    0.066,
+    "多頭"
+   ],
+   "2015": [
+    0.1,
+    "盤整"
+   ],
+   "2016": [
+    0.092,
+    "多頭"
+   ],
+   "2017": [
+    0.088,
+    "多頭"
+   ],
+   "2018": [
+    0.109,
+    "盤整"
+   ],
+   "2019": [
+    0.083,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.099,
+   "down_months": 0.06
+  },
+  "industry_icir": {
+   "電子": 1.09,
+   "生技": 0.98,
+   "半導體": 0.58,
+   "金融": 0.32
+  },
+  "legs": {
+   "long_excess_ann": 0.07,
+   "short_excess_ann": 0.09
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.43,
+  "stage2_culprit": {
+   "factor": "F-018",
+   "rho": 0.91,
+   "factor_name": "低波動隱藏成長股",
+   "factor_desc": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-018 |ρ|=0.91 > 0.5"
+ },
+ "diagnosis": "預測方向正確：ICIR遠超門檻(sub-train 0.92/validation 1.03，幾乎無衰減)，多頭腿為正(7%)，且industry_icir跨產業分布(0.32~1.09)證實機制非電子獨有，全市場泛化假說成立。但敗於stage2：與F-018 |ρ|=0.91，兩者描述幾乎同義('低波動隱藏成長股' vs '低波動穩健成長')，庫內早已收錄此機制。",
+ "failure_type": "duplicate",
+ "lesson": "把電子限定因子泛化到全市場前，應先用語意比對(不只是公式比對)檢查庫內是否已有同機制因子，可省下一次完整驗證週期。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0504",
+ "ts": "2026-07-30T00:08:12"
+}

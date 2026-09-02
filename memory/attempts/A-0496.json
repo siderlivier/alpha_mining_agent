@@ -1,0 +1,90 @@
+{
+ "round": 32,
+ "category": "earnings_backed_momentum",
+ "hypothesis": "純價格動能(mom_240等)在台股已知ICIR偏弱、易反轉，但當一季動能(mom_60)伴隨EPS年增率同步為正時，代表這波上漲有實質獲利支撐而非資金瞬間追捧。技術面交易者與基本面投資人是分裂的兩群人，只有兩者同時確認時市場才會出現訊息落差，此複合訊號傳導較慢。",
+ "prediction": "sub-train ICIR>0.45；純mom_60單獨版本ICIR應顯著低於本複合版本（驗證基本面確認的增量價值）；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(mom_60), cs_rank(eps_yoy))",
+ "name_zh": "獲利支撐動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "eps_yoy",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(mom_60), cs_rank(eps_yoy))",
+  "fhash": "02c8a6150e880195",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.044,
+   "icir": 0.5,
+   "decay_pct": -128.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.011,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.039,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.031,
+    "盤整"
+   ],
+   "2019": [
+    0.056,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.039,
+   "down_months": 0.009
+  },
+  "industry_icir": {
+   "電子": 0.34,
+   "生技": 0.24,
+   "半導體": -0.11,
+   "金融": 0.28
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.37,
+  "stage2_culprit": {
+   "factor": "F-016",
+   "rho": 0.62,
+   "factor_name": "本業獲利創高股",
+   "factor_desc": "股價近高點且本業獲利成長佳，勝過單純營收確認。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-016 |ρ|=0.62 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR僅0.22，明顯低於預測門檻0.45；validation卻跳升到0.5（decay -128%），此等幅度的『反向衰減』在僅7年樣本下更可能是validation期(2018-19恰逢財報動能行情)的區間特性，而非訊號真的變強，應存疑而非視為穩健性佐證。與F-016相關性0.62，顯示mom_60(價格動能)x eps_yoy(獲利成長)與px_hi252(創高)x op_income_yoy(獲利成長)在本質上是同一種『價格強度+獲利確認』機制的不同參數化。",
+ "failure_type": "duplicate",
+ "lesson": "『價格動能+盈餘成長雙確認』無論用mom_60或px_hi252做價格腿、eps_yoy或op_income_yoy做獲利腿，都收斂到F-016的相關性半徑內，這是一個相當寬廣的紅海類別。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0496",
+ "ts": "2026-07-29T23:57:20"
+}

@@ -1,0 +1,91 @@
+{
+ "round": 68,
+ "category": "operating_leverage_underreaction",
+ "hypothesis": "高固定成本公司在營收加速時營業利益率會非線性擴張（營運槓桿），但賣方模型多用固定利潤率假設做線性外推，因此對『營收成長＋利潤率同步擴張』的組合反應不足。用利潤率的變化量（delta op_margin）而非年增率相減，可避開低基期分母爆量的構造反模式。",
+ "prediction": "sub-train ICIR > 0.35；多頭腿年化超額 > 0；與F-026、R-017相關 |ρ| < 0.5；rev_yoy>0子樣本內IC明顯強於全樣本。",
+ "formula": "mul(cs_rank(delta(op_margin, 6)), cs_rank(rev_yoy))",
+ "name_zh": "營運槓桿發酵",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(op_margin, 6)), cs_rank(rev_yoy))",
+  "fhash": "8fe4e00415a98c88",
+  "sub_train": {
+   "mean_ic": 0.065,
+   "icir": 0.67
+  },
+  "validation": {
+   "mean_ic": 0.032,
+   "icir": 0.29,
+   "decay_pct": 57.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.082,
+    "多頭"
+   ],
+   "2015": [
+    0.066,
+    "盤整"
+   ],
+   "2016": [
+    0.064,
+    "多頭"
+   ],
+   "2017": [
+    0.074,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    0.05,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.052,
+   "down_months": 0.065
+  },
+  "industry_icir": {
+   "電子": 0.79,
+   "生技": 0.36,
+   "半導體": 0.51,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.103,
+   "short_excess_ann": 0.099
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.39,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.58,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.58 > 0.5"
+ },
+ "diagnosis": "",
+ "failure_type": "",
+ "lesson": "",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "distill_failed": true,
+ "id": "A-1035",
+ "ts": "2026-09-02T01:25:25"
+}

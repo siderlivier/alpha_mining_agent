@@ -1,0 +1,83 @@
+{
+ "round": 57,
+ "category": "biotech_cash_burn_discipline_transition",
+ "hypothesis": "生技公司營運現金流轉換率(ocf_ratio)持續改善,代表公司從燒錢的研發階段轉向具備商轉現金流的規模化階段,這是一次性的體質轉變。生技投資人多聚焦臨床/法規新聞而非現金流量表,對此類離散式體質轉變的定價反應遲緩。",
+ "prediction": "sub-train ICIR(生技子樣本)>0.4;多頭腿年化超額報酬>0;需與F-011/F-022/F-019相關性<0.5。",
+ "formula": "cs_rank(delta(ocf_ratio,12))",
+ "name_zh": "生技燒錢降溫",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ocf_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(delta(ocf_ratio,12))",
+  "fhash": "d3aa3559d6c6e7ce",
+  "sub_train": {
+   "mean_ic": -0.008,
+   "icir": -0.13
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.29,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.001,
+    "多頭"
+   ],
+   "2015": [
+    -0.009,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": 0.014
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.17,
+   "半導體": 0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": -0.01
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技子樣本ICIR>0.4為正，但實際生技產業icir=-0.17，方向與假設目標產業直接相反，全樣本強度也極弱(-0.13)。現金流轉換改善在生技股中並未被證實為體質轉折訊號，目標產業本身就打臉假設。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技現金流改善假設在目標產業本身即呈反向，暫不建議在此方向做表達調整重試；若要延續現金流體質轉變主題，應先在非生技產業驗證機制是否存在。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0874",
+ "ts": "2026-08-19T00:11:01"
+}

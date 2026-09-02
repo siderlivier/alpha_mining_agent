@@ -1,0 +1,91 @@
+{
+ "round": 21,
+ "category": "retail_leverage_contrarian",
+ "hypothesis": "融資餘額21日變化率快速上升代表散戶正在加碼追高，行為財務學文獻顯示槓桿散戶普遍存在過度自信與追高殺低的擇時能力不佳問題，是可靠的反向情緒指標；融資增速放緩或收斂的股票代表追價情緒已消退，後續報酬相對較佳。",
+ "prediction": "sub-train ICIR>0.45；多頭腿（低融資增速端）年化超額報酬須>0，且月換手率<0.4方可視為可交易。",
+ "formula": "cs_rank(neg(margin_d21))",
+ "name_zh": "散戶槓桿逆襲",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(margin_d21))",
+  "fhash": "bc1c0bd9e57225b6",
+  "sub_train": {
+   "mean_ic": 0.031,
+   "icir": 0.43
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.15,
+   "decay_pct": 64.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.021,
+    "盤整"
+   ],
+   "2013": [
+    0.073,
+    "多頭"
+   ],
+   "2014": [
+    0.045,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    0.032,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.026,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.33,
+   "生技": 0.24,
+   "半導體": 0.17,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": -0.013
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.7,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.18
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.43 < 0.45; validation ICIR 0.15 < 0.3; validation 衰減 64% > 50%（過擬合徵兆）; 月換手 0.7 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.43，非常接近0.45門檻但未過；長腿超額報酬0.022為正、符合預測方向，但validation衰減64%（過擬合）且月換手0.7遠超預測要求的<0.4。上漲/下跌月IC對稱(0.026/0.026)顯示並非regime依賴，核心「散戶去槓桿反轉」機制方向大致合理，但原始21日融資變化量太雜訊、換手率太高，不利於樣本外穩定與可交易性。",
+ "failure_type": "expression_bad",
+ "lesson": "融資餘額變化因子原始訊號(margin_d21)雜訊大、換手率高、樣本外衰減嚴重；可比照法人資金流因子的平滑做法(如ts_mean(margin_d21,2~3))降低換手與雜訊後，用同一「散戶去槓桿反轉」假說重新驗證。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0330",
+ "ts": "2026-07-21T13:38:15"
+}

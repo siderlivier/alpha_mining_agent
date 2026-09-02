@@ -1,0 +1,90 @@
+{
+ "round": 16,
+ "category": "fifty_two_week_high_anchoring",
+ "hypothesis": "股價接近52週高點通常代表強勢動能，但單純的價格位置訊號常混雜炒作性衝高；若同時具備正的月營收年增率，代表這波接近新高有基本面成長支撐，是更可信、更持續的動能訊號，市場對「動能+基本面雙重確認」的辨識存在延遲；改用rev_yoy而非先前已紅海的px/vol或px/turn組合來做確認腿，降低與F-008重複風險。",
+ "prediction": "sub-train ICIR>0.35（受if_else常數填補稀釋，全樣本門檻放寬）；限定rev_yoy>0子集內的px_hi252 rank IC需>0.45；子集內多頭腿年化超額報酬>5%；月換手率<0.4。",
+ "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, 0))",
+ "name_zh": "營收確認新高",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(rev_yoy,0), px_hi252, 0))",
+  "fhash": "ad3dd563ea4ccbc4",
+  "sub_train": {
+   "mean_ic": 0.049,
+   "icir": 0.53
+  },
+  "validation": {
+   "mean_ic": 0.056,
+   "icir": 0.82,
+   "decay_pct": -55.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.059,
+    "盤整"
+   ],
+   "2016": [
+    0.071,
+    "多頭"
+   ],
+   "2017": [
+    0.066,
+    "多頭"
+   ],
+   "2018": [
+    0.058,
+    "盤整"
+   ],
+   "2019": [
+    0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.062,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.82,
+   "生技": 0.42,
+   "半導體": 0.31,
+   "金融": 0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.115,
+   "short_excess_ann": 0.041
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.42,
+  "stage2_culprit": {
+   "factor": "F-003",
+   "rho": 0.72,
+   "factor_name": "風格孤兒股",
+   "factor_desc": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-003 |ρ|=0.72 > 0.5"
+ },
+ "diagnosis": "預測門檻(全樣本ICIR>0.35，因if_else常數稀釋)大幅超越——sub-train 0.53、validation 0.82，多頭腿超額報酬11.5%為全批最強，產業別電子0.82也最突出；然而在stage2卻被F-003以0.72高相關性判定重複，超出預期(原設計用rev_yoy>0作確認腿以避開F-008的px/vol重複，卻意外與sp基礎的F-003撞車)。推測原因：if_else(rev_yoy>0, X, 0)這種二元門檻本身對排序的影響力遠大於px_hi252這個連續變量，只要另一因子也用了近似的成長性二元切分(F-003隱含營收成長篩選)，兩者相關性就會很高，與具體用哪個連續變量反而關係較小。",
+ "failure_type": "duplicate",
+ "lesson": "if_else(condition, X, 0)這類「二元門檻+連續變量」設計，其cross-sectional排序主要由二元門檻決定，連續變量X的選擇對最終相關性影響有限；日後要用同一個門檻條件(如rev_yoy>0)時，應預先檢查庫內是否已有用相同或相近門檻的因子，而不能只靠換一個連續變量來規避重複。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0263",
+ "ts": "2026-07-21T12:37:07"
+}

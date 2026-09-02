@@ -1,0 +1,92 @@
+{
+ "round": 5,
+ "category": "institutional_accumulation_momentum",
+ "hypothesis": "法人建立部位是漸進式的，不會一次到位；當半年動能(mom_240)顯著強於近一季動能(mom_60)，代表價格是在較長時間內緩步墊高而非近期爆量急拉，這種「慢牛」型態通常對應法人持續買超尚未結束，短期漲幅溫和不易被視為過熱，因此能延續上漲。",
+ "prediction": "sub-train ICIR > 0.45；此訊號在下跌月的IC應不低於上漲月的IC（慢速累積型動能較不易在市場修正時逆轉，相對一般短期動能的順週期性）。",
+ "formula": "cs_rank(sub(mom_240, mom_60))",
+ "name_zh": "緩步動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "核心預測（down_months IC >= up_months IC，代表慢速動能抗跌）被證偽：down_months 0.023 < up_months 0.035，代表這只是普通順週期動能，不是防禦型訊號。sub-train ICIR 0.36也未達標。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『緩步建倉=抗回檔』的動能形狀假設沒有得到支持，長短期動能價差類因子預設應視為順週期，除非cond_ic明確反證。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0086",
+ "ts": "2026-07-19T17:32:31"
+}

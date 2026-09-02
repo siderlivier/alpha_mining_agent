@@ -1,0 +1,87 @@
+{
+ "round": 28,
+ "category": "trend_deviation_reversion",
+ "hypothesis": "個股價格相對自身12個月線性趨勢線的殘差，若當前價格略低於趨勢線(負殘差)但趨勢本身仍完整未破壞，代表這是趨勢中的短期回檔而非反轉；投資人常對短期下跌過度外推、錯殺仍在延續的長期趨勢，形成可預測的修正性買點。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；換手率<0.4(因僅捕捉趨勢內小幅偏離，訊號應相對穩定)。",
+ "formula": "cs_rank(neg(ts_resi(mom_120,12)))",
+ "name_zh": "順勢回檔買點",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_resi(mom_120,12)))",
+  "fhash": "a005f7554d15605f",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.04,
+   "icir": 0.47,
+   "decay_pct": -45.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.018,
+    "多頭"
+   ],
+   "2014": [
+    0.035,
+    "多頭"
+   ],
+   "2015": [
+    0.06,
+    "盤整"
+   ],
+   "2016": [
+    -0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.021,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    0.063,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": 0.055
+  },
+  "industry_icir": {
+   "電子": 0.32,
+   "生技": 0.35,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.008,
+   "short_excess_ann": 0.02
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.37,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.09
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.32 < 0.45"
+ },
+ "diagnosis": "預測sub-train ICIR>0.4，實際0.32未達；但validation ICIR 0.47且decay為-45%(驗證期反而更好)，訊號本身相當穩健，只是門檻沒過。多頭腿(0.008)遠弱於空頭腿(0.02)，且遠低於整體IC強度所暗示的水準——這與C-1、C-8、C-9同樣呈現'空頭腿明顯強於多頭腿'的模式，在台股難以放空的限制下，此類因子即使IC通過統計門檻，實際可交易的多頭超額報酬可能仍然薄弱。",
+ "failure_type": "expression_bad",
+ "lesson": "台股難以放空的限制下，許多在rank IC上有效的因子(尤其反轉/回檔類)超額報酬其實集中在空頭腿；評估此類因子時應把'多頭腿是否穩健為正'列為和ICIR同等重要的獨立門檻，而不只是通過ICIR後才順帶檢查。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0438",
+ "ts": "2026-07-28T19:19:09"
+}

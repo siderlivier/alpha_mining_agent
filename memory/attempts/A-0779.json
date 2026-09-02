@@ -1,0 +1,91 @@
+{
+ "round": 51,
+ "category": "margin_surprise_zscore",
+ "hypothesis": "財報公布後市場對「營益率意外程度」存在反應不足(PEAD類效應)；多數投資人關注年增率等原始數字，卻忽略應相對於自身歷史波動度標準化後的真實意外幅度。短期營益率變化相對自身歷史波動異常放大，代表真正超乎預期的訊號，市場需數月才能完全消化。",
+ "prediction": "sub-train ICIR > 0.45；財報公布後首兩個月IC應顯著高於第三個月以後(反應不足遞延修正)。",
+ "formula": "cs_rank(sdiv(delta(op_margin,3),ts_std(op_margin,12)))",
+ "name_zh": "營益率意外分數",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(op_margin,3),ts_std(op_margin,12)))",
+  "fhash": "a0d79236c52a3f80",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.48
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.09,
+   "decay_pct": 118.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.031,
+    "盤整"
+   ],
+   "2013": [
+    0.054,
+    "多頭"
+   ],
+   "2014": [
+    0.048,
+    "多頭"
+   ],
+   "2015": [
+    0.042,
+    "盤整"
+   ],
+   "2016": [
+    0.028,
+    "多頭"
+   ],
+   "2017": [
+    0.05,
+    "多頭"
+   ],
+   "2018": [
+    -0.044,
+    "盤整"
+   ],
+   "2019": [
+    0.032,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.041
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.27,
+   "半導體": 0.29,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.063,
+   "short_excess_ann": 0.057
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.41,
+  "stage2_max_rho": {
+   "factor": "F-001",
+   "rho": 0.43
+  },
+  "verdict": "rejected_stage4",
+  "reason": "validation ICIR -0.09 < 0.3; validation 衰減 118% > 50%（過擬合徵兆）; 月換手 0.41 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.48達標，但驗證期崩潰為-0.09(衰減118%)，逐年IC呈現2012-2017連續正值(0.028~0.054)於2018急轉負(-0.044)的斷裂式失效，而非漸進衰減。月換手率0.41偏高，短窗口(delta 3個月/std 12個月)標準化可能放大雜訊。與F-001相關度0.43接近但未達重複門檻，非重複因子。",
+ "failure_type": "expression_bad",
+ "lesson": "高換手率(>0.4)搭配短窗口delta/std標準化的財報意外因子容易對特定期間過擬合；同類PEAD假說重試時應延長標準化窗口或改用季度尺度平滑訊號以降低雜訊比重，並需確認2018年後子樣本仍有效才能放行。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0779",
+ "ts": "2026-08-14T01:05:54"
+}

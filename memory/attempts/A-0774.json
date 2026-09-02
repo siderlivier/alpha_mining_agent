@@ -1,0 +1,87 @@
+{
+ "round": 51,
+ "category": "retail_leverage_deleveraging_reversal",
+ "hypothesis": "台灣散戶偏好使用融資槓桿追逐上漲股票，當融資餘額持續快速增加，代表市場情緒已被槓桿資金推升至過熱狀態；這類買盤缺乏基本面支撐且面臨追繳保證金的脆弱性，一旦價格轉弱即引發強制平倉的骨牌賣壓，形成可預測的下檔風險，故融資成長放緩的股票後續報酬應優於融資持續飆升的股票。",
+ "prediction": "sub-train ICIR > 0.45；下跌月IC應顯著高於上漲月IC(去槓桿賣壓在下跌時更劇烈)；多頭腿(融資成長最緩組)年化超額報酬>0。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,6)))",
+ "name_zh": "融資降溫反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,6)))",
+  "fhash": "644251112a5cce0b",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.012,
+   "icir": 0.18,
+   "decay_pct": 20.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.004,
+    "盤整"
+   ],
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.011,
+    "多頭"
+   ],
+   "2015": [
+    0.003,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.012,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.14,
+   "半導體": 0.0,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.028,
+   "short_excess_ann": -0.007
+  },
+  "coverage": 0.73,
+  "turnover_m": 0.28,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.22遠低於0.45門檻；且核心預測「下跌月IC應顯著高於上漲月」被推翻——實際上漲月IC(0.021)反而高於下跌月(0.005)，去槓桿骨牌賣壓假說在條件IC上得到反向證據。多頭腿雖小幅為正(2.8%)但整體訊號太弱，不足以支撐可交易性。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "融資餘額減速的『去槓桿恐慌』機制未在下跌月顯現預期的解釋力，顯示台股融資變化多為右側追價的落後指標而非領先反轉訊號；若要再用融資資料，應改測「融資水準相對股價的背離度」而非單純餘額成長減緩。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0774",
+ "ts": "2026-08-14T01:05:54"
+}

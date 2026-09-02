@@ -1,0 +1,88 @@
+{
+ "round": 14,
+ "category": "volatility_term_structure",
+ "hypothesis": "短期波動度（vol_21）相對中期波動度（vol_63）異常升高，通常反映單一事件（如財報意外、單日重挫）造成的暫時性不確定性，而非公司風險結構性上升；台股散戶主導市場容易對短期波動放大恐慌性拋售，待波動回歸中期基準後，先前被過度打壓的股價容易修復，此為波動風險溢酬的短期錯價。",
+ "prediction": "sub-train ICIR > 0.4；效果應集中於大盤下跌月且訊號衰減較快（適合短持有期）；與F-005（低波動異常，聚焦vol_126水準）相關係數 |ρ| < 0.5",
+ "formula": "cs_rank(sub(vol_21, vol_63))",
+ "name_zh": "波動恐慌反彈",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "vol_21",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(vol_21, vol_63))",
+  "fhash": "d6605a27fc4d147e",
+  "sub_train": {
+   "mean_ic": -0.018,
+   "icir": -0.25
+  },
+  "validation": {
+   "mean_ic": 0.014,
+   "icir": 0.21,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.012,
+    "盤整"
+   ],
+   "2013": [
+    -0.019,
+    "多頭"
+   ],
+   "2014": [
+    -0.05,
+    "多頭"
+   ],
+   "2015": [
+    -0.043,
+    "盤整"
+   ],
+   "2016": [
+    0.002,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.01,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.011,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": -0.26,
+   "生技": -0.18,
+   "半導體": -0.11,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": -0.027,
+   "short_excess_ann": 0.002
+  },
+  "coverage": 0.98,
+  "turnover_m": 0.79,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向為正（短期恐慌性拋售後修復）且應集中於下跌月，實際sub-train ICIR為-0.25（符號完全相反），下跌月IC(-0.01)與上漲月(-0.011)幾乎相同且都為負，完全未出現預測的下跌月修復效果；validation期雖轉正(0.21)，但sub-train/validation正負完全反轉屬於訊號不穩定/近雜訊的警訊，而非真實效應。產業幾乎全面負向（電子-0.26、生技-0.18、半導體-0.11）。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『短期波動相對中期波動異常升高=暫時性恐慌可望修復』機制本輪被推翻，vol_21>vol_63的股票在sub-train期反而持續跑輸而非反彈，符合『波動聚集/風險持續性』文獻而非均值回歸；且sub-train與validation符號相反屬於不穩定訊號警訊，不宜視為單純運氣不好的表達問題。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0233",
+ "ts": "2026-07-21T12:11:51"
+}

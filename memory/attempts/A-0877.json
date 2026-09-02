@@ -1,0 +1,87 @@
+{
+ "round": 57,
+ "category": "informed_short_selling_signal",
+ "hypothesis": "台股放空成本高(強制回補、平盤下不得放空等限制),只有具強烈資訊優勢或高確信度的機構才會透過融券大量佈局空頭部位,散戶融資者鮮少融券。券資比高代表相對於融資多頭,空方確信度異常集中,是關於基本面即將轉差的資訊性訊號;過去的正向包裝(軋空延續/回補反轉)已證偽,應直接以負向使用。",
+ "prediction": "sub-train ICIR<-0.4;多頭腿(券資比低端)年化超額報酬>0;空頭腿顯著<0;需與F-024相關性<0.5。",
+ "formula": "cs_rank(neg(short_margin_ratio))",
+ "name_zh": "券資比放空訊號",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(short_margin_ratio))",
+  "fhash": "b61bbf279376b6a1",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.034,
+   "icir": 0.27,
+   "decay_pct": 31.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.023,
+    "盤整"
+   ],
+   "2013": [
+    0.056,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.049,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    0.07,
+    "盤整"
+   ],
+   "2019": [
+    -0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.048,
+   "down_months": 0.005
+  },
+  "industry_icir": {
+   "電子": 0.52,
+   "生技": 0.41,
+   "半導體": 0.15,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.04,
+   "short_excess_ann": 0.057
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.35,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(+)與假設宣稱(neg)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測sub-train ICIR<-0.4(neg方向)，但formula本身已含neg(short_margin_ratio)，實際sub-train icir=+0.39、validation+0.34(decay 31%可接受)，多空腿皆正、產業覆蓋廣(電子0.52、生技0.41)。系統判定『方向(+)與宣稱(neg)相反』，但假設本身(低券資比→未來報酬佳)與formula已是同一件事：direction欄位標記為neg很可能是把『原始變數方向』與『formula(已取neg後)的預期IC方向』搞混，屬標籤層級的假陰性，而非機制或表達真的失敗。",
+ "failure_type": "expression_bad",
+ "lesson": "direction欄位應描述『最終formula(含neg()等轉換後)』相對報酬的預期IC正負號，而非對原始變數的直覺方向；C-1也有類似潛在混淆風險，提交前應重新核對此候選的direction，公式與數字均已達標。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0877",
+ "ts": "2026-08-19T00:11:01"
+}

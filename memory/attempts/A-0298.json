@@ -1,0 +1,91 @@
+{
+ "round": 19,
+ "category": "long_term_momentum_continuation",
+ "hypothesis": "台股中小型股的長期(12個月)價格趨勢因法人季度調倉的紀律性（而非即時反應）而緩慢擴散進股價，形成長期動能相對短期更持久的延續效果，尤其在放空受限的台股更明顯。",
+ "prediction": "sub-train ICIR>0.45；下跌月與上漲月IC同號；月換手率<0.35。",
+ "formula": "cs_rank(mom_240)",
+ "name_zh": "長期動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_240)",
+  "fhash": "30124ce2fa791c47",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.047,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.23,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.3
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.2 < 0.45; validation ICIR 0.09 < 0.3; validation 衰減 54% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "方向正確(sub-train ICIR 0.2為正)，多頭腿正超額報酬(3.3%)，換手率0.21符合預測，但強度遠低於0.45門檻，validation衰減54%超過過擬合警戒線；且預測的「上漲/下跌月同號」未成立，下跌月IC為-0.004、上漲月0.028，顯示長期動能在空頭月會反轉，符合文獻上動能崩潰(momentum crash)的已知風險，而非台股特有的法人紀律性擴散故事。",
+ "failure_type": "expression_bad",
+ "lesson": "純240日價格動能雖方向正確且可交易，但強度不足且有動能崩潰風險(空頭月由正轉負)；若保留長期動能假設，應加入下檔篩選以提升穩定度，而非直接用原始mom_240。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0298",
+ "ts": "2026-07-21T13:13:10"
+}

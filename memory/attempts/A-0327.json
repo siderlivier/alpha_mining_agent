@@ -1,0 +1,90 @@
+{
+ "round": 21,
+ "category": "biotech_cash_runway_value",
+ "hypothesis": "生技股評價常被法規里程碑與題材式炒作主導，投資人過度關注管線敘事、忽略資產負債表的現金存續能力，導致淨值便宜（B/P高）且未捲入投機性高波動炒作（低波動）的生技股被系統性低估，此組合代表財務體質穩健但缺乏故事性而遭忽視。",
+ "prediction": "sub-train ICIR>0.45（限生技產業子樣本評估）；生技產業industry_icir應顯著高於其他三產業且>0.5；多頭腿超額報酬須>0。",
+ "formula": "sub(cs_rank(bp), cs_rank(vol_126))",
+ "name_zh": "生技現金安全墊",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "bp",
+   "vol_126"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(bp), cs_rank(vol_126))",
+  "fhash": "480289a24ed067e4",
+  "sub_train": {
+   "mean_ic": 0.064,
+   "icir": 0.63
+  },
+  "validation": {
+   "mean_ic": 0.062,
+   "icir": 0.43,
+   "decay_pct": 31.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.068,
+    "多頭"
+   ],
+   "2014": [
+    0.055,
+    "多頭"
+   ],
+   "2015": [
+    0.036,
+    "盤整"
+   ],
+   "2016": [
+    0.09,
+    "多頭"
+   ],
+   "2017": [
+    0.072,
+    "多頭"
+   ],
+   "2018": [
+    0.102,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.074,
+   "down_months": 0.04
+  },
+  "industry_icir": {
+   "電子": 0.87,
+   "生技": 0.63,
+   "半導體": 0.21,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.041,
+   "short_excess_ann": 0.059
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-005",
+   "rho": 0.8,
+   "factor_name": "低波動異常",
+   "factor_desc": "長期波動度低的穩定股因散戶偏好高波動股而被低估"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-005 |ρ|=0.80 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.63、validation 0.43(decay 31%)皆優於預測門檻，方向判斷正確。但預測「生技應為四產業中最高」錯誤——電子(0.87)明顯高於生技(0.63)，顯示效果廣泛存在於各產業而非生技特有，這正好印證了它與庫內F-005低波動異常高度重疊(ρ=0.80)的本質：B/P疊加低波動只是在複製既有低波動溢酬，並非生技現金存續的獨特敘事。",
+ "failure_type": "duplicate",
+ "lesson": "用 rank(bp) - rank(vol) 建構的因子，只要產業分布廣泛（非生技集中）就強烈暗示其實只是低波動異常的變形，B/P疊加沒有貢獻獨立訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0327",
+ "ts": "2026-07-21T13:38:15"
+}

@@ -1,0 +1,90 @@
+{
+ "round": 55,
+ "category": "smart_money_retail_divergence",
+ "hypothesis": "台股散戶融資行為常滯後或誤判基本面轉折；當融資餘額出現降溫（margin_d21下降）而同期營收年增率卻在改善時，代表這波基本面轉佳尚未被散戶槓桿資金追捧，屬於資訊尚未擴散到高頻交易群體的訊號，之後隨資訊擴散價格將補漲。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；此訊號應在上漲月與下跌月都維持同向IC（非純風險趨避型訊號）。",
+ "formula": "sub(cs_rank(rev_yoy), cs_rank(margin_d21))",
+ "name_zh": "營收領先融資",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "margin_d21",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(rev_yoy), cs_rank(margin_d21))",
+  "fhash": "df1fa489527f446f",
+  "sub_train": {
+   "mean_ic": 0.045,
+   "icir": 0.61
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.33,
+   "decay_pct": 46.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.062,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.034,
+    "盤整"
+   ],
+   "2016": [
+    0.036,
+    "多頭"
+   ],
+   "2017": [
+    0.06,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.041,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.26,
+   "半導體": 0.2,
+   "金融": 0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.043,
+   "short_excess_ann": 0.06
+  },
+  "coverage": 0.67,
+  "turnover_m": 0.65,
+  "stage2_culprit": {
+   "factor": "F-018",
+   "rho": 0.52,
+   "factor_name": "低波動隱藏成長股",
+   "factor_desc": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-018 |ρ|=0.52 > 0.5"
+ },
+ "diagnosis": "訓練期ICIR 0.61達標，上漲/下跌月同向的預測也成立(0.041 vs 0.027)，驗證期衰減46%接近但未過50%門檻。真正死因是與F-018相關0.52（僅微幅超標），rev_yoy作為成長代理已被F-018大量捕捉，margin_d21減項不足以差異化。",
+ "failure_type": "duplicate",
+ "lesson": "rev_yoy只要作為訊號支柱之一，幾乎必然與F-013/F-018為首的成長因子群產生中高相關；下次應先估算與該群的邊際相關，或改用非rev_yoy的成長代理。",
+ "lesson_confidence": "cross_validated",
+ "verdict": "rejected_stage2",
+ "id": "A-0836",
+ "ts": "2026-08-18T23:46:33"
+}

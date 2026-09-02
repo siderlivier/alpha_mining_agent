@@ -1,0 +1,87 @@
+{
+ "round": 39,
+ "category": "attention_spike_overreaction",
+ "hypothesis": "個股成交金額相對自身過去12個月區間出現異常暴衝(接近自身區間天量)，往往源自消息面或社群討論帶動的散戶追價，這種注意力驅動的買盤缺乏基本面支撐，消息淡化後容易回落，屬於典型的注意力過度反應後均值回歸。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(未暴衝端)年化超額報酬>0；下跌月IC應強於上漲月IC；月換手率<0.4",
+ "formula": "cs_rank(neg(ts_rank(amt_21,12)))",
+ "name_zh": "爆量過熱反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_rank(amt_21,12)))",
+  "fhash": "61695222fda4b1aa",
+  "sub_train": {
+   "mean_ic": 0.013,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": -0.01,
+   "icir": -0.16,
+   "decay_pct": 215.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.054,
+    "盤整"
+   ],
+   "2013": [
+    -0.003,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.0,
+    "盤整"
+   ],
+   "2016": [
+    0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.007,
+    "多頭"
+   ],
+   "2018": [
+    0.001,
+    "盤整"
+   ],
+   "2019": [
+    -0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.005,
+   "down_months": 0.012
+  },
+  "industry_icir": {
+   "電子": 0.07,
+   "生技": 0.12,
+   "半導體": 0.09,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.043,
+   "short_excess_ann": -0.026
+  },
+  "coverage": 0.91,
+  "turnover_m": 0.57,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測下跌月IC應強於上漲月(過熱反轉在下跌確認)，但實際上漲月(0.005)與下跌月(0.012)差距極小且皆接近零；sub-train本已弱(0.14)，validation直接翻負(-0.16, decay 215%)，多空兩腿超額報酬同時為負(-0.043/-0.026)，完全沒有交易價值。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用ts_rank(amt_21,12)衡量「爆量過熱」未能捕捉均值回歸效應，且樣本內外都不穩定，注意力過度反應假設在此表達法下證據不支持。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0600",
+ "ts": "2026-08-12T09:06:34"
+}

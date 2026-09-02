@@ -1,0 +1,92 @@
+{
+ "round": 18,
+ "category": "momentum_term_structure_buildup",
+ "hypothesis": "法人建立部位需分批進行，長期動能(mom_240)持續強於近期動能(mom_60)代表趨勢建立在扎實、持續的資金流入基礎上而非短期噴出；這種『長期強於短期』的動能結構反映資金慢速、有紀律地加碼，市場對這種結構訊息的持續性存在低估，因多數動能因子只看單一窗口而忽略跨窗口結構。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4(mom_240更新慢有助降低換手)；多頭腿超額報酬需為正",
+ "formula": "sub(cs_rank(mom_240), cs_rank(mom_60))",
+ "name_zh": "動能結構穩健度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(mom_240), cs_rank(mom_60))",
+  "fhash": "928f32bae96dc483",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.009,
+   "icir": 0.09,
+   "decay_pct": 78.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.177,
+    "盤整"
+   ],
+   "2013": [
+    0.052,
+    "多頭"
+   ],
+   "2014": [
+    0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.035,
+    "盤整"
+   ],
+   "2016": [
+    -0.002,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    -0.025,
+    "盤整"
+   ],
+   "2019": [
+    0.043,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.028
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": 0.26,
+   "半導體": 0.18,
+   "金融": 0.15
+  },
+  "legs": {
+   "long_excess_ann": -0.016,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.41,
+  "stage2_max_rho": {
+   "factor": "F-012",
+   "rho": 0.12
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.4 < 0.45; validation ICIR 0.09 < 0.3; validation 衰減 78% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.41 > 0.4"
+ },
+ "diagnosis": "預測ICIR>0.45、多頭腿超額為正，實際sub-train 0.40(接近但未達)，validation暴跌至0.09、衰減78%，屬典型過擬合。細看逐年IC，2012高達0.177遠超其他年份(多在0.02~0.05)，顯示sub-train平均被單一異常年份拉高；且多頭腿超額為負(-0.016)、空頭腿超額為正(0.027)，alpha其實來自『避開空頭腿』而非『佈局多頭腿』，在難放空的台股市場不可交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『長期動能強於短期動能=法人紀律建倉』這個機制在樣本外幾乎消失，且alpha集中在空頭腿而非多頭腿；用2012單一年份主導的sub-train均值來判斷長期動能結構因子有效性風險很高，之後應對此類因子額外檢查『排除最強單一年份後』的穩健度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0286",
+ "ts": "2026-07-21T12:59:43"
+}

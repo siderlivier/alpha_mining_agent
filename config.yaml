@@ -1,0 +1,89 @@
+# 單一事實來源：所有門檻/預算/路徑（規格書各章對應標註）
+# ⚠️ 修改任何 anti_overfit 或 dsl 區塊前，先重讀規格書第 9 章的洩漏面審視要求
+
+paths:
+  panel: ../tw_alpha_strategy/data/processed/panel.parquet   # 前置專案 PIT 面板
+  monthly_base: data/monthly_base.parquet
+  regime_table: data/regime_table.json
+  memory_dir: memory
+  prompts_dir: prompts
+
+dsl:                        # 規格書 5.3
+  window_whitelist: [3, 6, 12, 24]
+  max_depth: 3
+  max_fields: 3
+
+split:                      # 規格書 4.3
+  sub_train: ["2012-01", "2017-12"]
+  validation: ["2018-01", "2019-12"]
+  test: ["2020-01", "2026-06"]      # ⛔ 逐因子指標永不回饋 LLM
+
+funnel:                     # 規格書 6.2
+  stage1_min_abs_ic: 0.02
+  stage1_check_direction: true
+  stage2_max_corr_library: 0.5
+  stage3_max_corr_batch: 0.7
+  stage4:
+    min_subtrain_icir: 0.45
+    min_validation_icir: 0.30
+    max_validation_decay_pct: 50
+    require_long_leg_positive: true
+    min_coverage: 0.60
+    max_monthly_turnover: 0.40
+  min_stocks_per_group: 8   # 沿用前置專案 factor_eval 的 MIN_STOCKS
+  stage4b_industry:         # 產業專屬入庫通道（整體未達標時檢查單一產業）
+    enabled: true
+    min_subtrain_icir: 0.60      # 比全池門檻(0.45)嚴：單產業樣本少+跨產業多重比較
+    min_validation_icir: 0.35
+    max_validation_decay_pct: 50
+    min_coverage: 0.60
+    min_months_train: 36
+    min_months_valid: 12
+
+budget:                     # 規格書 8.4
+  weekly_round_budget: 15
+  candidates_per_round: 15
+  consolidation_every_n_rounds: 10   # 原為 30；搭配 weekly_round_budget=15 約每週整理一次。
+                                     # 另有超長觸發，門檻見 learnings_hard_cap_chars
+  learnings_token_cap: 4000
+  # 超長觸發的門檻（安全網，不是常規機制）。整理後約 5,500 字元、每輪增長約
+  # 1,000 字元；設太低會變成每 3 輪就整理一次，每次 ~$0.63 + 5 分鐘。
+  learnings_hard_cap_chars: 24000
+  consolidation_min_gap_rounds: 3   # 兩次整理嘗試之間至少隔幾輪（擋重試風暴）
+  # 週用量上限（0 = 不限制）。達到就不再開新輪，已開始的那一輪會跑完。
+  # ⚠️ 先跑一週看 `python src/mining_loop.py --budget` 的真實數字再回來設，
+  #    不要沿用舊的 est_tokens（那是 chars/3 估的，低估 2~3 倍）。
+  weekly_token_budget: 0
+  weekly_cost_budget_usd: 0
+
+backtest:                   # 回測（src/backtest.py）
+  top_q: 0.10               # 各產業內做多前 10%
+  cost: 0.004               # 單次換手成本（費+稅+滑點近似），按換手比例扣
+  weighting: equal          # equal | score（以分數排名配重）
+  ann: 12
+
+ml:                         # 因子組合實驗室（src/factor_lab.py）
+  min_train_months: 48      # 第一次訓練前至少要幾個月
+  retrain_every: 12         # 每幾個月重訓一次
+  embargo: 1                # 訓練尾與測試頭之間空幾個月（月頻標籤看下一月，故 ≥1）
+  ridge_alpha: 10.0
+  min_feature_coverage: 0.30   # 覆蓋率低於此的因子不納入合成
+
+hmm:                        # 市場狀態模型（src/hmm_regime.py）
+  n_states: 2               # 狀態數。2 = 多頭/空頭；3 以上容易在小樣本上過擬合
+  features: [ret, vol]      # ret=上月已實現報酬 vol=過去6個月波動 breadth=上漲家數比
+  vol_window: 6
+  min_train_months: 60      # 第一次擬合前至少要幾個月
+  refit_every: 12           # 每幾個月重擬一次參數
+  seed: 0
+
+llm:
+  command: "claude -p"      # headless；Pro 訂閱額度
+  output_format: json       # json = 從 CLI 取得真實 token 數與成本（建議）
+                            # text = 舊行為，用字數估算（CLI 版本太舊時的退路）
+  retry_limit: 1
+  # ⚠️ 逾時 = token 已經花掉但拿不到結果，是最貴的失敗方式，寧可設寬。
+  # 實測（mining.log）：Generate 平均 454s、最大 561s；整理回合 534s。
+  # 舊的硬編碼 600s 只剩幾十秒餘裕，經驗庫一長就會爆掉。
+  timeout_sec: 1200             # Generate / Distill
+  consolidate_timeout_sec: 1800 # 整理回合要吐一整份 markdown，更慢

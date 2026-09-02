@@ -1,0 +1,88 @@
+{
+ "round": 1,
+ "category": "quiet_strength_momentum",
+ "hypothesis": "股價逼近52週高點同時波動率偏低，代表上漲趨勢平穩、非投機性急拉，較少引來散戶追捧與過熱關注，法人得以緩步布局；相對地伴隨高波動創高常是消息面炒作或軋空所致，事後較易反轉。此類「安靜的強勢」因不顯眼而擴散慢，帶來延續性報酬。",
+ "prediction": "產業內rank IC為正，sub-train ICIR>0.3；低波動月份（vol_21全池中位數以下）的IC應高於高波動月份，驗證「安靜強勢」機制而非純動能。",
+ "formula": "cs_rank(sdiv(px_hi252, vol_21))",
+ "name_zh": "安靜的強勢股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "px_hi252",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(px_hi252, vol_21))",
+  "fhash": "8e3cbf2ccd56e44b",
+  "sub_train": {
+   "mean_ic": 0.073,
+   "icir": 0.6
+  },
+  "validation": {
+   "mean_ic": 0.096,
+   "icir": 0.69,
+   "decay_pct": -16.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.002,
+    "盤整"
+   ],
+   "2013": [
+    0.081,
+    "多頭"
+   ],
+   "2014": [
+    0.067,
+    "多頭"
+   ],
+   "2015": [
+    0.089,
+    "盤整"
+   ],
+   "2016": [
+    0.088,
+    "多頭"
+   ],
+   "2017": [
+    0.083,
+    "多頭"
+   ],
+   "2018": [
+    0.112,
+    "盤整"
+   ],
+   "2019": [
+    0.079,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.097,
+   "down_months": 0.032
+  },
+  "industry_icir": {
+   "電子": 0.75,
+   "生技": 0.55,
+   "半導體": 0.37,
+   "金融": 0.23
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.41,
+  "verdict": "rejected_stage4",
+  "reason": "月換手 0.41 > 0.4"
+ },
+ "diagnosis": "幾乎全面驗證：sub-train ICIR 0.60、validation 0.69且decay為負(樣本外更強)，電子產業ICIR 0.75最高符合散戶主導預測，上漲月IC(0.097)遠高於下跌月(0.032)佐證錨定+低波動的「安靜強勢」機制。唯一未過關原因是月換手0.41剛好超過0.4門檻，屬公式層面的邊緣失敗，機制驗證非常完整，是本輪最接近全過的候選。",
+ "failure_type": "expression_bad",
+ "lesson": "本案與C-3對照即規則B的直接證據：px/vol比值形式大幅提升ICIR，唯需額外處理換手率。輕度平滑訊號(如兩期移動平均)可望壓低換手且ICIR犧牲有限。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0038",
+ "ts": "2026-07-18T21:37:41"
+}

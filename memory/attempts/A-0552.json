@@ -1,0 +1,93 @@
+{
+ "round": 36,
+ "category": "short_interest_information_content",
+ "hypothesis": "過去正向框架(軋空延續、回補動能)已證偽，實證IC方向持續為負；改採負向敘事：券資比長期偏高代表市場對籌碼面與資訊面存在疑慮（融資追價意願低、融券避險/放空需求高），反映聰明錢對基本面隱憂的提前反應。用6月平滑降低短期雜訊。",
+ "prediction": "sub-train ICIR > 0.45（低券資比組合表現較佳）；此IC在下跌月應更顯著為正，上漲月IC可能較弱。",
+ "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+ "name_zh": "券資比籌碼疑慮",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(short_margin_ratio,6)))",
+  "fhash": "8a9f8acd732d5c84",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.27
+  },
+  "validation": {
+   "mean_ic": 0.036,
+   "icir": 0.25,
+   "decay_pct": 6.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.017,
+    "盤整"
+   ],
+   "2013": [
+    0.048,
+    "多頭"
+   ],
+   "2014": [
+    0.034,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.033,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": -0.017
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.29,
+   "半導體": 0.08,
+   "金融": -0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.053,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "核心預測失準：假說主張下跌月IC應顯著為正（避險/疑慮訊號），實際下跌月IC為負（-0.017），上漲月反而最強（0.049），方向與敘事相反；sub-train ICIR僅0.27，遠低於預測的0.45門檻，即使不論相關性問題此因子在敘事邏輯上已被證偽。與F-008（低調接近新高）ρ=0.57顯示券資比實際上更像股價未創新高的雜訊代理。這是券資比敘事第二次嘗試（先前正向框架已失敗），兩次獨立方向皆未成立。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "券資比無論正向（軋空延續）或負向（疑慮代理）框架，其條件IC模式都與各自假說方向相反，且與價格位置類因子高度相關，顯示其本身可能只是價格動能的落後代理，不含獨立資訊。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0552",
+ "ts": "2026-07-30T00:46:50"
+}

@@ -1,0 +1,94 @@
+{
+ "round": 52,
+ "category": "emerging_attention_quality",
+ "hypothesis": "F-020主張「長期冷門的高獲利股」被低估，但另一種機會是「剛開始被市場注意到」的高獲利股：本業獲利率高的公司若近期成交金額由低轉高(delta為正)，代表資訊剛開始擴散、尚未完全反映在股價，這與F-020的「持續冷門」邏輯互補而非重複。",
+ "prediction": "sub-train ICIR>0.45；與F-020相關係數<0.5；多頭腿年化超額>0；月換手率<0.4",
+ "formula": "mul(cs_rank(op_margin), cs_rank(delta(amt_21,6)))",
+ "name_zh": "新進關注優質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(op_margin), cs_rank(delta(amt_21,6)))",
+  "fhash": "2f0f59adf19ad337",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.046,
+   "icir": 0.56,
+   "decay_pct": -77.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.01,
+    "盤整"
+   ],
+   "2013": [
+    0.026,
+    "多頭"
+   ],
+   "2014": [
+    0.033,
+    "多頭"
+   ],
+   "2015": [
+    0.066,
+    "盤整"
+   ],
+   "2016": [
+    0.045,
+    "多頭"
+   ],
+   "2017": [
+    0.035,
+    "多頭"
+   ],
+   "2018": [
+    0.032,
+    "盤整"
+   ],
+   "2019": [
+    0.059,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.049,
+   "down_months": 0.016
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.24,
+   "半導體": 0.27,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.037,
+   "short_excess_ann": 0.062
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.34,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.51,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "IC品質預測準確甚至超標(validation ICIR 0.56、衰減-77%、多空腿皆正)，但預測中鎖定的差異化對照因子F-020完全沒被觸發，實際剔除是因與F-002(金融品質價值)相關係數0.51——一個假設論述中從未提及的因子。這是本輪第一起『預測的對照因子錯了』的案例。",
+ "failure_type": "duplicate",
+ "lesson": "提交時宣稱『與某因子X差異化』不能只驗證X，還需掃描整個現有因子庫；本輪op_margin類複合因子反覆被F-002/F-012/F-022等未被點名的因子攔下。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0796",
+ "ts": "2026-08-14T01:18:09"
+}

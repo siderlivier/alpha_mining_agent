@@ -1,0 +1,94 @@
+{
+ "round": 48,
+ "category": "value_momentum_confirmation",
+ "hypothesis": "便宜(高ep)但過去半年動能疲弱的股票常伴隨「價值陷阱」疑慮而被市場迴避；當半年動能(mom_120)開始轉強，代表基本面疑慮的修正已經展開，此為比單純ep更能篩選出真正價值反轉股(而非持續探底股)的確認訊號。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額>0；下跌月IC不應顯著劣於上漲月。",
+ "formula": "mul(cs_rank(ep), cs_rank(mom_120))",
+ "name_zh": "便宜轉強價值股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "ep",
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ep), cs_rank(mom_120))",
+  "fhash": "9c1a8fc0fe3f1972",
+  "sub_train": {
+   "mean_ic": 0.052,
+   "icir": 0.4
+  },
+  "validation": {
+   "mean_ic": 0.063,
+   "icir": 0.73,
+   "decay_pct": -85.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.025,
+    "盤整"
+   ],
+   "2013": [
+    0.039,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    0.073,
+    "盤整"
+   ],
+   "2016": [
+    0.075,
+    "多頭"
+   ],
+   "2017": [
+    0.059,
+    "多頭"
+   ],
+   "2018": [
+    0.026,
+    "盤整"
+   ],
+   "2019": [
+    0.1,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.067,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.52,
+   "生技": 0.46,
+   "半導體": 0.27,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": 0.097,
+   "short_excess_ann": 0.047
+  },
+  "coverage": 0.9,
+  "turnover_m": 0.26,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.75,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.75 > 0.5"
+ },
+ "diagnosis": "統計表現本輪最佳之一：sub-train ICIR 0.4、validation 0.73、多頭腿超額+0.097顯著為正，價值反轉確認假說看似成立。但與F-002(金融品質價值)相關性高達0.75——ep與bp、mom_120與roe這兩對『不同敘事』的變數，在台股橫斷面上高度冗餘。",
+ "failure_type": "duplicate",
+ "lesson": "即使變數與敘事表面不同(便宜×動能 vs 便宜×獲利品質)，只要都落在『便宜+近期改善』這個大軸上，横斷面排序極易高度相關。之後測試價值類複合因子時，不能只憑變數字面不同就假設訊息獨立，需實測相關性。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0740",
+ "ts": "2026-08-14T00:25:09"
+}

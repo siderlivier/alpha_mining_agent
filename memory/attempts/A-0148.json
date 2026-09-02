@@ -1,0 +1,83 @@
+{
+ "round": 9,
+ "category": "fund_flow_herding",
+ "hypothesis": "投信法人因績效排名壓力存在集中買超即持續買超的從眾效應，其買超力道會被同業與散戶跟風放大形成短期價格慣性；此為行為性法人羊群效應，與外資的資訊驅動機制不同，效果應在1-2個月內延續後消退。",
+ "prediction": "sub-train ICIR > 0.4；效果集中在買超後1個月內；validation衰減 < 45%。",
+ "formula": "cs_rank(trust_net_21)",
+ "name_zh": "投信羊群動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(trust_net_21)",
+  "fhash": "ea0668e934f0f7d5",
+  "sub_train": {
+   "mean_ic": -0.018,
+   "icir": -0.27
+  },
+  "validation": {
+   "mean_ic": -0.025,
+   "icir": -0.32,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.05,
+    "多頭"
+   ],
+   "2015": [
+    -0.02,
+    "盤整"
+   ],
+   "2016": [
+    -0.0,
+    "多頭"
+   ],
+   "2017": [
+    -0.017,
+    "多頭"
+   ],
+   "2018": [
+    -0.044,
+    "盤整"
+   ],
+   "2019": [
+    -0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.018,
+   "down_months": -0.023
+  },
+  "industry_icir": {
+   "電子": -0.05,
+   "生技": -0.01,
+   "半導體": -0.29,
+   "金融": -0.2
+  },
+  "legs": {
+   "long_excess_ann": -0.003,
+   "short_excess_ann": 0.012
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.55,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向完全反轉：預期投信羊群效應帶來正向延續，實際sub-train ICIR -0.27、validation -0.32，且在下跌月更負（-0.023 vs 上漲月-0.018），跨產業一致為負（半導體最負-0.29）。投信21日買超淨額實際上是一個持續且穩定的反向指標，顯示投信買超後股價傾向落後，而非被散戶跟風放大。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信買超力道本輪證據顯示是反指標而非動能延續指標；下次可直接提交反向版本（cs_rank(neg(trust_net_21))）作為新候選測試，機制上可能是投信偏好績效衝刺、追高導致隨後修正，而非行為性從眾放大。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0148",
+ "ts": "2026-07-20T17:18:53"
+}

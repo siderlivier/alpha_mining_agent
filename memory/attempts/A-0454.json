@@ -1,0 +1,84 @@
+{
+ "round": 29,
+ "category": "earnings_quality_divergence",
+ "hypothesis": "先前以neg方向測試「EPS靠業外墊高」視為警訊，alpha集中在不可交易的空頭腿。重新假設反向機制：對本業獲利為正（排除虧損股）的公司，EPS成長超越本業獲利成長，可能反映業外收益具結構性可預期來源（如轉投資收益、匯兌利得的持續性增加），這類「本業穩健+業外錦上添花」組合被市場以單一「業外墊高=品質差」捷思一概而論低估，實際上排除本業虧損公司後，業外增益的溢出效果可能被系統性低估而非高估。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿（本業為正且EPS超越本業成長者）年化超額報酬 > 0（若仍為負則反證原neg假說成立）。",
+ "formula": "cs_rank(if_else(greater(op_income_yoy,0),sub(eps_yoy,op_income_yoy),0))",
+ "name_zh": "業外加分品質股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(if_else(greater(op_income_yoy,0),sub(eps_yoy,op_income_yoy),0))",
+  "fhash": "222b2e5652aa2734",
+  "sub_train": {
+   "mean_ic": 0.002,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.28,
+   "decay_pct": -869.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.046,
+    "多頭"
+   ],
+   "2014": [
+    0.022,
+    "多頭"
+   ],
+   "2015": [
+    0.001,
+    "盤整"
+   ],
+   "2016": [
+    -0.027,
+    "多頭"
+   ],
+   "2017": [
+    -0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.004,
+    "盤整"
+   ],
+   "2019": [
+    0.043,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.07,
+   "生技": -0.02,
+   "半導體": 0.08,
+   "金融": 0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.037,
+   "short_excess_ann": 0.003
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "此為先前neg方向假說失敗後的反向重測（本業獲利為正時EPS超越本業成長）。實測sub-train ICIR僅0.03，接近零，逐年正負交錯(2016年-0.027、2019年+0.043)，長腿超額雖為正(0.037)但整體訊噪比太低。連同假說文本提及的前次neg方向失敗，同一『業外收益vs本業』機制的兩個方向都未能建立穩定訊號。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "EPS成長減本業獲利成長（業外貢獻度）不論正向或反向詮釋，在sub-train期都測不出穩定訊號，此構造本身（單純相減）可能雜訊過大，若要再測應考慮以業外項目的『持續性/來源穩定度』做額外篩選，而非只看單期差值大小。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0454",
+ "ts": "2026-07-29T23:14:31"
+}

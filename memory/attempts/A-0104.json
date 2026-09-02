@@ -1,0 +1,92 @@
+{
+ "round": 6,
+ "category": "momentum_continuation",
+ "hypothesis": "法人機構建立大部位部位需分批執行數月，當長期動能(240日)顯著強於近期動能(60日)，代表機構仍在緩慢建倉、尚未完全反映在近期價格中(Hong-Stein漸進資訊擴散/機構交易延續效應)，短期價格回檔只是執行過程中的噪音，長期趨勢動能將恢復而非反轉；此為全新探索類別，測試長期動能延續而非長期反轉假說。",
+ "prediction": "sub-train產業內rank ICIR > 0.45；且此為pos方向因子，訊號最高分位(多頭腿)之超額報酬應顯著>0(避免神台股放空限制陷阱)。",
+ "formula": "cs_rank(sub(mom_240,mom_60))",
+ "name_zh": "長期動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240,mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "sub-train ICIR 0.36與validation ICIR 0.19均低於門檻，decay 47%接近過擬合線；多頭腿超額報酬2.2%為正，符合『避免純放空』的預測，但整體訊號強度不足以支持Hong-Stein機構緩慢建倉假說在台股的顯著性。",
+ "failure_type": "expression_bad",
+ "lesson": "長期減短期動能(mom_240-mom_60)的機構建倉假說在全池排名下訊號偏弱且有一定衰減；可比對C-1/C-10成功案例改用產業內cs_rank化的動能差值，或改用更長期動能窗口加大訊號後再測一次，避免僅憑本次全池版本判定機制無效。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0104",
+ "ts": "2026-07-19T17:47:42"
+}

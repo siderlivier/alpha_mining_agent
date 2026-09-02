@@ -1,0 +1,87 @@
+{
+ "round": 15,
+ "category": "financial_capital_value_reversion",
+ "hypothesis": "金融股（尤其銀行、保險）的淨值對股價比（B/P）相較其他產業更能真實反映其資本適足性與帳面資產品質（不像科技股帳面價值低估了無形資產）；當個股B/P相對自身近半年歷史中樞顯著墊高（股價相對淨值變便宜），代表市場對其資本狀況的定價尚未跟上基本面，這種價值便宜化在資本監理透明、財報揭露頻繁的金融業中應能較快、較可靠地被重新定價。",
+ "prediction": "sub-train ICIR > 0.45；金融產業industry_icir > 0.5；樣本涵蓋率相較24個月窗口版本提升；validation衰減 < 40%。",
+ "formula": "cs_rank(sub(bp, ts_med(bp,6)))",
+ "name_zh": "淨值便宜化",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(bp, ts_med(bp,6)))",
+  "fhash": "7a18690cfd3c4b0a",
+  "sub_train": {
+   "mean_ic": 0.037,
+   "icir": 0.3
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.08,
+   "decay_pct": 72.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.011,
+    "多頭"
+   ],
+   "2014": [
+    0.063,
+    "多頭"
+   ],
+   "2015": [
+    0.08,
+    "盤整"
+   ],
+   "2016": [
+    0.043,
+    "多頭"
+   ],
+   "2017": [
+    -0.012,
+    "多頭"
+   ],
+   "2018": [
+    0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.009,
+   "down_months": 0.077
+  },
+  "industry_icir": {
+   "電子": 0.13,
+   "生技": 0.16,
+   "半導體": 0.25,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.001,
+   "short_excess_ann": -0.021
+  },
+  "coverage": 0.69,
+  "turnover_m": 0.43,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.19
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.3 < 0.45; validation ICIR 0.08 < 0.3; validation 衰減 72% > 50%（過擬合徵兆）; 月換手 0.43 > 0.4"
+ },
+ "diagnosis": "第三次「金融產業應為訊號最強產業」的預測失準——金融industry_icir僅0.12，半導體(0.25)才最高；sub-train ICIR 0.30不達標，validation僅0.08且decay72%、換手0.43偏高。B/P相對自身歷史墊高在金融股並未展現預期的資訊優勢。",
+ "failure_type": "expression_bad",
+ "lesson": "這是第三個「金融產業資訊不透明→訊號應在金融股最強」的假設落空(C-12外資佈局、C-14淨利效率、C-15皆獨立支持)；金融股家數少、法規揭露頻繁、機構覆蓋密度高，反而不利於此類「資訊落差」故事，未來主打金融產業專屬資訊優勢的假說應降低先驗權重或要求更強證據。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0248",
+ "ts": "2026-07-21T12:24:47"
+}

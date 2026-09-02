@@ -1,0 +1,83 @@
+{
+ "round": 26,
+ "category": "leverage_dynamics_standardized",
+ "hypothesis": "融資餘額變化速度經自身兩年歷史波動度標準化後，代表相對於該股平常槓桿波動幅度而言，當前融資擴張是否「異常」；異常放大的融資擴張反映散戶追價熱度上升帶來短期動能延續，用標準化速度而非水準或簡單變化率，避免與先前「融資去槓桿趨緩」反轉型假說（已證實validation大幅衰減）混淆。",
+ "prediction": "sub-train ICIR>0.40；下跌月IC與上漲月IC需同向；多頭腿超額報酬>0；月換手率<0.4。",
+ "formula": "cs_rank(sdiv(ts_mean(margin_d21,3), ts_std(margin_d21,24)))",
+ "name_zh": "融資異常擴張",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(ts_mean(margin_d21,3), ts_std(margin_d21,24)))",
+  "fhash": "e87db888a18df64d",
+  "sub_train": {
+   "mean_ic": -0.019,
+   "icir": -0.23
+  },
+  "validation": {
+   "mean_ic": -0.007,
+   "icir": -0.09,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.017,
+    "多頭"
+   ],
+   "2014": [
+    -0.019,
+    "多頭"
+   ],
+   "2015": [
+    -0.003,
+    "盤整"
+   ],
+   "2016": [
+    -0.028,
+    "多頭"
+   ],
+   "2017": [
+    -0.028,
+    "多頭"
+   ],
+   "2018": [
+    -0.01,
+    "盤整"
+   ],
+   "2019": [
+    -0.003,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.018,
+   "down_months": -0.009
+  },
+  "industry_icir": {
+   "電子": -0.1,
+   "生技": -0.03,
+   "半導體": -0.08,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.009
+  },
+  "coverage": 0.6,
+  "turnover_m": 0.39,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測正向（融資異常擴張延續動能），實際ICIR顯著為負(-0.23)，方向完全相反，且上漲月與下跌月皆為負、四大產業ICIR也全部為負，訊號一致但方向與假設相反。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "融資餘額相對自身歷史波動度異常擴張，實際上預測「未來報酬下跌」而非延續——符合「融資追價=散戶過熱=反向指標」的傳統解讀，而非法人動能延續假說；下次應直接以反向邏輯（過熱=賣出訊號）設計此類因子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0408",
+ "ts": "2026-07-28T18:54:36"
+}

@@ -1,0 +1,91 @@
+{
+ "round": 23,
+ "category": "momentum_continuation",
+ "hypothesis": "長期(一年)價格動能延續反映法人與長線資金因決策流程慢(季度調倉、投資委員會審議)而對趨勢反應滯後，導致強勢股的資訊優勢需較長時間才完全反映在價格中；與常見反轉的短期動能不同。",
+ "prediction": "sub-train ICIR>0.4；多頭腿超額報酬>0；下跌月與上漲月IC同向。",
+ "formula": "cs_rank(mom_240)",
+ "name_zh": "年度動能延續",
+ "direction": "pos",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_240)",
+  "fhash": "30124ce2fa791c47",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.047,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.23,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.3
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.2 < 0.45; validation ICIR 0.09 < 0.3; validation 衰減 54% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR僅0.2，遠低於預測>0.4；down_months IC轉負(-0.004)而up_months為0.028，直接違反「同向」的預測。validation decay 54%顯示過擬合。此結果與國際文獻中已知的momentum crash(動能崩潰、僅牛市有效)現象一致，說明「法人決策滯後」不足以解釋全樣本行為。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "長期動能(mom_240)在台股同樣呈現多頭限定特性，下跌月轉負；純長動能因子若不搭配市場狀態過濾，難以通過過擬合檢查。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0364",
+ "ts": "2026-07-21T14:03:28"
+}

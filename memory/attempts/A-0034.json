@@ -1,0 +1,87 @@
+{
+ "round": 1,
+ "category": "long_term_reversal",
+ "hypothesis": "De Bondt & Thaler的過度反應理論指出，投資人對長期（約一年）大幅漲跌會過度外推，尤其台股生技股常因題材炒作出現長期超漲；長期贏家因估值過度膨脹、長期輸家因過度悲觀，兩者都在後續出現反轉。",
+ "prediction": "產業內rank IC為負，sub-train ICIR<-0.3；效應在題材炒作明顯的生技最強，在基本面穩定、較少過度反應的金融最弱。",
+ "formula": "cs_rank(mom_240)",
+ "name_zh": "長期過度反應",
+ "direction": "neg",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_240"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_240)",
+  "fhash": "30124ce2fa791c47",
+  "sub_train": {
+   "mean_ic": 0.023,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.01,
+   "icir": 0.09,
+   "decay_pct": 54.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.047,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.048,
+    "盤整"
+   ],
+   "2016": [
+    0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.04,
+    "多頭"
+   ],
+   "2018": [
+    -0.046,
+    "盤整"
+   ],
+   "2019": [
+    0.067,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.004
+  },
+  "industry_icir": {
+   "電子": 0.12,
+   "生技": 0.23,
+   "半導體": -0.01,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.033,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(+)與假設宣稱(neg)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測完全被推翻：假設長期(240日)反轉，實際IC方向為正(sub-train ICIR +0.20)，即長期動能延續而非反轉，於stage1直接因方向相反被拒。產業預測(生技最強)方向上部分吻合(生技ICIR 0.23確實較高)，但整體符號判斷錯誤，說明De Bondt-Thaler式長期反轉機制在此樣本期(2012-2019台股)不成立，反而呈現長期動能延續。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "長期(240日)反轉假設在台股此樣本期證偽，證據明確指向反向機制(長期動能延續)，應將「長期反轉」列入禁忌方向，並改以長期動能延續假設重新提交測試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0034",
+ "ts": "2026-07-18T21:37:41"
+}

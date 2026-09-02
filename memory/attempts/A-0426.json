@@ -1,0 +1,88 @@
+{
+ "round": 27,
+ "category": "informed_short_selling_normalized",
+ "hypothesis": "借券活動多由具備放空能力的機構法人發起，台灣散戶因交易成本與資格限制極少參與借券放空；用借券量除以成交金額做標準化後，可濾除單純因流動性大而借券量高的規模效應，凸顯出相對正常交易熱度而言異常偏高的借券需求，這代表知情法人正超額佈局空頭部位，其資訊優勢應領先於價格下跌。",
+ "prediction": "sub-train ICIR>0.4（需留意lend_vol_21覆蓋率約需>0.5才具統計效力）；多頭腿（低標準化借券比組）超額報酬>0；效應在借券覆蓋率較高的大型股子集應更穩健。",
+ "formula": "cs_rank(neg(sdiv(lend_vol_21, amt_21)))",
+ "name_zh": "相對借券壓力",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(lend_vol_21, amt_21)))",
+  "fhash": "bafbe7b5de977ae0",
+  "sub_train": {
+   "mean_ic": -0.023,
+   "icir": -0.18
+  },
+  "validation": {
+   "mean_ic": -0.029,
+   "icir": -0.24,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.085,
+    "盤整"
+   ],
+   "2013": [
+    -0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.007,
+    "盤整"
+   ],
+   "2016": [
+    -0.018,
+    "多頭"
+   ],
+   "2017": [
+    -0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.05,
+    "盤整"
+   ],
+   "2019": [
+    -0.009,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.032,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": -0.34,
+   "生技": -0.44,
+   "半導體": -0.12,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": -0.034,
+   "short_excess_ann": -0.053
+  },
+  "coverage": 0.54,
+  "turnover_m": 0.33,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(-)與假設宣稱(pos)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測方向為pos，但實際IC全程為負，且sub-train與validation方向一致地負(-0.18, -0.24)，是系統性反向而非雜訊。這暗示真實機制可能與假設相反：借券量相對成交金額高，可能不是「知情放空預警」，而更可能反映該股是套利/避險活動熱絡的標的（可轉債避險、期現套利），機構關注度和流動性反而支撐正報酬。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "借券強度(標準化)因子的IC方向與假設穩定相反(訓練/驗證一致)，顯示台股中「借券量高」更可能對應套利/避險活動而非放空預警，可將反向假設放入待驗證佇列而非直接放棄整個借券量維度。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0426",
+ "ts": "2026-07-28T19:08:22"
+}

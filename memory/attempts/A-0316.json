@@ -1,0 +1,84 @@
+{
+ "round": 20,
+ "category": "capital_retention_compounding_financial",
+ "hypothesis": "金融股受資本適足與監理要求限制，高ROE但選擇較低配息比率的公司，代表管理層優先保留資本以支持風險性資產成長與複利積累，而非追求短期現金殖利率吸引力。偏好高股息的投資人容易忽略這類正在內生積累資本的金融股，導致其被低估。",
+ "prediction": "sub-train ICIR > 0.45；金融產業industry_icir > 0.4 且高於半導體/電子/生技三產業；與F-002相關係數 < 0.5。",
+ "formula": "sub(cs_rank(roe), cs_rank(div_yield))",
+ "name_zh": "金融資本內生",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "div_yield",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(roe), cs_rank(div_yield))",
+  "fhash": "503ee98d4ebd8073",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.031,
+   "icir": -0.32,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.025,
+    "多頭"
+   ],
+   "2014": [
+    0.005,
+    "多頭"
+   ],
+   "2015": [
+    0.023,
+    "盤整"
+   ],
+   "2016": [
+    -0.028,
+    "多頭"
+   ],
+   "2017": [
+    -0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.059,
+    "盤整"
+   ],
+   "2019": [
+    -0.004,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.018,
+   "down_months": -0.0
+  },
+  "industry_icir": {
+   "電子": -0.1,
+   "生技": -0.19,
+   "半導體": -0.05,
+   "金融": -0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.038,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.18,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45且金融業industry_icir>0.4並領先其他產業，實際全面反向：sub-train-0.06、金融業icir僅-0.04，且所有產業ICIR皆為負；多空兩腿報酬幾乎相同(3.8%/3.7%)顯示因子毫無差異化能力，只是搭上大盤beta。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "高ROE低配息=資本內生積累的假說在台股金融股完全未獲支持，ROE與股息殖利率排名差可能無法捕捉監理資本策略差異，此類金融股特定的『資本保留』故事證據薄弱。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0316",
+ "ts": "2026-07-21T13:24:55"
+}

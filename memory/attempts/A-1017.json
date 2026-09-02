@@ -1,0 +1,90 @@
+{
+ "round": 67,
+ "category": "semiconductor_revenue_reacceleration",
+ "hypothesis": "半導體供應鏈的庫存修正循環結束時，會先出現月營收環比急速回升，年增率才隨後翻正。賣方與投資人錨定於仍為負的年增率、持續看淡循環，對『月營收二階變化(加速度)翻正』反應不足。機制是錨定效應加上對高頻訊號的忽視，只在具明顯庫存循環的半導體/電子成立。",
+ "prediction": "sub-train ICIR > 0.35；industry_icir 在半導體/電子最高；多頭腿年化超額 > 0；12 月平滑後訊號換手率 < 0.4；下跌月 IC 不弱於上漲月。",
+ "formula": "cs_rank(ts_mean(delta(rev_mom,6),12))",
+ "name_zh": "半導體營收回溫",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(delta(rev_mom,6),12))",
+  "fhash": "28c720371e85a6ae",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.029,
+   "icir": 0.43,
+   "decay_pct": -36.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.022,
+    "多頭"
+   ],
+   "2014": [
+    0.002,
+    "多頭"
+   ],
+   "2015": [
+    0.026,
+    "盤整"
+   ],
+   "2016": [
+    0.062,
+    "多頭"
+   ],
+   "2017": [
+    -0.002,
+    "多頭"
+   ],
+   "2018": [
+    0.037,
+    "盤整"
+   ],
+   "2019": [
+    0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.024,
+   "down_months": 0.025
+  },
+  "industry_icir": {
+   "電子": 0.56,
+   "生技": 0.15,
+   "半導體": 0.42,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.03,
+   "short_excess_ann": 0.076
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.41,
+  "stage2_culprit": {
+   "factor": "F-009",
+   "rho": 0.63,
+   "factor_name": "營收加速趨勢",
+   "factor_desc": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-009 |ρ|=0.63 > 0.5"
+ },
+ "diagnosis": "預測幾乎全中：電子 0.56/半導體 0.42 最高、cond_ic 跌月 0.025≥漲月 0.024、turnover 0.41、多頭腿+3.0%，val ICIR 0.43 品質良好。純粹輸在與 F-009『營收加速趨勢』ρ=0.63——delta(rev_mom,6) 的 12 月平滑本質就是營收年增率斜率，與 F-009 同一件事。校準：我對機制與產業定位的預測是對的，但沒預見這條路已被佔據。",
+ "failure_type": "duplicate",
+ "lesson": "『月營收二階變化/加速度』已被 F-009 佔據，任何 delta(rev_mom,k) 或營收年增率斜率的變形都會 ρ>0.6。半導體庫存循環的營收回溫訊號紅海邊界在此，除非改用非營收的循環訊號(如產能利用率、存貨天數轉折)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "from_queue": "Q-014",
+ "id": "A-1017",
+ "ts": "2026-09-02T01:09:58"
+}

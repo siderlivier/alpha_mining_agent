@@ -1,0 +1,83 @@
+{
+ "round": 7,
+ "category": "earnings_stability",
+ "hypothesis": "EPS年增率長期波動度低的公司代表獲利可預測性高、經營穩健，但因缺乏成長故事性與樂透式報酬吸引力，容易被偏好高波動題材股的散戶資金忽略，形成系統性折價。",
+ "prediction": "sub-train 產業內 ICIR>0.45；且與F-004(毛利波動度)、F-007(營收動能波動度)截面相關係數|ρ|<0.5，確認為獨立訊號。",
+ "formula": "cs_rank(neg(ts_std(eps_yoy,6)))",
+ "name_zh": "獲利穩定溢價",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(eps_yoy,6)))",
+  "fhash": "8efcb277e8b90a20",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.068,
+   "icir": 0.97,
+   "decay_pct": -578.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.047,
+    "多頭"
+   ],
+   "2014": [
+    0.014,
+    "多頭"
+   ],
+   "2015": [
+    0.031,
+    "盤整"
+   ],
+   "2016": [
+    0.026,
+    "多頭"
+   ],
+   "2017": [
+    0.009,
+    "多頭"
+   ],
+   "2018": [
+    0.081,
+    "盤整"
+   ],
+   "2019": [
+    0.054,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.037,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.13,
+   "半導體": 0.24,
+   "金融": 0.25
+  },
+  "legs": {
+   "long_excess_ann": -0.005,
+   "short_excess_ann": -0.001
+  },
+  "coverage": 0.74,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45且與其他波動度因子不重複；實際sub-train ICIR僅0.14未達門檻，validation卻達0.97(decay-578%)但多空兩腿報酬皆趨近0(-0.005/-0.001)，'穩定溢價'無對應報酬價差，屬train/validation反向擺盪的雜訊訊號而非真實效應。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "見全域規則：decay_pct大幅為負且兩腿報酬同時趨零，應判定為雜訊，不可因validation ICIR亮眼而誤判為有潛力。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0120",
+ "ts": "2026-07-19T17:59:13"
+}

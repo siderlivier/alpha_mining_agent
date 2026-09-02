@@ -1,0 +1,90 @@
+{
+ "round": 3,
+ "category": "low_volatility_anomaly",
+ "hypothesis": "散戶偏好高波動的「樂透型」股票並願支付溢價追逐（Kumar 2009 lottery preference），導致長期高波動股系統性高估、低波動股相對低估，形成低波動異常；台股散戶佔比高、槓桿型商品（權證/期貨）發達，此效應可能更顯著。此為因子庫與經驗庫皆未出現過的新機制類別。",
+ "prediction": "sub-train ICIR>0.40；下跌月IC應高於上漲月IC；多頭腿（低波動組）超額報酬>0。",
+ "formula": "cs_rank(neg(vol_126))",
+ "name_zh": "低波動異常",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "vol_126"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(vol_126))",
+  "fhash": "b56750e993215061",
+  "sub_train": {
+   "mean_ic": 0.068,
+   "icir": 0.61
+  },
+  "validation": {
+   "mean_ic": 0.114,
+   "icir": 0.83,
+   "decay_pct": -35.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.022,
+    "盤整"
+   ],
+   "2013": [
+    0.065,
+    "多頭"
+   ],
+   "2014": [
+    0.059,
+    "多頭"
+   ],
+   "2015": [
+    0.078,
+    "盤整"
+   ],
+   "2016": [
+    0.088,
+    "多頭"
+   ],
+   "2017": [
+    0.083,
+    "多頭"
+   ],
+   "2018": [
+    0.142,
+    "盤整"
+   ],
+   "2019": [
+    0.087,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.093,
+   "down_months": 0.047
+  },
+  "industry_icir": {
+   "電子": 0.77,
+   "生技": 0.54,
+   "半導體": 0.31,
+   "金融": 0.34
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.021
+  },
+  "coverage": 0.96,
+  "turnover_m": 0.12,
+  "stage2_max_rho": {
+   "factor": "F-004",
+   "rho": 0.26
+  },
+  "verdict": "passed"
+ },
+ "diagnosis": "預測『sub-train ICIR>0.40、下跌月IC高於上漲月、多頭腿(低波動組)>0』。強度大幅超標且通過所有檢驗(sub-train 0.61、驗證0.83、decay -35%、產業普遍有效)。但方向性子預測部分錯誤：上漲月IC(0.093)反而高於下跌月IC(0.047)，與『避險/防禦』的敘事相反，雖然兩者皆為正。多頭腿超額報酬(0.022)與空頭腿(0.021)相當，未特別集中在低波動多頭腿。",
+ "failure_type": "none",
+ "lesson": "低波動異常在台股確實強勁存在且通過所有結構檢定，但其條件IC模式呈現『上漲市場更有效』而非教科書式的『下跌避險』，顯示美股常見的防禦性敘事不能直接套用到台股條件IC預測上，需要分別驗證。",
+ "lesson_confidence": "single_case",
+ "verdict": "passed",
+ "id": "A-0068",
+ "ts": "2026-07-19T17:08:22"
+}

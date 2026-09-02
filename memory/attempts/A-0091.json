@@ -1,0 +1,83 @@
+{
+ "round": 5,
+ "category": "momentum_quality_weighting",
+ "hypothesis": "動能訊號的可靠度取決於趨勢本身的「乾淨程度」：一個穩定、低雜訊的上升趨勢（高R²）比同樣漲幅但路徑震盪劇烈的動能更可能延續，因為前者代表資訊緩慢持續被消化（如法人分批建倉），後者較可能是消息面驅動的一次性跳空容易反轉。用ts_rsq加權可將「趨勢品質」內生到動能訊號，取代過去用sign()二元篩選的不穩定做法。",
+ "prediction": "sub-train ICIR > 0.45，且應優於單純mom_120原始排名版本（驗證R²加權的邊際貢獻）；換手率應與純動能因子相近，不應顯著上升。",
+ "formula": "cs_rank(mul(mom_120, ts_rsq(mom_120,12)))",
+ "name_zh": "趨勢品質動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mul(mom_120, ts_rsq(mom_120,12)))",
+  "fhash": "8e284f88f4b2638b",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.08
+  },
+  "validation": {
+   "mean_ic": 0.02,
+   "icir": 0.25,
+   "decay_pct": -218.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.009,
+    "多頭"
+   ],
+   "2014": [
+    -0.005,
+    "多頭"
+   ],
+   "2015": [
+    0.039,
+    "盤整"
+   ],
+   "2016": [
+    0.028,
+    "多頭"
+   ],
+   "2017": [
+    -0.012,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.041,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": 0.18,
+   "生技": 0.21,
+   "半導體": 0.09,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.051,
+   "short_excess_ann": 0.052
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.3,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.08，幾乎無edge，且down_months IC為負(-0.005)，沒有驗證『乾淨趨勢在下跌月更抗跌』的說法。R²加權動能疊加沒有帶來預期的品質篩選效果。",
+ "failure_type": "expression_bad",
+ "lesson": "用mul(momentum, R²)做連續乘法式『趨勢品質加權』未必能保留清晰上升/下降趨勢的不對稱性，可考慮改用高R²子集內做動能排名等明確篩選方式，而非連續交互項。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0091",
+ "ts": "2026-07-19T17:32:32"
+}

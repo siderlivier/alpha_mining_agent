@@ -1,0 +1,93 @@
+{
+ "round": 66,
+ "category": "biotech_sustained_profitability_recognition_lag",
+ "hypothesis": "生技類股被市場貼上『高風險、難獲利、二元下注』標籤並給予類股風險折價。少數已連續多月維持正稅後淨利率的生技公司證明商業模式可持續，但『生技=投機』的標籤黏著性使市場不重新歸類、仍套用類股折價，直到被指數/法人重分類為特用化學或醫材才修正。此標籤僵固在成熟產業不存在（持續獲利本為預期），故為生技限定。",
+ "prediction": "生技產業內 rank IC 月均 > 0.04 且為四大產業最高；sub-train ICIR > 0.35（產業限定門檻）；多頭腿年化超額 > 0；與 F-022、F-011 之 |ρ| < 0.5。",
+ "formula": "cs_rank(streak_true(greater(net_margin,0),12))",
+ "name_zh": "生技連續獲利",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(streak_true(greater(net_margin,0),12))",
+  "fhash": "031081fbdb884d7e",
+  "sub_train": {
+   "mean_ic": 0.044,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": 0.091,
+   "icir": 1.13,
+   "decay_pct": -208.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.156,
+    "盤整"
+   ],
+   "2013": [
+    -0.0,
+    "多頭"
+   ],
+   "2014": [
+    0.067,
+    "多頭"
+   ],
+   "2015": [
+    0.065,
+    "盤整"
+   ],
+   "2016": [
+    0.062,
+    "多頭"
+   ],
+   "2017": [
+    0.045,
+    "多頭"
+   ],
+   "2018": [
+    0.077,
+    "盤整"
+   ],
+   "2019": [
+    0.104,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.058,
+   "down_months": 0.057
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.55,
+   "半導體": 0.25,
+   "金融": 0.18
+  },
+  "legs": {
+   "long_excess_ann": 0.008,
+   "short_excess_ann": 0.039
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.11,
+  "stage2_culprit": {
+   "factor": "R-016",
+   "rho": 0.66,
+   "factor_name": "股東權益報酬率",
+   "factor_desc": "稅後淨利 / 股東權益"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 R-016 |ρ|=0.66 > 0.5"
+ },
+ "diagnosis": "預測相當精準:生技產業內 ICIR 0.55(四大產業最高)、整體 sub-train ICIR 0.37(>0.35 產業限定門檻)、IC 0.044——產業型態的直覺完全對。預測未涵蓋:因子=『連續維持正淨利率的月數』≈ 持續獲利能力 ≈ ROE,與 R-016 股東權益報酬率 ρ=0.66 死於 stage2;且 2012 盤整年 IC -0.156 巨大離群顯示脆弱、validation ICIR 1.13 可能是少數年份灌出。",
+ "failure_type": "duplicate",
+ "lesson": "『連續獲利月數』捕捉的是獲利能力水準,和 ROE 本質重疊(即使加上產業標籤故事)。下次生技標籤僵固假說要測,需對 ROE/獲利水準殘差化,並聚焦『首度轉正/剛脫離虧損』的事件型定義而非累積月數,才可能與 R-016 區隔。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-1012",
+ "ts": "2026-09-02T00:51:50"
+}

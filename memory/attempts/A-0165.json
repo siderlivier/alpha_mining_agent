@@ -1,0 +1,91 @@
+{
+ "round": 10,
+ "category": "retail_leverage_contrarian",
+ "hypothesis": "散戶傾向在上漲末端加碼融資追高，此類槓桿缺乏基本面支撐；融資餘額近期降溫代表去槓桿已完成、追高壓力解除，後續報酬優於仍在加碼融資的股票。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4(已用3月平滑)；下跌月IC應高於上漲月。",
+ "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+ "name_zh": "融資降溫訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "margin_d21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(margin_d21,3)))",
+  "fhash": "8dcb62747ea222cf",
+  "sub_train": {
+   "mean_ic": 0.027,
+   "icir": 0.39
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.21,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.041,
+    "盤整"
+   ],
+   "2013": [
+    0.037,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.024,
+    "多頭"
+   ],
+   "2018": [
+    0.018,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.025,
+   "down_months": 0.021
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.22,
+   "半導體": 0.11,
+   "金融": 0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.019,
+   "short_excess_ann": 0.001
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.4,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.26
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.39 < 0.45; validation ICIR 0.21 < 0.3"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際0.39；validation 0.21，decay 47%接近過擬合邊界。預測『下跌月IC應高於上漲月』(去槓桿效應應在空頭更明顯)未成立：下跌月0.021反略低於上漲月0.025。訊號方向大致正確但強度不足，且不具備假設所述的空頭增強特性。",
+ "failure_type": "expression_bad",
+ "lesson": "融資降溫方向大致正確但強度不足以支撐『空頭時效應更強』的條件性假設，可能3個月平滑窗口太長稀釋了急速降溫訊號；下次可嘗試更短窗口或改用降溫速度(二階變化)而非水準值。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0165",
+ "ts": "2026-07-21T11:22:51"
+}

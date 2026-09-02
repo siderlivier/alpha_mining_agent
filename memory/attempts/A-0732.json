@@ -1,0 +1,87 @@
+{
+ "round": 48,
+ "category": "turnover_surge_speculation_fade",
+ "hypothesis": "週轉率的「急升」(delta，而非水準)代表短期投機資金湧入的結構性訊號，缺乏基本面支撐，追價熱度在1-2個月內消退並均值回歸；此為獨立於F-008週轉率水準之外的變化速度訊息。",
+ "prediction": "sub-train ICIR>0.45；週轉急升端(空頭腿)超額顯著為負；多頭腿(無急升端)年化超額>0。",
+ "formula": "cs_rank(neg(delta(turn_21,3)))",
+ "name_zh": "週轉急升退燒股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(delta(turn_21,3)))",
+  "fhash": "f3c507c4d83e6be1",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": -0.018,
+   "icir": -0.24,
+   "decay_pct": 165.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    0.049,
+    "多頭"
+   ],
+   "2015": [
+    0.046,
+    "盤整"
+   ],
+   "2016": [
+    0.024,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    -0.042,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.013,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.24,
+   "生技": 0.21,
+   "半導體": 0.15,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.027,
+   "short_excess_ann": 0.024
+  },
+  "coverage": 0.78,
+  "turnover_m": 0.52,
+  "stage2_max_rho": {
+   "factor": "F-008",
+   "rho": 0.23
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR -0.24 < 0.3; validation 衰減 165% > 50%（過擬合徵兆）; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）; 月換手 0.52 > 0.4"
+ },
+ "diagnosis": "sub-train ICIR 0.36符合方向但未達門檻，validation ICIR轉為-0.24（165%衰減，符號翻轉），且空頭腿(週轉急升端)超額反而為正(0.024)，多頭腿為負(-0.027)——與『急升退燒』預測完全相反，市場資料顯示週轉率急升端事後反而表現較好。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "週轉率『急升』在台股樣本中並非退燒訊號，證據顯示方向可能相反（急升端表現較優）。若要繼續探索此變數，應轉向測試『週轉急升=關注度動能延續』的相反假說，而非再嘗試同方向的變形表達。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0732",
+ "ts": "2026-08-14T00:25:09"
+}

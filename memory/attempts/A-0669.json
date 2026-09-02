@@ -1,0 +1,84 @@
+{
+ "round": 44,
+ "category": "smart_money_divergence",
+ "hypothesis": "外資與投信是資訊環境與誘因結構不同的兩類法人：外資具跨市場、跨產業鏈比較優勢且較少受規模排名壓力，投信則常受季底作帳、規模排名與追價誘因驅動而追漲殺跌。當外資買超而投信同時賣超，代表『知情資金』與『追價資金』看法分歧，此時應跟隨外資方向；此分歧訊號比『雙方一致買超』更具資訊含量，因為一致買超易反映集體追高的擁擠效應（經驗庫已證實一致買超方向為負）。",
+ "prediction": "sub-train ICIR > 0.45；此分歧訊號IC應顯著高於frgn_net_21或trust_net_21單獨作為因子的IC；上漲月與下跌月IC同向不反轉。",
+ "formula": "cs_rank(sub(frgn_net_21, trust_net_21))",
+ "name_zh": "法人分歧訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(frgn_net_21, trust_net_21))",
+  "fhash": "9818946cc9465001",
+  "sub_train": {
+   "mean_ic": 0.009,
+   "icir": 0.13
+  },
+  "validation": {
+   "mean_ic": -0.0,
+   "icir": -0.0,
+   "decay_pct": 102.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.006,
+    "多頭"
+   ],
+   "2014": [
+    0.025,
+    "多頭"
+   ],
+   "2015": [
+    0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.008,
+    "多頭"
+   ],
+   "2017": [
+    -0.005,
+    "多頭"
+   ],
+   "2018": [
+    0.015,
+    "盤整"
+   ],
+   "2019": [
+    -0.015,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": 0.04,
+   "生技": 0.04,
+   "半導體": 0.06,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": -0.022,
+   "short_excess_ann": 0.019
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.54,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測 ICIR>0.45 且顯著優於單邊 frgn_net/trust_net，上下月同向不反轉。實際 sub-train ICIR 僅 0.13、validation 幾乎歸零；cond_ic 上漲月0.014/下跌月-0.012 出現反轉，且多頭腿超額為負(-0.022)、空頭腿為正(0.019)，方向與『分歧訊號應可跟隨外資』的假設不符，訊號近乎雜訊。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『外資-投信分歧』本身未展現增量資訊，兩法人淨買超相減後訊號被互相抵消而非放大差異；未來若要測試法人分歧類假設，應先檢查單邊 frgn_net_21 的邊際 IC 是否本身就弱，避免用差分掩蓋兩邊都不顯著的事實。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0669",
+ "ts": "2026-08-12T14:15:12"
+}

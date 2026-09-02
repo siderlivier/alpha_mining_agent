@@ -1,0 +1,87 @@
+{
+ "round": 50,
+ "category": "electronics_dual_confirmation",
+ "hypothesis": "電子業短期營收動能(rev_mom)加速與毛利率同步改善時，代表訂單能見度與成本結構同時轉佳，此雙重確認比單一訊號更可信；用加法而非乘法組合可避免任一端極端值主導排序，同時降低與既有F-016/F-017系乘積型因子的重疊。",
+ "prediction": "sub-train ICIR>0.45；與F-009、F-016相關係數應<0.5。",
+ "formula": "add(cs_rank(rev_mom), cs_rank(ts_slope(gross_margin,6)))",
+ "name_zh": "電子雙重轉強",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "add(cs_rank(rev_mom), cs_rank(ts_slope(gross_margin,6)))",
+  "fhash": "5f8682befbfee902",
+  "sub_train": {
+   "mean_ic": 0.018,
+   "icir": 0.33
+  },
+  "validation": {
+   "mean_ic": 0.013,
+   "icir": 0.23,
+   "decay_pct": 28.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.049,
+    "盤整"
+   ],
+   "2013": [
+    -0.008,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.018,
+    "盤整"
+   ],
+   "2016": [
+    0.025,
+    "多頭"
+   ],
+   "2017": [
+    0.023,
+    "多頭"
+   ],
+   "2018": [
+    -0.002,
+    "盤整"
+   ],
+   "2019": [
+    0.028,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.014,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.31,
+   "生技": 0.08,
+   "半導體": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.037,
+   "short_excess_ann": 0.057
+  },
+  "coverage": 0.83,
+  "turnover_m": 0.72,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45並與F-009/F-016相關係數<0.5，實際sub-train ICIR 0.33即在stage1被拒，未進相關性檢驗；符號多數年份為正(僅2013、2018微負)方向大致正確但強度不足，turnover偏高(0.72)本輪次高，代表為降低與既有乘積型因子重疊而改用加法組合，反而讓訊號變得更嘈雜、換手更頻繁，「雙重確認更可信」的方向未被證偽，但加法表達未能放大雙重確認的邊際效果。",
+ "failure_type": "expression_bad",
+ "lesson": "為規避與F-016/F-017重疊而將乘法改為加法組合，方向仍正確但ICIR不增反減、turnover大幅升高，顯示加法平均化了兩訊號、稀釋了「雙重確認」該有的乘數效果；若要規避紅海重疊，應保留乘法但改變其中一端的定義，而非改變組合方式為加法。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0769",
+ "ts": "2026-08-14T00:51:32"
+}

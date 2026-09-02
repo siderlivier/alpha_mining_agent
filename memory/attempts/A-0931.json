@@ -1,0 +1,92 @@
+{
+ "round": 61,
+ "category": "operating_net_margin_gap",
+ "hypothesis": "本業獲利率(op_margin)遠高於稅後淨利率(net_margin)，代表獲利被業外一次性項目（匯損、利息費用、業外減損）暫時拖累，市場過度聚焦於淨利率下滑的表面數字而忽略核心本業依然強健，此為全新的「損益表分項背離」類別。",
+ "prediction": "sub-train ICIR > 0.4；下跌月IC不低於上漲月（代表非景氣循環型訊號）",
+ "formula": "cs_rank(sub(op_margin,net_margin))",
+ "name_zh": "業外拖累價值股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "net_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(op_margin,net_margin))",
+  "fhash": "7c5b62a2b5290a4d",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.2
+  },
+  "validation": {
+   "mean_ic": 0.021,
+   "icir": 0.25,
+   "decay_pct": -27.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.003,
+    "盤整"
+   ],
+   "2013": [
+    0.032,
+    "多頭"
+   ],
+   "2014": [
+    0.043,
+    "多頭"
+   ],
+   "2015": [
+    0.076,
+    "盤整"
+   ],
+   "2016": [
+    0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.023,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.011
+  },
+  "industry_icir": {
+   "電子": 0.17,
+   "生技": 0.04,
+   "半導體": 0.27,
+   "金融": 0.11
+  },
+  "legs": {
+   "long_excess_ann": -0.001,
+   "short_excess_ann": 0.024
+  },
+  "coverage": 0.88,
+  "turnover_m": 0.19,
+  "stage2_max_rho": {
+   "factor": "F-020",
+   "rho": 0.2
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.2 < 0.45; validation ICIR 0.25 < 0.3; 多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）"
+ },
+ "diagnosis": "預測ICIR>0.4且下跌月IC不低於上漲月（非景氣循環型），結果sub-train僅0.2，且cond_ic上漲月(0.028)明顯高於下跌月(0.011)，非景氣循環的預測直接被推翻；更關鍵的是長腳超額報酬為負(-0.001)、短腳為正(0.024)，代表這個訊號真正抓到的是「本業遠不如淨利率好看的公司」該被避開（空頭腿有效），而非「本業被業外拖累的價值股」該被買進，機制方向判斷錯誤。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "op_margin-net_margin正向差距被市場定價為業外拖累的價值股，實證上並不成立；真正有效的是負向端（本業遠不如帳面淨利率的公司該避開），但在台股難放空環境下這類單邊空頭訊號不可交易。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0931",
+ "ts": "2026-08-27T10:25:20"
+}

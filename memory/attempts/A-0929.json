@@ -1,0 +1,87 @@
+{
+ "round": 61,
+ "category": "financial_margin_trend_industry_demeaned",
+ "hypothesis": "用industry_demean剔除金融業整體景氣循環（如全業利差同步擴張）後，個股特有的淨利率改善趨勢才是真正的公司資本配置優勢，市場常把產業景氣順風誤判為個股能力，導致真正優於同業的公司被低估。",
+ "prediction": "金融產業內sub-train ICIR > 0.4；與F-023(net_margin/ts_max版)截面相關 |ρ| < 0.5",
+ "formula": "cs_rank(ts_slope(industry_demean(net_margin),6))",
+ "name_zh": "金控淨利率超額改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(industry_demean(net_margin),6))",
+  "fhash": "49ee0b4618b5d47c",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.015,
+   "icir": 0.28,
+   "decay_pct": -28.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.013,
+    "盤整"
+   ],
+   "2013": [
+    0.046,
+    "多頭"
+   ],
+   "2014": [
+    0.018,
+    "多頭"
+   ],
+   "2015": [
+    0.029,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    -0.007,
+    "多頭"
+   ],
+   "2018": [
+    0.007,
+    "盤整"
+   ],
+   "2019": [
+    0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.39,
+   "生技": 0.09,
+   "半導體": 0.17,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.034,
+   "short_excess_ann": 0.083
+  },
+  "coverage": 0.86,
+  "turnover_m": 0.29,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測「金融產業內」sub-train ICIR>0.4，結果金融業內ICIR僅0.04，遠低於預期，反而電子業內達0.39——industry_demean去除金融業景氣循環後，金融股個股特有的淨利率改善趨勢並沒有被市場低估，假設鎖定的產業完全落空，訊號在非目標產業意外較強，說明機制描述（金融業景氣順風掩蓋個股能力）本身站不住腳。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「industry_demean剔除產業景氣循環、找個股特有改善趨勢」這個機制在金融業並未驗證成立，金融股的淨利率趨勢對市場定價來說不構成盲點，不宜再針對金融業重試同一故事。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0929",
+ "ts": "2026-08-27T10:25:20"
+}

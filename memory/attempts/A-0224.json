@@ -1,0 +1,83 @@
+{
+ "round": 14,
+ "category": "institutional_flow_persistence",
+ "hypothesis": "外資具備較優的資訊網絡與管理層接觸管道；當外資近月買超力道相對自身歷史波動出現顯著加速（標準化驚奇而非單純水準或趨勢），代表外資掌握尚未公開的資訊優勢，而台股以散戶為主的市場對法人動向的跟隨存在延遲，形成可持續數週的資訊擴散訊號。",
+ "prediction": "sub-train ICIR > 0.45；下跌月IC不弱於上漲月；與frgn_ratio_d63後續變化方向一致（作為機制交叉驗證）",
+ "formula": "cs_rank(sdiv(delta(frgn_net_21,3), ts_std(frgn_net_21,12)))",
+ "name_zh": "外資買超加速",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(frgn_net_21,3), ts_std(frgn_net_21,12)))",
+  "fhash": "526a297d44a6d980",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.08
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.1,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    0.025,
+    "多頭"
+   ],
+   "2014": [
+    -0.005,
+    "多頭"
+   ],
+   "2015": [
+    -0.011,
+    "盤整"
+   ],
+   "2016": [
+    -0.011,
+    "多頭"
+   ],
+   "2017": [
+    0.0,
+    "多頭"
+   ],
+   "2018": [
+    0.017,
+    "盤整"
+   ],
+   "2019": [
+    -0.034,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.0,
+   "down_months": -0.021
+  },
+  "industry_icir": {
+   "電子": -0.15,
+   "生技": -0.13,
+   "半導體": -0.28,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": -0.007,
+   "short_excess_ann": -0.019
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.69,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際-0.08接近零偏負，下跌月尤其負(-0.021)，半導體產業ICIR達-0.28。『外資資訊優勢+散戶跟隨延遲』機制未獲支持，標準化外資買超加速訊號呈弱負相關而非正相關，較可能是外資買超加速本身是價格上漲後的果（追price而非領先資訊）。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『外資買超力道加速=資訊優勢』機制本輪方向偏負，缺乏支持；後續若用外資籌碼構建alpha，應避開短窗(21天)標準化加速表達，改測外資持股水準的長期趨勢。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0224",
+ "ts": "2026-07-21T12:11:51"
+}

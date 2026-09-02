@@ -1,0 +1,83 @@
+{
+ "round": 30,
+ "category": "cross_scope_rank_divergence",
+ "hypothesis": "應計項在產業內部排名明顯差於全市場排名的公司，代表該公司相對其直接競爭對手有盈餘品質問題；投資人習慣用全市場基準比較，容易忽略只在同業比較下才顯著的相對劣勢，產業內比較的訊息傳遞較慢，訊號需一段時間才被市場發現。",
+ "prediction": "sub-train ICIR>0.45；此訊號與F-006(全市場應計項)相關係數需<0.5；多頭腿(低分組)年化超額報酬需為正。",
+ "formula": "sub(cs_rank(accruals), cs_rank_all(accruals))",
+ "name_zh": "產業內應計異常",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(accruals), cs_rank_all(accruals))",
+  "fhash": "e10f535eed4a0da8",
+  "sub_train": {
+   "mean_ic": -0.0,
+   "icir": -0.01
+  },
+  "validation": {
+   "mean_ic": -0.013,
+   "icir": -0.27,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.01,
+    "多頭"
+   ],
+   "2014": [
+    -0.006,
+    "多頭"
+   ],
+   "2015": [
+    -0.018,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.015,
+    "多頭"
+   ],
+   "2018": [
+    -0.018,
+    "盤整"
+   ],
+   "2019": [
+    -0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.0,
+   "down_months": -0.013
+  },
+  "industry_icir": {
+   "電子": 0.11,
+   "生技": -0.21,
+   "半導體": 0.1,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.021,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.21,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR接近零(-0.01)，validation轉為-0.27，方向與假設宣稱的neg一致，但sub-train訊噪太低無法判斷是真實訊號還是巧合，診斷資訊(僅4大產業分組、無更細部拆解)不足以下定論。",
+ "failure_type": "expression_bad",
+ "lesson": "「產業內排名 vs 全市場排名」落差類因子在僅4大類產業分組下可能過於粗糙，難以真正捕捉同業比較的意涵；證據不足，需更細產業分類或更長樣本才能判斷。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0469",
+ "ts": "2026-07-29T23:26:46"
+}

@@ -1,0 +1,92 @@
+{
+ "round": 9,
+ "category": "momentum_term_structure_slow_diffusion",
+ "hypothesis": "長期動能(240日)扣除短期動能(60日)後的殘差，代表尚未被近一季價格完全消化的法人持續建倉成分；台股中小型股法人覆蓋率低、部位調整需分批完成，此殘差動能會延續數月才完全反映。",
+ "prediction": "sub-train ICIR > 0.45；validation衰減 < 40%；外資持股集中的半導體/電子產業內IC應優於金融/生技。",
+ "formula": "cs_rank(sub(mom_240,mom_60))",
+ "name_zh": "長期動能殘差",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240,mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.24
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "預測全面落空：sub-train ICIR 0.36未達0.45，validation ICIR僅0.19且衰減47%（過擬合徵兆），更關鍵的是產業預測完全反轉——預期半導體/電子（外資覆蓋高）應優於金融/生技，實際半導體0.10為四產業最低、生技0.35反而最高。長期動能扣短期動能的「殘差代表法人未消化建倉」敘事，未能在資料中得到支持，產業分布看起來更像雜訊而非法人覆蓋機制。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「動能期限結構殘差=法人分批建倉」這個機制假說，至少在本次資料窗口與產業切分下不成立；下次若要再測動能期限結構，應先用法人買賣超資料直接驗證是否真的存在跨月分批建倉行為，而非僅用價格動能反推法人行為再測IC。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0146",
+ "ts": "2026-07-20T17:18:53"
+}

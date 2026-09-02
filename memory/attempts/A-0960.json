@@ -1,0 +1,25 @@
+{
+ "round": 63,
+ "category": "earnings_quality_improvement_momentum",
+ "hypothesis": "營運現金流/淨利比(ocf_ratio)上升的「變化速度」搭配應計項下降的「變化速度」，代表盈餘品質正動態改善而非僅靜態高低，比F-006/F-012的水準訊號更早捕捉會計調整轉折，市場對變化率反應慢於水準。",
+ "prediction": "sub-train ICIR>0.4；與F-006、F-012截面相關|ρ|<0.5(改用delta預期相關性可控)。",
+ "formula": "mul(cs_rank(delta(ocf_ratio,12)), cs_rank(neg(delta(accruals,12))))",
+ "name_zh": "現金品質加速改善",
+ "direction": "pos",
+ "complexity": {
+  "depth": null,
+  "fields": null
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(ocf_ratio,12)), cs_rank(neg(delta(accruals,12))))",
+  "verdict": "rejected_syntax",
+  "reason": "[too_deep] 運算子深度 4 超過上限 3"
+ },
+ "diagnosis": "假設（現金流品質與應計項『雙重加速』訊號）未被測試——同樣因四層巢狀（delta外面再包cs_rank後mul）在深度4被rejected_syntax擋下。",
+ "failure_type": "expression_bad",
+ "lesson": "雙delta交乘（delta(ocf_ratio,12) × neg(delta(accruals,12))）天生就是四層結構；若要驗證『雙重加速』機制，可先用單一delta搭配另一欄位水準值降低深度，驗證方向後再考慮補上第二個delta。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_syntax",
+ "id": "A-0960",
+ "ts": "2026-08-27T21:36:00"
+}

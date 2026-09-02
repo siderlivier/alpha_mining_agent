@@ -1,0 +1,79 @@
+{
+ "round": 21,
+ "category": "financial_accrual_stability",
+ "hypothesis": "金融業會計處理（如備抵呆帳、利息收入認列）複雜度高，一般投資人因處理成本規避而降低對金融股財報的深入分析，應計項低波動代表該金融機構提列政策穩健、非藉盈餘管理平滑獲利，此穩健度因會計不透明而被市場系統性低估；此為「會計複雜度規避」機制，區別於先前已驗證失敗的「金融資訊優勢」敘事。",
+ "prediction": "sub-train ICIR>0.45；金融產業industry_icir應為四產業最高（若未居冠則對此類假說再添一次反證）；與F-006、F-010相關係數<0.5。",
+ "formula": "cs_rank(neg(ts_std(accruals,24)))",
+ "name_zh": "金融應計穩定度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_std(accruals,24)))",
+  "fhash": "3299e080150777bc",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.039,
+   "icir": 0.61,
+   "decay_pct": -154.0
+  },
+  "ic_by_year": {
+   "2014": [
+    -0.023,
+    "多頭"
+   ],
+   "2015": [
+    0.004,
+    "盤整"
+   ],
+   "2016": [
+    0.051,
+    "多頭"
+   ],
+   "2017": [
+    0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.037,
+    "盤整"
+   ],
+   "2019": [
+    0.04,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.019,
+   "down_months": 0.039
+  },
+  "industry_icir": {
+   "電子": 0.33,
+   "生技": 0.37,
+   "半導體": -0.04,
+   "金融": 0.22
+  },
+  "legs": {
+   "long_excess_ann": 0.009,
+   "short_excess_ann": 0.016
+  },
+  "coverage": 0.63,
+  "turnover_m": 0.07,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR 0.24不足0.45；validation反升至0.61（decay -154%，樣本不穩）。核心預測「金融產業industry_icir應為四產業最高」被推翻：生技最高(0.37)，金融僅第三(0.22)，半導體甚至為負(-0.04)。「會計複雜度規避造成金融股被低估」的機制未獲產業別數據支持。這是本輪第4個「產業特定敘事預測被實際industry_icir推翻」的案例（另三個為C-1預期電子/半導體實際金融最高、C-4預期生技最高實際電子最高、C-5預期半導體最高實際半導體最低）。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「會計複雜度規避」假說預測金融業反應應最強，但實際生技業ICIR最高、金融僅居第三，機制未獲數據支持；累計本輪已有4例(C-1,C-4,C-5,C-15)顯示「先預測某產業应該最强、再用industry_icir驗證」這種產業敘事型預測命中率很低，未來應把industry_icir當作事後診斷工具而非可提前押注的驗證指標。",
+ "lesson_confidence": "pattern",
+ "verdict": "rejected_stage1",
+ "id": "A-0338",
+ "ts": "2026-07-21T13:38:15"
+}

@@ -1,0 +1,91 @@
+{
+ "round": 51,
+ "category": "electronics_margin_relative_recovery",
+ "hypothesis": "電子代工與系統廠受產能利用率調整週期影響，毛利率景氣循環幅度大；當本期毛利率相對自身近一年均值回升，但尚未回到歷史高點，代表產業正處於庫存去化後價格權力回升的早期階段。市場多聚焦年增率等落後指標，對這種相對水準回升訊號反應遲緩。",
+ "prediction": "sub-train ICIR > 0.45；電子產業industry_icir應為四產業最高且高於次高產業至少0.15；decay(sub-train→validation) < 50%。",
+ "formula": "cs_rank(sdiv(op_margin,ts_mean(op_margin,12)))",
+ "name_zh": "電子毛利回升",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_margin,ts_mean(op_margin,12)))",
+  "fhash": "ec31c854ef5a394a",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": -0.029,
+   "icir": -0.3,
+   "decay_pct": 194.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.198,
+    "盤整"
+   ],
+   "2013": [
+    -0.015,
+    "多頭"
+   ],
+   "2014": [
+    0.05,
+    "多頭"
+   ],
+   "2015": [
+    0.044,
+    "盤整"
+   ],
+   "2016": [
+    0.041,
+    "多頭"
+   ],
+   "2017": [
+    0.03,
+    "多頭"
+   ],
+   "2018": [
+    -0.045,
+    "盤整"
+   ],
+   "2019": [
+    -0.013,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.015,
+   "down_months": 0.017
+  },
+  "industry_icir": {
+   "電子": 0.36,
+   "生技": 0.15,
+   "半導體": 0.07,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.003,
+   "short_excess_ann": 0.014
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.26,
+  "stage2_max_rho": {
+   "factor": "F-016",
+   "rho": 0.25
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.32 < 0.45; validation ICIR -0.3 < 0.3; validation 衰減 194% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR 0.32未達門檻，且驗證期完全反轉(ICIR -0.30，衰減194%)。產業別確如預測電子最高(0.36)且領先次高產業0.21(>預測門檻0.15)。但逐年IC顯示2012年高達0.198是sub-train均值的主要來源，2013年即轉負，2018-2019持續為負，顯示訊號集中於單一歷史景氣循環(2011-2012金融海嘯後補庫存)，而非可重複現象。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『毛利率相對近一年均值回升』這種週期性訊號容易被單一歷史景氣循環期主導評估結果；逐年IC分布比aggregate ICIR更能揭露這種過擬合，未來評估景氣循環類因子應檢查是否有單一年度貢獻過半IC，若有則對假說持保留態度而非直接信任sub-train數字。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0777",
+ "ts": "2026-08-14T01:05:54"
+}

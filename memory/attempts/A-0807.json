@@ -1,0 +1,87 @@
+{
+ "round": 53,
+ "category": "securities_lending_attention_signal",
+ "hypothesis": "借券量高的股票代表機構投資人（避險基金、法人套利者）對該股票投入高度研究與資訊活躍度，借券可能用於避險、可轉債套利等中性策略而非單純看空，因此高借券量是機構關注度領先指標，提前反映尚未被市場定價的資訊。",
+ "prediction": "sub-train ICIR>0.45；此因子與F-008相關係數應<0.5（機制為機構關注度而非零售炒作抑制）；多頭腿年化超額報酬顯著>0。",
+ "formula": "cs_rank(ts_mean(lend_vol_21, 6))",
+ "name_zh": "借券關注度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(lend_vol_21, 6))",
+  "fhash": "52bd911cbdef0096",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.1
+  },
+  "validation": {
+   "mean_ic": 0.054,
+   "icir": 0.51,
+   "decay_pct": -432.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.044,
+    "盤整"
+   ],
+   "2013": [
+    0.031,
+    "多頭"
+   ],
+   "2014": [
+    0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    0.023,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    0.078,
+    "盤整"
+   ],
+   "2019": [
+    0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.038,
+   "down_months": -0.02
+  },
+  "industry_icir": {
+   "電子": 0.38,
+   "生技": 0.29,
+   "半導體": 0.14,
+   "金融": -0.16
+  },
+  "legs": {
+   "long_excess_ann": 0.034,
+   "short_excess_ann": 0.032
+  },
+  "coverage": 0.52,
+  "turnover_m": 0.13,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.10遠低於預測，但validation跳升到0.51(decay -432%)，train/validation表現落差過大，加上coverage僅0.52，顯示借券量資料早期覆蓋率不足，訊號較可能是稀疏樣本雜訊而非真實效應。",
+ "failure_type": "expression_bad",
+ "lesson": "新興籌碼資料(借券量等)覆蓋率不足(<0.6)時，sub-train與validation的ICIR會出現方向不穩定的巨幅擺盪；應先限制在資料完整年度後再評估，而非直接套用全樣本期間。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0807",
+ "ts": "2026-08-15T11:33:03"
+}

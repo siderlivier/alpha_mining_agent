@@ -1,0 +1,93 @@
+{
+ "round": 64,
+ "category": "quality_moat_stability",
+ "hypothesis": "毛利率高且营业利益率长期波动度低的公司，代表护城河不仅体现在产品定价力（毛利），更延伸到费用管控与本业获利的稳定性，形成双重确认；这类闷型绩优股缺乏波动带来的故事性和话题度，长期被市场低估，与F-004（毛利波动度）、F-007（营收波动度）核心欄位不同，改用op_margin波动度作为稳定性锚点。",
+ "prediction": "sub-train ICIR>0.4；与F-004、F-007截面相关性|ρ|<0.5",
+ "formula": "cs_rank(sdiv(gross_margin, ts_std(op_margin,12)))",
+ "name_zh": "护城河稳健比",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(gross_margin, ts_std(op_margin,12)))",
+  "fhash": "052eebb77a68579d",
+  "sub_train": {
+   "mean_ic": 0.054,
+   "icir": 0.54
+  },
+  "validation": {
+   "mean_ic": 0.071,
+   "icir": 1.02,
+   "decay_pct": -88.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.015,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    0.095,
+    "盤整"
+   ],
+   "2016": [
+    0.049,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    0.069,
+    "盤整"
+   ],
+   "2019": [
+    0.073,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.059,
+   "down_months": 0.058
+  },
+  "industry_icir": {
+   "電子": 0.64,
+   "生技": 0.57,
+   "半導體": 0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.12,
+  "stage2_culprit": {
+   "factor": "F-004",
+   "rho": 0.64,
+   "factor_name": "毛利穩定溢價",
+   "factor_desc": "毛利率長期波動度低的悶型績優股，缺乏故事性而長期被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-004 |ρ|=0.64 > 0.5"
+ },
+ "diagnosis": "統計表現遠超預期(sub-train0.54/validation1.02)，驗證了護城河穩定性存在超額報酬，但換op_margin波動度取代毛利波動度仍未能與F-004脫鉤(ρ=0.64)，顯示「低波動=護城河」核心概念本身已是紅海。",
+ "failure_type": "duplicate",
+ "lesson": "僅替換波動度計算欄位(毛利率→營業利益率)不足以與F-004區隔，因兩者共同捕捉的是「獲利穩定的悶型股」底層群體；需引入結構性不同訊號(如搭配估值或關注度)才能真正脫鉤。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0973",
+ "ts": "2026-08-27T21:49:57"
+}

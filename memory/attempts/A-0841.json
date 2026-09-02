@@ -1,0 +1,92 @@
+{
+ "round": 55,
+ "category": "biotech_derisking_signal/生技限定",
+ "hypothesis": "生技股波動度通常隨臨床試驗/法規審查等不確定事件大幅波動；當波動度呈現趨勢性下降（不確定性正在解除，如試驗結果明朗或藥證取得）同時營業利益率同步改善，代表公司正從高風險敘事股過渡為可預測獲利個股，但市場仍錨定過去的高波動印象，重新評價存在滯後。",
+ "prediction": "生技限定industry_icir>0.45；多頭腿年化超額報酬>0；跨年度穩健性檢查：正IC年份佔比≥60%。",
+ "formula": "sub(cs_rank(op_margin), cs_rank(ts_slope(vol_63,6)))",
+ "name_zh": "生技降風險訊號",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "op_margin",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(op_margin), cs_rank(ts_slope(vol_63,6)))",
+  "fhash": "6f6dd002b4287f2b",
+  "sub_train": {
+   "mean_ic": 0.028,
+   "icir": 0.24
+  },
+  "validation": {
+   "mean_ic": 0.072,
+   "icir": 0.71,
+   "decay_pct": -191.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.027,
+    "盤整"
+   ],
+   "2013": [
+    0.042,
+    "多頭"
+   ],
+   "2014": [
+    -0.023,
+    "多頭"
+   ],
+   "2015": [
+    -0.0,
+    "盤整"
+   ],
+   "2016": [
+    0.013,
+    "多頭"
+   ],
+   "2017": [
+    0.107,
+    "多頭"
+   ],
+   "2018": [
+    0.068,
+    "盤整"
+   ],
+   "2019": [
+    0.076,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.047,
+   "down_months": 0.02
+  },
+  "industry_icir": {
+   "電子": 0.43,
+   "生技": 0.39,
+   "半導體": 0.37,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.006,
+   "short_excess_ann": 0.031
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.26,
+  "stage2_max_rho": {
+   "factor": "F-002",
+   "rho": 0.46
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.24 < 0.45"
+ },
+ "diagnosis": "生技限定ICIR預測>0.45，實際0.39略低於自身預測也低於系統門檻；跨年度正IC比例預測≥60%，實際6/8=75%達標；多頭腿報酬預測>0，實際0.006勉強為正但趨近零。訓練期(2014:-0.023, 2015:0.00)明顯拖累整體，2016年後(0.013→0.107→0.068→0.076)持續轉強，驗證期ICIR達0.71，暗示可能是早期樣本雜訊而非機制不存在。",
+ "failure_type": "expression_bad",
+ "lesson": "生技類股早期樣本可能因掛牌數少、流動性差拉低訓練期指標；若近幾年訊號持續增強，應嘗試限制起始年份或加入樣本數/流動性門檻後重估訓練期表現，而非直接依全樣本均值否決假說。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0841",
+ "ts": "2026-08-18T23:46:33"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 21,
+ "category": "short_term_overreaction_reversal",
+ "hypothesis": "短窗（20日）風險調整後動能若異常偏高，多半反映非資訊性訂單失衡與散戶追價的短期過度反應，流動性提供者要求價格補償以承接失衡部位，此過度反應會在下個月內均值回歸，與C-2（長期延續）方向相反、時間尺度不同。",
+ "prediction": "sub-train ICIR>0.45；訊號方向須與C-2相反才能驗證雙時間尺度假說；若平滑後月換手率仍>0.4需降頻處理。",
+ "formula": "cs_rank(neg(sdiv(mom_20, vol_21)))",
+ "name_zh": "短線過熱反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_20",
+   "vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sdiv(mom_20, vol_21)))",
+  "fhash": "ab4fe8d2d4c75c4d",
+  "sub_train": {
+   "mean_ic": 0.01,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": 0.005,
+   "icir": 0.05,
+   "decay_pct": 53.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.039,
+    "盤整"
+   ],
+   "2013": [
+    0.023,
+    "多頭"
+   ],
+   "2014": [
+    0.031,
+    "多頭"
+   ],
+   "2015": [
+    -0.024,
+    "盤整"
+   ],
+   "2016": [
+    0.009,
+    "多頭"
+   ],
+   "2017": [
+    -0.014,
+    "多頭"
+   ],
+   "2018": [
+    0.006,
+    "盤整"
+   ],
+   "2019": [
+    0.005,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.006,
+   "down_months": 0.046
+  },
+  "industry_icir": {
+   "電子": 0.1,
+   "生技": 0.18,
+   "半導體": 0.19,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": -0.013,
+   "short_excess_ann": -0.026
+  },
+  "coverage": 0.99,
+  "turnover_m": 0.79,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測與C-2方向相反以驗證雙時間尺度假說：實際下跌月IC(0.046)確實優於上漲月(-0.006)，方向上與C-2（上漲月優於下跌月）互補，理論上部分支持雙尺度機制。但sub-train ICIR僅0.11、validation 0.05，訊號絕對值太弱，且多空兩腿超額報酬皆為負(-0.013/-0.026)，換手率高達0.79，即便方向邏輯成立也不具可交易性。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "短窗風險調整動能的反轉方向雖與長窗動能(C-2)呈現互補的regime pattern（下跌月訊號較強），部分支持雙時間尺度理論，但20日窗口本身訊號太弱、換手率太高，在台股不具備可交易的過度反應反轉溢酬。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0336",
+ "ts": "2026-07-21T13:38:15"
+}

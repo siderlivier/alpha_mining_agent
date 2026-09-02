@@ -1,0 +1,93 @@
+{
+ "round": 46,
+ "category": "financial_margin_consistency_sharpe",
+ "hypothesis": "金融業淨利率主要受利差與備抵政策影響，波動小的公司代表資產品質與利率風險管理較佳；用淨利率相對其自身12個月波動度標準化的比值，篩選出『賺得穩』而非單純『賺得多』的金控股。分析師多聚焦絕對ROE或EPS數字、忽略經波動調整後的獲利品質，此訊號因此存在系統性低估。",
+ "prediction": "金融產業限定：industry_icir(金融)>0.5；sub-train全市場ICIR>0.4；與F-010相關性<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(sdiv(net_margin, ts_std(net_margin,12)))",
+ "name_zh": "淨利穩定佳金控",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "net_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(net_margin, ts_std(net_margin,12)))",
+  "fhash": "7c3dbd918d321f6f",
+  "sub_train": {
+   "mean_ic": 0.062,
+   "icir": 0.5
+  },
+  "validation": {
+   "mean_ic": 0.094,
+   "icir": 0.85,
+   "decay_pct": -70.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.037,
+    "盤整"
+   ],
+   "2013": [
+    0.035,
+    "多頭"
+   ],
+   "2014": [
+    0.069,
+    "多頭"
+   ],
+   "2015": [
+    0.08,
+    "盤整"
+   ],
+   "2016": [
+    0.08,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.069,
+    "盤整"
+   ],
+   "2019": [
+    0.12,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.073,
+   "down_months": 0.067
+  },
+  "industry_icir": {
+   "電子": 0.6,
+   "生技": 0.55,
+   "半導體": 0.28,
+   "金融": 0.28
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.05
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.12,
+  "stage2_culprit": {
+   "factor": "F-002",
+   "rho": 0.77,
+   "factor_name": "金融品質價值",
+   "factor_desc": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-002 |ρ|=0.77 > 0.5"
+ },
+ "diagnosis": "與C-9同一模式：sub-train 0.50、validation 0.85遠超預測，但與F-002相關性達0.77(比C-9更高)於stage2陣亡；金融industry_icir僅0.28，反而電子(0.60)、生技(0.55)更高，證明是跨產業通用品質效應而非金融業特有。",
+ "failure_type": "duplicate",
+ "lesson": "與C-9同一lesson：sdiv(獲利指標,ts_std(獲利指標,12))與F-002撞庫，兩案例互相印證此構造法已可判定為紅海。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0710",
+ "ts": "2026-08-12T14:41:10"
+}

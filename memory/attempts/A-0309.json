@@ -1,0 +1,84 @@
+{
+ "round": 20,
+ "category": "institutional_divergence",
+ "hypothesis": "外資具備全球比較基準與更完整的資訊蒐集能力，其買賣多反映基本面判斷；投信操作常受季度相對績效排名與作帳壓力驅動，易追價殺低。當外資買超、投信同時賣超（方向分歧）時，代表兩類法人資訊集合不一致，外資的資訊性買盤訊號較不受短期績效壓力污染，故此分歧狀態下的買超訊號更具持續解釋力。",
+ "prediction": "sub-train ICIR > 0.45；多頭腿（分歧值高的一端）年化超額報酬 > 0；下跌月與上漲月IC同號（非regime-dependent）。",
+ "formula": "cs_rank(sub(cs_rank(frgn_net_21), cs_rank(trust_net_21)))",
+ "name_zh": "外資投信分歧",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(cs_rank(frgn_net_21), cs_rank(trust_net_21)))",
+  "fhash": "c25a148448b5bd6e",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.15,
+   "decay_pct": 30.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.002,
+    "多頭"
+   ],
+   "2014": [
+    0.048,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    -0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.035,
+    "盤整"
+   ],
+   "2019": [
+    -0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.019,
+   "down_months": 0.001
+  },
+  "industry_icir": {
+   "電子": 0.06,
+   "生技": 0.03,
+   "半導體": 0.13,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.017,
+   "short_excess_ann": 0.016
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.61,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測sub-train ICIR>0.45，實際僅0.21，落差大；上漲/下跌月同號的預測方向正確(0.019/0.001)但下跌月幾乎無效。最關鍵的落空是多頭腿：預測多頭腿為正，實際long_excess=-1.7%而short_excess=+1.6%，代表外資投信分歧訊號的解釋力其實集中在空頭端，多頭端不可交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "外資投信分歧單靠21日淨買賣額排名差，資訊含量遠低於預期，且效果不對稱地落在空頭端而非多頭端；純法人流量分歧類因子若要再嘗試，應先檢視leg單調性而非只看IC正負。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0309",
+ "ts": "2026-07-21T13:24:55"
+}

@@ -1,0 +1,88 @@
+{
+ "round": 42,
+ "category": "illiquidity_risk_premium",
+ "hypothesis": "流動性風險溢酬理論：股票每單位成交金額所引發的價格衝擊越大，代表壓力時期越難無損出脫，投資人因此系統性要求風險補償，此為結構性定價機制而非單純關注度效應。",
+ "prediction": "sub-train ICIR>0.45；多頭腿(高價格衝擊組)年化超額報酬>0；與F-008、F-020截面相關|ρ|<0.5；下跌月IC應高於上漲月IC。",
+ "formula": "cs_rank(sdiv(abs(mom_20), amt_21))",
+ "name_zh": "流動性風險溢酬",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(abs(mom_20), amt_21))",
+  "fhash": "05f4b2421a41086b",
+  "sub_train": {
+   "mean_ic": -0.01,
+   "icir": -0.1
+  },
+  "validation": {
+   "mean_ic": -0.021,
+   "icir": -0.18,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.015,
+    "盤整"
+   ],
+   "2013": [
+    0.024,
+    "多頭"
+   ],
+   "2014": [
+    0.005,
+    "多頭"
+   ],
+   "2015": [
+    -0.021,
+    "盤整"
+   ],
+   "2016": [
+    -0.023,
+    "多頭"
+   ],
+   "2017": [
+    -0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    -0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.002,
+   "down_months": -0.038
+  },
+  "industry_icir": {
+   "電子": 0.03,
+   "生技": 0.21,
+   "半導體": -0.08,
+   "金融": -0.27
+  },
+  "legs": {
+   "long_excess_ann": 0.052,
+   "short_excess_ann": 0.037
+  },
+  "coverage": 0.99,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測正流動性風險溢酬（ICIR>0.45、下跌月IC高於上漲月）；實際sub-train ICIR為-0.10（方向反了），下跌月IC(-0.038)遠低於上漲月(-0.002)，方向與強度都與預測相反。金融業ICIR-0.27也不支持『結構性風險補償』敘事，此構造較像是在捕捉高波動追價股（已由低波動異常F-005涵蓋）而非流動性溢酬。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "檢驗流動性/風險溢酬假設時，若上漲與下跌月IC同時為負且下跌月更負（而非僅是強度不足），代表機制方向本身跑反，不是表達問題——除非重新設計後方向翻正，否則abs(mom)/amt這類價格衝擊代理不值得再試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0639",
+ "ts": "2026-08-12T09:45:43"
+}

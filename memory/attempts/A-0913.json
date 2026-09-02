@@ -1,0 +1,25 @@
+{
+ "round": 60,
+ "category": "earnings_streak_persistence",
+ "hypothesis": "投資人常僅關注最近一期EPS年增率是否超預期(recency bias)，忽略連續多期正成長所代表的結構性趨勢；EPS連續正成長的「連續期數」本身是市場尚未系統性定價的資訊，因多數篩選器只用單期門檻而非趨勢長度。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；IC應隨streak期數分組單調遞增(top decile優於bottom decile)。",
+ "formula": "cs_rank(streak(greater(eps_yoy,0),12))",
+ "name_zh": "獲利連增動能股",
+ "direction": "pos",
+ "complexity": {
+  "depth": null,
+  "fields": null
+ },
+ "result": {
+  "formula": "cs_rank(streak(greater(eps_yoy,0),12))",
+  "verdict": "rejected_syntax",
+  "reason": "[type_error] streak 的參數型別錯誤（需要 n，得到 b）"
+ },
+ "diagnosis": "streak(greater(eps_yoy,0),12)語法錯誤，streak()需要數值型窗口參數卻收到布林運算結果，假設完全未進入回測階段，無從對照預測。",
+ "failure_type": "expression_bad",
+ "lesson": "streak()運算子不接受greater()產生的布林序列作為輸入；「連續期數」類假設需改用其他方式表達，如ts_sum(greater(x,0),n)計算n窗口內正值月數(強度替代連續性)，或確認DSL是否有專用的連續計數算子再重試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_syntax",
+ "id": "A-0913",
+ "ts": "2026-08-20T08:30:15"
+}

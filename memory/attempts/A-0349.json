@@ -1,0 +1,79 @@
+{
+ "round": 22,
+ "category": "eps_surprise_momentum",
+ "hypothesis": "EPS意外變化相對自身歷史波動標準化後，代表真正超出市場預期的盈餘驚奇程度而非單純高成長；法人需時間逐步調整持倉、散戶對財報反應不足，此post-earnings drift效應在較長窗口下能過濾單季雜訊並延續數月。",
+ "prediction": "sub-train ICIR>0.45；月換手率<0.4；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(delta(eps_yoy,6), ts_std(eps_yoy,24)))",
+ "name_zh": "EPS驚奇動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(delta(eps_yoy,6), ts_std(eps_yoy,24)))",
+  "fhash": "a93a0c94794f3c7a",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": 0.024,
+   "icir": 0.44,
+   "decay_pct": -216.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.0,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    -0.001,
+    "多頭"
+   ],
+   "2017": [
+    0.027,
+    "多頭"
+   ],
+   "2018": [
+    0.03,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.39,
+   "生技": 0.13,
+   "半導體": 0.02,
+   "金融": 0.13
+  },
+  "legs": {
+   "long_excess_ann": 0.023,
+   "short_excess_ann": 0.022
+  },
+  "coverage": 0.6,
+  "turnover_m": 0.31,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.14不到門檻一半，但validation ICIR大幅躍升至0.44(decay為負216%)，多頭腿超額0.023>0與換手率0.31<0.4均命中預測。coverage僅0.6，且ic_by_year從2014年才開始(前兩年因ts_std(eps_yoy,24)需24個月歷史數據無法計算)，代表sub-train樣本被砍掉最早兩年，樣本代表性打折，可能是訓練期表現偏弱的原因之一，而非機制不成立。",
+ "failure_type": "expression_bad",
+ "lesson": "EPS意外動能公式用24個月標準化視窗，大幅犧牲2012-2013訓練樣本(coverage僅0.6)，導致sub-train評估基礎薄弱；同類需長歷史正規化的財務因子，應先評估縮短視窗以增加有效樣本再比較統計顯著性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0349",
+ "ts": "2026-07-21T13:51:27"
+}

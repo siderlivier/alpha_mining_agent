@@ -1,0 +1,87 @@
+{
+ "round": 63,
+ "category": "momentum_persistence_consistency",
+ "hypothesis": "用「連續正報酬月數」(streak)取代動能「幅度」，捕捉買盤持續性而非單次跳空；持續性動能代表資金分批系統性累積部位(如法人buy program)，較單次爆量上漲更不易反轉，市場對「持續但溫和」上漲的關注度低於單次暴漲，導致此訊號被低估。",
+ "prediction": "sub-train ICIR>0.4；與純mom_240、F-005、F-008截面相關|ρ|<0.5。",
+ "formula": "cs_rank(streak(sign(mom_20),6))",
+ "name_zh": "動能持續力股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(streak(sign(mom_20),6))",
+  "fhash": "bd11e1dce24d5050",
+  "sub_train": {
+   "mean_ic": -0.009,
+   "icir": -0.14
+  },
+  "validation": {
+   "mean_ic": -0.008,
+   "icir": -0.13,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    0.02,
+    "盤整"
+   ],
+   "2013": [
+    -0.053,
+    "多頭"
+   ],
+   "2014": [
+    -0.015,
+    "多頭"
+   ],
+   "2015": [
+    0.002,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    0.004,
+    "盤整"
+   ],
+   "2019": [
+    -0.02,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.013,
+   "down_months": 0.001
+  },
+  "industry_icir": {
+   "電子": -0.05,
+   "生技": -0.1,
+   "半導體": -0.09,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.006
+  },
+  "coverage": 0.93,
+  "turnover_m": 0.7,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向為正（持續溫和動能被低估），實際sub-train ICIR -0.14、validation -0.13，符號與預測完全相反，且各年多為負值。『持續但溫和上漲代表資金系統性累積』的機制沒有得到資料支持，同時月換手0.7偏高，即便訊號成立也難以低成本交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "streak(sign(mom_20),6)這類『動能持續性優於幅度』的假設在台股上未獲驗證，反而輕微負向，市場對持續溫和上漲並無系統性低估；後續若要測動能持續性，應先用簡單相關分析確認符號方向，避免預設訊號方向直接進全流程測試。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0965",
+ "ts": "2026-08-27T21:36:00"
+}

@@ -1,0 +1,83 @@
+{
+ "round": 25,
+ "category": "foreign_flow_persistence",
+ "hypothesis": "外資單月買賣超雜訊大，拉長至6個月平滑可過濾短期雜訊、僅保留具信念的持續建倉行為；外資機構為避免price impact需分批進場，此持續加碼對後續報酬有正向預測力，訊號應優於原始21日淨買超版本。",
+ "prediction": "sub-train ICIR > 0.45(優於過去21日/60日窗口版本的0.13-0.27)；多頭腿超額報酬 > 0。",
+ "formula": "cs_rank(ts_mean(frgn_net_21,6))",
+ "name_zh": "外資持續吸籌",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(frgn_net_21,6))",
+  "fhash": "ddd3f7839e6e8fcb",
+  "sub_train": {
+   "mean_ic": 0.008,
+   "icir": 0.11
+  },
+  "validation": {
+   "mean_ic": -0.012,
+   "icir": -0.17,
+   "decay_pct": 252.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    -0.001,
+    "多頭"
+   ],
+   "2015": [
+    0.036,
+    "盤整"
+   ],
+   "2016": [
+    -0.004,
+    "多頭"
+   ],
+   "2017": [
+    -0.01,
+    "多頭"
+   ],
+   "2018": [
+    -0.031,
+    "盤整"
+   ],
+   "2019": [
+    0.008,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.004,
+   "down_months": -0.003
+  },
+  "industry_icir": {
+   "電子": 0.2,
+   "生技": 0.13,
+   "半導體": -0.06,
+   "金融": -0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.006,
+   "short_excess_ann": 0.029
+  },
+  "coverage": 0.76,
+  "turnover_m": 0.2,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測拉長平滑窗至6個月會優於既有21/60日版本(0.13-0.27)，實際sub-train ICIR僅0.11，反而比既有版本更差；validation進一步翻負(-0.17，衰減252%)，『降噪=更好』的假設被證偽。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "見全域規則新增：平滑窗口非萬能。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0397",
+ "ts": "2026-07-28T18:41:52"
+}

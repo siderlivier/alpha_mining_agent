@@ -1,0 +1,88 @@
+{
+ "round": 20,
+ "category": "retail_institutional_short_divergence",
+ "hypothesis": "借券活動代表機構法人透過證券商借券放空或避險的相對知情行為；融券餘額主要由散戶投機操作，帶有較高雜訊與軋空風險。當借券量相對融券餘額比率異常偏高，代表空方壓力主要來自機構知情放空；反之比率偏低時，空方壓力主要是散戶雜訊性放空，股價下檔動能較弱、後續較易反彈。",
+ "prediction": "sub-train ICIR > 0.45（direction=neg）；多頭腿（比值低的一端）年化超額報酬 > 0；月換手率 < 0.45。",
+ "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+ "name_zh": "借券融券背離",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(lend_vol_21, short_margin_ratio))",
+  "fhash": "ec7f5f8e3d40146e",
+  "sub_train": {
+   "mean_ic": 0.038,
+   "icir": 0.32
+  },
+  "validation": {
+   "mean_ic": 0.031,
+   "icir": 0.26,
+   "decay_pct": 19.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.069,
+    "盤整"
+   ],
+   "2013": [
+    0.04,
+    "多頭"
+   ],
+   "2014": [
+    0.028,
+    "多頭"
+   ],
+   "2015": [
+    0.015,
+    "盤整"
+   ],
+   "2016": [
+    0.021,
+    "多頭"
+   ],
+   "2017": [
+    0.055,
+    "多頭"
+   ],
+   "2018": [
+    0.041,
+    "盤整"
+   ],
+   "2019": [
+    0.021,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.039,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.2,
+   "半導體": 0.18,
+   "金融": 0.03
+  },
+  "legs": {
+   "long_excess_ann": 0.042,
+   "short_excess_ann": 0.036
+  },
+  "coverage": 0.43,
+  "turnover_m": 0.48,
+  "verdict": "rejected_stage1",
+  "reason": "IC 方向(+)與假設宣稱(neg)相反——假設與證據不一致，可提出反向假設重新提交"
+ },
+ "diagnosis": "預測方向為neg(借券主導=知情放空=未來報酬低)，但實際IC穩定為正(sub0.038/val0.031，decay僅19%，是本輪少見的穩定案例)，即高借券融券比率端未來報酬反而較高，方向完全反了。推測借券活動未必等於知情放空，可能混雜避險/套利/ETF創設等借券動機，這些動機往往伴隨流動性佳、動能強的標的。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "借券量不能簡單等同於『知情空頭』訊號；本次証據顯示同一公式反向(高借券融券比端)有穩定小幅正IC且decay低，值得直接以相反方向(direction=pos)重新提交，而非放棄整個construct。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0311",
+ "ts": "2026-07-21T13:24:55"
+}

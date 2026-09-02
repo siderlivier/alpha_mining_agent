@@ -1,0 +1,92 @@
+{
+ "round": 39,
+ "category": "pullback_within_uptrend",
+ "hypothesis": "半年期動能強勁但近一個月出現價格回檔的股票，代表主升段中的健康換手整理而非趨勢反轉；短線交易者容易將任何回檔誤判為趨勢結束而過度賣出，造成『回檔即賣壓』的過度反應，這類股票整理後往往恢復原有中期上升趨勢。",
+ "prediction": "sub-train ICIR>0.45；多頭腿年化超額報酬>0；與F-005/F-018(低波動家族)相關性<0.5；月換手率<0.4",
+ "formula": "mul(cs_rank(mom_120),cs_rank(neg(mom_20)))",
+ "name_zh": "多頭健康回檔",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "mom_120",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(mom_120),cs_rank(neg(mom_20)))",
+  "fhash": "b40a056ae4ea2e52",
+  "sub_train": {
+   "mean_ic": 0.024,
+   "icir": 0.26
+  },
+  "validation": {
+   "mean_ic": 0.055,
+   "icir": 0.66,
+   "decay_pct": -154.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.018,
+    "盤整"
+   ],
+   "2013": [
+    0.032,
+    "多頭"
+   ],
+   "2014": [
+    0.027,
+    "多頭"
+   ],
+   "2015": [
+    -0.005,
+    "盤整"
+   ],
+   "2016": [
+    0.046,
+    "多頭"
+   ],
+   "2017": [
+    0.025,
+    "多頭"
+   ],
+   "2018": [
+    0.043,
+    "盤整"
+   ],
+   "2019": [
+    0.066,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.031,
+   "down_months": 0.036
+  },
+  "industry_icir": {
+   "電子": 0.46,
+   "生技": 0.42,
+   "半導體": 0.26,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": 0.027
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.66,
+  "stage2_max_rho": {
+   "factor": "F-016",
+   "rho": 0.23
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.26 < 0.45; 月換手 0.66 > 0.4"
+ },
+ "diagnosis": "預測ICIR>0.45，sub-train僅0.26不達標，但validation大幅轉強至0.66(decay -154%)，與C-6同樣呈現「訓練期弱、驗證期強」的時期依賴模式；另外月換手率0.66遠超0.4門檻，即便訊號有效也因交易成本過高而難以實作。與低波動因子相關性符合預測(0.23<0.5)。",
+ "failure_type": "expression_bad",
+ "lesson": "訊號本身可能有效(驗證期強)，但目前mom_120 x neg(mom_20)排序換手過高；應先加入平滑降低換手率，才能判斷是表達問題還是真的不可交易。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0601",
+ "ts": "2026-08-12T09:06:34"
+}

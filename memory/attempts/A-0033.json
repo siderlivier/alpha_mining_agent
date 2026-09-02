@@ -1,0 +1,87 @@
+{
+ "round": 1,
+ "category": "short_term_reversal",
+ "hypothesis": "台股當沖與融資券交易活躍，20日內的短期價格波動常反映流動性提供者的暫時性庫存效應與過度反應，而非基本面訊息，因此隔月容易出現技術性均值回歸。",
+ "prediction": "產業內rank IC為負，sub-train ICIR<-0.3；下跌月的負IC應強於上漲月（賣壓過度反應後的回補效應更明顯）。",
+ "formula": "cs_rank(mom_20)",
+ "name_zh": "短線動能反轉",
+ "direction": "neg",
+ "complexity": {
+  "depth": 1,
+  "fields": [
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(mom_20)",
+  "fhash": "a5bc626bdf40c707",
+  "sub_train": {
+   "mean_ic": -0.021,
+   "icir": -0.2
+  },
+  "validation": {
+   "mean_ic": -0.02,
+   "icir": -0.16,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.058,
+    "盤整"
+   ],
+   "2013": [
+    -0.041,
+    "多頭"
+   ],
+   "2014": [
+    -0.042,
+    "多頭"
+   ],
+   "2015": [
+    0.03,
+    "盤整"
+   ],
+   "2016": [
+    -0.018,
+    "多頭"
+   ],
+   "2017": [
+    0.002,
+    "多頭"
+   ],
+   "2018": [
+    -0.021,
+    "盤整"
+   ],
+   "2019": [
+    -0.019,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.008,
+   "down_months": -0.049
+  },
+  "industry_icir": {
+   "電子": -0.17,
+   "生技": -0.21,
+   "半導體": -0.23,
+   "金融": -0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.008,
+   "short_excess_ann": 0.004
+  },
+  "coverage": 0.99,
+  "turnover_m": 0.75,
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR -0.2 < 0.45; validation ICIR -0.16 < 0.3; 月換手 0.75 > 0.4"
+ },
+ "diagnosis": "下跌月效應強於上漲月符合預測(-0.049 vs -0.008)，但整體強度遠低於預測門檻(sub-train ICIR -0.20 < -0.3)，且月換手高達0.75，兩腿超額報酬皆接近零(0.008/0.004)，顯示即使方向正確，短線反轉在台股扣除交易成本後已無實際可交易的超額報酬。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "台股20日短線反轉訊號強度不足以覆蓋高換手成本，此類短窗反轉假設除非搭配降頻或流動性篩選，否則預期會反覆落入「弱且高換手」失敗模式。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0033",
+ "ts": "2026-07-18T21:37:41"
+}

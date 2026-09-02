@@ -1,0 +1,84 @@
+{
+ "round": 35,
+ "category": "distressed_quality_reversion",
+ "hypothesis": "股價遠低於52週高點但ROE仍維持正常水準的公司，代表股價下跌可能是系統性恐慌或產業輪動導致的錯殺，而非基本面惡化；動能追蹤資金與散戶因錨定近期弱勢價格而過度看空，忽略獲利能力並未同步惡化的事實，形成反轉機會。",
+ "prediction": "sub-train ICIR>0.45；下跌月IC應顯著高於上漲月IC（逆勢特性）；多頭腿年化超額>0。",
+ "formula": "mul(cs_rank(neg(px_hi252)), cs_rank(roe))",
+ "name_zh": "錯殺績優股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "px_hi252",
+   "roe"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(px_hi252)), cs_rank(roe))",
+  "fhash": "68b015b0b809ddcf",
+  "sub_train": {
+   "mean_ic": 0.002,
+   "icir": 0.03
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.02,
+   "decay_pct": 153.0
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.005,
+    "多頭"
+   ],
+   "2015": [
+    0.025,
+    "盤整"
+   ],
+   "2016": [
+    0.028,
+    "多頭"
+   ],
+   "2017": [
+    -0.012,
+    "多頭"
+   ],
+   "2018": [
+    -0.021,
+    "盤整"
+   ],
+   "2019": [
+    0.018,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.012,
+   "down_months": 0.031
+  },
+  "industry_icir": {
+   "電子": -0.08,
+   "生技": 0.03,
+   "半導體": 0.08,
+   "金融": -0.02
+  },
+  "legs": {
+   "long_excess_ann": -0.05,
+   "short_excess_ann": -0.027
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.26,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.03接近零。cond_ic方向部分符合預測(下跌月0.031>上漲月-0.012，逆勢特性存在)，但整體訊號太弱且雙腿超額皆為負(long -0.05, short -0.027)，代表此因子完全不可交易。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "「股價遠低於高點+ROE正常」的錯殺假說在條件IC上方向正確(逆勢特性確實存在)，但強度不足以形成可交易訊號，可能需要更嚴格的品質篩選(如ROE絕對門檻而非cs_rank相對值)才能放大訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0542",
+ "ts": "2026-07-30T00:34:10"
+}

@@ -1,0 +1,84 @@
+{
+ "round": 21,
+ "category": "institutional_flow_divergence",
+ "hypothesis": "外資研究資源與長線視角較強，投信申贖壓力常驅動短視追漲殺跌；當兩者同月出現「外資買、投信賣」的方向分歧，代表外資的資訊性買盤尚未被市場定價，而投信賣壓多為資金流雜訊，此分歧將在後續1-2個月內隨市場消化外資訊息而收斂為正報酬。",
+ "prediction": "sub-train ICIR>0.45；電子與半導體產業（外資覆蓋度高）industry_icir應顯著高於金融與生技；多頭腿（分歧為正的一端）年化超額報酬須>0，月換手率<0.4。",
+ "formula": "sub(cs_rank(frgn_net_21), cs_rank(trust_net_21))",
+ "name_zh": "外資背離投信",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "frgn_net_21",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "sub(cs_rank(frgn_net_21), cs_rank(trust_net_21))",
+  "fhash": "6b324e88136c2802",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.15,
+   "decay_pct": 30.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.002,
+    "多頭"
+   ],
+   "2014": [
+    0.048,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    -0.003,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    0.035,
+    "盤整"
+   ],
+   "2019": [
+    -0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.019,
+   "down_months": 0.001
+  },
+  "industry_icir": {
+   "電子": 0.06,
+   "生技": 0.03,
+   "半導體": 0.13,
+   "金融": 0.14
+  },
+  "legs": {
+   "long_excess_ann": -0.019,
+   "short_excess_ann": 0.014
+  },
+  "coverage": 0.79,
+  "turnover_m": 0.61,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測「電子/半導體 industry_icir 應顯著高於金融/生技」與實際相反：金融0.14、半導體0.13 最高，電子僅0.06，生技0.03。多頭腿（外資買/投信賣分歧）年化超額報酬為負(-0.019)，與「分歧將收斂為正報酬」的核心機制直接矛盾。sub-train ICIR僅0.21，遠低於0.45門檻。整體看不是表達問題，是外資資訊優勢在此分歧構造下根本不存在。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "法人資金流「背離」型因子（外資買-投信賣）訊號太弱且無電子/半導體集中效應；多頭腿還倒虧，顯示外資買盤未必比投信賣壓更具資訊性。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0324",
+ "ts": "2026-07-21T13:38:15"
+}

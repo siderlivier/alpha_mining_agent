@@ -1,0 +1,84 @@
+{
+ "round": 28,
+ "category": "earnings_quality_composition_bias",
+ "hypothesis": "當EPS年增率遠高於營業利益年增率時，獲利成長主要來自業外一次性項目(處分利益、匯兌、業外投資)而非本業；散戶對頭條EPS成長數字有功能性固著(functional fixation)，容易錯誤外推為持續性成長，之後隨業外效應消退而修正走弱。避開此類個股、傾向本業與帳面成長一致的公司應能獲得正超額報酬。",
+ "prediction": "sub-train ICIR>0.4；多頭腿(gap小/本業成長為主的公司)年化超額報酬>0；下跌月IC應高於上漲月IC(業外灌水股在市場轉弱時修正更明顯)。",
+ "formula": "cs_rank(neg(sub(eps_yoy, op_income_yoy)))",
+ "name_zh": "業外灌水警訊",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "eps_yoy",
+   "op_income_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(sub(eps_yoy, op_income_yoy)))",
+  "fhash": "63869bce533b668f",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.04,
+   "icir": -0.55,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.034,
+    "多頭"
+   ],
+   "2014": [
+    -0.02,
+    "多頭"
+   ],
+   "2015": [
+    0.022,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.008,
+    "多頭"
+   ],
+   "2018": [
+    -0.027,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.017,
+   "down_months": -0.012
+  },
+  "industry_icir": {
+   "電子": -0.09,
+   "生技": -0.06,
+   "半導體": -0.03,
+   "金融": -0.19
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": -0.014
+  },
+  "coverage": 0.75,
+  "turnover_m": 0.24,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.4，sub-train僅-0.06接近零，但validation轉為明顯負值(-0.55)，方向與假設(避開業外灌水股應獲正超額)相反且驗證期更強烈，顯示'業外灌水股後續修正走弱'的邏輯本身可能顛倒——EPS遠高於本業成長的公司驗證期反而續強。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『散戶對頭條EPS數字功能性固著』這類行為財務學敘事在此案例的驗證期方向與假設相反，顯示對於EPS/營業利益成長缺口，市場可能存在動能延續而非事後修正的傾向，需與C-13(生技授權驚喜，同樣用eps_yoy-rev_yoy缺口但方向相反)對照——兩案例分屬全市場vs生技產業，方向剛好相反，說明此類缺口指標的解讀高度依賴產業脈絡，不能全市場一概而論。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0439",
+ "ts": "2026-07-28T19:19:09"
+}

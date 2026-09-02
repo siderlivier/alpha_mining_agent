@@ -1,0 +1,89 @@
+{
+ "round": 63,
+ "category": "biotech_margin_revenue_quality",
+ "hypothesis": "生技股毛利率「加速改善」(delta)比毛利率「絕對水準」更能代表商業化進度真正跨過門檻；搭配當期營收成長，代表產品放量非單一季財報美化。市場對生技股定價多依賴管線新聞而非財務結構性轉折，導致此類訊號被低估（生技限定）。",
+ "prediction": "生技限定ICIR>0.45；與F-011(cs_rank(gross_margin)×cs_rank(rev_yoy))截面相關|ρ|<0.5(前次同構型因子ρ=0.66過高，本次以delta取代level應可降低)。",
+ "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(rev_yoy))",
+ "name_zh": "生技毛利加速股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(rev_yoy))",
+  "fhash": "26a7efaaf65a3f6c",
+  "sub_train": {
+   "mean_ic": 0.066,
+   "icir": 1.01
+  },
+  "validation": {
+   "mean_ic": 0.032,
+   "icir": 0.44,
+   "decay_pct": 56.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.081,
+    "多頭"
+   ],
+   "2015": [
+    0.074,
+    "盤整"
+   ],
+   "2016": [
+    0.067,
+    "多頭"
+   ],
+   "2017": [
+    0.067,
+    "多頭"
+   ],
+   "2018": [
+    0.015,
+    "盤整"
+   ],
+   "2019": [
+    0.049,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.057,
+   "down_months": 0.055
+  },
+  "industry_icir": {
+   "電子": 0.83,
+   "生技": 0.55,
+   "半導體": 0.42
+  },
+  "legs": {
+   "long_excess_ann": 0.102,
+   "short_excess_ann": 0.083
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.41,
+  "stage2_culprit": {
+   "factor": "F-011",
+   "rho": 0.59,
+   "factor_name": "生技轉骨訊號",
+   "factor_desc": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-011 |ρ|=0.59 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 1.01大幅超越預測>0.45，但validation衰減56%到0.44，已逼近過擬合警戒線。預測『用delta取代level可把與F-011的相關性壓到<0.5』只部分兌現：相關性從前次同構因子的0.66降到0.59，方向對但幅度不夠，仍越過紅線被拒。",
+ "failure_type": "duplicate",
+ "lesson": "把『水準值』換成『變化量(delta)』只能小幅降低與既有因子的相關性（本例約降0.07），不足以逃脫重疊判定；要真正區隔需要換掉共用的核心欄位（如rev_yoy），而不只是換算子。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0956",
+ "ts": "2026-08-27T21:36:00"
+}

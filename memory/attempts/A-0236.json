@@ -1,0 +1,93 @@
+{
+ "round": 15,
+ "category": "securities_lending_informed_signal",
+ "hypothesis": "傳統敘事認為高借券量代表放空壓力（利空），但過去實驗顯示以摩擦造成延續空頭的假說在台股經驗上常反轉；借券活動事實上多來自法人的避險/套利策略（如可轉債避險、期現套利），高借券量代表機構關注度與資訊處理密度高，是聰明錢介入的訊號而非單純看空，其後續報酬應優於借券冷清、乏人問津的個股。",
+ "prediction": "sub-train ICIR > 0.4（新方向，門檻放寬）；全池IC方向為正；至少2個產業cond_ic為正；月換手率 < 0.4。",
+ "formula": "cs_rank(ts_mean(lend_vol_21,3))",
+ "name_zh": "借券關注度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "lend_vol_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_mean(lend_vol_21,3))",
+  "fhash": "5e6c72e89cafe4e1",
+  "sub_train": {
+   "mean_ic": 0.022,
+   "icir": 0.21
+  },
+  "validation": {
+   "mean_ic": 0.054,
+   "icir": 0.54,
+   "decay_pct": -154.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.046,
+    "盤整"
+   ],
+   "2013": [
+    0.027,
+    "多頭"
+   ],
+   "2014": [
+    0.016,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.014,
+    "多頭"
+   ],
+   "2017": [
+    0.015,
+    "多頭"
+   ],
+   "2018": [
+    0.079,
+    "盤整"
+   ],
+   "2019": [
+    0.03,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.045,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": 0.42,
+   "生技": 0.29,
+   "半導體": 0.19,
+   "金融": -0.11
+  },
+  "legs": {
+   "long_excess_ann": 0.023,
+   "short_excess_ann": 0.046
+  },
+  "coverage": 0.53,
+  "turnover_m": 0.19,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.57,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.57 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR僅0.21未達預測0.4門檻，且因與F-008(低調接近新高)相關係數0.57在stage2先被淘汰。借券量代理「法人關注度」與F-008「價格接近新高但周轉率不高」的邏輯高度重疊，並非獨立訊號來源。",
+ "failure_type": "duplicate",
+ "lesson": "借券量作為「聰明錢關注度」代理與既有周轉率/新高型態因子(F-008)本質重疊；借券/融資融券類籌碼指標若未先與F-008系列正交化，容易被判重複。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0236",
+ "ts": "2026-07-21T12:24:47"
+}

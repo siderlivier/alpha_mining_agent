@@ -1,0 +1,84 @@
+{
+ "round": 52,
+ "category": "trust_flow_smallcap_revenue_confirmation/生技限定",
+ "hypothesis": "投信法人相較外資更聚焦中小型與生技類股，其買超行為隱含對營收數據的即時解讀能力；生技股外資覆蓋率低、資訊傳遞慢，當投信近期買超增加且營收月增率同步轉強，代表法人資訊優勢尚未被市場充分驗證定價，此機制與F-017(外資×電子供應鏈營收)互補而非重複。",
+ "prediction": "sub-train ICIR>0.45(生技產業子樣本)；industry_icir(生技)高於其餘三產業；多頭腿年化超額>0",
+ "formula": "mul(cs_rank(ts_mean(trust_net_21,3)), cs_rank(rev_mom))",
+ "name_zh": "投信認證營收",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(ts_mean(trust_net_21,3)), cs_rank(rev_mom))",
+  "fhash": "2f0c7987ffa84b47",
+  "sub_train": {
+   "mean_ic": -0.005,
+   "icir": -0.08
+  },
+  "validation": {
+   "mean_ic": 0.004,
+   "icir": 0.06,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.009,
+    "多頭"
+   ],
+   "2014": [
+    -0.009,
+    "多頭"
+   ],
+   "2015": [
+    -0.01,
+    "盤整"
+   ],
+   "2016": [
+    -0.006,
+    "多頭"
+   ],
+   "2017": [
+    0.006,
+    "多頭"
+   ],
+   "2018": [
+    0.01,
+    "盤整"
+   ],
+   "2019": [
+    -0.002,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.001,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": 0.08,
+   "生技": -0.13,
+   "半導體": -0.04,
+   "金融": 0.02
+  },
+  "legs": {
+   "long_excess_ann": 0.025,
+   "short_excess_ann": 0.023
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.76,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測『生技子樣本industry_icir最高』完全被推翻：整體sub-train IC為負(-0.08)，且生技產業別ICIR是四產業中最差的(-0.13)，正好與假設宣稱的機制方向相反。投信資訊優勢在生技股上沒有任何證據支持。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "『投信買超x營收動能』組合缺乏基礎alpha，且恰好在假設宣稱最強的生技子樣本表現最差——之後測試『法人類型x產業專精』假說時，應先看industry_icir是否真的在目標產業最強，而非只看整體覆蓋率。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0792",
+ "ts": "2026-08-14T01:18:09"
+}

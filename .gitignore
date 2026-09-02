@@ -1,0 +1,44 @@
+# ── 機密 ────────────────────────────────────────────────
+.env
+*.key
+*.token
+
+# ── 大型資料檔 ──────────────────────────────────────────
+# 這些都能從前置專案的 panel.parquet 重新產生，不進版控。
+# ⚠️ memory/ 底下的 JSON 與 markdown **要**進版控——那是 agent 的記憶，
+#    是這個專案的核心資產；只有 factor_values.parquet 因為 37MB 而排除。
+data/*.parquet
+memory/factor_values.parquet
+*.h5
+*.hdf5
+
+# 重建方式見 README「首次設定」：
+#   data/monthly_base.parquet   ← python src/build_base.py
+#   data/dfs_snapshot.parquet   ← python src/seed_reference.py --apply
+#   memory/factor_values.parquet ← 同上（會一併重建 R-xxx 的值）
+
+# ── 執行產物 ────────────────────────────────────────────
+*.log
+changes.diff
+memory/report.html
+memory/consolidate_raw/
+memory/llm_raw/
+
+# ── Python ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+*.egg-info/
+
+# ── 編輯器與系統 ────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ── 個人備份 ────────────────────────────────────────────
+備用/
+python

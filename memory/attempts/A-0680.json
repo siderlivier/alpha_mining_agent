@@ -1,0 +1,90 @@
+{
+ "round": 44,
+ "category": "quality_filtered_short_reversal",
+ "hypothesis": "短期價格反轉（mom_20逆勢操作）在全市場中效果混雜，因為包含大量財報體質差的投機股，其短期下跌可能反映真實基本面惡化而非過度反應；但限定在低應計項（盈餘品質佳）的股票中，短期急跌更可能是流動性衝擊或情緒性拋售造成的過度反應，因此品質篩選後的反轉訊號應更純粹可靠。",
+ "prediction": "sub-train ICIR > 0.45；pos方向；下跌月IC應顯著高於上漲月（反轉特徵）；此訊號應與單獨neg(mom_20)或F-006（neg accruals）相關性 < 0.7 顯示交乘後有增量訊號。",
+ "formula": "mul(cs_rank(neg(mom_20)), cs_rank(neg(accruals)))",
+ "name_zh": "品質反轉股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "accruals",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(neg(mom_20)), cs_rank(neg(accruals)))",
+  "fhash": "8cd454d0f6372f25",
+  "sub_train": {
+   "mean_ic": 0.031,
+   "icir": 0.46
+  },
+  "validation": {
+   "mean_ic": 0.039,
+   "icir": 0.43,
+   "decay_pct": 8.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.041,
+    "多頭"
+   ],
+   "2014": [
+    0.053,
+    "多頭"
+   ],
+   "2015": [
+    0.025,
+    "盤整"
+   ],
+   "2016": [
+    0.02,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.038,
+    "盤整"
+   ],
+   "2019": [
+    0.041,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.046
+  },
+  "industry_icir": {
+   "電子": 0.36,
+   "生技": 0.43,
+   "半導體": 0.4,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": -0.001,
+   "short_excess_ann": 0.003
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.61,
+  "stage2_culprit": {
+   "factor": "F-021",
+   "rho": 0.53,
+   "factor_name": "保守增提金控",
+   "factor_desc": "淨值便宜又保守提列準備金的金融股，代表資產品質紮實但被誤讀為獲利疲弱。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-021 |ρ|=0.53 > 0.5"
+ },
+ "diagnosis": "預測應與neg(mom_20)或F-006(neg accruals)相關性<0.7以證明交乘後有增量訊號。實際stage2揪出的是F-021(保守增提金控，ρ0.53)，一個看似不相關的金融子產業因子，顯示『低應計』這個品質維度本身就跟金融股的保守提列準備金概念高度共通，交叉相關性來自accruals這個分量而非mom_20。此外多頭腿超額幾乎為零(-0.001)，即使沒被stage2擋下，也大機率在stage4因不可交易被拒。",
+ "failure_type": "duplicate",
+ "lesson": "低應計(accruals)類品質因子容易與金融產業特定的『保守提列』因子重疊，因為兩者本質都在捕捉『盈餘/準備金的保守/穩健程度』；未來测accruals相關交乘因子時應把庫內所有quality/accruals語意的因子(不限產業)都納入預先比對名單。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0680",
+ "ts": "2026-08-12T14:15:12"
+}

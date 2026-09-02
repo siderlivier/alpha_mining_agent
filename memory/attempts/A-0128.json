@@ -1,0 +1,83 @@
+{
+ "round": 7,
+ "category": "valuation_yield_trend",
+ "hypothesis": "營收市值比(S/P)相對自身兩年中位數上升，若是由營收成長而非股價下跌驅動，代表公司賣得更多但市值還沒跟上，市場尚未把營收成長重新定價進股價，形成類似ROE趨勢因子(F-001)但作用於估值面的認知滯後。",
+ "prediction": "sub-train 產業內 ICIR>0.45；且與F-003(sp×sign rev_yoy)截面相關係數|ρ|<0.5，確認趨勢表達與既有水準×方向組合因子不重複。",
+ "formula": "cs_rank(sub(sp,ts_med(sp,12)))",
+ "name_zh": "營收市值比轉強",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "sp"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(sp,ts_med(sp,12)))",
+  "fhash": "4d0bce27fa6f83d0",
+  "sub_train": {
+   "mean_ic": 0.016,
+   "icir": 0.14
+  },
+  "validation": {
+   "mean_ic": -0.019,
+   "icir": -0.15,
+   "decay_pct": 209.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.048,
+    "多頭"
+   ],
+   "2015": [
+    0.005,
+    "盤整"
+   ],
+   "2016": [
+    -0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.017,
+    "多頭"
+   ],
+   "2018": [
+    0.014,
+    "盤整"
+   ],
+   "2019": [
+    -0.053,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.005,
+   "down_months": 0.027
+  },
+  "industry_icir": {
+   "電子": 0.2,
+   "生技": 0.05,
+   "半導體": 0.17,
+   "金融": -0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.025,
+   "short_excess_ann": -0.026
+  },
+  "coverage": 0.7,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR>0.45且與F-003區隔；相關性未及驗證(stage1即淘汰)。實際sub-train ICIR僅0.14偏弱，validation翻負(-0.15，decay209%)，cond_ic方向也反轉(上漲月-0.005、下跌月0.027，與典型估值因子相反)。S/P估值認知滯後假說完全未獲支持，且與C-9、C-11同屬'把ROE趨勢構造套用到其他財務指標'的模式，三者全數失敗。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "把ROE趨勢(F-001)的slope/差值構造套用到op_margin、ocf_ratio、sp等其他財務比率上，本輪三次嘗試(C-9、C-11、C-15)全數失敗(雜訊/與F-001重疊/樣本外反轉)，換指標做趨勢化不是可靠的因子擴增手法。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0128",
+ "ts": "2026-07-19T17:59:13"
+}

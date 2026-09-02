@@ -1,0 +1,94 @@
+{
+ "round": 56,
+ "category": "overlooked_profitability_liquidity",
+ "hypothesis": "機構投資人以成交金額作為流動性篩選門檻，本業獲利率高但成交金額低的公司容易被大型基金的篩選器排除在研究覆蓋之外；散戶又缺乏解讀本業獲利品質的能力，導致資訊傳遞緩慢，股價需數月才修正。以ts_mean(amt_21,3)取代單月amt_21以降低月度雜訊換手。",
+ "prediction": "sub-train ICIR>0.45；多頭腿（比值最高端）年化超額報酬>0；月均換手率低於未平滑版本（<0.4）。",
+ "formula": "cs_rank(sdiv(op_margin, ts_mean(amt_21,3)))",
+ "name_zh": "冷門獲利比",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(op_margin, ts_mean(amt_21,3)))",
+  "fhash": "a432114d60ff3490",
+  "sub_train": {
+   "mean_ic": 0.066,
+   "icir": 0.5
+  },
+  "validation": {
+   "mean_ic": 0.101,
+   "icir": 0.88,
+   "decay_pct": -77.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.06,
+    "盤整"
+   ],
+   "2013": [
+    0.072,
+    "多頭"
+   ],
+   "2014": [
+    0.047,
+    "多頭"
+   ],
+   "2015": [
+    0.086,
+    "盤整"
+   ],
+   "2016": [
+    0.068,
+    "多頭"
+   ],
+   "2017": [
+    0.059,
+    "多頭"
+   ],
+   "2018": [
+    0.103,
+    "盤整"
+   ],
+   "2019": [
+    0.1,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.081,
+   "down_months": 0.06
+  },
+  "industry_icir": {
+   "電子": 0.74,
+   "生技": 0.51,
+   "半導體": 0.37,
+   "金融": 0.24
+  },
+  "legs": {
+   "long_excess_ann": 0.067,
+   "short_excess_ann": 0.021
+  },
+  "coverage": 0.87,
+  "turnover_m": 0.15,
+  "stage2_culprit": {
+   "factor": "F-020",
+   "rho": 0.85,
+   "factor_name": "冷門獲利股",
+   "factor_desc": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-020 |ρ|=0.85 > 0.5"
+ },
+ "diagnosis": "預測 sub-train ICIR>0.45 命中（實際0.5），換手率0.15亦低於門檻，方法論假設本身表現良好；但用ts_mean(amt_21,3)取代單月amt_21只是對同一分母做降噪平滑，未改變因子的本質輸入，故仍與F-020「冷門獲利股」高度相關（ρ=0.85）而在stage2陣亡。",
+ "failure_type": "duplicate",
+ "lesson": "對既有因子的分母做時間平滑（降雜訊）不足以逃脫與該因子的高相關性，需改用結構不同的機制或完全不同的關注度代理變數才有機會通過相關性檢查。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0849",
+ "ts": "2026-08-18T23:55:52"
+}

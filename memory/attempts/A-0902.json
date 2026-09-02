@@ -1,0 +1,83 @@
+{
+ "round": 59,
+ "category": "revenue_signal_to_noise_ratio",
+ "hypothesis": "同樣幅度的單月營收成長，對歷史營收穩定的公司而言是顯著訊號，對歷史本就大起大落的公司而言只是雜訊；市場未做這種依公司自身波動基準調整的處理，一律等同看待，導致經波動度標準化後的營收動能（訊噪比）比原始營收動能更能篩出真正被低估的加速成長股。",
+ "prediction": "sub-train ICIR > 0.4；與F-007相關性|ρ|<0.5；多頭腿年化超額>0。",
+ "formula": "cs_rank(sdiv(rev_mom,ts_std(rev_mom,24)))",
+ "name_zh": "營收訊噪比高股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "rev_mom"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(rev_mom,ts_std(rev_mom,24)))",
+  "fhash": "55a3f4c52cdad4dc",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.07
+  },
+  "validation": {
+   "mean_ic": 0.018,
+   "icir": 0.38,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2013": [
+    -0.024,
+    "多頭"
+   ],
+   "2014": [
+    -0.014,
+    "多頭"
+   ],
+   "2015": [
+    -0.012,
+    "盤整"
+   ],
+   "2016": [
+    0.012,
+    "多頭"
+   ],
+   "2017": [
+    0.011,
+    "多頭"
+   ],
+   "2018": [
+    0.019,
+    "盤整"
+   ],
+   "2019": [
+    0.017,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.006,
+   "down_months": -0.006
+  },
+  "industry_icir": {
+   "電子": -0.01,
+   "生技": -0.17,
+   "半導體": 0.07,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.007,
+   "short_excess_ann": 0.013
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.87,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR為-0.07，與validation(0.38)方向相反，decay無法計算，顯示樣本內外正負不一致，是典型不穩定訊號而非被驗證的效果；用24期波動度標準化營收動能，對長期營收穩定的股票分母趨近於零，可能放大極端值造成不穩定，符合『訊噪比』構想本身合理但實作不穩健的情況。",
+ "failure_type": "expression_bad",
+ "lesson": "以rolling std做分母的標準化在低波動股票上容易產生極端比值，需要下限保護或改用其他穩健標準化方式（如winsorize後再rank），單純sdiv不足以避免此問題。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0902",
+ "ts": "2026-08-19T10:08:40"
+}

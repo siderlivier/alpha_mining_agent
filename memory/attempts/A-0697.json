@@ -1,0 +1,88 @@
+{
+ "round": 45,
+ "category": "value_liquidity_reawakening",
+ "hypothesis": "淨值便宜（高B/P）的股票需要交易關注度回升（半年成交金額增加）才會被市場重新發現並修正評價；深度價值股常年乏人問津，唯有流動性拐點出現、機構或量化篩選器開始注意到時，價值重估催化劑才會啟動，此拐點因不易預測而被市場滯後定價。",
+ "prediction": "sub-train ICIR>0.4；多頭腿年化超額報酬>0；月換手率<0.4；與F-008/F-020相關性|ρ|<0.5（方向相反，預期低相關）。",
+ "formula": "mul(cs_rank(bp), cs_rank(delta(amt_21,6)))",
+ "name_zh": "價值流動性甦醒",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "amt_21",
+   "bp"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(bp), cs_rank(delta(amt_21,6)))",
+  "fhash": "ac1bc202bc064317",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": -0.005,
+   "icir": -0.04,
+   "decay_pct": 112.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.009,
+    "多頭"
+   ],
+   "2014": [
+    0.026,
+    "多頭"
+   ],
+   "2015": [
+    0.006,
+    "盤整"
+   ],
+   "2016": [
+    0.058,
+    "多頭"
+   ],
+   "2017": [
+    0.06,
+    "多頭"
+   ],
+   "2018": [
+    0.013,
+    "盤整"
+   ],
+   "2019": [
+    -0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": 0.006
+  },
+  "industry_icir": {
+   "電子": 0.36,
+   "生技": 0.29,
+   "半導體": -0.05,
+   "金融": 0.05
+  },
+  "legs": {
+   "long_excess_ann": 0.035,
+   "short_excess_ann": 0.064
+  },
+  "coverage": 0.72,
+  "turnover_m": 0.35,
+  "stage2_max_rho": {
+   "factor": "F-021",
+   "rho": 0.47
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.37 < 0.45; validation ICIR -0.04 < 0.3; validation 衰減 112% > 50%（過擬合徵兆）"
+ },
+ "diagnosis": "sub-train ICIR預測>0.4，實際0.37未達；相關性檢查通過（F-021 rho 0.47<0.5），但validation ICIR轉負(-0.04)且decay 112%，2019年IC轉為-0.024，顯示『流動性拐點』這個時機性訊號在樣本外並不穩定。兩腿超額報酬雖皆為正，顯示交易性本身沒問題，純粹是預測力不穩定導致淘汰。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "以delta(amt_21,6)捕捉『流動性甦醒拐點』作為價值重估催化劑的機制，在樣本外方向不穩定，短窗成交量變化本身可能只是雜訊而非真正的機構關注度拐點訊號，此表達方式難以穩定捕捉『拐點』這個概念。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0697",
+ "ts": "2026-08-12T14:25:46"
+}

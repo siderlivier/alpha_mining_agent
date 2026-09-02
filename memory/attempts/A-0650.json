@@ -1,0 +1,84 @@
+{
+ "round": 42,
+ "category": "institutional_crowding_risk",
+ "hypothesis": "投信基金存在績效排名壓力與同儕比較效應，傾向追逐已被市場認可、營收成長故事清晰的熱門股；投信買超與營收年增率同時高檔代表籌碼已被機構過度佈局，容易在追價力道减弱後出現獲利了結賣壓，形成擁擠風險。",
+ "prediction": "sub-train ICIR>0.45(高值端預測較低報酬)；多頭腿(非擁擠端)年化超額報酬>0；方向應與先前『外資+投信同買超為負向』發現一致。",
+ "formula": "mul(cs_rank(trust_net_21), cs_rank(rev_yoy))",
+ "name_zh": "投信擁擠風險",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy",
+   "trust_net_21"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(trust_net_21), cs_rank(rev_yoy))",
+  "fhash": "a7ab7c30a3579ecc",
+  "sub_train": {
+   "mean_ic": 0.015,
+   "icir": 0.18
+  },
+  "validation": {
+   "mean_ic": 0.011,
+   "icir": 0.15,
+   "decay_pct": 13.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.004,
+    "多頭"
+   ],
+   "2014": [
+    -0.024,
+    "多頭"
+   ],
+   "2015": [
+    0.014,
+    "盤整"
+   ],
+   "2016": [
+    0.055,
+    "多頭"
+   ],
+   "2017": [
+    0.022,
+    "多頭"
+   ],
+   "2018": [
+    -0.001,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.021,
+   "down_months": -0.005
+  },
+  "industry_icir": {
+   "電子": 0.47,
+   "生技": 0.11,
+   "半導體": -0.03,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.044,
+   "short_excess_ann": 0.055
+  },
+  "coverage": 0.77,
+  "turnover_m": 0.53,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測方向為neg（擁擠端預測較低報酬）；實際平均IC為正（sub-train 0.015、validation 0.011），cond_ic顯示微弱正報酬集中於上漲月(0.021 vs -0.005)，方向與『擁擠風險』敘事相反，較像投信買超+營收成長是動能延續訊號而非過度佈局警訊。此結果也與先前『外資+投信同買超為負向』的既有發現有出入，但本案僅用投信單一法人流，強度也很弱（IC~0.01-0.02，遠低於門檻）。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "投信擁擠風險方向未獲支持；先前『外資+投信同買超為負』的結論可能僅適用於外資+投信同時買超的組合訊號，不應直接推廣到投信單一法人流×營收成長的構造。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0650",
+ "ts": "2026-08-12T09:45:44"
+}

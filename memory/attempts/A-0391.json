@@ -1,0 +1,93 @@
+{
+ "round": 25,
+ "category": "financial_nim_repricing_lag",
+ "hypothesis": "金融業資產(放款/投資)與負債(存款/保單)重定價速度不同，利率環境變動時營業利益率(NIM代理)呈緩慢但持續的趨勢性變化；NIM僅按季揭露且分析師模型更新滯後，此趨勢改善未即時反映在股價，機制僅在資產負債久期錯配明顯的金融業成立。",
+ "prediction": "金融產業子樣本sub-train ICIR > 0.4(產業限定門檻)；金融業industry_icir應明顯高於電子/生技/半導體。",
+ "formula": "cs_rank(ts_slope(op_margin,6))",
+ "name_zh": "金融讓利遲滯",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "op_margin"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_slope(op_margin,6))",
+  "fhash": "931de0aefdb52c6c",
+  "sub_train": {
+   "mean_ic": 0.039,
+   "icir": 0.37
+  },
+  "validation": {
+   "mean_ic": -0.002,
+   "icir": -0.02,
+   "decay_pct": 106.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.007,
+    "盤整"
+   ],
+   "2013": [
+    0.051,
+    "多頭"
+   ],
+   "2014": [
+    0.041,
+    "多頭"
+   ],
+   "2015": [
+    0.072,
+    "盤整"
+   ],
+   "2016": [
+    0.015,
+    "多頭"
+   ],
+   "2017": [
+    0.036,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.029,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.03,
+   "down_months": 0.022
+  },
+  "industry_icir": {
+   "電子": 0.41,
+   "生技": 0.18,
+   "半導體": 0.33,
+   "金融": 0.07
+  },
+  "legs": {
+   "long_excess_ann": 0.035,
+   "short_excess_ann": 0.084
+  },
+  "coverage": 0.84,
+  "turnover_m": 0.28,
+  "stage2_culprit": {
+   "factor": "F-001",
+   "rho": 0.51,
+   "factor_name": "ROE趨勢改善",
+   "factor_desc": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-001 |ρ|=0.51 > 0.5"
+ },
+ "diagnosis": "預測金融業industry_icir應最高，實際完全相反——金融最低(0.07)、電子最高(0.41)；同時與F-001(ROE趨勢改善)相關性0.51觸發重複淘汰。ts_slope(op_margin,6)捕捉到的是通用獲利趨勢訊號而非金融業特有的資產負債重定價機制，『產業限定』前提未成立。",
+ "failure_type": "duplicate",
+ "lesson": "用通用財務比率作特定產業機制的代理變數，容易退化成庫內既有的泛用獲利趨勢因子；驗證產業限定假說前應先檢查代理變數在非目標產業是否同樣/更有效，若是則需換用真正產業特定資料(如銀行NIM揭露值)。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0391",
+ "ts": "2026-07-28T18:41:52"
+}

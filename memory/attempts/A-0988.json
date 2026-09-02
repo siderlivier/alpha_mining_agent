@@ -1,0 +1,95 @@
+{
+ "round": 65,
+ "category": "lending_short_divergence_reversal",
+ "hypothesis": "借券量高但券資比（融券餘額/融資餘額）低，代表市場空方部位主要來自機構借券避險或套利，而非散戶恐慌式融券做空；這種機構分歧但無散戶追空的組合反映的是流動性與避險需求而非真正看空後市，過去誤判為看空訊號而套用反向假設，實證顯示方向應為正。",
+ "prediction": "direction=pos；sub-train ICIR > 0.3(前次驗證icir 0.31)；decay_pct < 10%；多頭腿年化超額 > 0，全期間IC正負一致不逆轉。",
+ "formula": "mul(cs_rank(lend_vol_21), cs_rank(neg(short_margin_ratio)))",
+ "name_zh": "機構借券分歧股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "lend_vol_21",
+   "short_margin_ratio"
+  ]
+ },
+ "result": {
+  "formula": "mul(cs_rank(lend_vol_21), cs_rank(neg(short_margin_ratio)))",
+  "fhash": "99f038d8332e1f11",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.34
+  },
+  "validation": {
+   "mean_ic": 0.039,
+   "icir": 0.31,
+   "decay_pct": 7.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.044,
+    "盤整"
+   ],
+   "2013": [
+    0.038,
+    "多頭"
+   ],
+   "2014": [
+    0.03,
+    "多頭"
+   ],
+   "2015": [
+    0.021,
+    "盤整"
+   ],
+   "2016": [
+    0.04,
+    "多頭"
+   ],
+   "2017": [
+    0.037,
+    "多頭"
+   ],
+   "2018": [
+    0.055,
+    "盤整"
+   ],
+   "2019": [
+    0.022,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.046,
+   "down_months": 0.001
+  },
+  "industry_icir": {
+   "電子": 0.5,
+   "生技": 0.29,
+   "半導體": 0.13,
+   "金融": 0.01
+  },
+  "legs": {
+   "long_excess_ann": 0.031,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.51,
+  "turnover_m": 0.34,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.64,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.64 > 0.5"
+ },
+ "diagnosis": "standalone 預測全中：direction pos 確認、sub-train ICIR 0.34>0.3、validation 0.31、decay 7%<10%、多頭腿+3.1%。漏判與 F-008 的相關(ρ=0.64)及 cond_ic 高度順勢(up 0.046 vs down 0.001)。高借券量+低券資比選到的其實是『安靜量縮走強』股，與 F-008『低調接近新高』本質重疊；coverage 僅 0.51 亦是隱憂。",
+ "failure_type": "duplicate",
+ "lesson": "借券/融券結構訊號(空方缺席)在多頭月才有效，且本質是『低週轉強勢股』變體、會撞 F-008；要獨立化需搭配真正的空方壓力事件而非單純空方缺席。coverage 0.51 表示信用交易資料僅覆蓋半池，ICIR 門檻應相應提高。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "from_queue": "Q-030",
+ "id": "A-0988",
+ "ts": "2026-09-02T00:32:52"
+}

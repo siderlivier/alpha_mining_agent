@@ -1,0 +1,85 @@
+{
+ "round": 53,
+ "category": "revenue_rank_persistence",
+ "hypothesis": "營收年增率長期(24個月)處於自身歷史高分位的公司，代表其成長趨勢已建立可驗證的track record，市場對於需要跨期比較才能確立的『持續性成長』存在系統性反應不足，因多數分析師僅關注最新一期年增率而非跨兩年相對位置。",
+ "prediction": "sub-train ICIR>0.45；此為動能延續方向(非反轉)；與F-009相關係數應<0.5(F-009用rev_yoy_ma3斜率，此用歷史分位排名，構造機制不同)。",
+ "formula": "cs_rank(ts_rank(rev_yoy, 24))",
+ "name_zh": "營收持續強度",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "rev_yoy"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_rank(rev_yoy, 24))",
+  "fhash": "a0ed93ed44c0396d",
+  "sub_train": {
+   "mean_ic": 0.035,
+   "icir": 0.52
+  },
+  "validation": {
+   "mean_ic": 0.017,
+   "icir": 0.26,
+   "decay_pct": 50.0
+  },
+  "ic_by_year": {
+   "2014": [
+    0.01,
+    "多頭"
+   ],
+   "2015": [
+    0.05,
+    "盤整"
+   ],
+   "2016": [
+    0.047,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.022,
+    "盤整"
+   ],
+   "2019": [
+    0.012,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": 0.55,
+   "生技": 0.28,
+   "半導體": 0.35,
+   "金融": 0.06
+  },
+  "legs": {
+   "long_excess_ann": 0.061,
+   "short_excess_ann": 0.078
+  },
+  "coverage": 0.66,
+  "turnover_m": 0.48,
+  "stage2_culprit": {
+   "factor": "F-013",
+   "rho": 0.54,
+   "factor_name": "冷門成長股",
+   "factor_desc": "營收成長強但成交金額低，代表利多尚未被市場注意到。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-013 |ρ|=0.54 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.52達標，方向與強度預測正確，但預測鎖定的比較對象是F-009，實際卻死於與F-013(rho=0.54)的重疊——「營收成長歷史分位排名」的成長強度資訊已被F-013的「冷門成長股」機制大量涵蓋。",
+ "failure_type": "duplicate",
+ "lesson": "預先猜測的比較因子不等於真正的高相關對象，構造機制不同不保證訊號正交；成長類因子上線前應對庫內所有成長相關因子全面掃描相關性，而非只挑最直覺相似的一個。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0808",
+ "ts": "2026-08-15T11:33:03"
+}

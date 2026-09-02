@@ -1,0 +1,87 @@
+{
+ "round": 60,
+ "category": "biotech_post_event_derisking/生技限定",
+ "hypothesis": "生技股常因臨床試驗成敗、法規審查等二元事件出現劇烈波動；當波動度已從近一年高點顯著回落(代表不確定性事件已落幕)且毛利率維持良好水準(核心業務未受衝擊)，是風險解除的確認訊號。生技投資人普遍存在事件前過度反應、事件後因信任耗損反應不足的雙重偏誤，對此確認訊號定價遲緩；此機制僅生技業成立，因其他產業罕有如此集中的二元事件驅動波動結構。",
+ "prediction": "生技子樣本sub-train ICIR>0.4；多頭腿年化超額報酬>0；與F-022(eps_yoy/std)相關度|ρ|<0.5。",
+ "formula": "mul(sdiv(ts_max(vol_63,12), vol_63), cs_rank(gross_margin))",
+ "name_zh": "生技除險確立股",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "gross_margin",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "mul(sdiv(ts_max(vol_63,12), vol_63), cs_rank(gross_margin))",
+  "fhash": "e326b8b43409f754",
+  "sub_train": {
+   "mean_ic": 0.017,
+   "icir": 0.22
+  },
+  "validation": {
+   "mean_ic": 0.029,
+   "icir": 0.58,
+   "decay_pct": -168.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.059,
+    "盤整"
+   ],
+   "2013": [
+    0.044,
+    "多頭"
+   ],
+   "2014": [
+    0.012,
+    "多頭"
+   ],
+   "2015": [
+    0.041,
+    "盤整"
+   ],
+   "2016": [
+    -0.007,
+    "多頭"
+   ],
+   "2017": [
+    -0.021,
+    "多頭"
+   ],
+   "2018": [
+    0.034,
+    "盤整"
+   ],
+   "2019": [
+    0.024,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.018,
+   "down_months": 0.026
+  },
+  "industry_icir": {
+   "電子": 0.35,
+   "生技": 0.05,
+   "半導體": 0.2
+  },
+  "legs": {
+   "long_excess_ann": 0.012,
+   "short_excess_ann": 0.048
+  },
+  "coverage": 0.81,
+  "turnover_m": 0.22,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測生技子樣本ICIR>0.4，實際sub-train僅0.22，生技產業ICIR僅0.05(遠低於預測門檻)。逐年IC在2016、2017轉負，「波動度從高點回落+毛利率良好」的除險確認訊號未展現穩健效果，機制本身可能未成立或二元事件的波動回落訊號雜訊過大。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "生技股「事件後波動回落」訊號在此窗口(vol_63相對vol_63的12月高點)雜訊過大、逐年不穩定，波動度回落本身可能滯後於真正的風險解除時點，不足以支撐可交易訊號。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0922",
+ "ts": "2026-08-20T08:30:15"
+}

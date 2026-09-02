@@ -1,0 +1,89 @@
+{
+ "round": 8,
+ "category": "attention_driven_reversal",
+ "hypothesis": "周轉率長期偏高代表籌碼分散、散戶交易佔比高，交易多由追高殺低等雜訊行為驅動而非基本面；此類股票長期存在過度交易造成的資訊效率損失，周轉率低、籌碼穩定的沉悶股長期報酬反而較佳，機制不同於F-005的報酬波動度代理。",
+ "prediction": "sub-train ICIR > 0.4；與F-005相關係數需 < 0.7（允許中度相關但需證明增量價值）；月換手率 < 0.4。",
+ "formula": "cs_rank(neg(ts_mean(turn_21,3)))",
+ "name_zh": "過度交易反轉",
+ "direction": "pos",
+ "complexity": {
+  "depth": 3,
+  "fields": [
+   "turn_21"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(neg(ts_mean(turn_21,3)))",
+  "fhash": "4318f1b0f608c059",
+  "sub_train": {
+   "mean_ic": 0.033,
+   "icir": 0.31
+  },
+  "validation": {
+   "mean_ic": 0.054,
+   "icir": 0.34,
+   "decay_pct": -11.0
+  },
+  "ic_by_year": {
+   "2013": [
+    0.054,
+    "多頭"
+   ],
+   "2014": [
+    0.046,
+    "多頭"
+   ],
+   "2015": [
+    0.02,
+    "盤整"
+   ],
+   "2016": [
+    0.035,
+    "多頭"
+   ],
+   "2017": [
+    0.02,
+    "多頭"
+   ],
+   "2018": [
+    0.098,
+    "盤整"
+   ],
+   "2019": [
+    0.011,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.062,
+   "down_months": -0.013
+  },
+  "industry_icir": {
+   "電子": 0.29,
+   "生技": 0.32,
+   "半導體": 0.16,
+   "金融": 0.12
+  },
+  "legs": {
+   "long_excess_ann": 0.03,
+   "short_excess_ann": 0.059
+  },
+  "coverage": 0.8,
+  "turnover_m": 0.14,
+  "stage2_culprit": {
+   "factor": "F-008",
+   "rho": 0.93,
+   "factor_name": "低調接近新高",
+   "factor_desc": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。"
+  },
+  "verdict": "rejected_stage2",
+  "reason": "與庫內 F-008 |ρ|=0.93 > 0.5"
+ },
+ "diagnosis": "sub-train ICIR 0.31、validation 0.34(decay -11%)實際表現穩健，命中了『機制在時間上穩定』的核心假設，但相關係數檢查抓到與F-008高達0.93的重疊，遠超預測設定的<0.7門檻，顯示『低週轉=籌碼穩定』的訊號本質上就是F-008『量價背離』因子在移除價格接近新高條件後的簡化版，並非真正互補的獨立訊號來源。",
+ "failure_type": "duplicate",
+ "lesson": "turn_21(週轉率)水準值本身已是庫內F-008的核心成分，任何『低週轉=籌碼穩定/資訊效率損失』方向的變體都極可能與F-008高度重疊(此案0.93)；此欄位的紅海邊界比預期更廣，中度相關門檻(<0.7)不足以篩掉本質重疊的構造，下次應先把rho門檻收緊或直接排除turn_21水準值變體。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage2",
+ "id": "A-0142",
+ "ts": "2026-07-19T21:42:48"
+}

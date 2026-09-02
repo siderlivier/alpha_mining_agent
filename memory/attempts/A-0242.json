@@ -1,0 +1,92 @@
+{
+ "round": 15,
+ "category": "momentum_term_structure",
+ "hypothesis": "傳統動能因子容易混淆「近期投機性急拉」與「長期法人緩步建倉」兩種截然不同的成因；長期動能（12個月）強但近3個月動能未同步異常拉高的個股，代表其上漲是機構緩慢、持續性建倉造成的資訊擴散結果，而非短期投機炒作，這類股票較不易發生動能崩潰，後續延續性應優於單純短期動能因子。",
+ "prediction": "sub-train ICIR > 0.45；四產業cond_ic至少3個為正；下跌月IC不顯著劣於上漲月IC；validation衰減 < 40%。",
+ "formula": "cs_rank(sub(mom_240, mom_60))",
+ "name_zh": "緩步建倉動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_240",
+   "mom_60"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sub(mom_240, mom_60))",
+  "fhash": "bd25e3aec032351e",
+  "sub_train": {
+   "mean_ic": 0.036,
+   "icir": 0.36
+  },
+  "validation": {
+   "mean_ic": 0.022,
+   "icir": 0.19,
+   "decay_pct": 47.0
+  },
+  "ic_by_year": {
+   "2012": [
+    0.132,
+    "盤整"
+   ],
+   "2013": [
+    0.043,
+    "多頭"
+   ],
+   "2014": [
+    0.003,
+    "多頭"
+   ],
+   "2015": [
+    0.058,
+    "盤整"
+   ],
+   "2016": [
+    0.01,
+    "多頭"
+   ],
+   "2017": [
+    0.057,
+    "多頭"
+   ],
+   "2018": [
+    -0.033,
+    "盤整"
+   ],
+   "2019": [
+    0.077,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.035,
+   "down_months": 0.023
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.35,
+   "半導體": 0.1,
+   "金融": 0.17
+  },
+  "legs": {
+   "long_excess_ann": 0.022,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.85,
+  "turnover_m": 0.22,
+  "stage2_max_rho": {
+   "factor": "F-011",
+   "rho": 0.25
+  },
+  "verdict": "rejected_stage4",
+  "reason": "sub-train ICIR 0.36 < 0.45; validation ICIR 0.19 < 0.3"
+ },
+ "diagnosis": "sub-train ICIR 0.36不達0.45，validation 0.19、decay 47%略超40%門檻，但cond_ic雙正、4/4產業正(優於預測的3/4)、多頭腿+2.2%為正——方向性機制大致成立，只是強度不足以通過嚴格門檻。",
+ "failure_type": "expression_bad",
+ "lesson": "長短期動能價差(mom_240-mom_60)方向穩定但偏弱，屬「真訊號、強度不夠」型；下次可嘗試與其他持續性指標（如法人買賣超趨勢）合成以放大訊噴比。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage4",
+ "id": "A-0242",
+ "ts": "2026-07-21T12:24:47"
+}

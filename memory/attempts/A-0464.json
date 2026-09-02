@@ -1,0 +1,88 @@
+{
+ "round": 30,
+ "category": "risk_adjusted_momentum_quality",
+ "hypothesis": "相同動能幅度下，波動度(vol_63)較低的動能代表趨勢由穩定、漸進的資訊擴散(如法人逐步建倉)所推動，而非單日爆量投機；經波動調整後的動能雜訊較低，比原始動能更能反映可持續的趨勢延續。",
+ "prediction": "sub-train ICIR>0.45；相較原始mom_120排名，本因子月換手率應更低且validation衰減幅度小於50%；多頭腿年化超額報酬>0。",
+ "formula": "cs_rank(sdiv(mom_120, vol_63))",
+ "name_zh": "波動調整動能",
+ "direction": "pos",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "mom_120",
+   "vol_63"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(sdiv(mom_120, vol_63))",
+  "fhash": "a8c5386fcc163216",
+  "sub_train": {
+   "mean_ic": 0.014,
+   "icir": 0.12
+  },
+  "validation": {
+   "mean_ic": 0.026,
+   "icir": 0.34,
+   "decay_pct": -195.0
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.038,
+    "盤整"
+   ],
+   "2013": [
+    0.02,
+    "多頭"
+   ],
+   "2014": [
+    -0.004,
+    "多頭"
+   ],
+   "2015": [
+    0.016,
+    "盤整"
+   ],
+   "2016": [
+    0.04,
+    "多頭"
+   ],
+   "2017": [
+    0.028,
+    "多頭"
+   ],
+   "2018": [
+    0.005,
+    "盤整"
+   ],
+   "2019": [
+    0.047,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": 0.028,
+   "down_months": -0.01
+  },
+  "industry_icir": {
+   "電子": 0.23,
+   "生技": 0.19,
+   "半導體": 0.03,
+   "金融": 0.04
+  },
+  "legs": {
+   "long_excess_ann": 0.087,
+   "short_excess_ann": 0.042
+  },
+  "coverage": 0.92,
+  "turnover_m": 0.32,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "sub-train ICIR僅0.12不達標，但validation回升至0.34，且多頭腿年化超額報酬達8.7%(本輪最高之一)、空頭腿也正(4.2%)，代表訊號本身有實質報酬能力。cond_ic顯示訊號只在上漲月生效(0.028 vs -0.01)，說明全樣本ICIR被下跌/盤整月的雜訊拖累。",
+ "failure_type": "expression_bad",
+ "lesson": "波動調整動能的Alpha主要來自多頭月份；全樣本(含空頭/盤整月)一起算ICIR會因訊號在非趨勢環境呈雜訊而拉低ICIR，即使legs報酬本身仍正、仍可交易——應同時報告regime-conditional ICIR，不要只憑全樣本ICIR門檻判死刑。",
+ "lesson_confidence": "multi_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0464",
+ "ts": "2026-07-29T23:26:46"
+}

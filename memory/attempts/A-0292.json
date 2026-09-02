@@ -1,0 +1,88 @@
+{
+ "round": 18,
+ "category": "price_volume_correlation_regime",
+ "hypothesis": "當短期動能(mom_20)與成交金額(amt_21)過去半年呈現高度正相關時，代表這波動能主要由『量價齊揚』的追價行為驅動，是典型散戶追高模式，缺乏機構或內部人趁淡靜時布局的特徵，這類熱度驅動動能容易在熱度消退後反轉；動能與成交量脫鉤(相關性低)的上漲，較可能反映持續、悄悄的資金流入，更具延續性。",
+ "prediction": "sub-train ICIR(絕對值)>0.45(方向為負)；月換手率<0.4；與F-008相關係數|ρ|<0.5",
+ "formula": "cs_rank(ts_corr(mom_20, amt_21, 6))",
+ "name_zh": "量價齊揚過熱",
+ "direction": "neg",
+ "complexity": {
+  "depth": 2,
+  "fields": [
+   "amt_21",
+   "mom_20"
+  ]
+ },
+ "result": {
+  "formula": "cs_rank(ts_corr(mom_20, amt_21, 6))",
+  "fhash": "dcf509e4b1172040",
+  "sub_train": {
+   "mean_ic": -0.004,
+   "icir": -0.06
+  },
+  "validation": {
+   "mean_ic": -0.016,
+   "icir": -0.2,
+   "decay_pct": null
+  },
+  "ic_by_year": {
+   "2012": [
+    -0.032,
+    "盤整"
+   ],
+   "2013": [
+    -0.006,
+    "多頭"
+   ],
+   "2014": [
+    -0.002,
+    "多頭"
+   ],
+   "2015": [
+    -0.035,
+    "盤整"
+   ],
+   "2016": [
+    0.036,
+    "多頭"
+   ],
+   "2017": [
+    0.003,
+    "多頭"
+   ],
+   "2018": [
+    -0.019,
+    "盤整"
+   ],
+   "2019": [
+    -0.014,
+    "多頭"
+   ]
+  },
+  "cond_ic": {
+   "up_months": -0.016,
+   "down_months": 0.015
+  },
+  "industry_icir": {
+   "電子": -0.24,
+   "生技": 0.01,
+   "半導體": 0.0,
+   "金融": -0.09
+  },
+  "legs": {
+   "long_excess_ann": 0.014,
+   "short_excess_ann": -0.0
+  },
+  "coverage": 0.95,
+  "turnover_m": 0.44,
+  "verdict": "rejected_stage1",
+  "reason": "sub-train IC 低於門檻"
+ },
+ "diagnosis": "預測ICIR絕對值>0.45(負向)，實際僅-0.06接近雜訊，逐年IC正負交錯無明顯規律(2016甚至+0.036)，cond_ic在上漲月(-0.016)與下跌月(+0.015)也符號相反卻無清楚解釋，產業別上僅電子(-0.24)勉強支持假設方向、其餘產業接近零或正值。整體看不出『量價齊揚=散戶追高過熱』這個機制在台股全市場成立的證據。",
+ "failure_type": "hypothesis_wrong",
+ "lesson": "用mom_20與amt_21的6個月時序相關性衡量『追價過熱程度』，在全市場層級測不出穩定訊號，正負號在各年、各產業、各市場狀態間反覆不一致，暗示這個代理變數本身可能無法有效區分『資訊型』與『追價型』動能。",
+ "lesson_confidence": "single_case",
+ "verdict": "rejected_stage1",
+ "id": "A-0292",
+ "ts": "2026-07-21T12:59:43"
+}

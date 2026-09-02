@@ -7,29 +7,22 @@
 
 ## 🔴 立即：把 repo 推上 GitHub
 
-本機 git 已初始化並完成首次 commit（`078ddea`，1099 個檔案、4.9MB），
-remote 也設好了，但**推送需要你自己的終端機**（這個 session 的 shell 沒有 GitHub 憑證）。
+GitHub repo 已建好（<https://github.com/siderlivier/alpha_mining_agent>，public、空的），
+本機 git 也已完成 2 個 commit、remote 指向正確位址。**只差最後一步推送**——
+這一步必須在你自己的終端機做，因為這個 session 的 shell 沒有 GitHub 憑證。
 
 ```bash
 cd C:\Users\User\Desktop\股匯操盤AI\alpha_mining_agent
-# 1. 先到 https://github.com/new 建立 repo（public）
-#    名稱：Taiwan_Stock_alpha_mining_agent
-#    ⚠️ 不要勾 "Add a README file"，否則會與本地歷史衝突
-# 2. 推送
 git push -u origin main
 ```
 
-若 repo 名稱想改，先改 remote：
-
-```bash
-git remote set-url origin https://github.com/siderlivier/<新名稱>.git
-```
+就這一行。repo 是空的，不會有衝突。
 
 **已排除在版控外的東西**（見 `.gitignore`）：`data/*.parquet`、
 `memory/factor_values.parquet`（37MB）、`*.log`、`備用/`。
 這些都能重建，方式寫在 `.gitignore` 的註解裡。
 
-- [ ] 建立 GitHub repo 並 `git push -u origin main`
+- [ ] `git push -u origin main`
 - [ ] 確認 GitHub 上看得到 `memory/attempts/` 的 1043 筆紀錄（那是挖礦軌跡）
 
 ---

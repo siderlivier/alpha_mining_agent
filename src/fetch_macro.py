@@ -126,8 +126,12 @@ def to_ym(s) -> str | None:
     """
     if s is None or (isinstance(s, float) and np.isnan(s)):
         return None
-    t = str(s).strip().replace("年", "/").replace("月", "").replace(".", "/")
-    t = t.replace("-", "/")
+    # 先全形轉半形。央行的 CSV 連數字都是全形（`１１３０３`），
+    # 不轉的話 isdigit() 對全形數字雖然為 True，int() 也還能處理，
+    # 但長度判斷與分隔符比對全都會錯。
+    t = _halfwidth(str(s)).strip()
+    t = t.replace("年", "/").replace("月", "").replace(".", "/")
+    t = t.replace("-", "/").replace("M", "/").replace("m", "/")
     if "/" in t:
         parts = [p for p in t.split("/") if p]
         if len(parts) < 2:
@@ -350,23 +354,138 @@ def fetch_ndc() -> pd.DataFrame:
 # 來源 2：央行貨幣總計數
 # ---------------------------------------------------------------------------
 
+def _halfwidth(s: str) -> str:
+    """
+    全形轉半形。政府 CSV 的欄名常寫成 `Ｍ１Ｂ` 而不是 `M1B`，
+    直接做子字串比對會完全找不到。
+    """
+    return "".join(chr(ord(c) - 0xFEE0) if 0xFF01 <= ord(c) <= 0xFF5E else c
+                   for c in str(s))
+
+
+# M1B / M2 的官方定義（央行）：
+#   M1A = 通貨淨額 + 支票存款 + 活期存款
+#   M1B = M1A + 活期儲蓄存款
+#   M2  = M1B + 準貨幣
+# EF15M01 這張表給的是**組成項目**，沒有直接的 M1B / M2 欄位，所以自行加總。
+M1B_PARTS = ("持有通貨", "支票存款", "活期存款", "活期儲蓄存款")
+M2_EXTRA = ("準貨幣",)
+
+
+def _level_col(df, keyword, used):
+    """
+    找某個組成項目的「原始值」欄（不是年增率欄）。
+
+    表格是 `<項目>-原始值` / `<項目>-年增率` 成對出現，
+    抓錯就會把百分比當成餘額去加總。
+    """
+    for c in df.columns:
+        n = _halfwidth(c)
+        if c in used or keyword not in n:
+            continue
+        if "年增率" in n or "增減" in n or "%" in n:
+            continue
+        if "原始值" in n or "餘額" in n or "-" not in n:
+            return c
+    return None
+
+
+def _crosscheck_deposits(df, cols, ymc) -> None:
+    """
+    交叉驗證：三項存款加總應該等於表裡的「存款貨幣-計」。
+
+    這是抓「欄位認錯」最有效的一道。若不小心把年增率欄當成餘額欄、
+    或把「活期存款」對到「活期儲蓄存款」，加總就會對不上總計——
+    而沒有這個檢查的話，錯誤會安靜地變成一組看起來合理的 M1B 數字。
+    """
+    tot = _level_col(df, "存款貨幣-計", set())
+    if tot is None:
+        tot = next((c for c in df.columns
+                    if "存款貨幣" in _halfwidth(c) and "計" in _halfwidth(c)
+                    and "年增率" not in _halfwidth(c)), None)
+    if tot is None:
+        print("     （表裡沒有「存款貨幣-計」，略過加總交叉驗證）")
+        return
+    parts = [cols[k] for k in ("支票存款", "活期存款", "活期儲蓄存款") if k in cols]
+    if len(parts) < 3:
+        return
+    s = sum(pd.to_numeric(df[c], errors="coerce") for c in parts)
+    t = pd.to_numeric(df[tot], errors="coerce")
+    ok = (s.notna() & t.notna() & (t != 0))
+    if not ok.any():
+        return
+    rel = ((s[ok] - t[ok]).abs() / t[ok].abs()).max()
+    if rel > 0.01:
+        raise ValueError(
+            f"三項存款加總與「{tot}」對不上（最大相對誤差 {rel:.1%}）。\n"
+            f"    可能認錯欄位——加總用的是 {parts}。\n"
+            f"    寧可在這裡停下來，也不要產出一組看起來合理的錯誤 M1B。")
+    print(f"     （交叉驗證通過：三項存款加總 ≈「{tot}」，最大誤差 {rel:.2%}）")
+
+
 def parse_cbc(df: pd.DataFrame) -> pd.DataFrame:
-    """M1B / M2 年增率，並算出黃金交叉（M1B 年增率 − M2 年增率）。"""
+    """
+    M1B / M2 年增率，並算出黃金交叉（M1B 年增率 − M2 年增率）。
+
+    兩條路徑：
+    1. 表裡直接有 M1B / M2 欄 → 直接用（欄名先做全形轉半形）
+    2. 只有組成項目（EF15M01 就是這樣）→ 依央行定義自行加總
+    """
     ymc = _pick(df, "年月", "時間", "期間", "date", "月份") or df.columns[0]
-    m1c = _pick(df, "M1B", exclude={ymc})
-    m2c = _pick(df, "M2", exclude={ymc, m1c})     # 同上，不讓兩者搶同一欄
-    if m1c is None or m2c is None:
-        raise ValueError(f"找不到 M1B / M2 欄位，實際欄名：{list(df.columns)[:12]}")
+
+    # ── 路徑 1：直接找 M1B / M2 ──
+    norm = {c: _halfwidth(c) for c in df.columns}
+    m1c = next((c for c, n in norm.items()
+                if "M1B" in n and c != ymc and "年增率" not in n), None)
+    m2c = next((c for c, n in norm.items()
+                if "M2" in n and c not in (ymc, m1c) and "年增率" not in n), None)
 
     rows = []
-    for _, r in df.iterrows():
-        ym = to_ym(r[ymc])
-        if ym is None:
-            continue
-        rows.append({"ym": ym,
-                     "m1b": pd.to_numeric(r[m1c], errors="coerce"),
-                     "m2": pd.to_numeric(r[m2c], errors="coerce")})
+    if m1c is not None and m2c is not None:
+        source = f"直接欄位（{m1c} / {m2c}）"
+        for _, r in df.iterrows():
+            ym = to_ym(r[ymc])
+            if ym is None:
+                continue
+            rows.append({"ym": ym,
+                         "m1b": pd.to_numeric(r[m1c], errors="coerce"),
+                         "m2": pd.to_numeric(r[m2c], errors="coerce")})
+    else:
+        # ── 路徑 2：由組成項目加總 ──
+        used, cols = set(), {}
+        for k in M1B_PARTS + M2_EXTRA:
+            c = _level_col(df, k, used)
+            if c is None:
+                raise ValueError(
+                    f"表裡既沒有 M1B / M2 欄，也湊不齊組成項目（缺「{k}」）。\n"
+                    f"    實際欄名：{[str(c) for c in df.columns][:20]}")
+            cols[k] = c
+            used.add(c)
+        source = "組成項目加總（M1B=通貨+支票+活期+活儲；M2=M1B+準貨幣）"
+        for _, r in df.iterrows():
+            ym = to_ym(r[ymc])
+            if ym is None:
+                continue
+            vals = {k: pd.to_numeric(r[c], errors="coerce")
+                    for k, c in cols.items()}
+            if any(pd.isna(v) for v in vals.values()):
+                continue
+            m1b = sum(vals[k] for k in M1B_PARTS)
+            rows.append({"ym": ym, "m1b": m1b,
+                         "m2": m1b + sum(vals[k] for k in M2_EXTRA)})
+        _crosscheck_deposits(df, cols, ymc)
+    print(f"     （M1B/M2 來源：{source}）")
+    if not rows:
+        # 一列都沒解析成功時，把實際的期間值印出來——否則下一行會丟
+        # `KeyError: None of ['ym'] are in the columns`，那個訊息完全看不出
+        # 是月份格式沒認出來。
+        sample = [repr(v) for v in df[ymc].head(6).tolist()]
+        raise ValueError(
+            f"「{ymc}」欄一列都認不出月份格式。實際值：{sample}\n"
+            f"    → 請在 to_ym() 補上這種寫法。")
     w = pd.DataFrame(rows).dropna().drop_duplicates("ym").set_index("ym").sort_index()
+    if len(w) < 13:
+        raise ValueError(f"只解析出 {len(w)} 個月，不足以算 12 個月年增率")
 
     # 欄位可能已經是年增率(%)，也可能是餘額。用量級判斷：餘額是兆元等級。
     is_level = w["m2"].abs().median() > 1000
@@ -428,6 +547,58 @@ def find_finmind_token() -> str:
     return ""
 
 
+def finmind_datalist_hint(dataset: str, token: str) -> str:
+    """
+    問 FinMind「這個資料集有哪些 data_id」，把答案放進錯誤訊息。
+
+    「status=200 但 data=[]」有三種可能，光看回應分不出來：
+      (a) data_id 寫錯     (b) token 無效或額度用完     (c) 需要付費層
+    datalist 端點能把 (a) 直接排除——它會回傳合法的 data_id 清單。
+    有清單就照著改；連 datalist 都空，那就是 (b) 或 (c)。
+    """
+    import urllib.parse
+    url = ("https://api.finmindtrade.com/api/v4/datalist?"
+           + urllib.parse.urlencode({"dataset": dataset, "token": token}))
+    try:
+        raw = json.loads(_http_get(url, timeout=20).decode("utf-8"))
+        ids = raw.get("data") or []
+    except Exception as e:
+        return f"     （查詢 datalist 也失敗：{type(e).__name__}: {e}）"
+
+    if not ids:
+        return ("     datalist 也回空 → 不是 data_id 寫錯，而是 **token 無效／額度用完，"
+                "\n     或這個資料集需要付費層**。可用 FinMind 網站的用量頁確認。")
+
+    # datalist 認得 data_id、資料端點卻回空 —— 這個組合幾乎只有兩種解釋：
+    # 額度用完，或這個資料集要付費層。把用量查出來就能分辨。
+    head = [str(x) for x in ids[:6]]
+    return (f"     datalist 認得這個資料集（{len(ids)} 個合法 data_id，"
+            f"例如 {head}）。\n"
+            f"     **合法 data_id 查得到、資料端點卻回空**，代表問題不在寫法：\n"
+            f"{finmind_usage_hint(token)}")
+
+
+def finmind_usage_hint(token: str) -> str:
+    """查 FinMind 的 API 用量，分辨「額度用完」與「需要付費層」。"""
+    try:
+        raw = json.loads(_http_get(
+            "https://api.finmindtrade.com/api/v4/user_info?token=" + token,
+            timeout=20).decode("utf-8"))
+        d = raw.get("user_count"), raw.get("api_request_limit"), raw.get("level")
+        used, limit, level = d
+        if limit is not None:
+            pct = f"（{used / limit:.0%}）" if used and limit else ""
+            note = ("\n       → 額度已滿，等下個時段重置即可，資料集本身沒問題。"
+                    if used is not None and limit and used >= limit else
+                    "\n       → 額度還有剩，所以是**這個資料集需要付費層**。"
+                    "\n         景氣指標與貨幣總計數已經夠用，殖利率可以先跳過。")
+            return (f"       用量：{used}/{limit} {pct}　會員層級：{level}{note}")
+        return f"       user_info 回應：{str(raw)[:200]}"
+    except Exception as e:
+        return (f"       （查用量也失敗：{type(e).__name__}）\n"
+                f"       → 請到 FinMind 網站的用量頁確認是額度還是層級問題。")
+
+
 def fetch_yields(token: str | None = None, start: str = "2010-01-01") -> pd.DataFrame:
     """
     美債 10Y / 2Y 與曲線斜率。日頻取月底值。
@@ -445,27 +616,63 @@ def fetch_yields(token: str | None = None, start: str = "2010-01-01") -> pd.Data
             "     很容易被誤判成「這個資料集沒有資料」。\n"
             "     請在專案根目錄放 .env（FINMIND_TOKEN=...）或設環境變數。")
     frames = {}
-    for tag, data_ids in (("us10y", ("10-Year", "10Y", "us10y")),
-                          ("us2y", ("2-Year", "2Y", "us2y"))):
+    # FinMind 的 data_id 是完整國名 + 年期（用 datalist 端點查出來的），
+    # 不是文件上寫的 "10-Year"。後面幾個是舊寫法的備援。
+    for tag, data_ids in (("us10y", ("United States 10-Year", "10-Year", "10Y")),
+                          ("us2y", ("United States 2-Year", "2-Year", "2Y"))):
         d, used, tried = None, None, []
+        # 免費層有時會限制可回溯的歷史深度：要 2010 年起會回空，
+        # 但只要近幾年就給得出來。所以每個 data_id 都試「完整歷史」與
+        # 「近三年」兩種起點，才不會把「歷史太深」誤判成「沒有這個資料集」。
+        recent = (pd.Timestamp.today() - pd.DateOffset(years=3)).strftime("%Y-%m-%d")
+        starts = [start] if start >= recent else [start, recent]
         for data_id in data_ids:      # 官方文件的寫法偶有變動，多試幾種
-            q = urllib.parse.urlencode({"dataset": "GovernmentBondsYield",
-                                        "data_id": data_id,
-                                        "start_date": start, "token": token})
-            raw = json.loads(_http_get(f"{FINMIND_URL}?{q}").decode("utf-8"))
-            tried.append(f"{data_id}→{len(raw.get('data') or [])}筆")
-            if raw.get("status") == 200 and raw.get("data"):
-                d, used = pd.DataFrame(raw["data"]), data_id
+            for st in starts:
+                q = urllib.parse.urlencode({"dataset": "GovernmentBondsYield",
+                                            "data_id": data_id,
+                                            "start_date": st, "token": token})
+                raw = json.loads(_http_get(f"{FINMIND_URL}?{q}").decode("utf-8"))
+                n = len(raw.get("data") or [])
+                tried.append(f"{data_id}@{st}→{n}筆")
+                if raw.get("status") == 200 and n:
+                    d, used = pd.DataFrame(raw["data"]), f"{data_id}（起 {st}）"
+                    break
+            if d is not None:
                 break
         if d is None:
             raise RuntimeError(
                 f"FinMind GovernmentBondsYield 取不到 {tag}：{'、'.join(tried)}\n"
-                f"     全部回空但 status=200 → 通常是 token 無效或額度用完，"
-                f"而不是資料集不存在。")
-        print(f"     {tag}: data_id='{used}'")
-        d["ym"] = pd.to_datetime(d["date"]).dt.to_period("M").astype(str)
-        frames[tag] = d.groupby("ym")["value"].last() / 100.0   # % → 小數
+                f"{finmind_datalist_hint('GovernmentBondsYield', token)}")
+        print(f"     {tag}: data_id='{used}'，{len(d)} 筆，欄位 {list(d.columns)}")
+        dcol = next((c for c in ("date", "Date", "日期") if c in d.columns), None)
+        vcol = next((c for c in ("value", "Value", "yield", "close", "price")
+                     if c in d.columns), None)
+        if vcol is None:      # 只剩一個數值欄的話就用它
+            nums = [c for c in d.columns
+                    if c != dcol and pd.api.types.is_numeric_dtype(d[c])]
+            vcol = nums[0] if len(nums) == 1 else None
+        if dcol is None or vcol is None:
+            raise RuntimeError(
+                f"FinMind 回了 {len(d)} 筆 {tag}，但認不出日期／數值欄。\n"
+                f"     實際欄位：{list(d.columns)}\n"
+                f"     前兩筆：{d.head(2).to_dict('records')}\n"
+                f"     → 把欄名補進 fetch_yields() 的候選清單。")
+        d["ym"] = pd.to_datetime(d[dcol]).dt.to_period("M").astype(str)
+        s = pd.to_numeric(d[vcol], errors="coerce").groupby(d["ym"]).last()
+        # 殖利率通常以「%」給（4.2 = 4.2%）。若中位數 < 0.5 就當它已經是小數，
+        # 免得把 0.042 又除以 100 變成 0.00042——這種錯不會報錯，只會讓
+        # 曲線斜率縮成噪音。
+        if s.abs().median() > 0.5:
+            s = s / 100.0
+        else:
+            print(f"     （{tag} 看起來已是小數形式，不再除以 100）")
+        frames[tag] = s
     w = pd.DataFrame(frames).dropna()
+    if not len(w):
+        raise RuntimeError(
+            f"10Y 與 2Y 各自有資料，但沒有共同的月份。\n"
+            f"     10Y：{frames['us10y'].index.min()} ~ {frames['us10y'].index.max()}\n"
+            f"     2Y ：{frames['us2y'].index.min()} ~ {frames['us2y'].index.max()}")
     w["us_curve"] = w["us10y"] - w["us2y"]
     print(f"  ✅ 美債殖利率：{len(w)} 個月，"
           f"倒掛月份 {int((w['us_curve'] < 0).sum())} 個")
@@ -530,9 +737,12 @@ def as_of_frame(panel: pd.DataFrame, months) -> pd.DataFrame:
 # 指令
 # ---------------------------------------------------------------------------
 
+# yield 標成選配：它是四組特徵裡唯一非必要的，而且 FinMind 免費層
+# 對這個資料集的支援不穩。ndc + cbc 已足以餵給 HMM。
 SOURCES = {"ndc": ("國發會景氣指標", fetch_ndc),
            "cbc": ("央行貨幣總計數", fetch_cbc),
-           "yield": ("美債殖利率曲線", fetch_yields)}
+           "yield": ("美債殖利率曲線（選配）", fetch_yields)}
+REQUIRED_SOURCES = ("ndc", "cbc")
 
 
 def cmd_probe(names):
@@ -550,6 +760,13 @@ def cmd_probe(names):
             print(f"  ❌ {type(e).__name__}: {str(e)[:300]}\n")
             bad.append(n)
     print(f"可用：{ok or '（無）'}　失敗：{bad or '（無）'}")
+    missing_required = [n for n in REQUIRED_SOURCES if n in bad]
+    if not missing_required:
+        opt = [n for n in bad if n not in REQUIRED_SOURCES]
+        print(f"✅ 必要來源都通了，可以 --fetch。"
+              + (f"（{opt} 是選配，缺了不影響）" if opt else ""))
+    else:
+        print(f"❌ 必要來源 {missing_required} 還沒通。")
     if "ndc" in bad or "cbc" in bad:
         print(f"\n政府開放平台走不通時的退路：")
         print(f"  1. 到 {NDC_PAGE} 手動下載景氣指標")

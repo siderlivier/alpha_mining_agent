@@ -1637,7 +1637,7 @@ python src/hmm_regime.py --apply              # 用狀態切因子組，比較�
 python src/factor_lab.py --compare --save memory/lab_compare.json
 
 # 測試
-python -m pytest tests/ -q               # 164 passed（約 2 分鐘；缺 data/ 時會跳過 5 支）
+python -m pytest tests/ -q               # 217 passed（約 2 分鐘；缺 data/ 時會跳過 5 支）
 python -m pytest tests/test_pipeline_no_lookahead.py -q  # 只跑全管線前瞻檢測
 python -m pytest tests/test_factor_lab.py -q         # 只跑因子合成/回測前瞻檢測
 python -m pytest tests/test_dsl_no_lookahead.py -q   # 只跑前瞻偏差測試

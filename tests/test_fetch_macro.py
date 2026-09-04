@@ -346,3 +346,329 @@ def test_find_finmind_token_prefers_env_and_never_returns_placeholder(monkeypatc
     monkeypatch.setenv("FINMIND_TOKEN", "   ")
     monkeypatch.setattr(fm, "ENV_PATHS", ())
     assert fm.find_finmind_token() == ""
+
+
+# ---------------------------------------------------------------------------
+# 央行貨幣總計數：實際的表沒有 M1B/M2 欄，只有組成項目
+# ---------------------------------------------------------------------------
+
+def _cbc_like(n=30, scale=1.0):
+    """仿 EF15M01 的欄位結構：每個項目都有「-原始值」與「-年增率」兩欄。"""
+    ym = [str(p) for p in pd.period_range("2022-01", periods=n, freq="M")]
+    g = np.linspace(1.0, 1.2, n)
+    cur, chk, dem, sav, qm = (2000 * g, 500 * g, 3000 * g, 8000 * g, 30000 * g)
+    return pd.DataFrame({
+        "期間": ym,
+        "貨幣機構以外各部門持有通貨-原始值": cur * scale,
+        "貨幣機構以外各部門持有通貨-年增率": np.full(n, 5.0),
+        "存款貨幣-計-原始值": (chk + dem + sav) * scale,
+        "存款貨幣-計-年增率": np.full(n, 4.0),
+        "存款貨幣-支票存款-原始值": chk * scale,
+        "存款貨幣-支票存款-年增率": np.full(n, 3.0),
+        "存款貨幣-活期存款-原始值": dem * scale,
+        "存款貨幣-活期存款-年增率": np.full(n, 4.0),
+        "存款貨幣-活期儲蓄存款-原始值": sav * scale,
+        "存款貨幣-活期儲蓄存款-年增率": np.full(n, 6.0),
+        "準貨幣-原始值": qm * scale,
+        "準貨幣-年增率": np.full(n, 2.0),
+    })
+
+
+def test_parse_cbc_builds_m1b_from_components():
+    """
+    實際的 EF15M01 沒有叫 M1B / M2 的欄位，只有組成項目。
+    依央行定義自行加總：M1B = 通貨+支票+活期+活儲，M2 = M1B+準貨幣。
+    """
+    df = _cbc_like(30)
+    d = fm.parse_cbc(df)
+    assert {"m1b_yoy", "m2_yoy", "m1b_minus_m2"} == set(d["field"])
+    # 各項同比例成長 → M1B 與 M2 的年增率相同 → 交叉為 0
+    x = d[d["field"] == "m1b_minus_m2"]["value"]
+    assert x.abs().max() < 1e-9
+
+
+def test_parse_cbc_never_sums_the_percentage_columns():
+    """
+    每個項目都有「-原始值」與「-年增率」兩欄，抓錯就會把百分比當餘額加總。
+    這裡讓餘額是兆元等級、年增率是個位數——若誤用年增率欄，
+    量級判斷會把它當成「已經是年增率」而走錯分支，結果完全不同。
+    """
+    df = _cbc_like(30)
+    d = fm.parse_cbc(df).set_index(["field", "ym"])["value"]
+    # 餘額線性成長 1.0→1.2，12 個月的年增率應為正且遠小於 1（不是 5.0 那種百分數）
+    v = d["m1b_yoy"]
+    assert (v > 0).all() and v.max() < 0.5, f"年增率量級不對：{v.head().tolist()}"
+
+
+def test_parse_cbc_prefers_explicit_m1b_column_when_present():
+    """有些表就直接給 M1B / M2，這時不必自己加總。"""
+    ym = [str(p) for p in pd.period_range("2022-01", periods=15, freq="M")]
+    df = pd.DataFrame({"期間": ym, "M1B-原始值": np.linspace(10000, 12000, 15),
+                       "M2-原始值": np.linspace(40000, 44000, 15)})
+    d = fm.parse_cbc(df)
+    assert "m1b_yoy" in set(d["field"])
+
+
+def test_parse_cbc_handles_fullwidth_column_names():
+    """政府 CSV 常把欄名寫成全形 Ｍ１Ｂ，子字串比對會完全找不到。"""
+    ym = [str(p) for p in pd.period_range("2022-01", periods=15, freq="M")]
+    df = pd.DataFrame({"期間": ym, "Ｍ１Ｂ": np.linspace(10000, 12000, 15),
+                       "Ｍ２": np.linspace(40000, 44000, 15)})
+    d = fm.parse_cbc(df)
+    assert "m1b_yoy" in set(d["field"])
+
+
+def test_parse_cbc_crosscheck_catches_wrong_column():
+    """
+    三項存款加總必須對得上「存款貨幣-計」。
+    把總計欄動手腳 → 必須丟錯，而不是安靜產出看似合理的 M1B。
+    """
+    df = _cbc_like(30)
+    df["存款貨幣-計-原始值"] = df["存款貨幣-計-原始值"] * 2.0     # 故意不一致
+    with pytest.raises(ValueError, match="對不上"):
+        fm.parse_cbc(df)
+
+
+def test_parse_cbc_reports_full_column_list_when_unparseable():
+    """湊不齊組成項目時，錯誤訊息要把實際欄名列出來，方便對照修正。"""
+    df = pd.DataFrame({"期間": ["2024/01"], "某個不相干的欄": [1.0]})
+    with pytest.raises(ValueError, match="組成項目"):
+        fm.parse_cbc(df)
+
+
+def test_halfwidth_conversion():
+    assert fm._halfwidth("Ｍ１Ｂ") == "M1B"
+    assert fm._halfwidth("M1B") == "M1B"
+    assert fm._halfwidth("存款貨幣-計") == "存款貨幣-計"
+
+
+def test_datalist_hint_lists_valid_ids(monkeypatch):
+    """datalist 有回東西 → 錯誤訊息要把合法的 data_id 列出來。"""
+    monkeypatch.setattr(fm, "_http_get", lambda url, **kw: json.dumps(
+        {"status": 200, "data": ["10Y", "2Y", "30Y"]}).encode())
+    hint = fm.finmind_datalist_hint("GovernmentBondsYield", "tok")
+    assert "10Y" in hint and "3 個" in hint
+
+
+def test_datalist_hint_distinguishes_auth_failure(monkeypatch):
+    """datalist 也空 → 不是 data_id 寫錯，要明講是 token / 付費層問題。"""
+    monkeypatch.setattr(fm, "_http_get", lambda url, **kw: json.dumps(
+        {"status": 200, "data": []}).encode())
+    hint = fm.finmind_datalist_hint("GovernmentBondsYield", "tok")
+    assert "token" in hint and "付費層" in hint
+
+
+def test_datalist_hint_survives_network_error(monkeypatch):
+    """診斷本身失敗也不能蓋掉原本的錯誤。"""
+    def boom(url, **kw):
+        raise OSError("no route")
+    monkeypatch.setattr(fm, "_http_get", boom)
+    assert "datalist 也失敗" in fm.finmind_datalist_hint("X", "tok")
+
+
+# ---------------------------------------------------------------------------
+# 實測第二輪暴露的問題
+# ---------------------------------------------------------------------------
+
+@pytest.mark.parametrize("raw,want", [
+    ("１１３０３", "2024-03"),        # 全形民國年
+    ("２０２４／０３", "2024-03"),     # 全形西元 + 全形斜線
+    ("２０２４０３", "2024-03"),
+    ("2024M03", "2024-03"),        # 央行常見的 M 分隔
+    ("2024m3", "2024-03"),
+    ("１１３年３月", "2024-03"),
+])
+def test_to_ym_handles_fullwidth_and_m_separator(raw, want):
+    """
+    央行的 CSV 連數字都是全形。欄名的全形已經處理了，值也要處理——
+    否則會出現「欄位找到了，但一列都認不出月份」這種很難診斷的情況。
+    """
+    assert fm.to_ym(raw) == want
+
+
+def test_parse_cbc_reports_unparseable_period_values():
+    """
+    一列都沒解析成功時，錯誤訊息要印出實際的期間值。
+
+    不加這道的話，下一行會丟 `KeyError: None of ['ym'] are in the columns`
+    ——那個訊息完全看不出真正的問題是「月份格式沒認出來」。
+    """
+    ym = ["民國113年第3季"] * 20                    # 故意用認不出的寫法
+    df = pd.DataFrame({"期間": ym,
+                       "貨幣總計數-Ｍ１Ｂ-原始值": np.linspace(1e4, 1.2e4, 20),
+                       "貨幣總計數-Ｍ２-原始值": np.linspace(4e4, 4.4e4, 20)})
+    with pytest.raises(ValueError, match="認不出月份格式"):
+        fm.parse_cbc(df)
+
+
+def test_parse_cbc_rejects_too_few_months():
+    """不足 13 個月就算不出 12 個月年增率，要明講而不是回空表。"""
+    ym = [str(p) for p in pd.period_range("2024-01", periods=6, freq="M")]
+    df = pd.DataFrame({"期間": ym, "M1B-原始值": np.linspace(1e4, 1.1e4, 6),
+                       "M2-原始值": np.linspace(4e4, 4.2e4, 6)})
+    with pytest.raises(ValueError, match="不足以算"):
+        fm.parse_cbc(df)
+
+
+def test_parse_cbc_handles_real_cbc_column_shape():
+    """
+    仿實際欄名：全形 Ｍ１Ｂ、欄名中間有空格、值也是全形民國年月。
+    這是 --probe 第二輪實際遇到的組合。
+    """
+    n = 30
+    ym = [str(p) for p in pd.period_range("2022-01", periods=n, freq="M")]
+    fw = str.maketrans("0123456789/", "０１２３４５６７８９／")
+    roc = [f"{int(m[:4]) - 1911}{m[5:7]}".translate(fw) for m in ym]
+    df = pd.DataFrame({
+        "期間": roc,
+        "貨幣總計數 -Ｍ１Ｂ-原始值": np.linspace(20000, 24000, n),
+        "貨幣總計數 -Ｍ１Ｂ-年增率": np.full(n, 5.0),
+        "貨幣總計數 -Ｍ２-原始值": np.linspace(50000, 55000, n),
+        "貨幣總計數 -Ｍ２-年增率": np.full(n, 4.0),
+    })
+    d = fm.parse_cbc(df)
+    assert {"m1b_yoy", "m2_yoy", "m1b_minus_m2"} == set(d["field"])
+    assert d["ym"].min() == "2023-01"      # 前 12 個月拿來當基期
+    assert (d[d["field"] == "m1b_yoy"]["value"] > 0).all()
+
+
+def test_fetch_yields_uses_full_country_data_id(monkeypatch):
+    """
+    FinMind 的 data_id 是 'United States 10-Year'，不是文件寫的 '10-Year'。
+    這是用 datalist 端點查出來的。
+    """
+    seen = []
+
+    def fake_get(url, **kw):
+        import urllib.parse as up
+        q = up.parse_qs(up.urlsplit(url).query)
+        did = q["data_id"][0]
+        seen.append(did)
+        data = ([{"date": "2024-01-31", "value": 4.0}]
+                if did.startswith("United States") else [])
+        return json.dumps({"status": 200, "data": data}).encode()
+
+    monkeypatch.setattr(fm, "_http_get", fake_get)
+    d = fm.fetch_yields(token="dummy")
+    assert seen[0] == "United States 10-Year", f"第一個試的應該是完整國名：{seen}"
+    assert set(d["field"]) == {"us10y", "us2y", "us_curve"}
+
+
+# ---------------------------------------------------------------------------
+# 殖利率：回應格式的防禦
+# ---------------------------------------------------------------------------
+
+def _fm_reply(rows):
+    return json.dumps({"status": 200, "msg": "success", "data": rows}).encode()
+
+
+def _yield_rows(n=40, val=4.0, col="value", start="2022-01-31"):
+    """
+    漂移量刻意設成 val 的 1%——太大的話小數版（0.042）會漂到 0.4 以上，
+    測試自己就把量級搞混了，反而測不出「有沒有重複除以 100」。
+    """
+    dates = pd.date_range(start, periods=n, freq="ME").strftime("%Y-%m-%d")
+    step = abs(val) * 0.01
+    return [{"date": d, "name": "x", col: val + i * step}
+            for i, d in enumerate(dates)]
+
+
+def test_fetch_yields_accepts_alternate_value_column(monkeypatch):
+    """FinMind 的欄名若不是 `value`，要能自動認出唯一的數值欄。"""
+    monkeypatch.setattr(fm, "_http_get",
+                        lambda url, **kw: _fm_reply(_yield_rows(col="yield")))
+    d = fm.fetch_yields(token="t")
+    assert set(d["field"]) == {"us10y", "us2y", "us_curve"}
+
+
+def test_fetch_yields_reports_unknown_columns(monkeypatch):
+    """認不出欄位時要把實際欄名與前兩筆印出來，不要丟裸 KeyError。"""
+    rows = [{"日期時間": "2022-01-31", "殖利率數值": 4.0} for _ in range(5)]
+    monkeypatch.setattr(fm, "_http_get", lambda url, **kw: _fm_reply(rows))
+    with pytest.raises(RuntimeError, match="認不出日期／數值欄"):
+        fm.fetch_yields(token="t")
+
+
+def test_fetch_yields_does_not_double_scale_decimals(monkeypatch):
+    """
+    殖利率通常以 % 給（4.2 = 4.2%），但若來源已經是小數（0.042），
+    再除以 100 會變成 0.00042——不會報錯，只會讓曲線斜率縮成噪音。
+    """
+    monkeypatch.setattr(fm, "_http_get",
+                        lambda url, **kw: _fm_reply(_yield_rows(val=0.042)))
+    d = fm.fetch_yields(token="t")
+    v = d[d["field"] == "us10y"]["value"]
+    assert 0.01 < v.median() < 0.2, f"量級不對：{v.median()}"
+
+
+def test_fetch_yields_scales_percentages(monkeypatch):
+    monkeypatch.setattr(fm, "_http_get",
+                        lambda url, **kw: _fm_reply(_yield_rows(val=4.2)))
+    d = fm.fetch_yields(token="t")
+    v = d[d["field"] == "us10y"]["value"]
+    assert 0.01 < v.median() < 0.2, f"% 沒有轉成小數：{v.median()}"
+
+
+def test_fetch_yields_errors_when_no_overlapping_months(monkeypatch):
+    """兩個年期各自有資料但月份不重疊時，要說清楚各自的範圍。"""
+    def fake(url, **kw):
+        import urllib.parse as up
+        did = up.parse_qs(up.urlsplit(url).query)["data_id"][0]
+        start = "2022-01-31" if "10-Year" in did else "2015-01-31"
+        return _fm_reply(_yield_rows(n=12, start=start))
+    monkeypatch.setattr(fm, "_http_get", fake)
+    with pytest.raises(RuntimeError, match="沒有共同的月份"):
+        fm.fetch_yields(token="t")
+
+
+def test_fetch_yields_retries_with_recent_start(monkeypatch):
+    """
+    免費層有時限制可回溯的歷史深度：要 2010 年起回空、近三年就給得出來。
+    不重試的話會把「歷史太深」誤判成「沒有這個資料集」。
+    """
+    seen = []
+
+    def fake(url, **kw):
+        import urllib.parse as up
+        q = up.parse_qs(up.urlsplit(url).query)
+        st = q["start_date"][0]
+        seen.append(st)
+        # 只有「近期」起點才給資料
+        data = _yield_rows(n=30, start="2023-01-31") if st >= "2020-01-01" else []
+        return _fm_reply(data)
+
+    monkeypatch.setattr(fm, "_http_get", fake)
+    d = fm.fetch_yields(token="t", start="2010-01-01")
+    assert seen[0] == "2010-01-01", "應該先試完整歷史"
+    assert any(s >= "2020-01-01" for s in seen), "回空之後要改試近期起點"
+    assert set(d["field"]) == {"us10y", "us2y", "us_curve"}
+
+
+def test_usage_hint_says_quota_full(monkeypatch):
+    """額度用完 → 要說「等重置就好，資料集沒問題」。"""
+    monkeypatch.setattr(fm, "_http_get", lambda url, **kw: json.dumps(
+        {"user_count": 600, "api_request_limit": 600, "level": 0}).encode())
+    assert "額度已滿" in fm.finmind_usage_hint("t")
+
+
+def test_usage_hint_says_tier_when_quota_remains(monkeypatch):
+    """額度還有剩卻取不到 → 就是資料集需要付費層，要建議先跳過。"""
+    monkeypatch.setattr(fm, "_http_get", lambda url, **kw: json.dumps(
+        {"user_count": 12, "api_request_limit": 600, "level": 0}).encode())
+    hint = fm.finmind_usage_hint("t")
+    assert "付費層" in hint and "先跳過" in hint
+
+
+def test_datalist_hint_chains_into_usage(monkeypatch):
+    """
+    datalist 認得 data_id、資料端點卻回空——這個組合要直接接到用量診斷，
+    而不是重複建議「改 data_id」（那已經被排除了）。
+    """
+    def fake(url, **kw):
+        if "datalist" in url:
+            return json.dumps({"data": ["United States 10-Year"]}).encode()
+        return json.dumps({"user_count": 5, "api_request_limit": 600,
+                           "level": 0}).encode()
+    monkeypatch.setattr(fm, "_http_get", fake)
+    hint = fm.finmind_datalist_hint("GovernmentBondsYield", "t")
+    assert "問題不在寫法" in hint and "付費層" in hint

@@ -30,7 +30,11 @@
     python src/hmm_regime.py --fit                # 訓練期擬合，看狀態長什麼樣
     python src/hmm_regime.py --predict            # walk-forward 樣本外準確率
     python src/hmm_regime.py --apply              # 用狀態切因子組，比較靜態
-    python src/hmm_regime.py --predict --states 3 --features ret,vol,breadth
+    python src/hmm_regime.py --predict --features ret,vol,monitoring_score,us_curve
+
+總經特徵（monitoring_score / monitoring_color / leading_yoy / m1b_minus_m2 /
+us_curve）需先跑 `fetch_macro.py --fetch`，取值一律走 as_of()——
+每個月拿到的都是「當下真的已經公布」的數字，不是當月尚未發布的。
 
 需要：pip install hmmlearn
 """
@@ -95,11 +99,54 @@ def market_series() -> pd.DataFrame:
 
 FEATURE_COLS = {"ret": "obs_ret", "vol": "obs_vol", "breadth": "obs_breadth"}
 
+# 總經特徵：名稱對應到 fetch_macro 的 field。值一律走 as_of()，
+# 所以每個月拿到的都是「當下真的已經公布」的數字。
+MACRO_FEATURES = ("monitoring_score", "monitoring_color", "leading_yoy",
+                  "m1b_minus_m2", "us_curve")
+MACRO_PATH = ROOT / "data" / "macro_monthly.parquet"
+
+
+def attach_macro(d: pd.DataFrame, features) -> pd.DataFrame:
+    """
+    把總經特徵併進市場序列。
+
+    ⛔ 唯一的取值管道是 `fetch_macro.as_of(panel, m)`——它只回傳
+       `pub_ym <= m` 的資料。**絕不可以直接把 macro panel 依 ym 併過來**，
+       那會用到還沒公布的數字（景氣燈號要次月底才知道）。
+       這一行是整個總經特徵最容易出錯的地方。
+    """
+    want = [f for f in features if f in MACRO_FEATURES]
+    if not want:
+        return d
+    if not MACRO_PATH.exists():
+        raise SystemExit(
+            f"要用總經特徵 {want} 但找不到 {MACRO_PATH.relative_to(ROOT)}。\n"
+            f"請先跑：python src/fetch_macro.py --fetch")
+    import fetch_macro as fm
+    panel = pd.read_parquet(MACRO_PATH)
+    have = set(panel["field"])
+    missing = [f for f in want if f not in have]
+    if missing:
+        raise SystemExit(
+            f"macro_monthly.parquet 裡沒有 {missing}（現有：{sorted(have)}）。\n"
+            f"那些來源可能抓取失敗，跑 python src/fetch_macro.py --probe 看原因。")
+
+    wide = fm.as_of_frame(panel, list(d.index))
+    out = d.copy()
+    for f in want:
+        out[f] = wide[f].reindex(out.index) if f in wide.columns else np.nan
+    return out
+
 
 def observation_matrix(d: pd.DataFrame, features) -> tuple[np.ndarray, pd.Index]:
     """取出特徵矩陣，丟掉暖身期的缺值列。"""
-    cols = [FEATURE_COLS[f] for f in features]
+    cols = [FEATURE_COLS.get(f, f) for f in features]
+    miss = [c for c in cols if c not in d.columns]
+    if miss:
+        raise SystemExit(f"序列裡沒有這些欄位：{miss}")
     sub = d[cols].dropna()
+    if not len(sub):
+        raise SystemExit(f"特徵 {list(features)} 交集後沒有任何完整的月份")
     return sub.values, sub.index
 
 
@@ -234,9 +281,14 @@ def walk_forward_states(d: pd.DataFrame, features=FEATURES,
 # 指令
 # ---------------------------------------------------------------------------
 
+def build_series(features) -> pd.DataFrame:
+    """市場序列 + （若有指定）總經特徵。所有指令都走這一個入口。"""
+    return attach_macro(market_series(), features)
+
+
 def cmd_fit(features, n_states, seed):
     """只在訓練期（≤ validation 末端）擬合一次，看狀態的性質。"""
-    d = market_series()
+    d = build_series(features)
     cut = CFG["split"]["validation"][1]
     X, idx = observation_matrix(d, features)
     keep = idx <= cut
@@ -277,7 +329,7 @@ def cmd_fit(features, n_states, seed):
 
 def cmd_predict(features, n_states, seed, span):
     """walk-forward 樣本外狀態，評估方向預測準確率。"""
-    d = market_series()
+    d = build_series(features)
     st = walk_forward_states(d, features, n_states, seed=seed)
     lo, hi = CFG["split"][span]
     s = st[(st.index >= lo) & (st.index <= hi)].dropna(subset=["mkt"])
@@ -364,7 +416,7 @@ def cmd_apply(features, n_states, seed, threshold=0.5):
               f"  ICIR_跌 {r['ICIR_跌']:>5.2f}  ICIR_漲 {r['ICIR_漲']:>5.2f}")
     print(f"⚠️ 分類完全不看 test 期。")
 
-    st = walk_forward_states(market_series(), features, n_states, seed=seed)
+    st = walk_forward_states(build_series(features), features, n_states, seed=seed)
     bull_months = set(st[st["p_bull"] >= threshold].index)
 
     s_all = fl.walk_forward(proc, feats, "ridge")
@@ -402,14 +454,170 @@ def cmd_apply(features, n_states, seed, threshold=0.5):
     return [o for o in out if o]
 
 
+# ---------------------------------------------------------------------------
+# 消融實驗：這些總經特徵到底有沒有用？
+# ---------------------------------------------------------------------------
+
+def _factor_setup():
+    """
+    因子分數與防禦組的分類——與 HMM 特徵無關，所以整個消融只算一次。
+
+    不這樣做的話，每個特徵組合都要重跑一次 51 個因子的 walk-forward，
+    十組就是十倍時間，而且算出來的東西完全一樣。
+    """
+    import ml_diagnose as md
+    df, feats, names = fl.load_panel("all")
+    proc = fl.prep(df, feats)
+    cls_lo, cls_hi = CFG["split"]["sub_train"][0], CFG["split"]["validation"][1]
+    R = md.factor_ic_by_regime(proc, feats, cls_lo, cls_hi, names)
+    n_dn = (proc[(proc["ym"] >= cls_lo) & (proc["ym"] <= cls_hi)]
+            .groupby("ym")["fwd_ret_1m"].mean() <= 0).sum()
+    R["t_跌"] = R["ICIR_跌"] * np.sqrt(n_dn)
+    defensive = list(R.sort_values("t_跌", ascending=False)
+                     .head(max(3, len(R) // 6))["因子"])
+    return proc, feats, defensive
+
+
+def _eval_switch(proc, s_all, s_def, bull_months, label):
+    """給定「哪些月份看多」，算出切換後的 test 期績效。"""
+    score = pd.Series(np.where(proc["ym"].isin(bull_months), s_all, s_def),
+                      index=proc.index)
+    dd = proc[["stock_id", "group", "ym", "fwd_ret_1m"]].copy()
+    dd["score"] = score
+    rr = bt.slice_span(bt.portfolio_returns(dd.dropna(subset=["score"])),
+                       fl.SPANS["test"])
+    if not len(rr):
+        return None
+    b, a = np.polyfit(rr["benchmark"], rr["long"], 1)
+    p = bt.perf(rr["long"])
+    ex = bt.excess_vs_benchmark(rr)
+    return {"label": label, "beta": float(b), "alpha": float(a * 12),
+            "CAGR": p["CAGR"], "MaxDD": p["MaxDD"],
+            "IR": float(ex.mean() * 12 / (ex.std() * np.sqrt(12))),
+            "n_bull": len([m for m in proc["ym"].unique() if m in bull_months])}
+
+
+# 消融的特徵組合。純價格版是對照組，其餘每組加一個總經特徵，
+# 最後是全加。逐一比對才知道是「總經有用」還是「某一個特定指標有用」。
+ABLATION_SETS = [
+    ("純價格（對照組）", ("ret", "vol")),
+    ("＋景氣對策信號分數", ("ret", "vol", "monitoring_score")),
+    ("＋景氣燈號", ("ret", "vol", "monitoring_color")),
+    ("＋領先指標年增率", ("ret", "vol", "leading_yoy")),
+    ("＋M1B−M2 交叉", ("ret", "vol", "m1b_minus_m2")),
+    ("＋全部總經", ("ret", "vol", "monitoring_score", "leading_yoy",
+                 "m1b_minus_m2")),
+    ("只用總經（無價格）", ("monitoring_score", "leading_yoy", "m1b_minus_m2")),
+]
+
+
+def cmd_ablate(n_states, seed, threshold, seeds=(0, 1, 2)):
+    """
+    逐一比較各種特徵組合，回答「這些總經特徵到底有沒有用」。
+
+    三個設計決定，每個都是為了不要自己騙自己：
+
+    1. **因子分數只算一次**。它與 HMM 特徵無關，重算只是浪費時間。
+    2. **每組跑多個 seed**。Baum-Welch 的初始化會影響結果，單一 seed
+       的差異可能只是初始化運氣。報中位數，並附上全距——
+       **全距比組間差異還大的話，那個「改善」就不是真的**。
+    3. **同時列出兩個參考線**：靜態全部因子（不切換）與完美預知（上限）。
+       有貢獻的定義是落在兩者之間，不是「比某個別的特徵組好」。
+    """
+    proc, feats, defensive = _factor_setup()
+    print(f"防禦組 {len(defensive)} 個（分類期 ≤{CFG['split']['validation'][1]}）："
+          f"{defensive}")
+    s_all = fl.walk_forward(proc, feats, "ridge")
+    s_def = fl.walk_forward(proc, defensive, "ridge")
+
+    months = list(proc["ym"].unique())
+    base = _eval_switch(proc, s_all, s_def, set(months), "靜態：全部因子")
+    only_def = _eval_switch(proc, s_all, s_def, set(), "靜態：只用防禦組")
+    perfect = _eval_switch(
+        proc, s_all, s_def,
+        set((proc.groupby("ym")["fwd_ret_1m"].mean() > 0).pipe(lambda s: s[s].index)),
+        "完美預知（上限）")
+
+    print(f"\n{'特徵組合':<22}{'看多月數':>9}{'IR':>17}{'超額α':>10}"
+          f"{'beta':>8}{'CAGR':>9}{'MaxDD':>9}")
+    print("-" * 86)
+    print(f"{base['label']:<22}{'—':>9}{base['IR']:>10.2f}{'':>7}"
+          f"{base['alpha']:>10.2%}{base['beta']:>8.3f}"
+          f"{base['CAGR']:>9.2%}{base['MaxDD']:>9.2%}   ← 不切換的基準")
+
+    rows = []
+    for label, feats_set in ABLATION_SETS:
+        try:
+            d = build_series(feats_set)
+            per_seed = []
+            for sd in seeds:
+                st = walk_forward_states(d, feats_set, n_states, seed=sd)
+                bull = set(st[st["p_bull"] >= threshold].index)
+                r = _eval_switch(proc, s_all, s_def, bull, label)
+                if r:
+                    per_seed.append(r)
+            if not per_seed:
+                print(f"{label:<22}（沒有結果）")
+                continue
+            irs = sorted(r["IR"] for r in per_seed)
+            med = per_seed[[r["IR"] for r in per_seed].index(irs[len(irs) // 2])]
+            spread = irs[-1] - irs[0]
+            flag = ""
+            if med["IR"] > base["IR"]:
+                flag = "  ✅ 勝過不切換" if spread < (med["IR"] - base["IR"]) \
+                    else "  ⚠️ 勝過但 seed 間全距更大"
+            print(f"{label:<22}{med['n_bull']:>9}{med['IR']:>10.2f}"
+                  f" ±{spread / 2:>4.2f}{med['alpha']:>10.2%}{med['beta']:>8.3f}"
+                  f"{med['CAGR']:>9.2%}{med['MaxDD']:>9.2%}{flag}")
+            rows.append({**med, "IR_全距": spread,
+                         "features": list(feats_set), "seeds": list(seeds)})
+        except SystemExit as e:
+            print(f"{label:<22}（略過：{e}）")
+
+    print("-" * 86)
+    print(f"{perfect['label']:<22}{perfect['n_bull']:>9}{perfect['IR']:>10.2f}"
+          f"{'':>7}{perfect['alpha']:>10.2%}{perfect['beta']:>8.3f}"
+          f"{perfect['CAGR']:>9.2%}{perfect['MaxDD']:>9.2%}   ← 天花板")
+    print(f"{only_def['label']:<22}{0:>9}{only_def['IR']:>10.2f}{'':>7}"
+          f"{only_def['alpha']:>10.2%}{only_def['beta']:>8.3f}"
+          f"{only_def['CAGR']:>9.2%}{only_def['MaxDD']:>9.2%}   ← 一直防禦")
+
+    best = max(rows, key=lambda r: r["IR"]) if rows else None
+    print(f"\n=== 判讀 ===")
+    print(f"不切換的基準 IR = {base['IR']:.2f}，完美預知的上限 = {perfect['IR']:.2f}。")
+    if best and best["IR"] > base["IR"]:
+        if best["IR_全距"] < (best["IR"] - base["IR"]):
+            print(f"✅ 最佳組合「{best['label']}」IR {best['IR']:.2f}，"
+                  f"勝過基準 {best['IR'] - base['IR']:+.2f}，"
+                  f"且大於 seed 間全距 {best['IR_全距']:.2f}——訊號看起來是真的。")
+        else:
+            print(f"⚠️ 最佳組合「{best['label']}」IR {best['IR']:.2f} 雖然贏基準，"
+                  f"\n   但 seed 間全距 {best['IR_全距']:.2f} 比勝幅 "
+                  f"{best['IR'] - base['IR']:.2f} 還大——"
+                  f"\n   這個「改善」可能只是 Baum-Welch 的初始化運氣。")
+    else:
+        print(f"❌ 沒有任何特徵組合勝過「完全不切換」。")
+        print(f"   總經特徵沒有帶來足以抵銷切換雜訊的資訊。")
+    print(f"\n⚠️ 這張表本身是在 test 期上比較多組設定——**挑最好的那組來用，"
+          f"\n   就是在測試集上選模型**。若要據此決定，請改用 validation 期挑，"
+          f"\n   或把勝幅當成上限而非預期值。")
+    return rows
+
+
 def main():
     ap = argparse.ArgumentParser(description="市場狀態模型（Gaussian HMM）")
     ap.add_argument("--fit", action="store_true", help="訓練期擬合一次，看狀態性質")
     ap.add_argument("--predict", action="store_true", help="walk-forward 方向準確率")
     ap.add_argument("--apply", action="store_true", help="用狀態切換因子組")
+    ap.add_argument("--ablate", action="store_true",
+                    help="消融實驗：逐一比較各特徵組合，看總經特徵有沒有用")
+    ap.add_argument("--seeds", default="0,1,2",
+                    help="消融時每組要跑的 seed（逗號分隔）。單一 seed 分不出"
+                         "「真的有改善」與「初始化運氣好」")
     ap.add_argument("--states", type=int, default=N_STATES)
     ap.add_argument("--features", default=",".join(FEATURES),
-                    help="逗號分隔：ret / vol / breadth")
+                    help="逗號分隔。價格類：ret / vol / breadth；"
+                         "總經類：" + " / ".join(MACRO_FEATURES))
     ap.add_argument("--span", default="test",
                     choices=["sub_train", "validation", "test"])
     ap.add_argument("--threshold", type=float, default=0.5,
@@ -419,17 +627,23 @@ def main():
     a = ap.parse_args()
 
     features = tuple(f.strip() for f in a.features.split(",") if f.strip())
-    bad = [f for f in features if f not in FEATURE_COLS]
+    allowed = set(FEATURE_COLS) | set(MACRO_FEATURES)
+    bad = [f for f in features if f not in allowed]
     if bad:
-        raise SystemExit(f"未知特徵 {bad}，可用：{list(FEATURE_COLS)}")
+        raise SystemExit(f"未知特徵 {bad}\n"
+                         f"  價格類：{list(FEATURE_COLS)}\n"
+                         f"  總經類：{list(MACRO_FEATURES)}（需先跑 fetch_macro --fetch）")
 
     out = {}
-    if a.fit or not any((a.fit, a.predict, a.apply)):
+    if a.fit or not any((a.fit, a.predict, a.apply, a.ablate)):
         cmd_fit(features, a.states, a.seed)
     if a.predict:
         out["predict"] = cmd_predict(features, a.states, a.seed, a.span)
     if a.apply:
         out["apply"] = cmd_apply(features, a.states, a.seed, a.threshold)
+    if a.ablate:
+        seeds = tuple(int(x) for x in a.seeds.split(",") if x.strip())
+        out["ablate"] = cmd_ablate(a.states, a.seed, a.threshold, seeds)
 
     if a.save and out:
         Path(a.save).write_text(json.dumps(out, ensure_ascii=False, indent=1,

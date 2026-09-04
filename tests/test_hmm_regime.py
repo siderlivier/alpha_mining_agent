@@ -230,3 +230,76 @@ def test_walk_forward_warmup_has_no_states():
                                 min_train=60, refit_every=12, seed=0)
     assert st.index[0] == idx[60]
     assert len(st) == len(X) - 60
+
+
+# ---------------------------------------------------------------------------
+# 5. 總經特徵：只能透過 as_of() 取值
+# ---------------------------------------------------------------------------
+
+def test_attach_macro_uses_as_of_not_raw_join(monkeypatch, tmp_path):
+    """
+    總經特徵**必須**走 fetch_macro.as_of()（只回 pub_ym <= 決策月的資料），
+    不能直接依 ym 併過來。
+
+    景氣燈號要到次月底才公布，直接 join 就會讓模型在月底 t 看到當月的燈號
+    ——那是還沒發生的資訊。這條測試把「差一個月」這件事釘死。
+    """
+    import fetch_macro as fm
+    ym = _months(8, "2024-01")
+    rows = [{"ym": m, "field": "monitoring_score", "value": 20.0 + i}
+            for i, m in enumerate(ym)]
+    panel = fm.build_panel([pd.DataFrame(rows)])
+    p = tmp_path / "macro.parquet"
+    panel.to_parquet(p, index=False)
+    monkeypatch.setattr(hr, "MACRO_PATH", p)
+
+    d = pd.DataFrame({"mkt": np.zeros(len(ym))}, index=ym)
+    out = hr.attach_macro(d, ("monitoring_score",))
+
+    # 2024-03 決策時只能看到 2024-02 的分數（21.0），不是 2024-03 的（22.0）
+    assert out.loc["2024-03", "monitoring_score"] == 21.0
+    raw = {r["ym"]: r["value"] for r in rows}
+    assert out.loc["2024-03", "monitoring_score"] != raw["2024-03"], \
+        "拿到了當月尚未公布的景氣分數——attach_macro 沒走 as_of()"
+    # 整條序列都要落後一格
+    got = out["monitoring_score"].dropna()
+    for m, v in got.items():
+        prev = str(pd.Period(m, freq="M") - 1)
+        assert v == raw.get(prev), f"{m} 應該對到 {prev} 的值"
+
+
+def test_attach_macro_noop_without_macro_features(tmp_path, monkeypatch):
+    """沒指定總經特徵時不該去碰檔案（純價格模式不應依賴總經資料）。"""
+    monkeypatch.setattr(hr, "MACRO_PATH", tmp_path / "does_not_exist.parquet")
+    d = pd.DataFrame({"mkt": [0.0, 0.1]}, index=_months(2))
+    out = hr.attach_macro(d, ("ret", "vol"))
+    pd.testing.assert_frame_equal(out, d)
+
+
+def test_attach_macro_errors_clearly_when_field_missing(monkeypatch, tmp_path):
+    """指定的總經欄位不在面板裡時，要說清楚有哪些、該怎麼補。"""
+    import fetch_macro as fm
+    panel = fm.build_panel([pd.DataFrame(
+        [{"ym": "2024-01", "field": "us_curve", "value": 0.01}])])
+    p = tmp_path / "m.parquet"
+    panel.to_parquet(p, index=False)
+    monkeypatch.setattr(hr, "MACRO_PATH", p)
+    with pytest.raises(SystemExit, match="monitoring_score"):
+        hr.attach_macro(pd.DataFrame({"mkt": [0.0]}, index=["2024-01"]),
+                        ("monitoring_score",))
+
+
+def test_observation_matrix_accepts_macro_column_names():
+    """總經欄位直接用 field 名當欄名，不經過 FEATURE_COLS 對照表。"""
+    ym = _months(6)
+    d = pd.DataFrame({"obs_ret": np.linspace(0, 0.05, 6),
+                      "monitoring_score": np.arange(6.0)}, index=ym)
+    X, idx = hr.observation_matrix(d, ("ret", "monitoring_score"))
+    assert X.shape == (6, 2)
+    assert list(idx) == ym
+
+
+def test_observation_matrix_reports_unknown_column():
+    d = pd.DataFrame({"obs_ret": [0.1, 0.2]}, index=_months(2))
+    with pytest.raises(SystemExit, match="沒有這些欄位"):
+        hr.observation_matrix(d, ("ret", "not_a_column"))

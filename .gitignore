@@ -42,3 +42,7 @@ Thumbs.db
 # ── 個人備份 ────────────────────────────────────────────
 備用/
 python
+
+# 分析輸出（可由指令重建）
+riskadj.json
+ablate_sharpe.json

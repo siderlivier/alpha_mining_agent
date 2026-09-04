@@ -303,3 +303,78 @@ def test_observation_matrix_reports_unknown_column():
     d = pd.DataFrame({"obs_ret": [0.1, 0.2]}, index=_months(2))
     with pytest.raises(SystemExit, match="沒有這些欄位"):
         hr.observation_matrix(d, ("ret", "not_a_column"))
+
+
+# ---------------------------------------------------------------------------
+# --riskadj：風險調整後對照的三個數學性質
+# ---------------------------------------------------------------------------
+
+def _fake_returns(n=60, seed=0):
+    """造一段有 beta 的月報酬：long = 0.8 × bench + alpha + 噪音。"""
+    import numpy as np
+    import pandas as pd
+    rng = np.random.default_rng(seed)
+    bench = pd.Series(rng.normal(0.01, 0.05, n),
+                      index=[f"20{10 + i // 12:02d}-{i % 12 + 1:02d}"
+                             for i in range(n)])
+    long = 0.8 * bench + 0.004 + rng.normal(0, 0.02, n)
+    return pd.DataFrame({"long": long, "benchmark": bench})
+
+
+def test_sharpe_對槓桿免疫():
+    """
+    這是整個 --riskadj 論證的地基：Sharpe 加了槓桿不會變。
+
+    若這條不成立，「用 Sharpe 當公正裁判」的說法就垮了——
+    所以它值得一個專門的測試，而不是靠註解宣稱。
+    """
+    import hmm_regime as hr
+    rr = _fake_returns()
+    a = hr._full_metrics(rr, "x", lever=1.0)
+    b = hr._full_metrics(rr, "x", lever=1.75)
+    assert abs(a["Sharpe"] - b["Sharpe"]) < 1e-9, (a["Sharpe"], b["Sharpe"])
+
+
+def test_槓桿讓_beta_與波動同比例放大():
+    """beta 與 Vol 必須恰好乘上 k——這是「等 beta 對照」能成立的前提。"""
+    import hmm_regime as hr
+    rr = _fake_returns()
+    k = 1.75
+    a = hr._full_metrics(rr, "x", lever=1.0)
+    b = hr._full_metrics(rr, "x", lever=k)
+    assert abs(b["beta"] - a["beta"] * k) < 1e-9
+    assert abs(b["Vol"] - a["Vol"] * k) < 1e-9
+
+
+def test_IR_會因為降低曝險而扣分():
+    """
+    用錯裁判的機制本身也要被測到，否則 16.1 節的論證只是嘴上說說。
+
+    把一個**完全沒有技術差異**的組合（同一條報酬序列）縮小曝險，
+    Sharpe 不動，IR 卻掉——這就是 IR 對 beta 決策有系統性偏見的證明。
+    """
+    import hmm_regime as hr
+    rr = _fake_returns()
+    full = hr._full_metrics(rr, "x", lever=1.0)
+    shrunk = hr._full_metrics(rr, "x", lever=0.6)
+    assert abs(full["Sharpe"] - shrunk["Sharpe"]) < 1e-9
+    assert shrunk["IR"] < full["IR"], (shrunk["IR"], full["IR"])
+
+
+def test_超額可由_alpha_與_beta_貢獻分解():
+    """超額 ≈ alpha + (beta−1)×基準。誤差要在 1pp 內（幾何 vs 算術的落差）。"""
+    import hmm_regime as hr
+    rr = _fake_returns(n=120)
+    m = hr._full_metrics(rr, "x")
+    assert abs(m["Excess"] - (m["alpha"] + m["BetaExcess"])) < 0.01
+
+
+def test_自助法在同一條序列上給出零差異():
+    """把兩條一模一樣的序列丟進去，ΔSharpe 必須恆為 0、CI 也是 0。"""
+    import hmm_regime as hr
+    rr = _fake_returns()
+    b = hr._paired_bootstrap(rr["long"], rr["long"], rr["benchmark"],
+                             n_boot=200, seed=0)
+    assert abs(b["dSharpe"]) < 1e-9
+    assert abs(b["dSharpe_lo"]) < 1e-9 and abs(b["dSharpe_hi"]) < 1e-9
+    assert b["n"] == len(rr)

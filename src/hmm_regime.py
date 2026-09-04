@@ -492,7 +492,8 @@ def _eval_switch(proc, s_all, s_def, bull_months, label):
     p = bt.perf(rr["long"])
     ex = bt.excess_vs_benchmark(rr)
     return {"label": label, "beta": float(b), "alpha": float(a * 12),
-            "CAGR": p["CAGR"], "MaxDD": p["MaxDD"],
+            "CAGR": p["CAGR"], "Vol": p["Vol"], "Sharpe": p["Sharpe"],
+            "MaxDD": p["MaxDD"],
             "IR": float(ex.mean() * 12 / (ex.std() * np.sqrt(12))),
             "n_bull": len([m for m in proc["ym"].unique() if m in bull_months])}
 
@@ -538,11 +539,14 @@ def cmd_ablate(n_states, seed, threshold, seeds=(0, 1, 2)):
         set((proc.groupby("ym")["fwd_ret_1m"].mean() > 0).pipe(lambda s: s[s].index)),
         "完美預知（上限）")
 
-    print(f"\n{'特徵組合':<22}{'看多月數':>9}{'IR':>17}{'超額α':>10}"
+    print(f"\n⚖️  排序依據是 **Sharpe** 不是 IR。切換的本質是改變 beta，"
+          f"\n    而 IR 是相對基準的指標，會因為部位刻意降 beta 就扣分——"
+          f"\n    用 IR 評判 beta 決策等於用錯裁判。Sharpe 對曝險大小免疫。\n")
+    print(f"{'特徵組合':<22}{'看多月數':>9}{'Sharpe':>16}{'IR':>8}{'超額α':>10}"
           f"{'beta':>8}{'CAGR':>9}{'MaxDD':>9}")
-    print("-" * 86)
-    print(f"{base['label']:<22}{'—':>9}{base['IR']:>10.2f}{'':>7}"
-          f"{base['alpha']:>10.2%}{base['beta']:>8.3f}"
+    print("-" * 94)
+    print(f"{base['label']:<22}{'—':>9}{base['Sharpe']:>10.2f}{'':>6}"
+          f"{base['IR']:>8.2f}{base['alpha']:>10.2%}{base['beta']:>8.3f}"
           f"{base['CAGR']:>9.2%}{base['MaxDD']:>9.2%}   ← 不切換的基準")
 
     rows = []
@@ -559,49 +563,232 @@ def cmd_ablate(n_states, seed, threshold, seeds=(0, 1, 2)):
             if not per_seed:
                 print(f"{label:<22}（沒有結果）")
                 continue
-            irs = sorted(r["IR"] for r in per_seed)
-            med = per_seed[[r["IR"] for r in per_seed].index(irs[len(irs) // 2])]
-            spread = irs[-1] - irs[0]
+            shs = sorted(r["Sharpe"] for r in per_seed)
+            med = per_seed[[r["Sharpe"] for r in per_seed].index(shs[len(shs) // 2])]
+            spread = shs[-1] - shs[0]
             flag = ""
-            if med["IR"] > base["IR"]:
-                flag = "  ✅ 勝過不切換" if spread < (med["IR"] - base["IR"]) \
+            if med["Sharpe"] > base["Sharpe"]:
+                flag = "  ✅ 勝過不切換" if spread < (med["Sharpe"] - base["Sharpe"]) \
                     else "  ⚠️ 勝過但 seed 間全距更大"
-            print(f"{label:<22}{med['n_bull']:>9}{med['IR']:>10.2f}"
-                  f" ±{spread / 2:>4.2f}{med['alpha']:>10.2%}{med['beta']:>8.3f}"
+            print(f"{label:<22}{med['n_bull']:>9}{med['Sharpe']:>10.2f}"
+                  f" ±{spread / 2:>4.2f}{med['IR']:>8.2f}{med['alpha']:>10.2%}"
+                  f"{med['beta']:>8.3f}"
                   f"{med['CAGR']:>9.2%}{med['MaxDD']:>9.2%}{flag}")
-            rows.append({**med, "IR_全距": spread,
+            rows.append({**med, "Sharpe_全距": spread,
                          "features": list(feats_set), "seeds": list(seeds)})
         except SystemExit as e:
             print(f"{label:<22}（略過：{e}）")
 
-    print("-" * 86)
-    print(f"{perfect['label']:<22}{perfect['n_bull']:>9}{perfect['IR']:>10.2f}"
-          f"{'':>7}{perfect['alpha']:>10.2%}{perfect['beta']:>8.3f}"
+    print("-" * 94)
+    print(f"{perfect['label']:<22}{perfect['n_bull']:>9}{perfect['Sharpe']:>10.2f}"
+          f"{'':>6}{perfect['IR']:>8.2f}{perfect['alpha']:>10.2%}"
+          f"{perfect['beta']:>8.3f}"
           f"{perfect['CAGR']:>9.2%}{perfect['MaxDD']:>9.2%}   ← 天花板")
-    print(f"{only_def['label']:<22}{0:>9}{only_def['IR']:>10.2f}{'':>7}"
-          f"{only_def['alpha']:>10.2%}{only_def['beta']:>8.3f}"
+    print(f"{only_def['label']:<22}{0:>9}{only_def['Sharpe']:>10.2f}{'':>6}"
+          f"{only_def['IR']:>8.2f}{only_def['alpha']:>10.2%}"
+          f"{only_def['beta']:>8.3f}"
           f"{only_def['CAGR']:>9.2%}{only_def['MaxDD']:>9.2%}   ← 一直防禦")
 
-    best = max(rows, key=lambda r: r["IR"]) if rows else None
+    best = max(rows, key=lambda r: r["Sharpe"]) if rows else None
     print(f"\n=== 判讀 ===")
-    print(f"不切換的基準 IR = {base['IR']:.2f}，完美預知的上限 = {perfect['IR']:.2f}。")
-    if best and best["IR"] > base["IR"]:
-        if best["IR_全距"] < (best["IR"] - base["IR"]):
-            print(f"✅ 最佳組合「{best['label']}」IR {best['IR']:.2f}，"
-                  f"勝過基準 {best['IR'] - base['IR']:+.2f}，"
-                  f"且大於 seed 間全距 {best['IR_全距']:.2f}——訊號看起來是真的。")
+    print(f"不切換的基準 Sharpe = {base['Sharpe']:.2f}，"
+          f"完美預知的上限 = {perfect['Sharpe']:.2f}。")
+    if best and best["Sharpe"] > base["Sharpe"]:
+        if best["Sharpe_全距"] < (best["Sharpe"] - base["Sharpe"]):
+            print(f"✅ 最佳組合「{best['label']}」Sharpe {best['Sharpe']:.2f}，"
+                  f"勝過基準 {best['Sharpe'] - base['Sharpe']:+.2f}，"
+                  f"且大於 seed 間全距 {best['Sharpe_全距']:.2f}——訊號看起來是真的。")
         else:
-            print(f"⚠️ 最佳組合「{best['label']}」IR {best['IR']:.2f} 雖然贏基準，"
-                  f"\n   但 seed 間全距 {best['IR_全距']:.2f} 比勝幅 "
-                  f"{best['IR'] - base['IR']:.2f} 還大——"
+            print(f"⚠️ 最佳組合「{best['label']}」Sharpe {best['Sharpe']:.2f} 雖然贏基準，"
+                  f"\n   但 seed 間全距 {best['Sharpe_全距']:.2f} 比勝幅 "
+                  f"{best['Sharpe'] - base['Sharpe']:.2f} 還大——"
                   f"\n   這個「改善」可能只是 Baum-Welch 的初始化運氣。")
     else:
         print(f"❌ 沒有任何特徵組合勝過「完全不切換」。")
         print(f"   總經特徵沒有帶來足以抵銷切換雜訊的資訊。")
+    print(f"\n（IR 欄留著只是對照用：它幾乎必然對切換版不利，"
+          f"因為切換一定會壓低 beta。）")
     print(f"\n⚠️ 這張表本身是在 test 期上比較多組設定——**挑最好的那組來用，"
           f"\n   就是在測試集上選模型**。若要據此決定，請改用 validation 期挑，"
           f"\n   或把勝幅當成上限而非預期值。")
     return rows
+
+
+# ---------------------------------------------------------------------------
+# 風險調整後的對照：IR 是評判 beta 決策的錯誤裁判
+# ---------------------------------------------------------------------------
+
+def _returns_for(proc: pd.DataFrame, score) -> pd.DataFrame:
+    """把一組分數跑成 test 期的月報酬表（long / benchmark / turnover）。"""
+    dd = proc[["stock_id", "group", "ym", "fwd_ret_1m"]].copy()
+    dd["score"] = score
+    return bt.slice_span(bt.portfolio_returns(dd.dropna(subset=["score"])),
+                         fl.SPANS["test"])
+
+
+def _full_metrics(rr: pd.DataFrame, label: str, lever: float = 1.0) -> dict:
+    """
+    比 _stat() 多算三個東西：Vol、Sharpe、追蹤誤差（TE）。
+
+    `lever` 是「用無風險利率（假設 0）融資把部位放大 k 倍」。這麼做會
+    讓 beta 與 Vol 同比例放大，**但 Sharpe 完全不變**——這正是我們要的
+    性質：Sharpe 對曝險大小免疫，所以它才是「切換到底有沒有幫上忙」
+    的公正裁判；IR 不是，IR 會因為你刻意壓低 beta 就扣你分。
+    """
+    r = (rr["long"] * lever).dropna()
+    b = rr["benchmark"].reindex(r.index)
+    beta, alpha = np.polyfit(b, r, 1)
+    p = bt.perf(r)
+    ex = (r - b).dropna()
+    te = float(ex.std() * np.sqrt(12))
+    bench_cagr = bt.perf(b).get("CAGR", np.nan)
+    return {
+        "label": label, "lever": float(lever),
+        "beta": float(beta), "alpha": float(alpha * 12),
+        "CAGR": p["CAGR"], "Vol": p["Vol"], "Sharpe": p["Sharpe"],
+        "MaxDD": p["MaxDD"],
+        "Excess": float(ex.mean() * 12), "TE": te,
+        "IR": float(ex.mean() * 12 / te) if te > 0 else np.nan,
+        "BetaExcess": float((beta - 1) * bench_cagr),
+        "Months": p["Months"],
+    }
+
+
+def _paired_bootstrap(r_a: pd.Series, r_b: pd.Series, bench: pd.Series,
+                      n_boot: int = 10000, seed: int = 0) -> dict:
+    """
+    配對自助法：Sharpe 差與 IR 差的 95% 信賴區間。
+
+    為什麼要做這個——77 個月的樣本下，「1.74 vs 1.08」看起來差很多，
+    但那是兩個由 77 個數字算出來的比值。不做這一步就無法分辨
+    「切換確實比較差」與「樣本太小，兩者其實分不出來」。
+
+    ⚠️ 用的是逐月 iid 重抽（配對，同時抽三條序列的同一個月），
+    這假設月報酬之間沒有序列相關。月頻資料上這個假設還算過得去，
+    但若之後改成週頻或日頻，要換成 stationary bootstrap。
+    """
+    idx = r_a.index.intersection(r_b.index).intersection(bench.index)
+    a, b_, m = (r_a.reindex(idx).to_numpy(), r_b.reindex(idx).to_numpy(),
+                bench.reindex(idx).to_numpy())
+    n = len(idx)
+    rng = np.random.default_rng(seed)
+
+    def _sh(x):
+        s = x.std(ddof=1)
+        return x.mean() * 12 / (s * np.sqrt(12)) if s > 0 else np.nan
+
+    def _ir(x, mk):
+        e = x - mk
+        s = e.std(ddof=1)
+        return e.mean() * 12 / (s * np.sqrt(12)) if s > 0 else np.nan
+
+    d_sh, d_ir = [], []
+    for _ in range(n_boot):
+        k = rng.integers(0, n, n)
+        d_sh.append(_sh(a[k]) - _sh(b_[k]))
+        d_ir.append(_ir(a[k], m[k]) - _ir(b_[k], m[k]))
+    d_sh, d_ir = np.array(d_sh), np.array(d_ir)
+
+    # 逐月差額的配對 t 檢定（報酬本身，不是比值）
+    diff = a - b_
+    t = diff.mean() / (diff.std(ddof=1) / np.sqrt(n)) if diff.std(ddof=1) > 0 else np.nan
+    return {
+        "n": int(n),
+        "dSharpe": float(_sh(a) - _sh(b_)),
+        "dSharpe_lo": float(np.nanpercentile(d_sh, 2.5)),
+        "dSharpe_hi": float(np.nanpercentile(d_sh, 97.5)),
+        "dSharpe_p_gt0": float(np.nanmean(d_sh > 0)),
+        "dIR": float(_ir(a, m) - _ir(b_, m)),
+        "dIR_lo": float(np.nanpercentile(d_ir, 2.5)),
+        "dIR_hi": float(np.nanpercentile(d_ir, 97.5)),
+        "dIR_p_gt0": float(np.nanmean(d_ir > 0)),
+        "monthly_diff_ann": float(diff.mean() * 12),
+        "monthly_diff_t": float(t),
+    }
+
+
+def cmd_riskadj(features, n_states, seed, threshold=0.5, n_boot=10000):
+    """
+    回答一個 --apply 回答不了的問題：**切換降的那 0.14 beta，是免費的還是買來的？**
+
+    --apply 的表格裡 IR 下降、beta 也下降，兩個指標指向相反的方向，
+    光看它無法判斷。這裡用三張表拆開：
+
+    A. 原始指標 + Sharpe/Vol/TE。Sharpe 對曝險免疫，是公正裁判。
+    B. 等 beta 對照：把切換版加槓桿放大到與靜態相同的 beta 再比。
+       若放大後追平，IR 差距就純粹是曝險差異；若仍落後，切換是真的有害。
+    C. 配對自助法：這個差距在 77 個月的樣本下分得出來嗎？
+    """
+    proc, feats, defensive = _factor_setup()
+    print(f"防禦組 {len(defensive)} 個：{defensive}\n")
+
+    st = walk_forward_states(build_series(features), features, n_states, seed=seed)
+    bull_months = set(st[st["p_bull"] >= threshold].index)
+
+    s_all = fl.walk_forward(proc, feats, "ridge")
+    s_def = fl.walk_forward(proc, defensive, "ridge")
+    s_sw = pd.Series(np.where(proc["ym"].isin(bull_months), s_all, s_def),
+                     index=proc.index)
+    perfect = set((proc.groupby("ym")["fwd_ret_1m"].mean() > 0)
+                  .pipe(lambda s: s[s].index))
+    s_pf = pd.Series(np.where(proc["ym"].isin(perfect), s_all, s_def),
+                     index=proc.index)
+
+    rr_all, rr_def = _returns_for(proc, s_all), _returns_for(proc, s_def)
+    rr_sw, rr_pf = _returns_for(proc, s_sw), _returns_for(proc, s_pf)
+
+    hdr = (f"{'':<26}{'beta':>6}{'alpha':>9}{'CAGR':>9}{'Vol':>8}"
+           f"{'Sharpe':>8}{'超額':>9}{'TE':>8}{'IR':>7}{'MaxDD':>9}")
+
+    def _row(m):
+        return (f"{m['label']:<26}{m['beta']:>6.3f}{m['alpha']:>+9.2%}"
+                f"{m['CAGR']:>9.2%}{m['Vol']:>8.2%}{m['Sharpe']:>8.2f}"
+                f"{m['Excess']:>+9.2%}{m['TE']:>8.2%}{m['IR']:>7.2f}"
+                f"{m['MaxDD']:>9.2%}")
+
+    print("=== A. 原始指標（test 期）===")
+    print(hdr)
+    A = [_full_metrics(rr_all, "靜態：全部因子"),
+         _full_metrics(rr_def, "靜態：只用防禦組"),
+         _full_metrics(rr_sw, "HMM 切換"),
+         _full_metrics(rr_pf, "完美預知（上限）")]
+    for m in A:
+        print(_row(m))
+    print(f"\n基準 CAGR {bt.perf(rr_all['benchmark'])['CAGR']:.2%}"
+          f"　（超額 ≈ alpha + (beta−1)×基準）")
+    for m in A:
+        print(f"   {m['label']:<26}alpha {m['alpha']:>+7.2%}"
+              f"  +  beta 貢獻 {m['BetaExcess']:>+7.2%}"
+              f"  =  {m['alpha'] + m['BetaExcess']:>+7.2%}"
+              f"　(實測超額 {m['Excess']:>+7.2%})")
+
+    k = A[0]["beta"] / A[2]["beta"]
+    print(f"\n=== B. 等 beta 對照：把切換版放大 {k:.3f} 倍（rf=0 融資）===")
+    print(hdr)
+    B = [A[0], _full_metrics(rr_sw, f"HMM 切換 ×{k:.3f}", lever=k)]
+    for m in B:
+        print(_row(m))
+    print("判讀：Sharpe 那一欄不會因為放大而改變——這是槓桿的數學性質，"
+          "\n     所以 A 表的 Sharpe 已經是等風險比較的答案。B 表只是把它"
+          "\n     翻譯成 CAGR/IR 的語言，讓『輸的是 beta 還是技術』一目了然。")
+
+    print(f"\n=== C. 這個差距分得出來嗎？（配對自助法 {n_boot} 次）===")
+    boot = _paired_bootstrap(rr_all["long"], rr_sw["long"],
+                             rr_all["benchmark"], n_boot=n_boot, seed=seed)
+    print(f"樣本 {boot['n']} 個月")
+    print(f"ΔSharpe（靜態 − 切換） {boot['dSharpe']:>+6.3f}   "
+          f"95% CI [{boot['dSharpe_lo']:+.3f}, {boot['dSharpe_hi']:+.3f}]   "
+          f"P(Δ>0) = {boot['dSharpe_p_gt0']:.3f}")
+    print(f"ΔIR    （靜態 − 切換） {boot['dIR']:>+6.3f}   "
+          f"95% CI [{boot['dIR_lo']:+.3f}, {boot['dIR_hi']:+.3f}]   "
+          f"P(Δ>0) = {boot['dIR_p_gt0']:.3f}")
+    print(f"逐月報酬差 年化 {boot['monthly_diff_ann']:+.2%}，"
+          f"配對 t = {boot['monthly_diff_t']:.2f}")
+    print("判讀：CI 若跨越 0，代表在這個樣本量下兩者分不出高下——"
+          "\n     那麼『切換比較差』就不能寫成結論，只能寫成『沒有證據顯示它比較好』。")
+
+    return {"A": A, "B": B, "boot": boot, "lever": float(k),
+            "n_bull": len(bull_months)}
 
 
 def main():
@@ -609,6 +796,8 @@ def main():
     ap.add_argument("--fit", action="store_true", help="訓練期擬合一次，看狀態性質")
     ap.add_argument("--predict", action="store_true", help="walk-forward 方向準確率")
     ap.add_argument("--apply", action="store_true", help="用狀態切換因子組")
+    ap.add_argument("--riskadj", action="store_true",
+                    help="風險調整後對照：Sharpe／等 beta／自助法信賴區間")
     ap.add_argument("--ablate", action="store_true",
                     help="消融實驗：逐一比較各特徵組合，看總經特徵有沒有用")
     ap.add_argument("--seeds", default="0,1,2",
@@ -635,7 +824,7 @@ def main():
                          f"  總經類：{list(MACRO_FEATURES)}（需先跑 fetch_macro --fetch）")
 
     out = {}
-    if a.fit or not any((a.fit, a.predict, a.apply, a.ablate)):
+    if a.fit or not any((a.fit, a.predict, a.apply, a.ablate, a.riskadj)):
         cmd_fit(features, a.states, a.seed)
     if a.predict:
         out["predict"] = cmd_predict(features, a.states, a.seed, a.span)
@@ -644,6 +833,8 @@ def main():
     if a.ablate:
         seeds = tuple(int(x) for x in a.seeds.split(",") if x.strip())
         out["ablate"] = cmd_ablate(a.states, a.seed, a.threshold, seeds)
+    if a.riskadj:
+        out["riskadj"] = cmd_riskadj(features, a.states, a.seed, a.threshold)
 
     if a.save and out:
         Path(a.save).write_text(json.dumps(out, ensure_ascii=False, indent=1,

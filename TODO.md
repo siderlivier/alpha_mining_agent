@@ -151,7 +151,7 @@ CAGR 42.86%（+3.54pp）、IR 1.80（+0.06）、MaxDD −15.50%（持平）。
 - 因子組合實驗室：`--compare` / `--loo` / `--greedy` / `--cost-scan`
 - 過擬合診斷六項：régime / breadth / liquidity / importance / DSR+PBO / timing
 - **四套前瞻偏差檢測**：DSL 層、全管線、因子合成、HMM
-- 164 個測試通過
+- 241 個測試通過
 
 **目前最佳成果**（test 期 2020-01 起，77 個月，51 個因子 + LightGBM）：
 年化超額 **16.36%**、IR **2.57**、Deflated Sharpe **0.997**、PBO 0.001。

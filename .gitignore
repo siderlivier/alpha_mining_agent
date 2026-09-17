@@ -46,3 +46,7 @@ python
 # 分析輸出（可由指令重建）
 riskadj.json
 ablate_sharpe.json
+
+# 橫斷面樣本外檢定輸出
+crosssec_oos.json
+crosssec_oos_test.json

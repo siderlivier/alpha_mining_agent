@@ -1,6 +1,6 @@
 # 檔案對照表
 
-> 本專案每一個檔案的中文名稱與職責。更新日期：2026-09-07
+> 本專案每一個檔案的中文名稱與職責。更新日期：2026-09-14
 >
 > 其他文件的分工：`SPEC_架構設計規格書.md` 講**為什麼這樣設計**、
 > `GUIDE_使用教學.md` 講**怎麼操作**、`RESULTS.md` 講**數字與出處**、
@@ -29,6 +29,7 @@
 | `GUIDE_使用教學.md` | 使用教學 | 逐項功能解說、參數調校、疑難排解，13 章 | ✅ |
 | `RESULTS.md` | 實測數據總表 | 17 節，所有數字＋產生它的指令。含第 16 節「結論被推翻」的完整紀錄 | ✅ |
 | `TODO.md` | 待辦清單 | 跨兩個專案的待處理事項 | ✅ |
+| `REVIEW_程式碼與數值正確性評估報告_2026-09-14.md` | 程式碼與數值正確性評估報告 | 27 項問題的嚴重程度、證據、數值影響、修正方向及驗收條件；含 test 資訊，僅供人類審閱，不放入挖礦 prompt | ✅ |
 | `FILES_檔案對照表.md` | 檔案對照表 | 就是本檔 | ✅ |
 | `.gitignore` | 版控排除規則 | 註解說明了**每個被排除的檔案怎麼重建**。核心原則：`memory/` 底下的 JSON 與 markdown **要**進版控（那是 agent 的記憶，是專案核心資產），只有 37MB 的 `factor_values.parquet` 因體積排除 | ✅ |
 
@@ -80,6 +81,8 @@
 |---|---|---|---|
 | `hmm_regime.py` | 847 | 市場狀態模型 | Gaussian HMM 判斷下月多空態，用途**不是進出場而是切換因子組**。三道前瞻紀律：觀測值時點對齊（`obs_ret[t] = mkt[t−1]`）、**只用自己寫的前向濾波不用 hmmlearn 的 Viterbi／平滑**（那兩者會用到未來觀測）、參數與標籤只在訓練窗擬合。指令：`--fit` 擬合看狀態性質、`--predict` 樣本外方向準確率、`--apply` 切換因子組、`--ablate` 特徵消融、`--riskadj` 風險調整後三張表（原始指標／等 beta 對照／配對自助法 CI） |
 | `threshold_sweep.py` | 58 | 門檻掃描 | 同時報 Sharpe 與 IR，看「換裁判會不會換結論」。存在理由：`--riskadj` 只比較預設門檻 0.5，若結論只在 0.5 成立就是巧合不是結論。⚠️ 這張表能支持的是「結論不依賴門檻」，**不是**「最佳門檻是 0.2」——在 test 期挑最好的門檻就是選擇偏誤 |
+
+| `crosssec_oos.py` | 134 | 橫斷面樣本外檢定 | 因子是在 4 個產業上挖出來的，民生與製造與營建是 agent 從沒看過的產業。拿新資料測它們，得到與「往前走」互相獨立的第二種樣本外——**往旁邊走**。判讀：抓到真機制的因子在新產業應該還有 IC；只是原產業特性代理的會歸零。⛔ 只讀資料不寫 `memory/`，因子庫的歷史指標不該被重算覆蓋 |
 
 ---
 
@@ -147,7 +150,7 @@
 
 | 檔案 | 中文名稱 | 內容 | 怎麼重建 |
 |---|---|---|---|
-| `monthly_base.parquet` | 月頻基礎面板 | 140,564 列、36 欄、958 檔、2012-01 ~ 2026-06。`stock_id`／`ym`／`group`／`fwd_ret_1m` ＋ 27 個 `fields.yaml` 欄位 | `python src/build_base.py` |
+| `monthly_base.parquet` | 月頻基礎面板 | **239,919 列、36 欄、1,616 檔、6 產業**、2012-01 ~ 2026-06。`stock_id`／`ym`／`group`／`fwd_ret_1m` ＋ 27 個 `fields.yaml` 欄位 | `python src/build_base.py` |
 | `tmp_prices.parquet` | 價量中間檔 | `build_base --stage prices` 的月底快照 | 同上 |
 | `tmp_chips.parquet` | 籌碼中間檔 | `build_base --stage chips` 的月底快照 | 同上 |
 | `dfs_snapshot.parquet` | 參考因子自足快照 | 395 萬列（`dfs_name`／`ym`／`stock_id`／`value`）。**存了這份之後就不必再跨專案讀取** | `python src/seed_reference.py --apply` |
@@ -157,10 +160,11 @@
 | `macro_monthly.parquet` | 總經月頻面板 | 3,992 列（`ym`／`field`／`value`／**`pub_ym`**）。長格式，8 個欄位 | `python src/fetch_macro.py --fetch` |
 | `stock_names.json` | 股票代號對照 | 975 檔的代號 → 名稱，流動性歸因報表用 | 從前置專案抓 |
 
-> ⚠️ **目前的資料狀態**：`monthly_base.parquet` 建於 07-20，只有 **958 檔 / 4 個產業**；
-> 前置專案的 `panel.parquet` 已於 09-05 重建為 **1,616 檔 / 6 個產業**
-> （多了民生與製造、營建）。等前置專案的籌碼與事件表補齊後需要重跑 `build_base.py`，
-> 屆時所有數字都會變。詳見 `TODO.md`。
+> ✅ **2026-09-17 已重建**：前置專案補齊逐檔抓取的資料表後重跑 `build_base.py`，
+> 從 958 檔 / 4 產業擴到 **1,616 檔 / 6 產業**（新增民生與製造、營建）。
+> 沒有任何欄位缺值率惡化超過 3pp。舊檔備份在 `data/_before_rebuild/`。
+> ⚠️ 但 `memory/factor_values.parquet`（958 檔）與 `data/dfs_snapshot.parquet`
+> 尚未重算，`library.json` 的指標仍是舊資料的結果。詳見 `TODO.md`。
 
 ---
 

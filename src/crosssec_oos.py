@@ -353,6 +353,175 @@ def cmd_pairwise(save_csv: str, spans=("sub_train", "validation", "test"),
     return df
 
 
+# ---------------------------------------------------------------------------
+# 去膨脹 ICIR：直接對 IC 序列做多重檢定校正，不經過回測引擎
+# ---------------------------------------------------------------------------
+
+def _trial_icirs():
+    """
+    從 `memory/attempts/` 取出**實際搜尋歷史**的 sub_train ICIR。
+
+    這是整支程式最關鍵的一塊。多數研究做不到完整的多重檢定校正，因為他們
+    不留被拒候選的紀錄——只剩存活者，試驗數就只能用存活數，嚴重低估搜尋量。
+    本專案的 `attempts/` 是**只進不出**，連死在 Stage 1 的都留著指標，
+    所以試驗池可以是真正的搜尋歷史。
+    """
+    import ast
+    rows = []
+    for f in (ROOT / "memory" / "attempts").glob("*.json"):
+        try:
+            a = json.loads(f.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        d = a.get("result")
+        if isinstance(d, str):
+            try:
+                d = ast.literal_eval(d)
+            except Exception:
+                d = None
+        if not isinstance(d, dict):
+            continue
+        st = d.get("sub_train") or {}
+        if st.get("icir") is None:
+            continue
+        rows.append((a.get("verdict", "?"), float(st["icir"])))
+    return np.array([r[1] for r in rows]), rows
+
+
+def _expected_max(sigma: float, n: int) -> float:
+    """N 次獨立抽樣中最大值的期望（Bailey & López de Prado 的近似式）。"""
+    from scipy.stats import norm
+    g = 0.5772156649                                   # Euler–Mascheroni
+    return float(sigma * ((1 - g) * norm.ppf(1 - 1.0 / n)
+                          + g * norm.ppf(1 - 1.0 / (n * np.e))))
+
+
+def cmd_deflate_icir(span: str = "sub_train", save: str | None = None) -> list:
+    """
+    問題：這些因子是從 1,011 次搜尋裡挑出來的，它們的 ICIR 會不會只是運氣？
+
+    為什麼不用既有的 `ml_diagnose --dsr`
+    ------------------------------------
+    `--dsr` 為了拿一個多重檢定校正，繞道走完了整個回測引擎：
+    因子 → 產業內前 10% 組合 → 扣換手成本 → 主動報酬 → Sharpe → 去膨脹。
+    於是它同時扛上 R05（缺報酬篩選）與 R12（換手定義）——而那兩件事跟
+    「這個 ICIR 是不是挑出來的」完全無關。
+
+    **ICIR 在數學形式上就是 Sharpe**：
+
+        Sharpe = mean(月報酬) / std(月報酬)
+        ICIR   = mean(月 IC)  / std(月 IC)      ← 同一個估計量
+
+    去膨脹公式吃的是「一條序列 + N 個試驗」，不在乎序列是報酬還是 IC，
+    所以直接對 IC 序列做，完全不碰回測引擎。
+
+    ⚠️ 虛無分布要用哪一個——這是最容易算錯的地方
+    ----------------------------------------------
+    門檻 =「N 次試驗中最大值的期望」= σ × f(N)，關鍵在 σ 取什麼：
+
+      (A) 1,011 個候選 ICIR 的**經驗**標準差（≈0.287）
+          Bailey & López de Prado 原文的估計方式。但它混入了**候選之間
+          真實的強弱差別**，不只是抽樣雜訊。
+
+      (B) 無技巧的**理論**標準差 1/√T（T=72 時 ≈0.118）
+          一個沒有預測力的因子，月 IC 均值為 0、ICIR 的抽樣誤差就是 1/√T。
+          這才是「純運氣」該有的分布。
+
+    (A) 約為 (B) 的 2.4 倍——那個差距是真實訊號差異，不是運氣。用 (A) 當
+    虛無分布，等於假設「所有候選都沒有訊號、觀察到的離散全是運氣」，
+    會把門檻灌到天上去。
+
+    **本函式以 (B) 為主答案，同時列出 (A) 當保守上界。**
+
+    ⚠️ test 期為什麼不需要做這個校正
+    ---------------------------------
+    選取只用了 sub_train + validation，**test 從未參與挑選**——沒有選擇偏誤
+    就不需要校正，test 期的 ICIR 直接報即可。
+    （但 test 期已被歷次研究反覆檢視，不是全新 holdout。那是另一種汙染，
+      去膨脹修不了，只能靠「往前走」解決。）
+    """
+    import ml_diagnose as md                       # 借用 psr，不重複實作
+    ctx = ec.Context()
+    lib = json.loads((ROOT / "memory" / "library.json").read_text(encoding="utf-8"))
+    fv = pd.read_parquet(ROOT / "memory" / "factor_values.parquet")
+    cols = ctx.fwd.columns
+
+    trials, rows = _trial_icirs()
+    n_rej = sum(1 for v, _ in rows if not v.startswith("passed"))
+    print(f"試驗池：**實際搜尋歷史** {len(trials)} 個候選"
+          f"（含 {n_rej} 個被漏斗刷掉的）")
+    print(f"  經驗 σ = {trials.std(ddof=1):.4f}　中位 {np.median(trials):.3f}"
+          f"　max {trials.max():.3f}")
+
+    own = {k: v for k, v in sorted(lib.items()) if k.startswith("F-")}
+    months = ctx.mask(span)
+    out = []
+    for fid, meta in own.items():
+        groups = _approved(meta)
+        fac = _values_matrix(fv, fid, ctx.months, cols)
+        if not len(fac) or not groups:
+            continue
+        ic = ic_series(ctx, fac, groups, months).dropna()
+        if len(ic) < 24 or not (ic.std() > 0):
+            continue
+        out.append({"factor": fid, "name": meta.get("name_zh", ""),
+                    "icir": float(ic.mean() / ic.std()), "T": int(len(ic)),
+                    "skew": float(ic.skew()),
+                    "kurt": float(ic.kurtosis() + 3.0)})
+    if not out:
+        raise SystemExit("沒有可評估的因子")
+
+    T = int(np.median([o["T"] for o in out]))
+    N = len(trials)
+    sr0_null = _expected_max(1.0 / np.sqrt(T), N)         # (B) 主答案
+    sr0_emp = _expected_max(float(trials.std(ddof=1)), N)  # (A) 保守上界
+
+    print(f"\n虛無分布與門檻（N = {N}，T = {T} 個月）")
+    print(f"  (B) 無技巧 σ = 1/√{T} = {1 / np.sqrt(T):.4f}"
+          f"　→ 純運氣期望最大 ICIR = **{sr0_null:.3f}**  ← 主答案")
+    print(f"  (A) 經驗 σ = {trials.std(ddof=1):.4f}"
+          f"　→ 門檻 = {sr0_emp:.3f}  ← 保守上界（混入真實強弱差別，偏高）")
+
+    for o in out:
+        o["deflated_p"] = md.psr(o["icir"], sr0_null, o["T"], o["skew"], o["kurt"])
+        o["pass_null"] = bool(o["icir"] > sr0_null)
+        o["pass_emp"] = bool(o["icir"] > sr0_emp)
+
+    out.sort(key=lambda x: -x["icir"])
+    print(f"\n===== 逐因子（{span} 期，各自的核准產業內）=====")
+    print(f"{'id':<7}{'名稱':<22}{'ICIR':>7}{'T':>5}{'去膨脹機率':>13}"
+          f"{'過(B)':>7}{'過(A)':>7}")
+    print("-" * 70)
+    for o in out:
+        print(f"{o['factor']:<7}{o['name'][:21]:<22}{o['icir']:>7.3f}{o['T']:>5}"
+              f"{o['deflated_p']:>13.3f}"
+              f"{'✅' if o['pass_null'] else '❌':>7}"
+              f"{'✅' if o['pass_emp'] else '❌':>7}")
+
+    nb = sum(o["pass_null"] for o in out)
+    na = sum(o["pass_emp"] for o in out)
+    print("-" * 70)
+    print(f"以 (B) 主答案：**{nb} / {len(out)}** 個超過純運氣門檻 {sr0_null:.3f}")
+    print(f"以 (A) 保守上界：{na} / {len(out)} 個超過 {sr0_emp:.3f}")
+    print(f"去膨脹機率 > 0.95 的：{sum(o['deflated_p'] > 0.95 for o in out)} / {len(out)}")
+
+    print(f"\n⚠️ 這個校正回答的是「**選取階段**有沒有被運氣主導」，"
+          f"所以用 {span} 期——\n   因子實際就是在這裡被挑出來的。")
+    print("⚠️ test 期不需要做這個校正：選取從未使用 test，沒有選擇偏誤。"
+          "\n   但 test 期已被歷次研究反覆檢視，不是全新 holdout。")
+    print("⚠️ 1,011 個候選彼此高度相關（Stage 2 存在的理由就是殺重複），"
+          "\n   獨立性假設不成立 → 有效試驗數小於 1,011 → 真實門檻比 (B) 更低。"
+          "\n   也就是說 (B) 已經站在偏保守的一側。")
+
+    if save:
+        Path(save).write_text(json.dumps(
+            {"span": span, "n_trials": N, "T": T,
+             "sr0_null": sr0_null, "sr0_empirical": sr0_emp, "factors": out},
+            ensure_ascii=False, indent=1, default=float), encoding="utf-8")
+        print(f"\n已存 {save}")
+    return out
+
+
 def main() -> None:
     scope_flags = {"--refresh", "--check-only", "--auto-apply", "--apply", "--recover", "--requalify"}
     if scope_flags.intersection(sys.argv[1:]):
@@ -360,6 +529,11 @@ def main() -> None:
         sys.argv = [sys.argv[0]] + [arg for arg in sys.argv[1:] if arg not in ("--refresh", "--requalify")]
         raise SystemExit(factor_scope.main())
     ap = argparse.ArgumentParser()
+    ap.add_argument("--deflate-icir", action="store_true",
+                    help="多重檢定校正：用完整搜尋歷史當試驗池，直接對 IC 序列去膨脹")
+    ap.add_argument("--deflate-span", default="sub_train",
+                    choices=["sub_train", "validation"],
+                    help="校正的期間（選取實際發生的地方；test 不需要校正）")
     ap.add_argument("--pairwise", action="store_true",
                     help="逐對比較並輸出 CSV：自有 × 基準 × 核准產業")
     ap.add_argument("--csv", default="logs/pairwise_own_vs_reference.csv",
@@ -371,6 +545,10 @@ def main() -> None:
                     choices=["all", "sub_train", "validation", "test"],
                     help="限定期間；預設 all（新產業的每一個月都是橫斷面樣本外）")
     a = ap.parse_args()
+
+    if a.deflate_icir:
+        cmd_deflate_icir(a.deflate_span, a.save)
+        return
 
     if a.pairwise:
         cmd_pairwise(a.csv)

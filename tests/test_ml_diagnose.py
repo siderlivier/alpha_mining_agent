@@ -431,3 +431,61 @@ def test_orientation_window_excludes_every_test_month():
     lo = fl.SPANS["test"][0]
     assert not (fit["ym"] >= lo).any(), "定向用到了 test 期資料"
     assert len(fit) > 0
+
+
+# ---------------------------------------------------------------------------
+# 去膨脹 ICIR（crosssec_oos.cmd_deflate_icir）的數學性質
+# ---------------------------------------------------------------------------
+
+def test_expected_max_grows_with_trial_count():
+    """試驗數越多，純運氣能達到的最大值越高——這是多重檢定校正的全部重點。"""
+    import crosssec_oos as co
+    sd = 0.12
+    vals = [co._expected_max(sd, n) for n in (10, 100, 1000, 10000)]
+    assert vals == sorted(vals), vals
+    assert vals[-1] > 2 * vals[0]
+
+
+def test_expected_max_scales_linearly_with_sigma():
+    """門檻對 σ 是線性的——所以選錯虛無分布會等比例放大門檻。"""
+    import crosssec_oos as co
+    a = co._expected_max(0.1179, 1011)
+    b = co._expected_max(0.2867, 1011)
+    ratio_sigma = 0.2867 / 0.1179
+    assert abs(b / a - ratio_sigma) < 1e-9, (a, b)
+
+
+def test_empirical_sigma_exceeds_no_skill_sigma():
+    """
+    實際候選的 ICIR 離散度應該**大於**純雜訊的 1/√T。
+
+    大出來的部分是候選之間真實的強弱差別。這條斷言若失敗，代表 1,011 個
+    候選之間看不出訊號差異，那整個挖礦的前提就要重新檢討。
+    """
+    import numpy as np
+    import crosssec_oos as co
+    trials, _ = co._trial_icirs()
+    if len(trials) < 100:
+        import pytest
+        pytest.skip("attempts 紀錄不足")
+    T = 58
+    assert trials.std(ddof=1) > 1.0 / np.sqrt(T), (
+        "候選 ICIR 的離散度不高於純雜訊——挖礦沒有產生強弱差異")
+
+
+def test_trial_pool_includes_rejected_candidates():
+    """
+    試驗池必須含被刷掉的候選，否則試驗數會嚴重低估搜尋量。
+
+    這是本專案能做完整多重檢定校正的唯一理由：attempts/ 只進不出。
+    """
+    import crosssec_oos as co
+    trials, rows = co._trial_icirs()
+    if not len(rows):
+        import pytest
+        pytest.skip("attempts 紀錄不足")
+    rejected = [v for v, _ in rows if not v.startswith("passed")]
+    admitted = [v for v, _ in rows if v.startswith("passed")]
+    assert len(rejected) > 10 * len(admitted), (
+        f"被拒 {len(rejected)} 不應該只有入庫 {len(admitted)} 的少數倍——"
+        "試驗池看起來只收了存活者")

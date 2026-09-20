@@ -35,6 +35,17 @@ ANN = int(BT.get("ann", 12))
 REQUIRED = ("stock_id", "group", "ym", "score", "fwd_ret_1m")
 
 
+class MissingReturnError(ValueError):
+    """Selected universe cannot be valued; never substitute a different stock."""
+    def __init__(self, ym, missing, longs, shorts):
+        self.ym = str(ym)
+        self.missing = list(missing)
+        self.long_holdings = list(longs)
+        self.short_holdings = list(shorts)
+        super().__init__(f"{ym}: missing/nonfinite returns for {self.missing}; "
+                         "selection is fixed. Resolve valuation before reporting performance.")
+
+
 def portfolio_returns(df: pd.DataFrame, top_q: float = TOP_Q,
                       weighting: str = WEIGHTING, cost: float = COST,
                       min_stocks: int = MIN_STOCKS) -> pd.DataFrame:
@@ -43,7 +54,7 @@ def portfolio_returns(df: pd.DataFrame, top_q: float = TOP_Q,
 
     回傳 index=ym 的 DataFrame：
       long        多頭月報酬（已扣換手成本）
-      long_short  多空月報酬（已扣換手成本；台股難放空，僅供參考）
+      long_short  前置相容的多空參考報酬（只扣多頭名單成本，非完整多空淨績效）
       benchmark   當月全樣本等權報酬
       turnover    換手比例
       nhold       持股數
@@ -54,7 +65,7 @@ def portfolio_returns(df: pd.DataFrame, top_q: float = TOP_Q,
 
     rows, prev = {}, set()
     for ym, g in df.groupby("ym", sort=True):
-        g = g.dropna(subset=["score", "fwd_ret_1m"])
+        g = g.dropna(subset=["score"])
         if len(g) < 20:
             continue
         longs, shorts = [], []
@@ -68,6 +79,11 @@ def portfolio_returns(df: pd.DataFrame, top_q: float = TOP_Q,
         if not longs:
             continue
         L, S = pd.concat(longs), pd.concat(shorts)
+        missing = g.loc[~np.isfinite(g["fwd_ret_1m"]), "stock_id"].tolist()
+        if missing:
+            # Includes benchmark constituents: silently dropping unheld missing
+            # returns would still bias excess returns and IR.
+            raise MissingReturnError(ym, missing, L.stock_id, S.stock_id)
 
         if weighting == "score":
             w = L["score"].rank()
@@ -75,6 +91,14 @@ def portfolio_returns(df: pd.DataFrame, top_q: float = TOP_Q,
         else:                                  # equal
             w = pd.Series(1.0 / len(L), index=L.index)
 
+        # ⚠️ R12（刻意保留，非疏漏）：換手＝「多頭名單的對稱差 ÷ 聯集」，
+        #    不是權重交易量。固定 n 檔、替換比例 q 時此值為 2q/(1+q)——
+        #    換一半得 66.67% 而不是 50%，約為標準單邊換手的 1.7 倍。
+        #    保留這個定義是為了**與前置專案的數字可以直接對照**；
+        #    代價是：(a) 權重漂移與 score 權重改變不反映在成本裡；
+        #           (b) long_short 只扣了多頭的換手，**空頭換倉完全沒扣費**。
+        #    → 因此 `long_short` 一欄不得當成完整的多空淨績效引用。
+        #      要改成逐腿權重交易額時，連同成本敏感度一起重跑。
         cur = set(L["stock_id"])
         turn = 1.0 if not prev else len(cur ^ prev) / max(len(cur | prev), 1)
         prev = cur
@@ -94,7 +118,9 @@ def portfolio_returns(df: pd.DataFrame, top_q: float = TOP_Q,
 
 def perf(r: pd.Series, ann: int = ANN) -> dict:
     """年化績效。樣本 < 6 個月回空 dict（數字沒有意義）。"""
-    r = pd.Series(r).dropna().astype(float)
+    r = pd.Series(r).astype(float)
+    if not np.isfinite(r).all():
+        raise ValueError("Cannot calculate complete-period performance with missing/nonfinite returns")
     if len(r) < 6:
         return {}
     curve = (1 + r).cumprod()
@@ -103,7 +129,7 @@ def perf(r: pd.Series, ann: int = ANN) -> dict:
         "CAGR": float(curve.iloc[-1] ** (ann / len(r)) - 1),
         "Vol": float(vol),
         "Sharpe": float((r.mean() * ann) / vol) if vol > 0 else np.nan,
-        "MaxDD": float((curve / curve.cummax() - 1).min()),
+        "MaxDD": float((curve / curve.cummax().clip(lower=1.0) - 1).min()),
         "WinRate": float((r > 0).mean()),
         "Months": int(len(r)),
     }
@@ -127,7 +153,9 @@ def evaluate(df: pd.DataFrame, span: tuple[str, str] | None = None,
     台股 test 期（2020-01 起）本身就是大多頭，等權全樣本基準的 CAGR 就有 24%，
     多頭組合的 30%+ 裡絕大部分是 beta，不是因子的功勞。
     """
-    rets = slice_span(portfolio_returns(df, **kw), span)
+    # Future months outside the requested report must not block earlier results.
+    source = df[df.ym.astype(str).le(span[1])] if span is not None else df
+    rets = slice_span(portfolio_returns(source, **kw), span)
     if not len(rets):
         return {}, float("nan")
     pf = perf(rets["long"])

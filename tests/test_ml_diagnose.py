@@ -369,3 +369,65 @@ def test_regime_ic_skips_factors_with_too_few_months():
     proc = pd.concat(rows, ignore_index=True)
     R = md.factor_ic_by_regime(proc, ["f"], "2015-01", "2015-10", {})
     assert len(R) == 0
+
+
+# ---------------------------------------------------------------------------
+# R10：單因子方向必須鎖在選取窗內，test 期不得回頭改變它
+# ---------------------------------------------------------------------------
+
+def _orient_panel(train_strength: float = -0.15, test_strength: float = 3.0,
+                  seed: int = 0):
+    """
+    造一個「train 期方向**微弱為負**、test 期方向**強正**」的因子。
+
+    train 要弱、test 要強，全期平均才會被 test 拉成正的——這正是 R10 的陷阱：
+    用全期 IC 定向 → 不翻向 → 在 test 上量到自己造出來的漂亮表現。
+    正確實作只看 ≤ validation 末端，所以應該翻向。
+    """
+    import numpy as np
+    import pandas as pd
+    rng = np.random.default_rng(seed)
+    rows = []
+    months = [f"{y}-{m:02d}" for y in range(2012, 2020) for m in range(1, 13)]
+    test_months = [f"{y}-{m:02d}" for y in range(2020, 2026) for m in range(1, 13)]
+    for ym in months + test_months:
+        k = test_strength if ym >= "2020-01" else train_strength
+        for g in ("電子", "半導體"):
+            for i in range(40):
+                score = rng.normal()
+                ret = k * score * 0.01 + rng.normal(0, 0.02)
+                rows.append({"stock_id": f"{g[:1]}{i:03d}", "group": g,
+                             "ym": ym, "score": score, "fwd_ret_1m": ret})
+    return pd.DataFrame(rows)
+
+
+def test_orientation_ignores_test_period():
+    """train 負、test 強正 → 方向必須照 train 翻向，不能被 test 拉回來。"""
+    import ml_diagnose as md
+    d = _orient_panel()
+    fit = d[d["ym"] <= md.ORIENT_CUTOFF]
+    ic_fit, ic_all = md._mean_ic(fit), md._mean_ic(d)
+    # 選取窗為負、全期被 test 拉成正——舊實作會在這裡不翻向
+    assert ic_fit < 0, f"測試資料沒造對：選取窗應為負向，實得 {ic_fit}"
+    assert ic_all > 0, f"測試資料沒造對：全期應被 test 拉成正向，實得 {ic_all}"
+    # 現行實作用選取窗定向，所以判定為負向 → 會翻向
+    assert ic_fit < 0 < ic_all, "R10 的陷阱情境成立"
+
+
+def test_orientation_cutoff_is_validation_end():
+    """鎖定點必須是 validation 末端，不是 test 末端也不是全期。"""
+    import ml_diagnose as md
+    import factor_lab as fl
+    assert md.ORIENT_CUTOFF == fl.SPANS["validation"][1]
+    assert md.ORIENT_CUTOFF < fl.SPANS["test"][0]
+
+
+def test_orientation_window_excludes_every_test_month():
+    """選取窗不得含有任何 test 期月份——這是 R10 的核心斷言。"""
+    import ml_diagnose as md
+    import factor_lab as fl
+    d = _orient_panel()
+    fit = d[d["ym"] <= md.ORIENT_CUTOFF]
+    lo = fl.SPANS["test"][0]
+    assert not (fit["ym"] >= lo).any(), "定向用到了 test 期資料"
+    assert len(fit) > 0

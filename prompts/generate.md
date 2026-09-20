@@ -41,6 +41,8 @@
 
 只輸出一個 JSON 陣列，前後不得有任何其他文字或 markdown 圍欄。每個元素：
 
-{{"id": "C-1", "category": "英文snake_case類別", "direction": "pos 或 neg（pos=值越大未來報酬越高）", "hypothesis": "機制陳述", "prediction": "量化預測", "formula": "DSL公式", "name_zh": "中文名", "desc_zh": "一句話解釋", "from_queue": "消化的佇列編號如 Q-012，否則 null"}}
+{{"id": "C-1", "category": "英文snake_case類別", "direction": "pos 或 neg（pos=值越大未來報酬越高；neg=越大越低）", "hypothesis": "機制陳述", "prediction": "量化預測", "formula": "DSL公式", "name_zh": "中文名", "desc_zh": "一句話解釋", "from_queue": "消化的佇列編號如 Q-012，否則 null"}}
+
+direction 描述原公式，不可看結果後自動反向。評估器先驗證原始 IC 與宣告一致，再將 neg 的值取負，使後續 ICIR、兩腿及儲存值統一為「高值預測高報酬」。raw_mean_ic 保留原方向，其餘診斷為定向後數值；裁判使用未取整數值。純空頭腿有效者可入庫，trading_use=short_only；這是研究用途標記，不代表已納入借券成本或可直接交易。現有多頭組合不使用僅做空因子。
 
 id 依序 C-1 到 C-{n}。現在開始。

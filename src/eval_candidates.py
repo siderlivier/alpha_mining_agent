@@ -32,6 +32,7 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import dsl
+from memory import Memory, approved_groups
 
 ROOT = Path(__file__).resolve().parents[1]
 CFG = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
@@ -46,13 +47,30 @@ def _r(x, nd=3):
     return round(float(x), nd)
 
 
+def orient_factor(fac, metadata):
+    """Stored values use this orientation; legacy metadata means raw (+1)."""
+    orientation = metadata.get("value_orientation", 1)
+    if orientation not in (-1, 1):
+        raise ValueError("value_orientation must be +1 or -1")
+    return fac * orientation
+
+
+def trading_use(legs):
+    """用途取決於定向後兩腿的超額，不以 direction 直接推定可做空。"""
+    long_ok = (legs.get("long_excess_ann") or 0) > 0
+    short_ok = (legs.get("short_excess_ann") or 0) > 0
+    return ("long_short" if long_ok and short_ok else
+            "long_only" if long_ok else "short_only" if short_ok else "unusable")
+
+
 # ---------------------------------------------------------------------------
 # 資料上下文（載入一次，整批共用）
 # ---------------------------------------------------------------------------
 
 class Context:
-    def __init__(self):
-        mb = pd.read_parquet(ROOT / CFG["paths"]["monthly_base"])
+    def __init__(self, base=None, load_library=True, memory_root=None):
+        self.memory_root = Path(memory_root) if memory_root else ROOT / CFG["paths"]["memory_dir"]
+        mb = pd.read_parquet(ROOT / CFG["paths"]["monthly_base"]) if base is None else base
         fields = [c for c in mb.columns
                   if c not in ("stock_id", "ym", "group", "fwd_ret_1m")]
         self.months = sorted(mb["ym"].unique())
@@ -62,7 +80,8 @@ class Context:
         self.data = {f: piv(f) for f in fields}
         self.fwd = piv("fwd_ret_1m")
         # 對齊所有寬表的 columns（Engine 要求一致）
-        cols = self.fwd.columns
+        cols = pd.Index(sorted(mb["stock_id"].unique()))
+        self.fwd = self.fwd.reindex(columns=cols)
         self.data = {k: v.reindex(columns=cols) for k, v in self.data.items()}
         self.group_map = mb.groupby("stock_id")["group"].last().to_dict()
         self.fields = set(fields)
@@ -79,26 +98,34 @@ class Context:
         self.mkt = mkt.set_index("ym")["taiex_ret"]
 
         self._cols = cols
-        self.reload_library()
+        self.lib_values, self.lib_meta = None, {}
+        if load_library:
+            self.reload_library()
 
     def reload_library(self):
         """載入/刷新因子庫（入庫後呼叫，讓 Stage 2 立即看到新因子）。"""
         self.lib_values, self.lib_meta = None, {}
-        fv = ROOT / CFG["paths"]["memory_dir"] / "factor_values.parquet"
-        lj = ROOT / CFG["paths"]["memory_dir"] / "library.json"
+        fv = self.memory_root / "factor_values.parquet"
+        lj = self.memory_root / "library.json"
         if fv.exists():
-            lv = pd.read_parquet(fv)   # columns: factor_id, ym, stock_id, value
+            self.lib_meta, lv = Memory(fv.parent).snapshot()
             if len(lv):
                 self.lib_values = {
                     fid: g.pivot_table(index="ym", columns="stock_id",
                                        values="value", aggfunc="first")
                          .reindex(self.months).reindex(columns=self._cols)
                     for fid, g in lv.groupby("factor_id")}
-        if lj.exists():
+                from memory import approved_groups
+                for fid, values in self.lib_values.items():
+                    scope = approved_groups(self.lib_meta.get(fid, {}))
+                    if scope is not None:
+                        outside = [s for s in values.columns if self.group_map.get(s) not in scope]
+                        values.loc[:, outside] = np.nan
+        if lj.exists() and not self.lib_meta:
             # library.json 同時含 agent 自有的 F-xxx 與匯入的參考因子 R-xxx
             # （見 src/seed_reference.py）。兩者都要參與 Stage 2 去相關，
             # 所以這裡全載入；「哪些算 agent 的成果」由 Memory.own_library() 區分。
-            self.lib_meta = json.loads(lj.read_text(encoding="utf-8"))
+            self.lib_meta = Memory(lj.parent).library()
 
     def mask(self, span):
         lo, hi = self.win[span]
@@ -177,8 +204,8 @@ def xsec_corr(a: pd.DataFrame, b: pd.DataFrame, months, min_n=30) -> float | Non
 def leg_stats(ctx: Context, fac: pd.DataFrame, months, q=0.2,
               cols=None, min_n=30):
     """多空腿：每月因子前/後 20% 等權，相對均值的年化超額。cols 限定範圍。"""
-    tops, bots, turn = [], [], []
-    prev_top = None
+    tops, bots, turn, short_turn = [], [], [], []
+    prev_top = prev_bot = None
     for ym in months:
         if ym not in fac.index:
             continue
@@ -197,10 +224,12 @@ def leg_stats(ctx: Context, fac: pd.DataFrame, months, q=0.2,
         bots.append(univ - rv[list(bot)].mean())
         if prev_top is not None:
             turn.append(1 - len(top & prev_top) / max(len(top), 1))
-        prev_top = top
+            short_turn.append(1 - len(bot & prev_bot) / max(len(bot), 1))
+        prev_top, prev_bot = top, bot
     out = {
-        "long_excess_ann": _r(np.mean(tops) * 12) if tops else None,
-        "short_excess_ann": _r(np.mean(bots) * 12) if bots else None,
+        "long_excess_ann": float(np.mean(tops) * 12) if tops else None,
+        "short_excess_ann": float(np.mean(bots) * 12) if bots else None,
+        "short_turnover_m": float(np.mean(short_turn)) if short_turn else None,
     }
     return out, (float(np.mean(turn)) if turn else None)
 
@@ -266,14 +295,20 @@ def industry_qualify(ctx: Context, fac: pd.DataFrame, ind_series: dict) -> list:
         if decay > s4b["max_validation_decay_pct"]:
             continue
         cols = gcols.get(g, [])
-        legs, _ = leg_stats(ctx, fac, list(m_tr) + list(m_va), cols=cols, min_n=10)
-        if (legs["long_excess_ann"] or -9) <= 0:
+        legs, _ = leg_stats(ctx, fac, sorted(m_tr | m_va), cols=cols, min_n=10)
+        use = trading_use(legs)
+        if use == "unusable" or (use == "short_only" and not
+                                 FUN["stage4"].get("allow_short_only", False)):
             continue
+        if use == "short_only":
+            turn = legs["short_turnover_m"]
+            if turn is None or turn > FUN["stage4"]["max_monthly_turnover"]:
+                continue
         cov = coverage(ctx, fac, ctx.mask("sub_train") + ctx.mask("validation"),
                        cols=cols)
         if (cov or 0) < s4b["min_coverage"]:
             continue
-        out.append((g, round(icir_tr, 2), round(icir_va, 2), round(decay)))
+        out.append((g, icir_tr, icir_va, decay))
     return sorted(out, key=lambda t: -t[1])
 
 
@@ -317,12 +352,12 @@ def diagnostics(ctx: Context, fac: pd.DataFrame):
 
     return {
         "ic_tr": ic_tr, "ic_va": ic_va,
-        "sub_train": {"mean_ic": _r(mean_tr), "icir": _r(icir_tr, 2)},
-        "validation": {"mean_ic": _r(mean_va), "icir": _r(icir_va, 2),
-                       "decay_pct": _r(decay, 0)},
+        "sub_train": {"mean_ic": mean_tr, "icir": icir_tr},
+        "validation": {"mean_ic": mean_va, "icir": icir_va,
+                       "decay_pct": decay},
         "ic_by_year": ic_by_year, "cond_ic": cond,
         "industry_icir": ind, "legs": legs,
-        "coverage": _r(cov, 2), "turnover_m": _r(turn, 2),
+        "coverage": cov, "turnover_m": turn,
         "_ind_series": ind_series,   # 內部用（Stage 4b），不進 LLM 輸出
     }
 
@@ -332,11 +367,20 @@ def diagnostics(ctx: Context, fac: pd.DataFrame):
 # ---------------------------------------------------------------------------
 
 def evaluate_batch(cands: list[dict], ctx: Context) -> list[dict]:
+    ids = [c.get("id") for c in cands]
+    if any(not isinstance(cid, str) or not cid for cid in ids) or len(set(ids)) != len(ids):
+        raise ValueError("候選 id 必須是非空且唯一的字串")
     out = {}
     alive = []          # (cand, parsed, fac, diag)
 
     for c in cands:
-        rec = {"id": c["id"], "formula": c.get("formula", "")}
+        rec = {"id": c["id"], "formula": c.get("formula", ""),
+               "groups_seen": sorted(set(ctx.group_map.values()))}
+        want = c.get("direction", "pos")
+        if want not in ("pos", "neg"):
+            rec.update(verdict="rejected_syntax", reason="direction 只能是 pos 或 neg")
+            out[c["id"]] = rec
+            continue
         # Stage 0
         try:
             pf = dsl.parse(c["formula"], allowed_fields=ctx.fields,
@@ -357,14 +401,17 @@ def evaluate_batch(cands: list[dict], ctx: Context) -> list[dict]:
             continue
 
         fac = dsl.Engine(ctx.data, ctx.group_map).eval(pf.tree)
+        rec["value_orientation"] = -1 if want == "neg" else 1
+        fac = orient_factor(fac, rec)
         diag = diagnostics(ctx, fac)
         rec.update({k: diag[k] for k in
                     ("sub_train", "validation", "ic_by_year", "cond_ic",
                      "industry_icir", "legs", "coverage", "turnover_m")})
 
         # Stage 1：快速 IC + 方向一致性
-        mean_tr = diag["sub_train"]["mean_ic"]
-        want = c.get("direction", "pos")
+        oriented_mean = diag["sub_train"]["mean_ic"]
+        mean_tr = None if oriented_mean is None else oriented_mean * rec["value_orientation"]
+        rec["raw_mean_ic"] = mean_tr
         if mean_tr is None or abs(mean_tr) < FUN["stage1_min_abs_ic"]:
             rec.update(verdict="rejected_stage1", reason="sub-train IC 低於門檻")
             out[c["id"]] = rec
@@ -382,9 +429,9 @@ def evaluate_batch(cands: list[dict], ctx: Context) -> list[dict]:
             worst, worst_rho = None, 0.0
             gc_all = group_cols(ctx, fac)
             for fid, lv in ctx.lib_values.items():
-                scope = ctx.lib_meta.get(fid, {}).get("industry_scope")
-                if scope:
-                    cols = gc_all.get(scope, [])
+                scope = approved_groups(ctx.lib_meta.get(fid, {}))
+                if scope is not None:
+                    cols = [s for g in scope for s in gc_all.get(g, [])]
                     if len(cols) < 10:
                         continue
                     rho = xsec_corr(fac[cols], lv[cols],
@@ -439,13 +486,19 @@ def evaluate_batch(cands: list[dict], ctx: Context) -> list[dict]:
         if va["decay_pct"] is not None and va["decay_pct"] > s4["max_validation_decay_pct"]:
             fails.append(f"validation 衰減 {va['decay_pct']:.0f}% > "
                          f"{s4['max_validation_decay_pct']}%（過擬合徵兆）")
+        use = trading_use(diag["legs"])
+        rec["trading_use"] = use
         if s4["require_long_leg_positive"] and (
-                (diag["legs"]["long_excess_ann"] or -9) <= 0):
-            fails.append("多頭腿超額 ≤ 0（台股難放空，純空頭腿因子不可交易）")
+                use not in ("long_only", "long_short") and not
+                (use == "short_only" and s4.get("allow_short_only", False))):
+            fails.append("沒有符合設定的正超額交易腿")
         if (diag["coverage"] or 0) < s4["min_coverage"]:
             fails.append(f"覆蓋率 {diag['coverage']} < {s4['min_coverage']}")
-        if (diag["turnover_m"] or 1) > s4["max_monthly_turnover"]:
-            fails.append(f"月換手 {diag['turnover_m']} > {s4['max_monthly_turnover']}")
+        turn = (diag["legs"].get("short_turnover_m") if use == "short_only"
+                else diag["turnover_m"])
+        rec["turnover_m"] = turn
+        if turn is None or not np.isfinite(turn) or turn > s4["max_monthly_turnover"]:
+            fails.append(f"交易腿月換手 {turn} 缺值或 > {s4['max_monthly_turnover']}")
         if not fails:
             rec.update(verdict="passed")
         else:
@@ -456,6 +509,13 @@ def evaluate_batch(cands: list[dict], ctx: Context) -> list[dict]:
                 rec["industry_scope"] = g
                 rec["industry_metrics"] = {"train_icir": itr,
                                            "valid_icir": iva, "decay_pct": dec}
+                legs, turn = leg_stats(ctx, fac,
+                    ctx.mask("sub_train") + ctx.mask("validation"),
+                    cols=group_cols(ctx, fac)[g], min_n=10)
+                rec["trading_use"] = trading_use(legs)
+                rec["industry_metrics"]["legs"] = legs
+                rec["turnover_m"] = (legs["short_turnover_m"]
+                    if rec["trading_use"] == "short_only" else turn)
                 rec.update(verdict="passed_industry",
                            reason=f"整體未達標（{'; '.join(fails)}），"
                                   f"但於「{g}」產業內達到專屬門檻")

@@ -13,6 +13,7 @@ v1.3 起分三階段（記憶體與執行時間友善，各階段可獨立重跑
      python src/build_base.py --stage prices
 """
 import argparse
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -38,6 +39,7 @@ def load(cols):
 
 
 def snap_monthly(df):
+    df = df.copy()
     df["ym"] = df["date"].dt.to_period("M").astype(str)
     m = df.groupby(["stock_id", "ym"], observed=True).tail(1)
     return m.sort_values(["stock_id", "ym"]).reset_index(drop=True)
@@ -55,11 +57,41 @@ def sdiv(a, b):
     return a / b.replace(0, np.nan)
 
 
+def calendar_value(m, column, offset):
+    """Same stock, exact calendar month. Missing months remain missing."""
+    periods = pd.PeriodIndex(m["ym"], freq="M")
+    keys = pd.MultiIndex.from_arrays([m["stock_id"].astype(str), periods])
+    if keys.has_duplicates:
+        raise ValueError("duplicate stock/month")
+    values = pd.Series(m[column].to_numpy(dtype=float), index=keys)
+    wanted = pd.MultiIndex.from_arrays([m["stock_id"].astype(str), periods + offset])
+    return pd.Series(values.reindex(wanted).to_numpy(), index=m.index)
+
+
+def issued_shares(df):
+    """PIT exchange-issued shares, in shares; no assumed-par fallback."""
+    shares = pd.to_numeric(df["shares_issued"], errors="coerce")
+    return shares.where(np.isfinite(shares) & shares.gt(0))
+
+
+def profit_growth(m, column, months=12):
+    """同股票、精確前 N 個月的獲利變化／前值絕對值；零或缺值無定義。"""
+    periods = pd.PeriodIndex(m["ym"], freq="M")
+    keys = pd.MultiIndex.from_arrays([m["stock_id"].astype(str), periods])
+    if keys.has_duplicates:
+        raise ValueError("profit_growth 需要唯一的 stock_id/ym")
+    values = pd.Series(m[column].to_numpy(dtype=float), index=keys)
+    previous_keys = pd.MultiIndex.from_arrays(
+        [m["stock_id"].astype(str), periods - months])
+    previous = pd.Series(values.reindex(previous_keys).to_numpy(), index=m.index)
+    return (m[column] - previous) / previous.abs().replace(0, np.nan) * 100
+
+
 # ---------------------------------------------------------------------------
 
 def stage_prices():
     df = load(KEYS + ["group", "close", "close_raw", "ret", "volume",
-                      "amount", "b_CapitalStock"])
+                      "amount", "b_CapitalStock", "shares_issued"])
     g = df.groupby("stock_id", observed=True, sort=False)
     for n in (20, 60, 120, 240):
         df[f"mom_{n}"] = g["close"].pct_change(n, fill_method=None)
@@ -69,11 +101,11 @@ def stage_prices():
     df["amt_21"] = g["amount"].transform(lambda s: s.rolling(21, min_periods=10).mean())
     hi252 = g["close"].transform(lambda s: s.rolling(252, min_periods=120).max())
     df["px_hi252"] = df["close"] / hi252
-    shares = df["b_CapitalStock"] * 100.0
+    shares = issued_shares(df)
     df["turn_d"] = df["volume"] / shares.replace(0, np.nan)
     df["turn_21"] = g["turn_d"].transform(lambda s: s.rolling(21, min_periods=10).mean())
 
-    keep = KEYS + ["group", "close", "close_raw", "b_CapitalStock",
+    keep = KEYS + ["group", "close", "close_raw", "b_CapitalStock", "shares_issued",
                    "mom_20", "mom_60", "mom_120", "mom_240",
                    "vol_21", "vol_63", "vol_126", "amt_21", "px_hi252", "turn_21"]
     snap_monthly(df[keep]).to_parquet(TMP_P, index=False)
@@ -83,9 +115,9 @@ def stage_prices():
 def stage_chips():
     df = load(KEYS + ["inst_foreign_net", "inst_trust_net", "margin_balance",
                       "short_balance", "foreign_ratio", "lending_vol",
-                      "div_yield", "volume", "b_CapitalStock"])
+                      "div_yield", "volume", "b_CapitalStock", "shares_issued"])
     g = df.groupby("stock_id", observed=True, sort=False)
-    shares = (df["b_CapitalStock"] * 100.0).replace(0, np.nan)
+    shares = issued_shares(df)
     df["_fn"] = df["inst_foreign_net"] / shares
     df["frgn_net_21"] = g["_fn"].transform(lambda s: s.rolling(21, min_periods=10).sum())
     df["_tn"] = df["inst_trust_net"] / shares
@@ -126,8 +158,8 @@ def stage_final():
     ni = coalesce(m, "f_NetIncome", "f_IncomeAfterTaxes", "f_IncomeAfterTax",
                   "f_TotalConsolidatedProfitForThePeriodAfterTax")
     rev_q = m["f_Revenue"]
-    px_raw = m["close_raw"].where(m["close_raw"].notna(), m["close"])
-    mktcap = px_raw * sdiv(m["b_CapitalStock"], pd.Series(10.0, index=m.index))
+    px_raw = m["close_raw"].where(m["close_raw"].gt(0))
+    mktcap = px_raw * issued_shares(m)
 
     m["roe"] = sdiv(ni, m["b_Equity"])
     m["gross_margin"] = sdiv(m["f_GrossProfit"], rev_q)
@@ -139,15 +171,15 @@ def stage_final():
     m["bp"] = sdiv(m["b_EquityAttributableToOwnersOfParent"], mktcap)
     m["sp"] = sdiv(rev_q, mktcap)
 
-    m["rev_yoy"] = gm["month_revenue"].pct_change(12, fill_method=None) * 100
+    m["rev_yoy"] = (sdiv(m["month_revenue"], calendar_value(m, "month_revenue", -12)) - 1) * 100
     gm = m.groupby("stock_id", observed=True, sort=False)
     m["rev_yoy_ma3"] = gm["rev_yoy"].transform(lambda s: s.rolling(3, min_periods=2).mean())
-    m["rev_mom"] = gm["month_revenue"].pct_change(1, fill_method=None) * 100
-    m["eps_yoy"] = gm["f_EPS"].pct_change(12, fill_method=None) * 100
-    m["op_income_yoy"] = gm["f_OperatingIncome"].pct_change(12, fill_method=None) * 100
+    m["rev_mom"] = (sdiv(m["month_revenue"], calendar_value(m, "month_revenue", -1)) - 1) * 100
+    m["eps_yoy"] = profit_growth(m, "f_EPS")
+    m["op_income_yoy"] = profit_growth(m, "f_OperatingIncome")
 
     # 目標變數：未來一月報酬（還原價），逐月 winsorize 壓假極端
-    m["fwd_ret_1m"] = gm["close"].shift(-1) / m["close"] - 1
+    m["fwd_ret_1m"] = sdiv(calendar_value(m, "close", 1), m["close"]) - 1
     m["fwd_ret_1m"] = m.groupby("ym")["fwd_ret_1m"].transform(
         lambda s: s.clip(s.quantile(0.01), s.quantile(0.99)))
 
@@ -174,6 +206,8 @@ def stage_final():
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--stage", default="all",
                     choices=["all", "prices", "chips", "final"])

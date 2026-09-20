@@ -1,45 +1,6 @@
-"""
-把前置專案（tw_alpha_strategy）DFS 挖出的因子，匯入本專案的因子庫作為
-「參考因子」（R-xxx），讓 Stage 2 也對它們去相關。
-
-為什麼需要
-----------
-agent 的 31 個欄位裡有 24 個直接來自或等價於 mine_dfs.py 的因子，但 Stage 2
-原本只跟 agent「自己入庫的」因子去相關。結果是：一個候選通過 Stage 2，只證明
-它跟 agent 已有的因子不重複，**不保證跟你早就知道的 86 個 DFS 因子不重複**。
-實際發生過：F-005 `cs_rank(neg(vol_126))` 就是 `neg_vol_126`，F-006 幾乎等於
-`neg_accruals`。
-
-存放位置（單一因子庫）
-----------------------
-  memory/library.json           R-xxx 與 F-xxx 同住，靠 reference:true 區分
-  memory/factor_values.parquet  月頻值（Stage 2 的資料源）
-  data/dfs_snapshot.parquet     自足快照 ← 有它之後就不必再跨專案
-
-跨專案只發生在「第一次匯入」。之後 --clear / 重新匯入都直接讀快照，
-不需要 tw_alpha_strategy 的程式或 panel.parquet。
-
-篩選（三道）
-------------
-  1. t_train > 2 且測試期同向、|ICIR_test| > 0.2   ← 沿用前置專案自己的判準
-  2. |ICIR_train| > --min-icir（預設 0.3）
-  3. 衰減 ≤ --max-decay（預設 50%）                ← 與本專案 Stage 4 同一標準
-訓練期漂亮、測試期崩掉的因子不該當作「已知因子」去擋別人。
-
-洩漏紀律
---------
-  - 參考因子在 Generate prompt 中**只給中文名與一句話描述，不給公式**：
-    它們是用原始財報欄位算的（gp_to_px = 毛利/股價），本 DSL 沒有那些欄位，
-    給了只會誘使模型拼出無效公式。列出的目的是「別再提相近變體」。
-  - report / audit / 統計一律走 Memory.own_library()，不把參考因子算成成果。
-
-用法
-----
-    python src/seed_reference.py --list       # 只看篩選結果，不計算
-    python src/seed_reference.py --dry-run    # 計算但不寫（第一次會讀前置專案）
-    python src/seed_reference.py --apply
-    python src/seed_reference.py --apply --max-decay 40 --min-icir 0.4
-    python src/seed_reference.py --clear      # 移除所有 R-xxx
+"""Versioned reference pool from all registered local base fields.
+Selection, direction and dedup use sub_train/validation only; legacy DFS pools
+are archived through Memory transactions. --apply replaces references atomically.
 """
 from __future__ import annotations
 
@@ -159,78 +120,15 @@ def upstream_root() -> Path:
     return (ROOT / CFG["paths"]["panel"]).resolve().parents[2]
 
 
-def select(cand: pd.DataFrame, min_icir: float, max_decay: float,
-           take_all: bool) -> pd.DataFrame:
-    d = cand.copy()
-    d["decay_pct"] = (1 - d["ICIR_test"].abs()
-                      / d["ICIR_train"].abs().replace(0, np.nan)) * 100
+def select(cand, min_icir, max_decay, take_all=False):
     if take_all:
-        return d
-    ok = ((d["t_train"].abs() > 2)
-          & (np.sign(d["ICIR_train"]) == np.sign(d["ICIR_test"]))
-          & (d["ICIR_test"].abs() > 0.2)
-          & (d["ICIR_train"].abs() > min_icir)
-          & (d["decay_pct"] <= max_decay))
-    return d[ok]
-
-
-def compute_from_upstream(names: list[str]) -> pd.DataFrame:
-    """跑一次前置專案的 generate()，回傳對齊後的長格式值，並存成自足快照。"""
-    up = upstream_root()
-    src = up / "src"
-    if not (src / "mine_dfs.py").exists():
-        raise SystemExit(
-            f"找不到 {src / 'mine_dfs.py'}，也沒有 {SNAPSHOT}。\n"
-            f"第一次匯入需要前置專案；之後只讀快照。")
-    sys.path.insert(0, str(src))
-    import mine_dfs
-
-    panel_p = up / "data" / "processed" / "panel.parquet"
-    print(f"讀取 {panel_p}（第一次匯入才需要，之後走快照）…")
-    panel = pd.read_parquet(panel_p)
-    print("建立月底基礎欄位…")
-    m = mine_dfs.build_monthly_base(panel)
-    print("生成 DFS 因子（沿用前置專案的 generate()，不重寫以免語意漂移）…")
-    df, _ = mine_dfs.generate(m)
-
-    mb = pd.read_parquet(ROOT / CFG["paths"]["monthly_base"])
-    months = set(mb["ym"].astype(str))
-    stocks = set(mb["stock_id"].astype(str))
-    df = df.copy()
-    df["ym"] = df["ym"].astype(str)
-    df["stock_id"] = df["stock_id"].astype(str)
-    df = df[df["ym"].isin(months) & df["stock_id"].isin(stocks)]
-
-    have = [n for n in names if n in df.columns]
-    miss = [n for n in names if n not in df.columns]
-    if miss:
-        print(f"⚠️ 生成結果中沒有這些欄位，略過：{miss}")
-
-    out = []
-    for n in have:
-        s = df[["ym", "stock_id", n]].rename(columns={n: "value"})
-        s = s[s["value"].notna()]
-        s.insert(0, "dfs_name", n)
-        out.append(s)
-    long = pd.concat(out, ignore_index=True)
-    SNAPSHOT.parent.mkdir(parents=True, exist_ok=True)
-    long.to_parquet(SNAPSHOT, index=False)
-    print(f"✅ 自足快照已存：{SNAPSHOT.relative_to(ROOT)}"
-          f"（{long['dfs_name'].nunique()} 個因子、{len(long):,} 筆）")
-    print("   之後 --clear 或重新匯入都直接讀它，不再需要前置專案。")
-    return long
-
-
-def load_values(names: list[str], force_upstream: bool) -> pd.DataFrame:
-    if SNAPSHOT.exists() and not force_upstream:
-        long = pd.read_parquet(SNAPSHOT)
-        have = set(long["dfs_name"])
-        miss = [n for n in names if n not in have]
-        if not miss:
-            print(f"讀取自足快照 {SNAPSHOT.relative_to(ROOT)}（不需要前置專案）")
-            return long[long["dfs_name"].isin(names)]
-        print(f"快照缺少 {len(miss)} 個因子（{miss[:5]}…），改從前置專案重算。")
-    return compute_from_upstream(names)
+        raise ValueError("Unqualified reference admission is disabled")
+    d = cand.copy()
+    d["decay_pct"] = (1 - d.ICIR_validation.abs() / d.ICIR_train.abs().replace(0, np.nan)) * 100
+    return d[(d.t_train.abs() > 2) & (d.ICIR_train.abs() > min_icir)
+             & (np.sign(d.ICIR_train) == np.sign(d.ICIR_validation))
+             & (d.ICIR_validation.abs() > 0.2) & (d.decay_pct <= max_decay)
+             & (d.n_train >= 36) & (d.n_validation >= 12)]
 
 
 def dedupe_reference(long: pd.DataFrame, names: list[str], row: pd.DataFrame,
@@ -251,6 +149,9 @@ def dedupe_reference(long: pd.DataFrame, names: list[str], row: pd.DataFrame,
 
     回傳 (保留的名稱, [(丟掉的, 因為誰, ρ), …])
     """
+    # Selection/dedup must never depend on sealed test values.
+    lo, hi = CFG["split"]["sub_train"][0], CFG["split"]["validation"][1]
+    long = long[long.ym.between(lo, hi)]
     wide = long.pivot_table(index=["ym", "stock_id"], columns="dfs_name",
                             values="value", aggfunc="first")
     wide = wide.reindex(columns=[n for n in names if n in wide.columns])
@@ -270,148 +171,116 @@ def dedupe_reference(long: pd.DataFrame, names: list[str], row: pd.DataFrame,
     return [n for n in names if n in keep], dropped
 
 
-def do_clear(mem: Memory):
-    lib = mem.library()
-    refs = [k for k in lib if k.startswith(REFERENCE_PREFIX)]
-    for k in refs:
-        lib.pop(k)
-    mem._save_library(lib)
-    if mem.values_path.exists():
-        fv = pd.read_parquet(mem.values_path)
-        n0 = fv["factor_id"].nunique()
-        fv = fv[~fv["factor_id"].astype(str).str.startswith(REFERENCE_PREFIX)]
-        fv.to_parquet(mem.values_path, index=False)
-        print(f"factor_values.parquet：{n0} → {fv['factor_id'].nunique()} 個因子")
-    print(f"已從 library.json 移除 {len(refs)} 個參考因子。"
-          f"（快照 {SNAPSHOT.name} 保留，隨時可重新匯入）")
+def do_clear(mem):
+    with mem.locked():
+        lib, values = mem.snapshot()
+        keep = {k: v for k, v in lib.items() if not k.startswith(REFERENCE_PREFIX)}
+        return mem.commit_snapshot(keep, values[values.factor_id.isin(keep)])
+
+
+def reference_candidates(base):
+    """Fixed catalog: every registered base field, no DFS survivor/test lists."""
+    import eval_candidates as ec
+    from factor_scope import context_for
+    ctx = context_for(base, CFG)
+    catalog = yaml.safe_load((ROOT / "fields.yaml").read_text(encoding="utf-8"))
+    names = sorted(f for group in catalog.values() for f in group)
+    rows, frames = [], []
+    for name in names:
+        fac = ctx.data[name]
+        spans = {}
+        for span in ("sub_train", "validation"):
+            # Last label of each span would use a price outside that span.
+            months = ctx.mask(span)
+            hi = str(pd.Period(CFG["split"][span][1], freq="M") - 1)
+            spans[span] = ec.monthly_ic(ctx, fac, [m for m in months if m <= hi]).dropna()
+        tr, va = spans["sub_train"], spans["validation"]
+        def score(x):
+            return float(x.mean() / x.std()) if len(x)>1 and x.std()>0 else np.nan
+        train, valid = score(tr), score(va)
+        t = float(tr.mean()/tr.std()*np.sqrt(len(tr))) if len(tr)>1 and tr.std()>0 else np.nan
+        rows.append(dict(factor=name, ICIR_train=train, ICIR_validation=valid,
+                         t_train=t, n_train=len(tr), n_validation=len(va)))
+        frame = base[["ym", "stock_id", name]].rename(columns={name: "value"}).dropna()
+        frame.insert(0, "dfs_name", name)
+        frames.append(frame)
+    return pd.DataFrame(rows), pd.concat(frames, ignore_index=True)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="匯入前置專案 DFS 因子作為參考因子")
-    ap.add_argument("--list", action="store_true", help="只列出篩選結果")
-    ap.add_argument("--dry-run", action="store_true", help="計算但不寫檔")
-    ap.add_argument("--apply", action="store_true", help="寫入")
-    ap.add_argument("--clear", action="store_true", help="移除所有 R-xxx")
-    ap.add_argument("--all", action="store_true", help="不篩選，全部匯入")
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    import hashlib
+    ap = argparse.ArgumentParser(description="Versioned local-field reference pool; train/validation only")
+    mode = ap.add_mutually_exclusive_group()
+    mode.add_argument("--apply", action="store_true")
+    mode.add_argument("--clear", action="store_true")
+    mode.add_argument("--dry-run", action="store_true")
+    mode.add_argument("--list", action="store_true")
     ap.add_argument("--min-icir", type=float, default=0.3)
-    ap.add_argument("--max-decay", type=float, default=50.0,
-                    help="train→test ICIR 衰減上限%%（預設 50，與 Stage 4 同標準）")
-    ap.add_argument("--max-ref-corr", type=float, default=0.95,
-                    help="參考因子彼此的相關度上限（預設 0.95，只擋近乎重複的；"
-                         "設 1.0 = 不去重）")
-    ap.add_argument("--from-upstream", action="store_true",
-                    help="忽略快照，強制重新從前置專案計算")
+    ap.add_argument("--max-decay", type=float, default=50)
+    ap.add_argument("--max-ref-corr", type=float, default=0.95)
     a = ap.parse_args()
-
-    mem = Memory()
+    if not (0 <= a.min_icir and np.isfinite(a.min_icir) and 0 <= a.max_decay <= 100
+            and 0 < a.max_ref_corr <= 1):
+        raise ValueError("invalid reference thresholds")
+    mem = Memory(ROOT / CFG["paths"]["memory_dir"])
     mem.ensure()
     if a.clear:
-        do_clear(mem)
-        return
-
-    up = upstream_root()
-    cand_p = up / "data" / "processed" / "dfs_candidates.csv"
-    local_cand = ROOT / "data" / "dfs_candidates.csv"
-    if local_cand.exists() and not a.from_upstream:
-        cand = pd.read_csv(local_cand)
-    elif cand_p.exists():
-        cand = pd.read_csv(cand_p)
-        local_cand.parent.mkdir(parents=True, exist_ok=True)
-        cand.to_csv(local_cand, index=False)     # 複製一份，之後不必跨專案
-        print(f"（已複製 dfs_candidates.csv 到 {local_cand.relative_to(ROOT)}）")
-    else:
-        raise SystemExit(f"找不到 dfs_candidates.csv（{cand_p} 或 {local_cand}）")
-
-    sel = select(cand, a.min_icir, a.max_decay, a.all).sort_values(
-        "ICIR_train", key=abs, ascending=False)
-    dropped = len(cand) - len(sel)
-    print(f"DFS 候選 {len(cand)} 個 → 通過篩選 {len(sel)} 個（淘汰 {dropped}）")
-    if not a.all:
-        print(f"  篩選：t_train>2、測試同向、|ICIR_test|>0.2、"
-              f"|ICIR_train|>{a.min_icir}、衰減≤{a.max_decay:.0f}%\n")
-    fmt = {"ICIR_train": "{:+.3f}".format, "ICIR_test": "{:+.3f}".format,
-           "decay_pct": "{:.0f}%".format}
-    print(sel[["factor", "ICIR_train", "ICIR_test", "decay_pct"]].head(40)
-          .to_string(index=False, formatters=fmt))
-    if len(sel) > 40:
-        print(f"…另有 {len(sel) - 40} 個")
-
-    if not a.all:
-        cut = select(cand, a.min_icir, 999, False)
-        bad = cut[~cut["factor"].isin(sel["factor"])]
-        if len(bad):
-            print(f"\n因衰減 > {a.max_decay:.0f}% 被淘汰的 {len(bad)} 個：")
-            print(bad[["factor", "ICIR_train", "ICIR_test", "decay_pct"]]
-                  .to_string(index=False, formatters=fmt))
-
-    own_n = len(mem.own_library())
-    print(f"\nStage 2：目前 {own_n} 個自有因子 → 匯入後共 {own_n + len(sel)} 個")
-
-    if a.list:
-        print("\n--list 模式，未計算因子值。")
-        return
-
-    names = sel["factor"].tolist()
-    long = load_values(names, a.from_upstream)
-    have = [n for n in names if n in set(long["dfs_name"])]
-    row = sel.set_index("factor")
-
-    # 第四道：參考因子彼此去重複（前置專案有同公式雙名的情況）
-    if a.max_ref_corr < 1.0 and len(have) > 1:
-        have, dup = dedupe_reference(long, have, row, a.max_ref_corr)
-        if dup:
-            print(f"\n參考因子互相去重（|ρ| > {a.max_ref_corr:.2f}）："
-                  f"丟掉 {len(dup)} 個")
-            for n, k, r in dup:
-                print(f"   {n:18} ≈ {k:18} ρ={r:.3f}")
-            long = long[long["dfs_name"].isin(have)]
-
-    ids = {n: f"{REFERENCE_PREFIX}{i:03d}" for i, n in enumerate(have, 1)}
-
-    if not a.apply:
-        print(f"\n--dry-run：可匯入 {len(have)} 個因子、{len(long):,} 筆值，未寫入。")
-        for n in have[:5]:
-            zh, desc, asp = describe(n)
-            print(f"   {ids[n]} {n:18} → 【{zh}】({asp}) {desc}")
-        return
-
-    lib = {k: v for k, v in mem.library().items()
-           if not k.startswith(REFERENCE_PREFIX)}
-    for n in have:
-        zh, desc, asp = describe(n)
-        r = row.loc[n]
-        lib[ids[n]] = {
-            "name_zh": zh, "desc_zh": desc, "aspect": asp,
-            "category": "dfs_reference",
-            "formula": None,          # ⚠️ 非 DSL 表達式，prompt 也刻意不給
-            "fhash": None, "fields": [], "depth": None,
-            "reference": True, "dfs_name": n,
-            "source": "tw_alpha_strategy/src/mine_dfs.py",
-            "industry_scope": None, "industry_metrics": None,
-            "icir_train": float(r["ICIR_train"]), "icir_test": float(r["ICIR_test"]),
-            "decay_pct": float(r["decay_pct"]),
-            "created_at": datetime.now().isoformat(timespec="seconds"),
-            "test_metrics_sealed": None,
-        }
-    mem._save_library(lib)
-
-    vals = long[long["dfs_name"].isin(have)].copy()
-    vals["factor_id"] = vals["dfs_name"].map(ids)
-    vals = vals[["factor_id", "ym", "stock_id", "value"]]
-    old = (pd.read_parquet(mem.values_path) if mem.values_path.exists()
-           else pd.DataFrame(columns=vals.columns))
-    old = old[~old["factor_id"].astype(str).str.startswith(REFERENCE_PREFIX)]
-    merged = pd.concat([old, vals], ignore_index=True)
-    mem.values_path.parent.mkdir(parents=True, exist_ok=True)
-    merged.to_parquet(mem.values_path, index=False)
-
-    print(f"\n✅ library.json：{len(mem.own_library())} 個自有 + "
-          f"{len(mem.reference_library())} 個參考因子")
-    print(f"✅ factor_values.parquet：{merged['factor_id'].nunique()} 個因子、"
-          f"{len(merged):,} 筆值")
-    print("\n下一輪 Generate 會在因子庫摘要看到「已知因子」清單（只有名稱與描述、"
-          "不給公式）；Stage 2 會對它們去相關。")
-    print("要還原：python src/seed_reference.py --clear")
+        print("Archived transaction:", do_clear(mem)); return
+    # Serialize against mining/scope commits for the full replacement.
+    with mem.locked():
+        base_path = ROOT / CFG["paths"]["monthly_base"]
+        raw = base_path.read_bytes()
+        base_hash = hashlib.sha256(raw).hexdigest()
+        base = pd.read_parquet(base_path)
+        cand, long = reference_candidates(base)
+        sel = select(cand, a.min_icir, a.max_decay).sort_values("ICIR_train", key=abs, ascending=False)
+        names, dropped = dedupe_reference(long, sel.factor.tolist(), sel.set_index("factor"), a.max_ref_corr)
+        print(f"Fixed base-field catalog: {len(cand)}; qualified: {len(sel)}; deduplicated: {len(names)}")
+        print(sel[["factor", "ICIR_train", "ICIR_validation", "decay_pct"]].to_string(index=False))
+        if not names:
+            raise ValueError("Empty reference release; active pool unchanged")
+        if not a.apply:
+            print("Dry run; active pool unchanged"); return
+        lib, old = mem.snapshot()
+        prior_ids = [int(k[2:]) for k in lib if k.startswith(REFERENCE_PREFIX)]
+        # Include archived IDs to prevent reuse even following --clear.
+        for archived in (mem.root / "transactions").glob("*/library.before"):
+            prior_ids += [int(k[2:]) for k in json.loads(archived.read_text(encoding="utf-8")) if k.startswith(REFERENCE_PREFIX)]
+        next_id = max(prior_ids, default=0) + 1
+        keep = {k: v for k, v in lib.items() if not k.startswith(REFERENCE_PREFIX)}
+        values = [old[old.factor_id.isin(keep)]]
+        row = sel.set_index("factor")
+        release = datetime.now().strftime("%Y%m%d_%H%M%S")
+        for i, name in enumerate(names, next_id):
+            fid = f"R-{i:03d}"
+            r = row.loc[name]
+            orientation = 1 if r.ICIR_train > 0 else -1
+            from memory import derive_aspect
+            catalog = yaml.safe_load((ROOT / "fields.yaml").read_text(encoding="utf-8"))
+            definition = next(group[name] for group in catalog.values() if name in group)
+            desc = definition["desc"]
+            zh, aspect = desc.split("（")[0], derive_aspect([name])
+            if orientation < 0:
+                zh, desc = "反向：" + zh, "原欄位取負後使用；" + desc
+            keep[fid] = dict(name_zh=zh, desc_zh=desc, aspect=aspect, category="base_field_reference",
+                reference=True, formula=None, fhash=None, fields=[name], depth=None,
+                source="registered_base_fields_v1", source_field=name, reference_release=release,
+                value_orientation=orientation, approved_groups=sorted(base.group.unique()),
+                icir_train=float(r.ICIR_train)*orientation,
+                icir_validation=float(r.ICIR_validation)*orientation, decay_pct=float(r.decay_pct),
+                selection_periods={k: CFG["split"][k] for k in ("sub_train", "validation")},
+                base_hash=base_hash, test_metrics_sealed=None,
+                created_at=datetime.now().isoformat(timespec="seconds"))
+            v = long[long.dfs_name.eq(name)].drop(columns="dfs_name").copy()
+            v["value"] *= orientation
+            v.insert(0,"factor_id",fid)
+            values.append(v)
+        if hashlib.sha256(base_path.read_bytes()).hexdigest() != base_hash:
+            raise ValueError("Base changed during selection")
+        transaction = mem.commit_snapshot(keep, pd.concat(values, ignore_index=True))
+        print(f"Committed reference release {release}; {len(names)} factors; backup transaction {transaction}")
 
 
 if __name__ == "__main__":

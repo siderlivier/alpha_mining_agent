@@ -20,7 +20,7 @@ from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from memory import Memory
+from memory import Memory, scope_label, admission_metrics
 
 
 def fmt(x, nd=2):
@@ -34,7 +34,7 @@ def _collect(mem: Memory) -> dict:
     by_cat = defaultdict(lambda: [0, 0])
     for a in attempts:
         by_cat[a.get("category", "?")][0] += 1
-        if a.get("verdict") == "passed":
+        if a.get("verdict") in ("passed", "passed_industry"):
             by_cat[a.get("category", "?")][1] += 1
     fc = Counter(a.get("failure_type") for a in attempts
                  if a.get("failure_type") not in (None, "", "none"))
@@ -64,9 +64,8 @@ def build_text(d: dict) -> str:
 
     L.append(f"\n──── 因子庫（{len(d['lib'])} 個）────")
     for fid, m in d["lib"].items():
-        st, va = m.get("sub_train") or {}, m.get("validation") or {}
-        se = m.get("test_metrics_sealed") or {}
-        scope = m.get("industry_scope")
+        st, va, se = admission_metrics(m)
+        scope = scope_label(m)
         L.append(f"\n{fid}【{m.get('name_zh','')}】 "
                  f"{m.get('aspect','')}"
                  f"{'｜⭐' + scope + '限定' if scope else ''}"
@@ -74,7 +73,9 @@ def build_text(d: dict) -> str:
                  f"第{m.get('round','?')}輪｜深度{m.get('depth','?')}")
         L.append(f"  公式  {m.get('formula','')}")
         L.append(f"  說明  {m.get('desc_zh','')}")
-        L.append(f"  ICIR  train {fmt(st.get('icir'))} → "
+        L.append(f"  用途  {m.get('trading_use', 'legacy（尚未分類）')}｜"
+                 f"儲存值 = 原公式 × {m.get('value_orientation', 1)}")
+        L.append(f"  ICIR（入庫時同範圍） train {fmt(st.get('icir'))} → "
                  f"valid {fmt(va.get('icir'))}（衰減 {fmt(va.get('decay_pct'),0)}%）→ "
                  f"⚠test {fmt(se.get('icir'))}"
                  f"（衰減 {fmt(se.get('decay_vs_subtrain_pct'),0)}%）")
@@ -93,8 +94,8 @@ def build_text(d: dict) -> str:
             L.append(f"  {STAGE_LABEL[s]:<12s} 淘汰 {died:>3d}  "
                      f"{alive:>3d} → {alive - died:<3d} {bar}")
             alive -= died
-        L.append(f"  {'通過 passed':<12s}      {d['vc'].get('passed',0):>3d} 個"
-                 f"（總通過率 {d['vc'].get('passed',0)/n:.0%}）")
+        L.append(f"  {'通過 passed':<12s}      {(d['vc'].get('passed',0) + d['vc'].get('passed_industry',0)):>3d} 個"
+                 f"（總通過率 {(d['vc'].get('passed',0) + d['vc'].get('passed_industry',0))/max(n,1):.0%}）")
 
         if d["fc"]:
             L.append("\n  失因分類  " + "｜".join(
@@ -115,7 +116,7 @@ def build_text(d: dict) -> str:
     if b:
         L.append(f"\n──── 預算 ────\n\n  本週（{b.get('week_of','?')}）"
                  f"已用 {b.get('rounds_used','?')} 輪、"
-                 f"約 {b.get('est_tokens_used',0):,} tokens｜"
+                 f"約 {b.get('tokens_used', b.get('est_tokens_used',0)):,} tokens｜"
                  f"歷史總輪數 {b.get('total_rounds','?')}")
     return "\n".join(L)
 
@@ -134,12 +135,11 @@ def build_html(d: dict) -> str:
     e = html_mod.escape
     rows = []
     for fid, m in d["lib"].items():
-        st, va = m.get("sub_train") or {}, m.get("validation") or {}
-        se = m.get("test_metrics_sealed") or {}
+        st, va, se = admission_metrics(m)
         vd, td = va.get("decay_pct"), se.get("decay_vs_subtrain_pct")
         rows.append(f"""<tr>
 <td><b>{fid}</b></td><td>{e(str(m.get('name_zh','')))}</td>
-<td>{e(str(m.get('aspect','')))}{('<br><b>⭐' + e(str(m.get('industry_scope'))) + '限定</b>') if m.get('industry_scope') else ''}</td><td class="cat">{e(str(m.get('category','')))}</td>
+<td>{e(str(m.get('aspect','')))}{('<br><b>⭐' + e(scope_label(m)) + '限定</b>') if scope_label(m) else ''}</td><td class="cat">{e(str(m.get('category','')))}</td>
 <td><code>{e(str(m.get('formula','')))}</code></td><td>{m.get('depth','')}</td>
 <td>{fmt(st.get('icir'))}</td><td>{fmt(va.get('icir'))}</td>
 <td style="color:{_decay_color(vd)}">{fmt(vd,0)}%</td>
@@ -147,7 +147,7 @@ def build_html(d: dict) -> str:
 <td class="sealed" style="color:{_decay_color(td)}">{fmt(td,0)}%</td>
 <td>{fmt(m.get('coverage'))}</td><td>{fmt(m.get('turnover_m'))}</td>
 <td>{m.get('round','')}</td></tr>
-<tr class="desc"><td></td><td colspan="13">💡 {e(str(m.get('desc_zh','')))}</td></tr>""")
+<tr class="desc"><td></td><td colspan="13">💡 {e(str(m.get('desc_zh','')))} — 用途：{e(str(m.get('trading_use', 'legacy（尚未分類）')))}；儲存值 = 原公式 × {m.get('value_orientation', 1)}</td></tr>""")
 
     n = len(d["attempts"])
     funnel = []
@@ -187,12 +187,12 @@ code{{background:#f6f8fa;padding:1px 5px;border-radius:4px;font-size:.92em}}
 
 <h2>因子庫（{len(d['lib'])} 個）</h2>
 <table><tr><th>id</th><th>名稱</th><th>面向</th><th>category</th><th>公式</th>
-<th>深度</th><th>train ICIR</th><th>valid ICIR</th><th>valid 衰減</th>
+<th>深度</th><th>入庫範圍 train ICIR</th><th>valid ICIR</th><th>valid 衰減</th>
 <th>⚠test ICIR</th><th>⚠test 衰減</th><th>覆蓋</th><th>換手</th><th>輪</th></tr>
 {''.join(rows) if rows else '<tr><td colspan="14">（尚無入庫因子）</td></tr>'}</table>
 
-<h2>漏斗（{n} 筆 attempts，通過 {d['vc'].get('passed',0)} 個
-＝ {d['vc'].get('passed',0)/n:.0%}）</h2>
+<h2>漏斗（{n} 筆 attempts，通過 {(d['vc'].get('passed',0) + d['vc'].get('passed_industry',0))} 個
+＝ {(d['vc'].get('passed',0) + d['vc'].get('passed_industry',0))/max(n,1):.0%}）</h2>
 <table><tr><th>關卡</th><th>淘汰</th><th>存活</th><th></th></tr>
 {''.join(funnel)}</table>
 <p>失因分類：{'、'.join(f"{e(str(k))} {v} 筆" for k, v in d['fc'].most_common()) or '—'}</p>
@@ -202,7 +202,7 @@ code{{background:#f6f8fa;padding:1px 5px;border-radius:4px;font-size:.92em}}
 
 <h2>預算</h2>
 <p>本週（{b.get('week_of','?')}）已用 {b.get('rounds_used','?')} 輪、
-約 {b.get('est_tokens_used',0):,} tokens｜歷史總輪數 {b.get('total_rounds','?')}
+約 {b.get('tokens_used', b.get('est_tokens_used',0)):,} tokens｜歷史總輪數 {b.get('total_rounds','?')}
 ｜已完成輪次 {d['rounds'][0] if d['rounds'] else '—'} ~
 {d['rounds'][-1] if d['rounds'] else '—'}</p>
 </body></html>"""
@@ -221,8 +221,7 @@ def build_md(d: dict) -> str:
                  "| 衰減% | ⚠test | ⚠test衰減% | 覆蓋 | 換手 | 輪 |")
         L.append("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
         for fid, m in d["lib"].items():
-            st, va = m.get("sub_train") or {}, m.get("validation") or {}
-            se = m.get("test_metrics_sealed") or {}
+            st, va, se = admission_metrics(m)
             L.append(f"| {fid} | {m.get('name_zh','')} | {m.get('aspect','')} "
                      f"| {m.get('category','')} | `{m.get('formula','')}` "
                      f"| {m.get('depth','')} | {fmt(st.get('icir'))} "
@@ -232,7 +231,9 @@ def build_md(d: dict) -> str:
                      f"| {fmt(m.get('coverage'))} | {fmt(m.get('turnover_m'))} "
                      f"| {m.get('round','')} |")
         for fid, m in d["lib"].items():
-            L.append(f"- **{fid}【{m.get('name_zh','')}】**：{m.get('desc_zh','')}")
+            L.append(f"- **{fid}【{m.get('name_zh','')}】**：{m.get('desc_zh','')}；"
+                     f"用途：{m.get('trading_use', 'legacy（尚未分類）')}；範圍：{scope_label(m) or '全池（舊制）'}；"
+                     f"儲存值 = 原公式 × {m.get('value_orientation', 1)}")
     L.append(build_text(d).split("──── 漏斗統計")[1].join(["\n## 漏斗統計", ""])
              if d["attempts"] else "")
     return "\n".join(L)

@@ -77,10 +77,12 @@ def test_admit_with_scope(tmp_path):
     cand = {"id": "X-1", "formula": "cs_rank(roe) * sign(mom_60)",
             "category": "fin_special", "name_zh": "金融測試", "desc_zh": "測試"}
     fid = mem.admit(cand, diag, pf, fac, industry_scope=TARGET,
+                    group_map={"A":TARGET,"B":"excluded"},
                     test_metrics_sealed={"icir": 0.5})
     meta = mem.library()[fid]
     assert meta["industry_scope"] == TARGET
     assert meta["industry_metrics"]["train_icir"] == 0.7
+    assert set(pd.read_parquet(mem.values_path).stock_id)=={"A"}
     assert f"{TARGET}限定" in mem.library_summary()
 
 

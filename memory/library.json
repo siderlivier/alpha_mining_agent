@@ -1,1419 +1,4313 @@
 {
- "F-001": {
-  "name_zh": "ROE趨勢改善",
-  "desc_zh": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。",
-  "aspect": "基本面",
-  "category": "profitability_trend_underreaction",
-  "formula": "cs_rank(sub(roe, ts_med(roe,12)))",
-  "fhash": "9108712666fe336d",
-  "fields": [
-   "roe"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-18T21:37:43",
-  "round": 1,
-  "source_attempt": "A-0027",
-  "sub_train": {
-   "mean_ic": 0.043,
-   "icir": 0.63
+  "F-001": {
+    "name_zh": "ROE趨勢改善",
+    "desc_zh": "本期ROE明顯高於自身兩年中位數的公司，代表獲利能力正在結構性提升。",
+    "aspect": "基本面",
+    "category": "profitability_trend_underreaction",
+    "formula": "cs_rank(sub(roe, ts_med(roe,12)))",
+    "fhash": "9108712666fe336d",
+    "fields": [
+      "roe"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-18T21:37:43",
+    "round": 1,
+    "source_attempt": "A-0027",
+    "sub_train": {
+      "mean_ic": 0.043,
+      "icir": 0.63
+    },
+    "validation": {
+      "mean_ic": 0.026,
+      "icir": 0.4,
+      "decay_pct": 36.0
+    },
+    "coverage": 0.74,
+    "turnover_m": 0.27,
+    "test_metrics_sealed": {
+      "mean_ic": 0.028,
+      "icir": 0.37,
+      "decay_vs_subtrain_pct": 42.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 50,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.32944736292851945,
+            "valid_icir": 0.469974780641153,
+            "decay_pct": -42.65549933787873,
+            "coverage": 0.7458540123535431,
+            "legs": {
+              "long_excess_ann": 0.040378331266384494,
+              "short_excess_ann": 0.06920533530106313,
+              "short_turnover_m": 0.27521539810210244
+            },
+            "long_turnover": 0.2736721966545792,
+            "short_turnover": 0.27521539810210244,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 50,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.3775512156451116,
+            "valid_icir": 0.4768611458728683,
+            "decay_pct": -26.303697647501533,
+            "coverage": 0.7679249316005472,
+            "legs": {
+              "long_excess_ann": 0.0537330440144418,
+              "short_excess_ann": 0.06631375539336973,
+              "short_turnover_m": 0.2683319903303787
+            },
+            "long_turnover": 0.2731668009669621,
+            "short_turnover": 0.2683319903303787,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
   },
-  "validation": {
-   "mean_ic": 0.026,
-   "icir": 0.4,
-   "decay_pct": 36.0
+  "F-002": {
+    "name_zh": "金融品質價值",
+    "desc_zh": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。",
+    "aspect": "基本面",
+    "category": "quality_value_financial",
+    "formula": "cs_rank(mul(bp, roe))",
+    "fhash": "3ad4fdd24a2a7b73",
+    "fields": [
+      "bp",
+      "roe"
+    ],
+    "depth": 2,
+    "created_at": "2026-07-18T21:37:47",
+    "round": 1,
+    "source_attempt": "A-0036",
+    "sub_train": {
+      "mean_ic": 0.071,
+      "icir": 0.57
+    },
+    "validation": {
+      "mean_ic": 0.098,
+      "icir": 0.91,
+      "decay_pct": -62.0
+    },
+    "coverage": 0.72,
+    "turnover_m": 0.24,
+    "test_metrics_sealed": {
+      "mean_ic": 0.071,
+      "icir": 0.6,
+      "decay_vs_subtrain_pct": -4.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "民生與製造",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [],
+            "train_icir": 0.6788162513493158,
+            "valid_icir": 0.7503124514052155,
+            "decay_pct": -10.532482083889905,
+            "coverage": 0.7662483309508378,
+            "legs": {
+              "long_excess_ann": 0.0784005778805658,
+              "short_excess_ann": 0.04853824200301479,
+              "short_turnover_m": 0.14408628667571532
+            },
+            "long_turnover": 0.2472519896662421,
+            "short_turnover": 0.14408628667571532,
+            "required_use": "long_only",
+            "status": "passed"
+          },
+          {
+            "group": "營建",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.29718981521248716,
+            "valid_icir": 0.5780977150167708,
+            "decay_pct": -94.52137503549298,
+            "coverage": 0.6730420656634747,
+            "legs": {
+              "long_excess_ann": 0.034221014162883874,
+              "short_excess_ann": -0.02074229695347174,
+              "short_turnover_m": 0.16964285714285712
+            },
+            "long_turnover": 0.24752747252747248,
+            "short_turnover": 0.16964285714285712,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs",
+    "data_correction_history": [
+      {
+        "migration": "20260919_234830_priority_repairs",
+        "assessment": {
+          "id": "F-002",
+          "group": "民生與製造",
+          "train_months": 57,
+          "valid_months": 24,
+          "reasons": [],
+          "train_icir": 0.7187724187237519,
+          "valid_icir": 0.7508878566207697,
+          "decay_pct": -4.468095472283395,
+          "coverage": 0.9121441836352994,
+          "legs": {
+            "long_excess_ann": 0.08150245092711808,
+            "short_excess_ann": 0.05184009047255619,
+            "short_turnover_m": 0.14434228404553945
+          },
+          "long_turnover": 0.2557132448334128,
+          "short_turnover": 0.14434228404553945,
+          "required_use": "long_only",
+          "status": "passed"
+        }
+      }
+    ]
   },
-  "coverage": 0.74,
-  "turnover_m": 0.27,
-  "test_metrics_sealed": {
-   "mean_ic": 0.028,
-   "icir": 0.37,
-   "decay_vs_subtrain_pct": 42.0,
-   "n_months": 77
+  "F-003": {
+    "name_zh": "風格孤兒股",
+    "desc_zh": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。",
+    "aspect": "基本面",
+    "category": "style_box_orphan_stocks",
+    "formula": "cs_rank(mul(sp, sign(rev_yoy)))",
+    "fhash": "3cf01d86a6259f09",
+    "fields": [
+      "rev_yoy",
+      "sp"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-19T09:53:04",
+    "round": 2,
+    "source_attempt": "A-0048",
+    "sub_train": {
+      "mean_ic": 0.05,
+      "icir": 0.45
+    },
+    "validation": {
+      "mean_ic": 0.039,
+      "icir": 0.56,
+      "decay_pct": -25.0
+    },
+    "coverage": 0.75,
+    "turnover_m": 0.32,
+    "test_metrics_sealed": {
+      "mean_ic": 0.014,
+      "icir": 0.16,
+      "decay_vs_subtrain_pct": 64.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.24378589352478852,
+            "valid_icir": 0.5958222346094093,
+            "decay_pct": -144.4039013064655,
+            "coverage": 0.8024834911472326,
+            "legs": {
+              "long_excess_ann": 0.04761720222901508,
+              "short_excess_ann": 0.020659018129540213,
+              "short_turnover_m": 0.4026623801703174
+            },
+            "long_turnover": 0.40398306336909917,
+            "short_turnover": 0.4026623801703174,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.19305186916786657,
+            "valid_icir": 0.2676078604123475,
+            "decay_pct": -38.61966815749991,
+            "coverage": 0.8226288189694482,
+            "legs": {
+              "long_excess_ann": 0.04011575276578513,
+              "short_excess_ann": -0.006255012070721322,
+              "short_turnover_m": 0.4501164215686274
+            },
+            "long_turnover": 0.38700061274509806,
+            "short_turnover": 0.4501164215686274,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-004": {
+    "name_zh": "毛利穩定溢價",
+    "desc_zh": "毛利率長期波動度低的悶型績優股，缺乏故事性而長期被低估。",
+    "aspect": "基本面",
+    "category": "margin_stability_quality",
+    "formula": "cs_rank(neg(ts_std(gross_margin,12)))",
+    "fhash": "842e61fe9f3a9ea8",
+    "fields": [
+      "gross_margin"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-19T09:53:06",
+    "round": 2,
+    "source_attempt": "A-0050",
+    "sub_train": {
+      "mean_ic": 0.045,
+      "icir": 0.6
+    },
+    "validation": {
+      "mean_ic": 0.049,
+      "icir": 0.8,
+      "decay_pct": -33.0
+    },
+    "coverage": 0.79,
+    "turnover_m": 0.13,
+    "test_metrics_sealed": {
+      "mean_ic": 0.043,
+      "icir": 0.62,
+      "decay_vs_subtrain_pct": -3.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 61,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 腿超額非正或缺值"
+            ],
+            "train_icir": 0.474427330429516,
+            "valid_icir": 0.6060517668121091,
+            "decay_pct": -27.743856211535878,
+            "coverage": 0.8457965012061955,
+            "legs": {
+              "long_excess_ann": -0.0038127571744672145,
+              "short_excess_ann": 0.04329752360185359,
+              "short_turnover_m": 0.08687481008984142
+            },
+            "long_turnover": 0.15295561066193744,
+            "short_turnover": 0.08687481008984142,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 61,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.3409346153556857,
+            "valid_icir": 0.5529543334789742,
+            "decay_pct": -62.18779454297867,
+            "coverage": 0.8736616642781142,
+            "legs": {
+              "long_excess_ann": 0.023974116845857492,
+              "short_excess_ann": 0.018940799918142827,
+              "short_turnover_m": 0.08280812324929972
+            },
+            "long_turnover": 0.11917892156862746,
+            "short_turnover": 0.08280812324929972,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-005": {
+    "name_zh": "低波動異常",
+    "desc_zh": "長期波動度低的穩定股因散戶偏好高波動股而被低估",
+    "aspect": "技術面",
+    "category": "low_volatility_anomaly",
+    "formula": "cs_rank(neg(vol_126))",
+    "fhash": "b56750e993215061",
+    "fields": [
+      "vol_126"
+    ],
+    "depth": 2,
+    "created_at": "2026-07-19T17:08:23",
+    "round": 3,
+    "source_attempt": "A-0068",
+    "sub_train": {
+      "mean_ic": 0.068,
+      "icir": 0.61
+    },
+    "validation": {
+      "mean_ic": 0.114,
+      "icir": 0.83,
+      "decay_pct": -35.0
+    },
+    "coverage": 0.96,
+    "turnover_m": 0.12,
+    "test_metrics_sealed": {
+      "mean_ic": 0.059,
+      "icir": 0.36,
+      "decay_vs_subtrain_pct": 41.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "營建",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 69,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 腿超額非正或缺值"
+            ],
+            "train_icir": 0.40636177923316785,
+            "valid_icir": 0.706385953846439,
+            "decay_pct": -73.8317897858005,
+            "coverage": 0.9566411978468699,
+            "legs": {
+              "long_excess_ann": -0.006060779266649713,
+              "short_excess_ann": 0.008876396324074024,
+              "short_turnover_m": 0.12696080595760062
+            },
+            "long_turnover": 0.12028912174264025,
+            "short_turnover": 0.12696080595760062,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 69,
+            "valid_months": 24,
+            "reasons": [],
+            "train_icir": 0.7602650849955223,
+            "valid_icir": 1.086386913180433,
+            "decay_pct": -42.89580497923713,
+            "coverage": 0.9651577635700773,
+            "legs": {
+              "long_excess_ann": 0.008945484781953443,
+              "short_excess_ann": 0.028960632008438833,
+              "short_turnover_m": 0.10006393861892582
+            },
+            "long_turnover": 0.1592071611253197,
+            "short_turnover": 0.10006393861892582,
+            "required_use": "long_only",
+            "status": "passed"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs",
+    "data_correction_history": [
+      {
+        "migration": "20260919_234830_priority_repairs",
+        "assessment": {
+          "id": "F-005",
+          "group": "營建",
+          "train_months": 69,
+          "valid_months": 24,
+          "reasons": [],
+          "train_icir": 0.7583242576979684,
+          "valid_icir": 1.1314729871314124,
+          "decay_pct": -49.20701476255091,
+          "coverage": 0.9965418048683815,
+          "legs": {
+            "long_excess_ann": 0.00953850790751578,
+            "short_excess_ann": 0.028270290332072366,
+            "short_turnover_m": 0.09814578005115088
+          },
+          "long_turnover": 0.1592071611253197,
+          "short_turnover": 0.09814578005115088,
+          "required_use": "long_only",
+          "status": "passed"
+        }
+      }
+    ]
+  },
+  "F-006": {
+    "name_zh": "低應計品質股",
+    "desc_zh": "應計項長期偏低的公司盈餘含金量高，市場常高估高應計公司獲利的持續性。",
+    "aspect": "基本面",
+    "category": "accruals_quality_anomaly",
+    "formula": "cs_rank(neg(ts_mean(accruals,12)))",
+    "fhash": "4ee00a6a8c9515a0",
+    "fields": [
+      "accruals"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-19T17:21:05",
+    "round": 4,
+    "source_attempt": "A-0083",
+    "sub_train": {
+      "mean_ic": 0.03,
+      "icir": 0.46
+    },
+    "validation": {
+      "mean_ic": 0.02,
+      "icir": 0.33,
+      "decay_pct": 28.0
+    },
+    "coverage": 0.72,
+    "turnover_m": 0.07,
+    "test_metrics_sealed": {
+      "mean_ic": 0.029,
+      "icir": 0.4,
+      "decay_vs_subtrain_pct": 13.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 50,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.28034729299948175,
+            "valid_icir": 0.5613771409599064,
+            "decay_pct": -100.2434676481589,
+            "coverage": 0.7355878714600208,
+            "legs": {
+              "long_excess_ann": 0.020406546512982612,
+              "short_excess_ann": 0.026020600355872666,
+              "short_turnover_m": 0.07428855462498438
+            },
+            "long_turnover": 0.07146359315678871,
+            "short_turnover": 0.07428855462498438,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 50,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 腿超額非正或缺值"
+            ],
+            "train_icir": -0.02868231960696079,
+            "valid_icir": -0.3579094235150358,
+            "decay_pct": null,
+            "coverage": 0.7684094277245782,
+            "legs": {
+              "long_excess_ann": -0.07278355620239771,
+              "short_excess_ann": -0.0027297821911283454,
+              "short_turnover_m": 0.06446414182111201
+            },
+            "long_turnover": 0.08702659145850122,
+            "short_turnover": 0.06446414182111201,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-007": {
+    "name_zh": "營收穩健溢價",
+    "desc_zh": "月增率波動度低、營收表現穩健的公司，比營收忽高忽低的公司更值得信賴。",
+    "aspect": "基本面",
+    "category": "revenue_noise_discount",
+    "formula": "cs_rank(neg(ts_std(rev_mom,6)))",
+    "fhash": "2e25e106c05edf47",
+    "fields": [
+      "rev_mom"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-19T17:47:45",
+    "round": 6,
+    "source_attempt": "A-0108",
+    "sub_train": {
+      "mean_ic": 0.03,
+      "icir": 0.45
+    },
+    "validation": {
+      "mean_ic": 0.05,
+      "icir": 0.72,
+      "decay_pct": -60.0
+    },
+    "coverage": 0.94,
+    "turnover_m": 0.2,
+    "test_metrics_sealed": {
+      "mean_ic": 0.032,
+      "icir": 0.42,
+      "decay_vs_subtrain_pct": 7.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 68,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.5293144653618299,
+            "valid_icir": 0.46160314746375203,
+            "decay_pct": 12.792266663596962,
+            "coverage": 0.9339286753071595,
+            "legs": {
+              "long_excess_ann": 0.04164504137293513,
+              "short_excess_ann": 0.032327840043782065,
+              "short_turnover_m": 0.16689265539960083
+            },
+            "long_turnover": 0.23035269000640252,
+            "short_turnover": 0.16689265539960083,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 68,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.08210747768350196,
+            "valid_icir": -0.22408442991093028,
+            "decay_pct": 372.91598309072896,
+            "coverage": 0.9362806144452737,
+            "legs": {
+              "long_excess_ann": 0.016053426267439674,
+              "short_excess_ann": -0.00987021313535551,
+              "short_turnover_m": 0.1479664942900237
+            },
+            "long_turnover": 0.17800581771170007,
+            "short_turnover": 0.1479664942900237,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-008": {
+    "name_zh": "低調接近新高",
+    "desc_zh": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。",
+    "aspect": "技術面",
+    "category": "fifty_two_week_high_anchoring",
+    "formula": "cs_rank(sdiv(px_hi252,turn_21))",
+    "fhash": "a304bb712de90b6b",
+    "fields": [
+      "px_hi252",
+      "turn_21"
+    ],
+    "depth": 2,
+    "created_at": "2026-07-19T17:59:14",
+    "round": 7,
+    "source_attempt": "A-0123",
+    "sub_train": {
+      "mean_ic": 0.05,
+      "icir": 0.46
+    },
+    "validation": {
+      "mean_ic": 0.055,
+      "icir": 0.35,
+      "decay_pct": 25.0
+    },
+    "coverage": 0.8,
+    "turnover_m": 0.26,
+    "test_metrics_sealed": {
+      "mean_ic": 0.048,
+      "icir": 0.26,
+      "decay_vs_subtrain_pct": 44.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 腿超額非正或缺值"
+            ],
+            "train_icir": 0.31138383606486086,
+            "valid_icir": 0.4250719859892138,
+            "decay_pct": -36.51061383310592,
+            "coverage": 0.8192774695246103,
+            "legs": {
+              "long_excess_ann": -0.004501559584414503,
+              "short_excess_ann": 0.0297693397798319,
+              "short_turnover_m": 0.28916015519815835
+            },
+            "long_turnover": 0.25011492895972703,
+            "short_turnover": 0.28916015519815835,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.47266557407419246,
+            "valid_icir": 0.4904893768895491,
+            "decay_pct": -3.770911992113657,
+            "coverage": 0.840952747378021,
+            "legs": {
+              "long_excess_ann": 0.0648863994753916,
+              "short_excess_ann": 0.07798041356642399,
+              "short_turnover_m": 0.3080422794117647
+            },
+            "long_turnover": 0.2701746323529412,
+            "short_turnover": 0.3080422794117647,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-009": {
+    "name_zh": "營收加速趨勢",
+    "desc_zh": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。",
+    "aspect": "基本面",
+    "category": "revenue_growth_acceleration",
+    "formula": "cs_rank(ts_slope(rev_yoy_ma3,6))",
+    "fhash": "c577b17ca34499b2",
+    "fields": [
+      "rev_yoy_ma3"
+    ],
+    "depth": 2,
+    "created_at": "2026-07-20T17:18:58",
+    "round": 9,
+    "industry_scope": "電子",
+    "industry_metrics": {
+      "train_icir": 0.68,
+      "valid_icir": 0.65,
+      "decay_pct": 4
+    },
+    "source_attempt": "A-0144",
+    "sub_train": {
+      "mean_ic": 0.027,
+      "icir": 0.38
+    },
+    "validation": {
+      "mean_ic": 0.031,
+      "icir": 0.44,
+      "decay_pct": -16.0
+    },
+    "coverage": 0.79,
+    "turnover_m": 0.28,
+    "test_metrics_sealed": {
+      "mean_ic": 0.03,
+      "icir": 0.49,
+      "decay_vs_subtrain_pct": 28.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "電子"
+    ],
+    "excluded_at_admission": [
+      "半導體",
+      "生技",
+      "金融"
+    ],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "電子"
+        ],
+        "after": [
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.44802311339312817,
+            "valid_icir": 0.6405229310680693,
+            "decay_pct": -42.966492558170266,
+            "coverage": 0.7861103835535902,
+            "legs": {
+              "long_excess_ann": 0.0286495563071978,
+              "short_excess_ann": 0.05159114377945241,
+              "short_turnover_m": 0.298592553372785
+            },
+            "long_turnover": 0.30373559205463074,
+            "short_turnover": 0.298592553372785,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 腿超額非正或缺值"
+            ],
+            "train_icir": -0.03358875100886347,
+            "valid_icir": 0.4690399861477017,
+            "decay_pct": null,
+            "coverage": 0.8109724122207022,
+            "legs": {
+              "long_excess_ann": -0.005192836353060594,
+              "short_excess_ann": 0.02823008145022635,
+              "short_turnover_m": 0.26987465872424915
+            },
+            "long_turnover": 0.27224807644576815,
+            "short_turnover": 0.26987465872424915,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-010": {
+    "name_zh": "金融資本穩健度",
+    "desc_zh": "ROE長期波動度低的金融股，代表資本管理穩健、股利能力可持續但被低估。",
+    "aspect": "基本面",
+    "category": "financial_capital_stability",
+    "formula": "cs_rank(neg(ts_std(roe,12)))",
+    "fhash": "8f069e0f2260b58e",
+    "fields": [
+      "roe"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-20T17:19:00",
+    "round": 9,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0157",
+    "sub_train": {
+      "mean_ic": 0.047,
+      "icir": 0.56
+    },
+    "validation": {
+      "mean_ic": 0.069,
+      "icir": 0.82,
+      "decay_pct": -48.0
+    },
+    "coverage": 0.74,
+    "turnover_m": 0.12,
+    "test_metrics_sealed": {
+      "mean_ic": 0.037,
+      "icir": 0.42,
+      "decay_vs_subtrain_pct": 24.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 50,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.5441482594951874,
+            "valid_icir": 0.7622934124942721,
+            "decay_pct": -40.08928618120737,
+            "coverage": 0.7469474312118437,
+            "legs": {
+              "long_excess_ann": 0.00931317150558898,
+              "short_excess_ann": 0.028599042148430814,
+              "short_turnover_m": 0.07768939558966749
+            },
+            "long_turnover": 0.12003881339830155,
+            "short_turnover": 0.07768939558966749,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 50,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.34214488996366055,
+            "valid_icir": 0.7311226055210102,
+            "decay_pct": -113.68800966124711,
+            "coverage": 0.7684094277245782,
+            "legs": {
+              "long_excess_ann": 0.034722894684898906,
+              "short_excess_ann": 0.07441804372237702,
+              "short_turnover_m": 0.09024979854955682
+            },
+            "long_turnover": 0.11845286059629333,
+            "short_turnover": 0.09024979854955682,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-011": {
+    "name_zh": "生技轉骨訊號",
+    "desc_zh": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。",
+    "aspect": "基本面",
+    "category": "biotech_margin_revenue_quality",
+    "formula": "cs_rank(mul(cs_rank(gross_margin), cs_rank(rev_yoy)))",
+    "fhash": "92ec4f3bdba8c30b",
+    "fields": [
+      "gross_margin",
+      "rev_yoy"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-21T11:46:43",
+    "round": 12,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0203",
+    "sub_train": {
+      "mean_ic": 0.041,
+      "icir": 0.49
+    },
+    "validation": {
+      "mean_ic": 0.024,
+      "icir": 0.33,
+      "decay_pct": 31.0
+    },
+    "coverage": 0.77,
+    "turnover_m": 0.34,
+    "test_metrics_sealed": {
+      "mean_ic": 0.009,
+      "icir": 0.11,
+      "decay_vs_subtrain_pct": 77.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 60,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.42668951686338674,
+            "valid_icir": 0.6519019485577763,
+            "decay_pct": -52.781336966030004,
+            "coverage": 0.823733314413249,
+            "legs": {
+              "long_excess_ann": 0.06842652854495328,
+              "short_excess_ann": 0.06573016014685326,
+              "short_turnover_m": 0.3091751193875668
+            },
+            "long_turnover": 0.3442527402779348,
+            "short_turnover": 0.3091751193875668,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 60,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.09076658776880195,
+            "valid_icir": 0.3359433461138549,
+            "decay_pct": -270.1178532452494,
+            "coverage": 0.8497062487785811,
+            "legs": {
+              "long_excess_ann": 0.021527608831391966,
+              "short_excess_ann": 0.01094179019298001,
+              "short_turnover_m": 0.36437810063784554
+            },
+            "long_turnover": 0.43178892038743205,
+            "short_turnover": 0.36437810063784554,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-012": {
+    "name_zh": "淨化ROE動能",
+    "desc_zh": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。",
+    "aspect": "基本面",
+    "category": "profitability_trend_underreaction",
+    "formula": "sub(cs_rank(delta(roe,12)), cs_rank(accruals))",
+    "fhash": "0caed507a967b7b1",
+    "fields": [
+      "accruals",
+      "roe"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-21T12:37:08",
+    "round": 16,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0253",
+    "sub_train": {
+      "mean_ic": 0.048,
+      "icir": 0.72
+    },
+    "validation": {
+      "mean_ic": 0.038,
+      "icir": 0.56,
+      "decay_pct": 23.0
+    },
+    "coverage": 0.67,
+    "turnover_m": 0.19,
+    "test_metrics_sealed": {
+      "mean_ic": 0.043,
+      "icir": 0.58,
+      "decay_vs_subtrain_pct": 19.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 45,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.4807013706826304,
+            "valid_icir": 0.400157325765046,
+            "decay_pct": 16.755526368315966,
+            "coverage": 0.6768729136326957,
+            "legs": {
+              "long_excess_ann": 0.08661044059251666,
+              "short_excess_ann": 0.04872076634980594,
+              "short_turnover_m": 0.21108361110929488
+            },
+            "long_turnover": 0.19543246813452098,
+            "short_turnover": 0.21108361110929488,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 45,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 腿超額非正或缺值"
+            ],
+            "train_icir": 0.13877927421347075,
+            "valid_icir": 0.06753125019831757,
+            "decay_pct": 51.3390954225335,
+            "coverage": 0.715110579115367,
+            "legs": {
+              "long_excess_ann": -0.017382347106607167,
+              "short_excess_ann": 0.010443355295389367,
+              "short_turnover_m": 0.1894463667820069
+            },
+            "long_turnover": 0.19555579584775087,
+            "short_turnover": 0.1894463667820069,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-013": {
+    "name_zh": "冷門成長股",
+    "desc_zh": "營收成長強但成交金額低，代表利多尚未被市場注意到。",
+    "aspect": "混合",
+    "category": "overlooked_growth_liquidity",
+    "formula": "sub(cs_rank(rev_yoy), cs_rank(amt_21))",
+    "fhash": "a0eb752de729d368",
+    "fields": [
+      "amt_21",
+      "rev_yoy"
+    ],
+    "depth": 2,
+    "created_at": "2026-07-21T13:24:55",
+    "round": 20,
+    "industry_scope": "電子",
+    "industry_metrics": {
+      "train_icir": 0.71,
+      "valid_icir": 0.39,
+      "decay_pct": 44
+    },
+    "source_attempt": "A-0323",
+    "sub_train": {
+      "mean_ic": 0.034,
+      "icir": 0.43
+    },
+    "validation": {
+      "mean_ic": 0.017,
+      "icir": 0.15,
+      "decay_pct": 65.0
+    },
+    "coverage": 0.84,
+    "turnover_m": 0.42,
+    "test_metrics_sealed": {
+      "mean_ic": 0.038,
+      "icir": 0.29,
+      "decay_vs_subtrain_pct": 59.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "電子"
+    ],
+    "excluded_at_admission": [
+      "半導體",
+      "生技",
+      "金融"
+    ],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "電子"
+        ],
+        "after": [
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 60,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.4079215871827721,
+            "valid_icir": 0.36831725988317254,
+            "decay_pct": 9.708808884844466,
+            "coverage": 0.834147656726417,
+            "legs": {
+              "long_excess_ann": 0.03633948657990879,
+              "short_excess_ann": 0.05634074034305373,
+              "short_turnover_m": 0.42243294660901237
+            },
+            "long_turnover": 0.43071965074961704,
+            "short_turnover": 0.42243294660901237,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 60,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.18034356920691255,
+            "valid_icir": 0.33606625640290694,
+            "decay_pct": -86.34779043178966,
+            "coverage": 0.8538586994875471,
+            "legs": {
+              "long_excess_ann": 0.04013972569156342,
+              "short_excess_ann": 0.04822696823310212,
+              "short_turnover_m": 0.4519519253484526
+            },
+            "long_turnover": 0.4296332388377037,
+            "short_turnover": 0.4519519253484526,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-014": {
+    "name_zh": "本業成長價值股",
+    "desc_zh": "營收市值比便宜且本業獲利成長佳，但因非熱門標籤被市場忽略",
+    "aspect": "基本面",
+    "category": "style_box_orphan_stocks",
+    "formula": "add(cs_rank(sp), cs_rank(op_income_yoy))",
+    "fhash": "d4857c61bd483540",
+    "fields": [
+      "op_income_yoy",
+      "sp"
+    ],
+    "depth": 2,
+    "created_at": "2026-07-21T13:51:27",
+    "round": 22,
+    "industry_scope": "電子",
+    "industry_metrics": {
+      "train_icir": 0.81,
+      "valid_icir": 0.61,
+      "decay_pct": 25
+    },
+    "source_attempt": "A-0340",
+    "sub_train": {
+      "mean_ic": 0.062,
+      "icir": 0.52
+    },
+    "validation": {
+      "mean_ic": 0.007,
+      "icir": 0.07,
+      "decay_pct": 87.0
+    },
+    "coverage": 0.74,
+    "turnover_m": 0.19,
+    "test_metrics_sealed": {
+      "mean_ic": 0.047,
+      "icir": 0.77,
+      "decay_vs_subtrain_pct": 6.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "民生與製造",
+      "電子"
+    ],
+    "excluded_at_admission": [
+      "半導體",
+      "生技",
+      "金融"
+    ],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "電子"
+        ],
+        "after": [
+          "民生與製造",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [],
+            "train_icir": 0.7214543272113283,
+            "valid_icir": 0.5594444947077358,
+            "decay_pct": 22.456006762038115,
+            "coverage": 0.78201447664889,
+            "legs": {
+              "long_excess_ann": 0.08289255646128613,
+              "short_excess_ann": 0.07631275186464564,
+              "short_turnover_m": 0.17584733043600137
+            },
+            "long_turnover": 0.1830561839516853,
+            "short_turnover": 0.17584733043600137,
+            "required_use": "long_only",
+            "status": "passed"
+          },
+          {
+            "group": "營建",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.3050168493042342,
+            "valid_icir": 0.3222663990869432,
+            "decay_pct": -5.6552776746781275,
+            "coverage": 0.8280936502507981,
+            "legs": {
+              "long_excess_ann": 0.02757642102919385,
+              "short_excess_ann": 0.02286404099847282,
+              "short_turnover_m": 0.20271779597915116
+            },
+            "long_turnover": 0.22305472822040212,
+            "short_turnover": 0.20271779597915116,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs",
+    "data_correction_history": [
+      {
+        "migration": "20260919_234830_priority_repairs",
+        "assessment": {
+          "id": "F-014",
+          "group": "民生與製造",
+          "train_months": 56,
+          "valid_months": 24,
+          "reasons": [],
+          "train_icir": 0.6541404168373096,
+          "valid_icir": 0.43414723947696077,
+          "decay_pct": 33.630879807731404,
+          "coverage": 0.9160392956742569,
+          "legs": {
+            "long_excess_ann": 0.07542096582845781,
+            "short_excess_ann": 0.0700325556151406,
+            "short_turnover_m": 0.18172575184238368
+          },
+          "long_turnover": 0.18290513173465764,
+          "short_turnover": 0.18172575184238368,
+          "required_use": "long_only",
+          "status": "passed"
+        }
+      }
+    ]
+  },
+  "F-015": {
+    "name_zh": "便宜成長孤兒股",
+    "desc_zh": "盈餘殖利率便宜又有營收成長，卻因不符單一風格標籤被機構忽略",
+    "aspect": "基本面",
+    "category": "style_box_orphan_stocks",
+    "formula": "cs_rank(mul(ep, sign(rev_yoy)))",
+    "fhash": "1b2a2cc60d6c50fd",
+    "fields": [
+      "ep",
+      "rev_yoy"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-28T18:28:37",
+    "round": 24,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0378",
+    "sub_train": {
+      "mean_ic": 0.032,
+      "icir": 0.53
+    },
+    "validation": {
+      "mean_ic": 0.029,
+      "icir": 0.58,
+      "decay_pct": -11.0
+    },
+    "coverage": 0.82,
+    "turnover_m": 0.4,
+    "test_metrics_sealed": {
+      "mean_ic": 0.031,
+      "icir": 0.42,
+      "decay_vs_subtrain_pct": 21.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 60,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.36745974169438006,
+            "valid_icir": 0.44762812971984917,
+            "decay_pct": -21.816917318835415,
+            "coverage": 0.8330632489844007,
+            "legs": {
+              "long_excess_ann": 0.06817499240337895,
+              "short_excess_ann": 0.005657080315181229,
+              "short_turnover_m": 0.5197972458828535
+            },
+            "long_turnover": 0.42069474368800835,
+            "short_turnover": 0.5197972458828535,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 60,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": -0.03744700652383561,
+            "valid_icir": 0.2756106916692754,
+            "decay_pct": null,
+            "coverage": 0.8538586994875471,
+            "legs": {
+              "long_excess_ann": 0.035452668166263995,
+              "short_excess_ann": 0.005273868781779715,
+              "short_turnover_m": 0.5008386487124971
+            },
+            "long_turnover": 0.4199769666902906,
+            "short_turnover": 0.5008386487124971,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-016": {
+    "name_zh": "本業獲利創高股",
+    "desc_zh": "股價近高點且本業獲利成長佳，勝過單純營收確認。",
+    "aspect": "混合",
+    "category": "anchoring_profit_confirmation",
+    "formula": "mul(cs_rank(px_hi252), cs_rank(op_income_yoy))",
+    "fhash": "ebd75230589693fd",
+    "fields": [
+      "op_income_yoy",
+      "px_hi252"
+    ],
+    "depth": 2,
+    "created_at": "2026-07-28T19:19:10",
+    "round": 28,
+    "industry_scope": "電子",
+    "industry_metrics": {
+      "train_icir": 0.6,
+      "valid_icir": 0.59,
+      "decay_pct": 2
+    },
+    "source_attempt": "A-0430",
+    "sub_train": {
+      "mean_ic": 0.047,
+      "icir": 0.36
+    },
+    "validation": {
+      "mean_ic": 0.058,
+      "icir": 0.63,
+      "decay_pct": -75.0
+    },
+    "coverage": 0.75,
+    "turnover_m": 0.28,
+    "test_metrics_sealed": {
+      "mean_ic": 0.038,
+      "icir": 0.34,
+      "decay_vs_subtrain_pct": 43.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "民生與製造",
+      "電子"
+    ],
+    "excluded_at_admission": [
+      "半導體",
+      "生技",
+      "金融"
+    ],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "電子"
+        ],
+        "after": [
+          "民生與製造",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [],
+            "train_icir": 0.6179174964311969,
+            "valid_icir": 0.667781286020302,
+            "decay_pct": -8.069651673094725,
+            "coverage": 0.7839470122477564,
+            "legs": {
+              "long_excess_ann": 0.09849968123840774,
+              "short_excess_ann": 0.07524411404057166,
+              "short_turnover_m": 0.20172958008241346
+            },
+            "long_turnover": 0.30720376348225065,
+            "short_turnover": 0.20172958008241346,
+            "required_use": "long_only",
+            "status": "passed"
+          },
+          {
+            "group": "營建",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.3291684566795335,
+            "valid_icir": 0.6107797054323535,
+            "decay_pct": -85.5523191965464,
+            "coverage": 0.8289386684906521,
+            "legs": {
+              "long_excess_ann": 0.04846873088250488,
+              "short_excess_ann": -0.008396236984580106,
+              "short_turnover_m": 0.23161764705882348
+            },
+            "long_turnover": 0.28727661950856287,
+            "short_turnover": 0.23161764705882348,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs",
+    "data_correction_history": [
+      {
+        "migration": "20260919_234830_priority_repairs",
+        "assessment": {
+          "id": "F-016",
+          "group": "民生與製造",
+          "train_months": 56,
+          "valid_months": 24,
+          "reasons": [],
+          "train_icir": 0.6171722271533667,
+          "valid_icir": 0.6628632789765275,
+          "decay_pct": -7.403290331761259,
+          "coverage": 0.9562868081201679,
+          "legs": {
+            "long_excess_ann": 0.09813146967777864,
+            "short_excess_ann": 0.07465648400997447,
+            "short_turnover_m": 0.2013957162400906
+          },
+          "long_turnover": 0.30720376348225065,
+          "short_turnover": 0.2013957162400906,
+          "required_use": "long_only",
+          "status": "passed"
+        }
+      }
+    ]
+  },
+  "F-017": {
+    "name_zh": "外資認證營收動能",
+    "desc_zh": "外資買超又逢營收成長，電子供應鏈的資金與基本面雙重確認訊號最可信。",
+    "aspect": "混合",
+    "category": "foreign_flow_revenue_confirmation",
+    "formula": "mul(cs_rank(frgn_net_21),cs_rank(rev_yoy))",
+    "fhash": "b2d71ee027ef4b82",
+    "fields": [
+      "frgn_net_21",
+      "rev_yoy"
+    ],
+    "depth": 2,
+    "created_at": "2026-07-29T23:14:32",
+    "round": 29,
+    "industry_scope": "電子",
+    "industry_metrics": {
+      "train_icir": 0.64,
+      "valid_icir": 0.39,
+      "decay_pct": 39
+    },
+    "source_attempt": "A-0453",
+    "sub_train": {
+      "mean_ic": 0.029,
+      "icir": 0.32
+    },
+    "validation": {
+      "mean_ic": 0.029,
+      "icir": 0.4,
+      "decay_pct": -28.0
+    },
+    "coverage": 0.77,
+    "turnover_m": 0.57,
+    "test_metrics_sealed": {
+      "mean_ic": 0.026,
+      "icir": 0.39,
+      "decay_vs_subtrain_pct": 40.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "電子"
+    ],
+    "excluded_at_admission": [
+      "半導體",
+      "生技",
+      "金融"
+    ],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "電子"
+        ],
+        "after": [
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.18775933622719762,
+            "valid_icir": 0.35956552061086483,
+            "decay_pct": -91.50340421728677,
+            "coverage": 0.7912663948257112,
+            "legs": {
+              "long_excess_ann": 0.02611213306442943,
+              "short_excess_ann": 0.026937283757687447,
+              "short_turnover_m": 0.5202455619335211
+            },
+            "long_turnover": 0.6012502566226752,
+            "short_turnover": 0.5202455619335211,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.09683749292887736,
+            "valid_icir": 0.09560190598666543,
+            "decay_pct": 1.2759385903550968,
+            "coverage": 0.8161337209302326,
+            "legs": {
+              "long_excess_ann": 0.008452491486461381,
+              "short_excess_ann": 0.0017235356081776218,
+              "short_turnover_m": 0.5240226715686275
+            },
+            "long_turnover": 0.6115502450980392,
+            "short_turnover": 0.5240226715686275,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-018": {
+    "name_zh": "低波動隱藏成長股",
+    "desc_zh": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。",
+    "aspect": "混合",
+    "category": "low_risk_growth_mismatch",
+    "formula": "mul(cs_rank(neg(vol_21)),cs_rank(rev_yoy))",
+    "fhash": "332cdc589440ee71",
+    "fields": [
+      "rev_yoy",
+      "vol_21"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-29T23:14:33",
+    "round": 29,
+    "industry_scope": "電子",
+    "industry_metrics": {
+      "train_icir": 1.26,
+      "valid_icir": 1.09,
+      "decay_pct": 14
+    },
+    "source_attempt": "A-0458",
+    "sub_train": {
+      "mean_ic": 0.084,
+      "icir": 0.88
+    },
+    "validation": {
+      "mean_ic": 0.088,
+      "icir": 0.89,
+      "decay_pct": -1.0
+    },
+    "coverage": 0.84,
+    "turnover_m": 0.54,
+    "test_metrics_sealed": {
+      "mean_ic": 0.077,
+      "icir": 0.66,
+      "decay_vs_subtrain_pct": 48.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "電子"
+    ],
+    "excluded_at_admission": [
+      "半導體",
+      "生技",
+      "金融"
+    ],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "電子"
+        ],
+        "after": [
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 60,
+            "valid_months": 24,
+            "reasons": [
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.728894060448287,
+            "valid_icir": 1.020800190803807,
+            "decay_pct": -40.04781300810585,
+            "coverage": 0.834147656726417,
+            "legs": {
+              "long_excess_ann": 0.03500564140718432,
+              "short_excess_ann": 0.052187878874966134,
+              "short_turnover_m": 0.4718808576939875
+            },
+            "long_turnover": 0.551021296074302,
+            "short_turnover": 0.4718808576939875,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 60,
+            "valid_months": 24,
+            "reasons": [
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.6356796757361343,
+            "valid_icir": 0.948841077842737,
+            "decay_pct": -49.264026216341314,
+            "coverage": 0.8538586994875471,
+            "legs": {
+              "long_excess_ann": 0.055809103809477206,
+              "short_excess_ann": 0.053321518646425994,
+              "short_turnover_m": 0.47481691471769427
+            },
+            "long_turnover": 0.5728177415544531,
+            "short_turnover": 0.47481691471769427,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-019": {
+    "name_zh": "現金含金價值股",
+    "desc_zh": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略",
+    "aspect": "基本面",
+    "category": "cash_backed_value_orphan",
+    "formula": "mul(cs_rank(sp), cs_rank(ocf_ratio))",
+    "fhash": "d351ef28cb9c5ca1",
+    "fields": [
+      "ocf_ratio",
+      "sp"
+    ],
+    "depth": 2,
+    "created_at": "2026-07-30T00:21:47",
+    "round": 34,
+    "industry_scope": "電子",
+    "industry_metrics": {
+      "train_icir": 0.74,
+      "valid_icir": 0.6,
+      "decay_pct": 18
+    },
+    "source_attempt": "A-0533",
+    "sub_train": {
+      "mean_ic": 0.05,
+      "icir": 0.45
+    },
+    "validation": {
+      "mean_ic": 0.015,
+      "icir": 0.14,
+      "decay_pct": 70.0
+    },
+    "coverage": 0.77,
+    "turnover_m": 0.17,
+    "test_metrics_sealed": {
+      "mean_ic": 0.043,
+      "icir": 0.64,
+      "decay_vs_subtrain_pct": 13.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "電子"
+    ],
+    "excluded_at_admission": [
+      "半導體",
+      "生技",
+      "金融"
+    ],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "電子"
+        ],
+        "after": [
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.5291294931014493,
+            "valid_icir": 0.3855132706896262,
+            "decay_pct": 27.141980230591255,
+            "coverage": 0.8197477903018643,
+            "legs": {
+              "long_excess_ann": 0.031857217425210214,
+              "short_excess_ann": 0.053899429797682676,
+              "short_turnover_m": 0.16512619248365784
+            },
+            "long_turnover": 0.18020844940052302,
+            "short_turnover": 0.16512619248365784,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 腿超額非正或缺值"
+            ],
+            "train_icir": 0.20867726423194063,
+            "valid_icir": 0.002003979221711813,
+            "decay_pct": 99.03967534312486,
+            "coverage": 0.8425373347013223,
+            "legs": {
+              "long_excess_ann": -0.0045998646194777126,
+              "short_excess_ann": -0.02503091071853332,
+              "short_turnover_m": 0.2036764705882353
+            },
+            "long_turnover": 0.20514705882352943,
+            "short_turnover": 0.2036764705882353,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-020": {
+    "name_zh": "冷門獲利股",
+    "desc_zh": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。",
+    "aspect": "混合",
+    "category": "overlooked_profitability_liquidity",
+    "formula": "mul(cs_rank(op_margin), cs_rank(neg(amt_21)))",
+    "fhash": "91f066af99d74934",
+    "fields": [
+      "amt_21",
+      "op_margin"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-30T00:34:11",
+    "round": 35,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0539",
+    "sub_train": {
+      "mean_ic": 0.061,
+      "icir": 0.48
+    },
+    "validation": {
+      "mean_ic": 0.078,
+      "icir": 0.69,
+      "decay_pct": -45.0
+    },
+    "coverage": 0.88,
+    "turnover_m": 0.2,
+    "test_metrics_sealed": {
+      "mean_ic": 0.073,
+      "icir": 0.52,
+      "decay_vs_subtrain_pct": -9.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 68,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.5683474088240199,
+            "valid_icir": 0.6191430174049065,
+            "decay_pct": -8.937422392052241,
+            "coverage": 0.9319964066119857,
+            "legs": {
+              "long_excess_ann": 0.047660661121012526,
+              "short_excess_ann": 0.04746396003733305,
+              "short_turnover_m": 0.2000914849010322
+            },
+            "long_turnover": 0.20274021142893894,
+            "short_turnover": 0.2000914849010322,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 68,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.17586517663369283,
+            "valid_icir": 0.7167118682710085,
+            "decay_pct": -307.5348411720177,
+            "coverage": 0.9492555088604041,
+            "legs": {
+              "long_excess_ann": 0.02070789760134068,
+              "short_excess_ann": 0.027311769946221483,
+              "short_turnover_m": 0.22450711053652225
+            },
+            "long_turnover": 0.2714528118939884,
+            "short_turnover": 0.22450711053652225,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-021": {
+    "name_zh": "保守增提金控",
+    "desc_zh": "淨值便宜又保守提列準備金的金融股，代表資產品質紮實但被誤讀為獲利疲弱。",
+    "aspect": "基本面",
+    "category": "financial_conservative_provisioning_value",
+    "formula": "mul(cs_rank(bp), cs_rank(neg(accruals)))",
+    "fhash": "cf522442d4710c1a",
+    "fields": [
+      "accruals",
+      "bp"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-30T00:34:13",
+    "round": 35,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0543",
+    "sub_train": {
+      "mean_ic": 0.045,
+      "icir": 0.49
+    },
+    "validation": {
+      "mean_ic": 0.04,
+      "icir": 0.44,
+      "decay_pct": 9.0
+    },
+    "coverage": 0.71,
+    "turnover_m": 0.16,
+    "test_metrics_sealed": {
+      "mean_ic": 0.065,
+      "icir": 0.64,
+      "decay_vs_subtrain_pct": -31.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.41249341933089056,
+            "valid_icir": 0.4780417742890239,
+            "decay_pct": -15.890763800416474,
+            "coverage": 0.7558650584030979,
+            "legs": {
+              "long_excess_ann": 0.035522787386118575,
+              "short_excess_ann": 0.025235265012067166,
+              "short_turnover_m": 0.15226729861347624
+            },
+            "long_turnover": 0.1753697306558764,
+            "short_turnover": 0.15226729861347624,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 57,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.35666079251939947,
+            "valid_icir": 0.3296860887601152,
+            "decay_pct": 7.563125615445121,
+            "coverage": 0.6730420656634747,
+            "legs": {
+              "long_excess_ann": 0.028052746867728795,
+              "short_excess_ann": 0.03378405707405635,
+              "short_turnover_m": 0.15247252747252743
+            },
+            "long_turnover": 0.17005494505494506,
+            "short_turnover": 0.15247252747252743,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-022": {
+    "name_zh": "生技穩健成長",
+    "desc_zh": "生技股EPS成長相對自身波動穩定，代表已脫離燒錢賭博期、進入穩定收成階段。",
+    "aspect": "基本面",
+    "category": "biotech_earnings_consistency_premium",
+    "formula": "cs_rank(sdiv(eps_yoy, ts_std(eps_yoy,12)))",
+    "fhash": "90043daca065575d",
+    "fields": [
+      "eps_yoy"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-30T00:34:15",
+    "round": 35,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0546",
+    "sub_train": {
+      "mean_ic": 0.035,
+      "icir": 0.57
+    },
+    "validation": {
+      "mean_ic": 0.046,
+      "icir": 0.97,
+      "decay_pct": -71.0
+    },
+    "coverage": 0.7,
+    "turnover_m": 0.26,
+    "test_metrics_sealed": {
+      "mean_ic": 0.043,
+      "icir": 0.66,
+      "decay_vs_subtrain_pct": -16.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 49,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.5868784191096699,
+            "valid_icir": 0.45696717112088103,
+            "decay_pct": 22.135972930453306,
+            "coverage": 0.7010331200861547,
+            "legs": {
+              "long_excess_ann": 0.08049457179717119,
+              "short_excess_ann": 0.06156897424584214,
+              "short_turnover_m": 0.25647994957694487
+            },
+            "long_turnover": 0.27233695223797927,
+            "short_turnover": 0.25647994957694487,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 49,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.1936657170539344,
+            "valid_icir": 0.20274775123299862,
+            "decay_pct": -4.6895415033807675,
+            "coverage": 0.7467567259461925,
+            "legs": {
+              "long_excess_ann": 0.02690967064401673,
+              "short_excess_ann": -7.110464615425521e-05,
+              "short_turnover_m": 0.2470452069716776
+            },
+            "long_turnover": 0.28376565904139434,
+            "short_turnover": 0.2470452069716776,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-023": {
+    "name_zh": "利差創高金控股",
+    "desc_zh": "淨利率創近兩年新高的金融股，代表利差擴張才剛開始被市場注意到。",
+    "aspect": "基本面",
+    "category": "financial_margin_breakout_underreaction",
+    "formula": "cs_rank(sdiv(net_margin, ts_max(net_margin,24)))",
+    "fhash": "6e055033aaf68bd9",
+    "fields": [
+      "net_margin"
+    ],
+    "depth": 3,
+    "created_at": "2026-07-30T00:46:51",
+    "round": 36,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0551",
+    "sub_train": {
+      "mean_ic": 0.046,
+      "icir": 0.6
+    },
+    "validation": {
+      "mean_ic": 0.066,
+      "icir": 0.94,
+      "decay_pct": -57.0
+    },
+    "coverage": 0.72,
+    "turnover_m": 0.18,
+    "test_metrics_sealed": {
+      "mean_ic": 0.04,
+      "icir": 0.52,
+      "decay_vs_subtrain_pct": 14.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 53,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.4226263082650985,
+            "valid_icir": 0.516495675102215,
+            "decay_pct": -22.210961551933362,
+            "coverage": 0.7589443906503269,
+            "legs": {
+              "long_excess_ann": 0.060621733563085714,
+              "short_excess_ann": 0.04372781224948793,
+              "short_turnover_m": 0.15954639489695788
+            },
+            "long_turnover": 0.22052120357443425,
+            "short_turnover": 0.15954639489695788,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 53,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.2648303670364685,
+            "valid_icir": 0.32056770962612197,
+            "decay_pct": -21.046431802127195,
+            "coverage": 0.7875341997264022,
+            "legs": {
+              "long_excess_ann": 0.029505458365256188,
+              "short_excess_ann": 0.02121802287624547,
+              "short_turnover_m": 0.17932469040247676
+            },
+            "long_turnover": 0.20409249226006193,
+            "short_turnover": 0.17932469040247676,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-024": {
+    "name_zh": "成長無空頭疑慮",
+    "desc_zh": "EPS高成長且融券空方未大舉押注看空，雙重確認成長真實性，此訊號尚未被市場充分定價。",
+    "aspect": "混合",
+    "category": "growth_skepticism_confirmation",
+    "formula": "mul(cs_rank(eps_yoy), cs_rank(neg(short_margin_ratio)))",
+    "fhash": "f6870d0106961633",
+    "fields": [
+      "eps_yoy",
+      "short_margin_ratio"
+    ],
+    "depth": 3,
+    "created_at": "2026-08-12T14:41:11",
+    "round": 46,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0709",
+    "sub_train": {
+      "mean_ic": 0.063,
+      "icir": 0.78
+    },
+    "validation": {
+      "mean_ic": 0.061,
+      "icir": 0.71,
+      "decay_pct": 10.0
+    },
+    "coverage": 0.62,
+    "turnover_m": 0.35,
+    "test_metrics_sealed": {
+      "mean_ic": 0.062,
+      "icir": 0.62,
+      "decay_vs_subtrain_pct": 20.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "民生與製造",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [],
+            "train_icir": 0.75936624151922,
+            "valid_icir": 0.6180417818398377,
+            "decay_pct": 18.61084308892145,
+            "coverage": 0.6598301159003543,
+            "legs": {
+              "long_excess_ann": 0.06589691775528284,
+              "short_excess_ann": 0.058275858099806475,
+              "short_turnover_m": 0.28725299649285
+            },
+            "long_turnover": 0.35892438231084767,
+            "short_turnover": 0.28725299649285,
+            "required_use": "long_only",
+            "status": "passed"
+          },
+          {
+            "group": "營建",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.3720432873302529,
+            "valid_icir": 0.3732057577149909,
+            "decay_pct": -0.3124556803805856,
+            "coverage": 0.7038104195166438,
+            "legs": {
+              "long_excess_ann": 0.007040556177227831,
+              "short_excess_ann": 0.03722122508924573,
+              "short_turnover_m": 0.2868178235266843
+            },
+            "long_turnover": 0.3381926090786849,
+            "short_turnover": 0.2868178235266843,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs",
+    "data_correction_history": [
+      {
+        "migration": "20260919_234830_priority_repairs",
+        "assessment": {
+          "id": "F-024",
+          "group": "民生與製造",
+          "train_months": 56,
+          "valid_months": 24,
+          "reasons": [],
+          "train_icir": 0.7593527245293742,
+          "valid_icir": 0.616731045587876,
+          "decay_pct": 18.78200661357885,
+          "coverage": 0.8227316016440952,
+          "legs": {
+            "long_excess_ann": 0.06577889857902716,
+            "short_excess_ann": 0.05772254332636655,
+            "short_turnover_m": 0.2869653094963023
+          },
+          "long_turnover": 0.35892438231084767,
+          "short_turnover": 0.2869653094963023,
+          "required_use": "long_only",
+          "status": "passed"
+        }
+      }
+    ]
+  },
+  "F-025": {
+    "name_zh": "生技毛利回升與營收背離",
+    "name_history": [
+      {
+        "date": "2026-09-18",
+        "previous_name": "半導體毛利拐點股",
+        "reason": "名稱對齊既有生技產業範圍；公式與歷史績效不變"
+      }
+    ],
+    "desc_zh": "毛利率半年內回升但營收還沒跟上，代表景氣循環早期反轉訊號。",
+    "aspect": "基本面",
+    "category": "semiconductor_margin_inflection",
+    "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(neg(rev_mom)))",
+    "fhash": "067b04a77e46168c",
+    "fields": [
+      "gross_margin",
+      "rev_mom"
+    ],
+    "depth": 3,
+    "created_at": "2026-08-18T21:21:48",
+    "round": 54,
+    "industry_scope": "生技",
+    "industry_metrics": {
+      "train_icir": 0.61,
+      "valid_icir": 0.38,
+      "decay_pct": 37
+    },
+    "source_attempt": "A-0828",
+    "sub_train": {
+      "mean_ic": 0.045,
+      "icir": 0.85
+    },
+    "validation": {
+      "mean_ic": 0.019,
+      "icir": 0.41,
+      "decay_pct": 52.0
+    },
+    "coverage": 0.79,
+    "turnover_m": 0.71,
+    "test_metrics_sealed": {
+      "mean_ic": 0.039,
+      "icir": 0.43,
+      "decay_vs_subtrain_pct": 29.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "生技"
+    ],
+    "excluded_at_admission": [
+      "半導體",
+      "金融",
+      "電子"
+    ],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "生技"
+        ],
+        "after": [
+          "生技"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 62,
+            "valid_months": 24,
+            "reasons": [
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.6385590929802055,
+            "valid_icir": 0.48810772172526457,
+            "decay_pct": 23.561072563037598,
+            "coverage": 0.850069732731901,
+            "legs": {
+              "long_excess_ann": 0.05811542779679296,
+              "short_excess_ann": 0.067493356195687,
+              "short_turnover_m": 0.6066712547317543
+            },
+            "long_turnover": 0.7120447102708543,
+            "short_turnover": 0.6066712547317543,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 62,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻",
+              "long 換手缺值或超過門檻"
+            ],
+            "train_icir": 0.36431780237011374,
+            "valid_icir": 0.5941008418943845,
+            "decay_pct": -63.072141418670526,
+            "coverage": 0.8689275807222113,
+            "legs": {
+              "long_excess_ann": 0.04208990262169843,
+              "short_excess_ann": 0.04966560049887082,
+              "short_turnover_m": 0.6507987312572087
+            },
+            "long_turnover": 0.7197750865051903,
+            "short_turnover": 0.6507987312572087,
+            "required_use": "long_only",
+            "status": "rejected"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs"
+  },
+  "F-026": {
+    "name_zh": "金控效率重估",
+    "desc_zh": "净值便宜又本业效率改善的金控股，市场还没注意到获利品质提升。",
+    "aspect": "基本面",
+    "category": "financial_operating_efficiency_repricing",
+    "formula": "mul(cs_rank(bp), cs_rank(delta(op_margin,12)))",
+    "fhash": "52f83116d89438b1",
+    "fields": [
+      "bp",
+      "op_margin"
+    ],
+    "depth": 3,
+    "created_at": "2026-08-27T21:49:57",
+    "round": 64,
+    "industry_scope": null,
+    "industry_metrics": null,
+    "source_attempt": "A-0978",
+    "sub_train": {
+      "mean_ic": 0.064,
+      "icir": 0.91
+    },
+    "validation": {
+      "mean_ic": 0.041,
+      "icir": 0.51,
+      "decay_pct": 44.0
+    },
+    "coverage": 0.67,
+    "turnover_m": 0.18,
+    "test_metrics_sealed": {
+      "mean_ic": 0.052,
+      "icir": 0.59,
+      "decay_vs_subtrain_pct": 35.0,
+      "n_months": 77
+    },
+    "groups_at_admission": [
+      "半導體",
+      "電子",
+      "生技",
+      "金融"
+    ],
+    "scope_provenance": "verified_legacy_four_groups",
+    "approved_groups": [
+      "半導體",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "excluded_at_admission": [],
+    "groups_seen": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "scope_history": [
+      {
+        "run_id": "20260919_220627_8a069424",
+        "data_hash": "b0e20ea14ac6ebe6e4b8001262dd05393bb2e6e36a028459fa91ef84957cd0da",
+        "config_hash": "8b45ec6c09017540ae085509e304c18efb5731a00f832e0e5f317d7779c41894",
+        "split": {
+          "sub_train": [
+            "2012-01",
+            "2017-12"
+          ],
+          "validation": [
+            "2018-01",
+            "2019-12"
+          ]
+        },
+        "before": [
+          "半導體",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "after": [
+          "半導體",
+          "營建",
+          "生技",
+          "金融",
+          "電子"
+        ],
+        "assessments": [
+          {
+            "group": "民生與製造",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [
+              "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+            ],
+            "train_icir": 0.5471843797404387,
+            "valid_icir": 0.4699132449058367,
+            "decay_pct": 14.121590033556174,
+            "coverage": 0.7213952373396376,
+            "legs": {
+              "long_excess_ann": 0.07500429831964808,
+              "short_excess_ann": 0.06979048047055744,
+              "short_turnover_m": 0.17068140464358358
+            },
+            "long_turnover": 0.19379274455920845,
+            "short_turnover": 0.17068140464358358,
+            "required_use": "long_only",
+            "status": "rejected"
+          },
+          {
+            "group": "營建",
+            "train_months": 56,
+            "valid_months": 24,
+            "reasons": [],
+            "train_icir": 0.6014815177790414,
+            "valid_icir": 0.5442072287501286,
+            "decay_pct": 9.522202650614586,
+            "coverage": 0.658363258093935,
+            "legs": {
+              "long_excess_ann": 0.06399871956381406,
+              "short_excess_ann": 0.05517767936877649,
+              "short_turnover_m": 0.1743056521537534
+            },
+            "long_turnover": 0.23816478879770017,
+            "short_turnover": 0.1743056521537534,
+            "required_use": "long_only",
+            "status": "passed"
+          }
+        ]
+      }
+    ],
+    "values_version": "20260919_235425_6f5fb8c4",
+    "values_rebuild": "20260919_234830_priority_repairs",
+    "data_correction_history": [
+      {
+        "migration": "20260919_234830_priority_repairs",
+        "assessment": {
+          "id": "F-026",
+          "group": "營建",
+          "train_months": 56,
+          "valid_months": 24,
+          "reasons": [
+            "未通過既有 Stage 4b ICIR／衰減／覆蓋／交易腿門檻"
+          ],
+          "train_icir": 0.5573116143907105,
+          "valid_icir": 0.5326131304347537,
+          "decay_pct": 4.431718865747825,
+          "coverage": 0.8832365003417635,
+          "legs": {
+            "long_excess_ann": 0.05885154030842003,
+            "short_excess_ann": 0.06515442994211634,
+            "short_turnover_m": 0.18088978532016503
+          },
+          "long_turnover": 0.24378680391338617,
+          "short_turnover": 0.18088978532016503,
+          "required_use": "long_only",
+          "status": "rejected"
+        }
+      }
+    ]
+  },
+  "R-026": {
+    "name_zh": "反向：21 日報酬波動率",
+    "desc_zh": "原欄位取負後使用；21 日報酬波動率（月）",
+    "aspect": "技術面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "vol_21"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "vol_21",
+    "reference_release": "20260919_235349",
+    "value_orientation": -1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.8813699071638994,
+    "icir_validation": 0.9104763473725833,
+    "decay_pct": -3.3024091215393847,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:49"
+  },
+  "R-027": {
+    "name_zh": "反向：63 日報酬波動率",
+    "desc_zh": "原欄位取負後使用；63 日報酬波動率（季）",
+    "aspect": "技術面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "vol_63"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "vol_63",
+    "reference_release": "20260919_235349",
+    "value_orientation": -1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.8166386096069179,
+    "icir_validation": 0.897617843217399,
+    "decay_pct": -9.91616519937255,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:49"
+  },
+  "R-028": {
+    "name_zh": "反向：126 日報酬波動率",
+    "desc_zh": "原欄位取負後使用；126 日報酬波動率（半年）",
+    "aspect": "技術面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "vol_126"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "vol_126",
+    "reference_release": "20260919_235349",
+    "value_orientation": -1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.7974759094297715,
+    "icir_validation": 0.9260317347443301,
+    "decay_pct": -16.120339660978765,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:50"
+  },
+  "R-029": {
+    "name_zh": "盈餘殖利率 E/P",
+    "desc_zh": "盈餘殖利率 E/P（1/PE；前置專案證實台股純價值因子偏弱）",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "ep"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "ep",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.722126676864327,
+    "icir_validation": 1.0247702708853992,
+    "decay_pct": -41.910042062873806,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:50"
+  },
+  "R-030": {
+    "name_zh": "EPS 年變化率：與精確12個月前PIT值之差／前值絕對值×100；虧損收斂為正，前值零或缺值不計",
+    "desc_zh": "EPS 年變化率：與精確12個月前PIT值之差／前值絕對值×100；虧損收斂為正，前值零或缺值不計",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "eps_yoy"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "eps_yoy",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.6655631289392545,
+    "icir_validation": 0.5134226382684023,
+    "decay_pct": 22.858912108506836,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:50"
+  },
+  "R-031": {
+    "name_zh": "現金殖利率 %",
+    "desc_zh": "現金殖利率 %（交易所公告，TTM 口徑）",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "div_yield"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "div_yield",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.5610023726387466,
+    "icir_validation": 1.3212871740309493,
+    "decay_pct": -135.5225643371356,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:50"
+  },
+  "R-032": {
+    "name_zh": "營業利益年變化率：與精確12個月前PIT值之差／前值絕對值×100；虧損收斂為正，前值零或缺值不計",
+    "desc_zh": "營業利益年變化率：與精確12個月前PIT值之差／前值絕對值×100；虧損收斂為正，前值零或缺值不計",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "op_income_yoy"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "op_income_yoy",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.5363592380298032,
+    "icir_validation": 0.3039435948035886,
+    "decay_pct": 43.33208542840465,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:51"
+  },
+  "R-033": {
+    "name_zh": "淨值股價比 B/P",
+    "desc_zh": "淨值股價比 B/P",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "bp"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "bp",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.5094284329080898,
+    "icir_validation": 0.39870463568068437,
+    "decay_pct": 21.7349072165711,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:51"
+  },
+  "R-034": {
+    "name_zh": "ROE 稅後",
+    "desc_zh": "ROE 稅後（季頻，PIT 對齊發布日）",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "roe"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "roe",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.5081281762185236,
+    "icir_validation": 0.7636049873422179,
+    "decay_pct": -50.27802493161195,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:51"
+  },
+  "R-035": {
+    "name_zh": "營業利益率",
+    "desc_zh": "營業利益率（本業獲利能力）",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "op_margin"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "op_margin",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.5040538396176354,
+    "icir_validation": 0.6831258802002698,
+    "decay_pct": -35.52637169046755,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:51"
+  },
+  "R-036": {
+    "name_zh": "稅後淨利率",
+    "desc_zh": "稅後淨利率",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "net_margin"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "net_margin",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.5008726054870465,
+    "icir_validation": 0.8004633926749355,
+    "decay_pct": -59.813769790138174,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:52"
+  },
+  "R-037": {
+    "name_zh": "反向：券資比",
+    "desc_zh": "原欄位取負後使用；券資比（融券餘額/融資餘額，軋空潛能與空方情緒）",
+    "aspect": "籌碼面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "short_margin_ratio"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "short_margin_ratio",
+    "reference_release": "20260919_235349",
+    "value_orientation": -1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.4999194055599696,
+    "icir_validation": 0.29587909186864103,
+    "decay_pct": 40.81464160463605,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:52"
+  },
+  "R-038": {
+    "name_zh": "月營收年增率 %",
+    "desc_zh": "月營收年增率 %（台股獨有的高頻基本面訊號）",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "rev_yoy"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "rev_yoy",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.4784054837710044,
+    "icir_validation": 0.5769929298009866,
+    "decay_pct": -20.607507517027646,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:52"
+  },
+  "R-039": {
+    "name_zh": "月營收年增率 3 月移動平均",
+    "desc_zh": "月營收年增率 3 月移動平均（平滑單月波動）",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "rev_yoy_ma3"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "rev_yoy_ma3",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.4544450309497968,
+    "icir_validation": 0.6447479503479863,
+    "decay_pct": -41.87589398886231,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:52"
+  },
+  "R-040": {
+    "name_zh": "反向：21 日平均週轉率",
+    "desc_zh": "原欄位取負後使用；21 日平均週轉率（散戶熱度代理）",
+    "aspect": "技術面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "turn_21"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "turn_21",
+    "reference_release": "20260919_235349",
+    "value_orientation": -1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.41057573459609115,
+    "icir_validation": 0.2769624517774649,
+    "decay_pct": 32.5429078145765,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:53"
+  },
+  "R-041": {
+    "name_zh": "現價 / 52 週最高價",
+    "desc_zh": "現價 / 52 週最高價（距新高距離，動能與錨定效應）",
+    "aspect": "技術面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "px_hi252"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "px_hi252",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.3519317320925498,
+    "icir_validation": 0.592516707619725,
+    "decay_pct": -68.36126259393596,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:53"
+  },
+  "R-042": {
+    "name_zh": "借券量 21 日均值佔成交量比",
+    "desc_zh": "借券量 21 日均值佔成交量比（機構空方壓力代理）",
+    "aspect": "籌碼面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "lend_vol_21"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "lend_vol_21",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.3428660908942057,
+    "icir_validation": 0.43482541971195243,
+    "decay_pct": -26.82077092485695,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:53"
+  },
+  "R-043": {
+    "name_zh": "毛利率",
+    "desc_zh": "毛利率（產品競爭力）",
+    "aspect": "基本面",
+    "category": "base_field_reference",
+    "reference": true,
+    "formula": null,
+    "fhash": null,
+    "fields": [
+      "gross_margin"
+    ],
+    "depth": null,
+    "source": "registered_base_fields_v1",
+    "source_field": "gross_margin",
+    "reference_release": "20260919_235349",
+    "value_orientation": 1,
+    "approved_groups": [
+      "半導體",
+      "民生與製造",
+      "營建",
+      "生技",
+      "金融",
+      "電子"
+    ],
+    "icir_train": 0.3119295761995262,
+    "icir_validation": 0.3873570750630838,
+    "decay_pct": -24.1809384613501,
+    "selection_periods": {
+      "sub_train": [
+        "2012-01",
+        "2017-12"
+      ],
+      "validation": [
+        "2018-01",
+        "2019-12"
+      ]
+    },
+    "base_hash": "57462e0faa975b38d2a91538ab9d796a57449935250015cd6801cfb40fb97b6f",
+    "test_metrics_sealed": null,
+    "created_at": "2026-09-19T23:53:53"
   }
- },
- "F-002": {
-  "name_zh": "金融品質價值",
-  "desc_zh": "淨值便宜同時資本運用效率高（高ROE）的金控股，容易被市場低估。",
-  "aspect": "基本面",
-  "category": "quality_value_financial",
-  "formula": "cs_rank(mul(bp, roe))",
-  "fhash": "3ad4fdd24a2a7b73",
-  "fields": [
-   "bp",
-   "roe"
-  ],
-  "depth": 2,
-  "created_at": "2026-07-18T21:37:47",
-  "round": 1,
-  "source_attempt": "A-0036",
-  "sub_train": {
-   "mean_ic": 0.071,
-   "icir": 0.57
-  },
-  "validation": {
-   "mean_ic": 0.098,
-   "icir": 0.91,
-   "decay_pct": -62.0
-  },
-  "coverage": 0.72,
-  "turnover_m": 0.24,
-  "test_metrics_sealed": {
-   "mean_ic": 0.071,
-   "icir": 0.6,
-   "decay_vs_subtrain_pct": -4.0,
-   "n_months": 77
-  }
- },
- "F-003": {
-  "name_zh": "風格孤兒股",
-  "desc_zh": "營收市值比便宜又有營收成長，卻因不符單一風格標籤被機構忽略。",
-  "aspect": "基本面",
-  "category": "style_box_orphan_stocks",
-  "formula": "cs_rank(mul(sp, sign(rev_yoy)))",
-  "fhash": "3cf01d86a6259f09",
-  "fields": [
-   "rev_yoy",
-   "sp"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-19T09:53:04",
-  "round": 2,
-  "source_attempt": "A-0048",
-  "sub_train": {
-   "mean_ic": 0.05,
-   "icir": 0.45
-  },
-  "validation": {
-   "mean_ic": 0.039,
-   "icir": 0.56,
-   "decay_pct": -25.0
-  },
-  "coverage": 0.75,
-  "turnover_m": 0.32,
-  "test_metrics_sealed": {
-   "mean_ic": 0.014,
-   "icir": 0.16,
-   "decay_vs_subtrain_pct": 64.0,
-   "n_months": 77
-  }
- },
- "F-004": {
-  "name_zh": "毛利穩定溢價",
-  "desc_zh": "毛利率長期波動度低的悶型績優股，缺乏故事性而長期被低估。",
-  "aspect": "基本面",
-  "category": "margin_stability_quality",
-  "formula": "cs_rank(neg(ts_std(gross_margin,12)))",
-  "fhash": "842e61fe9f3a9ea8",
-  "fields": [
-   "gross_margin"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-19T09:53:06",
-  "round": 2,
-  "source_attempt": "A-0050",
-  "sub_train": {
-   "mean_ic": 0.045,
-   "icir": 0.6
-  },
-  "validation": {
-   "mean_ic": 0.049,
-   "icir": 0.8,
-   "decay_pct": -33.0
-  },
-  "coverage": 0.79,
-  "turnover_m": 0.13,
-  "test_metrics_sealed": {
-   "mean_ic": 0.043,
-   "icir": 0.62,
-   "decay_vs_subtrain_pct": -3.0,
-   "n_months": 77
-  }
- },
- "F-005": {
-  "name_zh": "低波動異常",
-  "desc_zh": "長期波動度低的穩定股因散戶偏好高波動股而被低估",
-  "aspect": "技術面",
-  "category": "low_volatility_anomaly",
-  "formula": "cs_rank(neg(vol_126))",
-  "fhash": "b56750e993215061",
-  "fields": [
-   "vol_126"
-  ],
-  "depth": 2,
-  "created_at": "2026-07-19T17:08:23",
-  "round": 3,
-  "source_attempt": "A-0068",
-  "sub_train": {
-   "mean_ic": 0.068,
-   "icir": 0.61
-  },
-  "validation": {
-   "mean_ic": 0.114,
-   "icir": 0.83,
-   "decay_pct": -35.0
-  },
-  "coverage": 0.96,
-  "turnover_m": 0.12,
-  "test_metrics_sealed": {
-   "mean_ic": 0.059,
-   "icir": 0.36,
-   "decay_vs_subtrain_pct": 41.0,
-   "n_months": 77
-  }
- },
- "F-006": {
-  "name_zh": "低應計品質股",
-  "desc_zh": "應計項長期偏低的公司盈餘含金量高，市場常高估高應計公司獲利的持續性。",
-  "aspect": "基本面",
-  "category": "accruals_quality_anomaly",
-  "formula": "cs_rank(neg(ts_mean(accruals,12)))",
-  "fhash": "4ee00a6a8c9515a0",
-  "fields": [
-   "accruals"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-19T17:21:05",
-  "round": 4,
-  "source_attempt": "A-0083",
-  "sub_train": {
-   "mean_ic": 0.03,
-   "icir": 0.46
-  },
-  "validation": {
-   "mean_ic": 0.02,
-   "icir": 0.33,
-   "decay_pct": 28.0
-  },
-  "coverage": 0.72,
-  "turnover_m": 0.07,
-  "test_metrics_sealed": {
-   "mean_ic": 0.029,
-   "icir": 0.4,
-   "decay_vs_subtrain_pct": 13.0,
-   "n_months": 77
-  }
- },
- "F-007": {
-  "name_zh": "營收穩健溢價",
-  "desc_zh": "月增率波動度低、營收表現穩健的公司，比營收忽高忽低的公司更值得信賴。",
-  "aspect": "基本面",
-  "category": "revenue_noise_discount",
-  "formula": "cs_rank(neg(ts_std(rev_mom,6)))",
-  "fhash": "2e25e106c05edf47",
-  "fields": [
-   "rev_mom"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-19T17:47:45",
-  "round": 6,
-  "source_attempt": "A-0108",
-  "sub_train": {
-   "mean_ic": 0.03,
-   "icir": 0.45
-  },
-  "validation": {
-   "mean_ic": 0.05,
-   "icir": 0.72,
-   "decay_pct": -60.0
-  },
-  "coverage": 0.94,
-  "turnover_m": 0.2,
-  "test_metrics_sealed": {
-   "mean_ic": 0.032,
-   "icir": 0.42,
-   "decay_vs_subtrain_pct": 7.0,
-   "n_months": 77
-  }
- },
- "F-008": {
-  "name_zh": "低調接近新高",
-  "desc_zh": "股價接近前高但周轉率不高，代表這波接近新高不是炒作出來的。",
-  "aspect": "技術面",
-  "category": "fifty_two_week_high_anchoring",
-  "formula": "cs_rank(sdiv(px_hi252,turn_21))",
-  "fhash": "a304bb712de90b6b",
-  "fields": [
-   "px_hi252",
-   "turn_21"
-  ],
-  "depth": 2,
-  "created_at": "2026-07-19T17:59:14",
-  "round": 7,
-  "source_attempt": "A-0123",
-  "sub_train": {
-   "mean_ic": 0.05,
-   "icir": 0.46
-  },
-  "validation": {
-   "mean_ic": 0.055,
-   "icir": 0.35,
-   "decay_pct": 25.0
-  },
-  "coverage": 0.8,
-  "turnover_m": 0.26,
-  "test_metrics_sealed": {
-   "mean_ic": 0.048,
-   "icir": 0.26,
-   "decay_vs_subtrain_pct": 44.0,
-   "n_months": 77
-  }
- },
- "F-009": {
-  "name_zh": "營收加速趨勢",
-  "desc_zh": "用三月均線後的營收年增率斜率抓真正加速、避開單月雜訊。",
-  "aspect": "基本面",
-  "category": "revenue_growth_acceleration",
-  "formula": "cs_rank(ts_slope(rev_yoy_ma3,6))",
-  "fhash": "c577b17ca34499b2",
-  "fields": [
-   "rev_yoy_ma3"
-  ],
-  "depth": 2,
-  "created_at": "2026-07-20T17:18:58",
-  "round": 9,
-  "industry_scope": "電子",
-  "industry_metrics": {
-   "train_icir": 0.68,
-   "valid_icir": 0.65,
-   "decay_pct": 4
-  },
-  "source_attempt": "A-0144",
-  "sub_train": {
-   "mean_ic": 0.027,
-   "icir": 0.38
-  },
-  "validation": {
-   "mean_ic": 0.031,
-   "icir": 0.44,
-   "decay_pct": -16.0
-  },
-  "coverage": 0.79,
-  "turnover_m": 0.28,
-  "test_metrics_sealed": {
-   "mean_ic": 0.03,
-   "icir": 0.49,
-   "decay_vs_subtrain_pct": 28.0,
-   "n_months": 77
-  }
- },
- "F-010": {
-  "name_zh": "金融資本穩健度",
-  "desc_zh": "ROE長期波動度低的金融股，代表資本管理穩健、股利能力可持續但被低估。",
-  "aspect": "基本面",
-  "category": "financial_capital_stability",
-  "formula": "cs_rank(neg(ts_std(roe,12)))",
-  "fhash": "8f069e0f2260b58e",
-  "fields": [
-   "roe"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-20T17:19:00",
-  "round": 9,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0157",
-  "sub_train": {
-   "mean_ic": 0.047,
-   "icir": 0.56
-  },
-  "validation": {
-   "mean_ic": 0.069,
-   "icir": 0.82,
-   "decay_pct": -48.0
-  },
-  "coverage": 0.74,
-  "turnover_m": 0.12,
-  "test_metrics_sealed": {
-   "mean_ic": 0.037,
-   "icir": 0.42,
-   "decay_vs_subtrain_pct": 24.0,
-   "n_months": 77
-  }
- },
- "F-011": {
-  "name_zh": "生技轉骨訊號",
-  "desc_zh": "生技股營收成長又有毛利率撐腰，代表真的從燒錢轉向商轉獲利。",
-  "aspect": "基本面",
-  "category": "biotech_margin_revenue_quality",
-  "formula": "cs_rank(mul(cs_rank(gross_margin), cs_rank(rev_yoy)))",
-  "fhash": "92ec4f3bdba8c30b",
-  "fields": [
-   "gross_margin",
-   "rev_yoy"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-21T11:46:43",
-  "round": 12,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0203",
-  "sub_train": {
-   "mean_ic": 0.041,
-   "icir": 0.49
-  },
-  "validation": {
-   "mean_ic": 0.024,
-   "icir": 0.33,
-   "decay_pct": 31.0
-  },
-  "coverage": 0.77,
-  "turnover_m": 0.34,
-  "test_metrics_sealed": {
-   "mean_ic": 0.009,
-   "icir": 0.11,
-   "decay_vs_subtrain_pct": 77.0,
-   "n_months": 77
-  }
- },
- "F-012": {
-  "name_zh": "淨化ROE動能",
-  "desc_zh": "剔除高應計項雜訊後，ROE真正改善的公司才是市場低估的優質成長股。",
-  "aspect": "基本面",
-  "category": "profitability_trend_underreaction",
-  "formula": "sub(cs_rank(delta(roe,12)), cs_rank(accruals))",
-  "fhash": "0caed507a967b7b1",
-  "fields": [
-   "accruals",
-   "roe"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-21T12:37:08",
-  "round": 16,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0253",
-  "sub_train": {
-   "mean_ic": 0.048,
-   "icir": 0.72
-  },
-  "validation": {
-   "mean_ic": 0.038,
-   "icir": 0.56,
-   "decay_pct": 23.0
-  },
-  "coverage": 0.67,
-  "turnover_m": 0.19,
-  "test_metrics_sealed": {
-   "mean_ic": 0.043,
-   "icir": 0.58,
-   "decay_vs_subtrain_pct": 19.0,
-   "n_months": 77
-  }
- },
- "F-013": {
-  "name_zh": "冷門成長股",
-  "desc_zh": "營收成長強但成交金額低，代表利多尚未被市場注意到。",
-  "aspect": "混合",
-  "category": "overlooked_growth_liquidity",
-  "formula": "sub(cs_rank(rev_yoy), cs_rank(amt_21))",
-  "fhash": "a0eb752de729d368",
-  "fields": [
-   "amt_21",
-   "rev_yoy"
-  ],
-  "depth": 2,
-  "created_at": "2026-07-21T13:24:55",
-  "round": 20,
-  "industry_scope": "電子",
-  "industry_metrics": {
-   "train_icir": 0.71,
-   "valid_icir": 0.39,
-   "decay_pct": 44
-  },
-  "source_attempt": "A-0323",
-  "sub_train": {
-   "mean_ic": 0.034,
-   "icir": 0.43
-  },
-  "validation": {
-   "mean_ic": 0.017,
-   "icir": 0.15,
-   "decay_pct": 65.0
-  },
-  "coverage": 0.84,
-  "turnover_m": 0.42,
-  "test_metrics_sealed": {
-   "mean_ic": 0.038,
-   "icir": 0.29,
-   "decay_vs_subtrain_pct": 59.0,
-   "n_months": 77
-  }
- },
- "F-014": {
-  "name_zh": "本業成長價值股",
-  "desc_zh": "營收市值比便宜且本業獲利成長佳，但因非熱門標籤被市場忽略",
-  "aspect": "基本面",
-  "category": "style_box_orphan_stocks",
-  "formula": "add(cs_rank(sp), cs_rank(op_income_yoy))",
-  "fhash": "d4857c61bd483540",
-  "fields": [
-   "op_income_yoy",
-   "sp"
-  ],
-  "depth": 2,
-  "created_at": "2026-07-21T13:51:27",
-  "round": 22,
-  "industry_scope": "電子",
-  "industry_metrics": {
-   "train_icir": 0.81,
-   "valid_icir": 0.61,
-   "decay_pct": 25
-  },
-  "source_attempt": "A-0340",
-  "sub_train": {
-   "mean_ic": 0.062,
-   "icir": 0.52
-  },
-  "validation": {
-   "mean_ic": 0.007,
-   "icir": 0.07,
-   "decay_pct": 87.0
-  },
-  "coverage": 0.74,
-  "turnover_m": 0.19,
-  "test_metrics_sealed": {
-   "mean_ic": 0.047,
-   "icir": 0.77,
-   "decay_vs_subtrain_pct": 6.0,
-   "n_months": 77
-  }
- },
- "F-015": {
-  "name_zh": "便宜成長孤兒股",
-  "desc_zh": "盈餘殖利率便宜又有營收成長，卻因不符單一風格標籤被機構忽略",
-  "aspect": "基本面",
-  "category": "style_box_orphan_stocks",
-  "formula": "cs_rank(mul(ep, sign(rev_yoy)))",
-  "fhash": "1b2a2cc60d6c50fd",
-  "fields": [
-   "ep",
-   "rev_yoy"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-28T18:28:37",
-  "round": 24,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0378",
-  "sub_train": {
-   "mean_ic": 0.032,
-   "icir": 0.53
-  },
-  "validation": {
-   "mean_ic": 0.029,
-   "icir": 0.58,
-   "decay_pct": -11.0
-  },
-  "coverage": 0.82,
-  "turnover_m": 0.4,
-  "test_metrics_sealed": {
-   "mean_ic": 0.031,
-   "icir": 0.42,
-   "decay_vs_subtrain_pct": 21.0,
-   "n_months": 77
-  }
- },
- "F-016": {
-  "name_zh": "本業獲利創高股",
-  "desc_zh": "股價近高點且本業獲利成長佳，勝過單純營收確認。",
-  "aspect": "混合",
-  "category": "anchoring_profit_confirmation",
-  "formula": "mul(cs_rank(px_hi252), cs_rank(op_income_yoy))",
-  "fhash": "ebd75230589693fd",
-  "fields": [
-   "op_income_yoy",
-   "px_hi252"
-  ],
-  "depth": 2,
-  "created_at": "2026-07-28T19:19:10",
-  "round": 28,
-  "industry_scope": "電子",
-  "industry_metrics": {
-   "train_icir": 0.6,
-   "valid_icir": 0.59,
-   "decay_pct": 2
-  },
-  "source_attempt": "A-0430",
-  "sub_train": {
-   "mean_ic": 0.047,
-   "icir": 0.36
-  },
-  "validation": {
-   "mean_ic": 0.058,
-   "icir": 0.63,
-   "decay_pct": -75.0
-  },
-  "coverage": 0.75,
-  "turnover_m": 0.28,
-  "test_metrics_sealed": {
-   "mean_ic": 0.038,
-   "icir": 0.34,
-   "decay_vs_subtrain_pct": 43.0,
-   "n_months": 77
-  }
- },
- "F-017": {
-  "name_zh": "外資認證營收動能",
-  "desc_zh": "外資買超又逢營收成長，電子供應鏈的資金與基本面雙重確認訊號最可信。",
-  "aspect": "混合",
-  "category": "foreign_flow_revenue_confirmation",
-  "formula": "mul(cs_rank(frgn_net_21),cs_rank(rev_yoy))",
-  "fhash": "b2d71ee027ef4b82",
-  "fields": [
-   "frgn_net_21",
-   "rev_yoy"
-  ],
-  "depth": 2,
-  "created_at": "2026-07-29T23:14:32",
-  "round": 29,
-  "industry_scope": "電子",
-  "industry_metrics": {
-   "train_icir": 0.64,
-   "valid_icir": 0.39,
-   "decay_pct": 39
-  },
-  "source_attempt": "A-0453",
-  "sub_train": {
-   "mean_ic": 0.029,
-   "icir": 0.32
-  },
-  "validation": {
-   "mean_ic": 0.029,
-   "icir": 0.4,
-   "decay_pct": -28.0
-  },
-  "coverage": 0.77,
-  "turnover_m": 0.57,
-  "test_metrics_sealed": {
-   "mean_ic": 0.026,
-   "icir": 0.39,
-   "decay_vs_subtrain_pct": 40.0,
-   "n_months": 77
-  }
- },
- "F-018": {
-  "name_zh": "低波動隱藏成長股",
-  "desc_zh": "波動度低但營收成長強的個股，常被誤判為無趣股而遭低估。",
-  "aspect": "混合",
-  "category": "low_risk_growth_mismatch",
-  "formula": "mul(cs_rank(neg(vol_21)),cs_rank(rev_yoy))",
-  "fhash": "332cdc589440ee71",
-  "fields": [
-   "rev_yoy",
-   "vol_21"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-29T23:14:33",
-  "round": 29,
-  "industry_scope": "電子",
-  "industry_metrics": {
-   "train_icir": 1.26,
-   "valid_icir": 1.09,
-   "decay_pct": 14
-  },
-  "source_attempt": "A-0458",
-  "sub_train": {
-   "mean_ic": 0.084,
-   "icir": 0.88
-  },
-  "validation": {
-   "mean_ic": 0.088,
-   "icir": 0.89,
-   "decay_pct": -1.0
-  },
-  "coverage": 0.84,
-  "turnover_m": 0.54,
-  "test_metrics_sealed": {
-   "mean_ic": 0.077,
-   "icir": 0.66,
-   "decay_vs_subtrain_pct": 48.0,
-   "n_months": 77
-  }
- },
- "F-019": {
-  "name_zh": "現金含金價值股",
-  "desc_zh": "營收便宜且現金流真實的公司，因缺乏成長故事被機構篩選器忽略",
-  "aspect": "基本面",
-  "category": "cash_backed_value_orphan",
-  "formula": "mul(cs_rank(sp), cs_rank(ocf_ratio))",
-  "fhash": "d351ef28cb9c5ca1",
-  "fields": [
-   "ocf_ratio",
-   "sp"
-  ],
-  "depth": 2,
-  "created_at": "2026-07-30T00:21:47",
-  "round": 34,
-  "industry_scope": "電子",
-  "industry_metrics": {
-   "train_icir": 0.74,
-   "valid_icir": 0.6,
-   "decay_pct": 18
-  },
-  "source_attempt": "A-0533",
-  "sub_train": {
-   "mean_ic": 0.05,
-   "icir": 0.45
-  },
-  "validation": {
-   "mean_ic": 0.015,
-   "icir": 0.14,
-   "decay_pct": 70.0
-  },
-  "coverage": 0.77,
-  "turnover_m": 0.17,
-  "test_metrics_sealed": {
-   "mean_ic": 0.043,
-   "icir": 0.64,
-   "decay_vs_subtrain_pct": 13.0,
-   "n_months": 77
-  }
- },
- "F-020": {
-  "name_zh": "冷門獲利股",
-  "desc_zh": "本業獲利率高但成交清淡沒人關注的股票，因為不在機構雷達上而被低估。",
-  "aspect": "混合",
-  "category": "overlooked_profitability_liquidity",
-  "formula": "mul(cs_rank(op_margin), cs_rank(neg(amt_21)))",
-  "fhash": "91f066af99d74934",
-  "fields": [
-   "amt_21",
-   "op_margin"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-30T00:34:11",
-  "round": 35,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0539",
-  "sub_train": {
-   "mean_ic": 0.061,
-   "icir": 0.48
-  },
-  "validation": {
-   "mean_ic": 0.078,
-   "icir": 0.69,
-   "decay_pct": -45.0
-  },
-  "coverage": 0.88,
-  "turnover_m": 0.2,
-  "test_metrics_sealed": {
-   "mean_ic": 0.073,
-   "icir": 0.52,
-   "decay_vs_subtrain_pct": -9.0,
-   "n_months": 77
-  }
- },
- "F-021": {
-  "name_zh": "保守增提金控",
-  "desc_zh": "淨值便宜又保守提列準備金的金融股，代表資產品質紮實但被誤讀為獲利疲弱。",
-  "aspect": "基本面",
-  "category": "financial_conservative_provisioning_value",
-  "formula": "mul(cs_rank(bp), cs_rank(neg(accruals)))",
-  "fhash": "cf522442d4710c1a",
-  "fields": [
-   "accruals",
-   "bp"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-30T00:34:13",
-  "round": 35,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0543",
-  "sub_train": {
-   "mean_ic": 0.045,
-   "icir": 0.49
-  },
-  "validation": {
-   "mean_ic": 0.04,
-   "icir": 0.44,
-   "decay_pct": 9.0
-  },
-  "coverage": 0.71,
-  "turnover_m": 0.16,
-  "test_metrics_sealed": {
-   "mean_ic": 0.065,
-   "icir": 0.64,
-   "decay_vs_subtrain_pct": -31.0,
-   "n_months": 77
-  }
- },
- "F-022": {
-  "name_zh": "生技穩健成長",
-  "desc_zh": "生技股EPS成長相對自身波動穩定，代表已脫離燒錢賭博期、進入穩定收成階段。",
-  "aspect": "基本面",
-  "category": "biotech_earnings_consistency_premium",
-  "formula": "cs_rank(sdiv(eps_yoy, ts_std(eps_yoy,12)))",
-  "fhash": "90043daca065575d",
-  "fields": [
-   "eps_yoy"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-30T00:34:15",
-  "round": 35,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0546",
-  "sub_train": {
-   "mean_ic": 0.035,
-   "icir": 0.57
-  },
-  "validation": {
-   "mean_ic": 0.046,
-   "icir": 0.97,
-   "decay_pct": -71.0
-  },
-  "coverage": 0.7,
-  "turnover_m": 0.26,
-  "test_metrics_sealed": {
-   "mean_ic": 0.043,
-   "icir": 0.66,
-   "decay_vs_subtrain_pct": -16.0,
-   "n_months": 77
-  }
- },
- "F-023": {
-  "name_zh": "利差創高金控股",
-  "desc_zh": "淨利率創近兩年新高的金融股，代表利差擴張才剛開始被市場注意到。",
-  "aspect": "基本面",
-  "category": "financial_margin_breakout_underreaction",
-  "formula": "cs_rank(sdiv(net_margin, ts_max(net_margin,24)))",
-  "fhash": "6e055033aaf68bd9",
-  "fields": [
-   "net_margin"
-  ],
-  "depth": 3,
-  "created_at": "2026-07-30T00:46:51",
-  "round": 36,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0551",
-  "sub_train": {
-   "mean_ic": 0.046,
-   "icir": 0.6
-  },
-  "validation": {
-   "mean_ic": 0.066,
-   "icir": 0.94,
-   "decay_pct": -57.0
-  },
-  "coverage": 0.72,
-  "turnover_m": 0.18,
-  "test_metrics_sealed": {
-   "mean_ic": 0.04,
-   "icir": 0.52,
-   "decay_vs_subtrain_pct": 14.0,
-   "n_months": 77
-  }
- },
- "F-024": {
-  "name_zh": "成長無空頭疑慮",
-  "desc_zh": "EPS高成長且融券空方未大舉押注看空，雙重確認成長真實性，此訊號尚未被市場充分定價。",
-  "aspect": "混合",
-  "category": "growth_skepticism_confirmation",
-  "formula": "mul(cs_rank(eps_yoy), cs_rank(neg(short_margin_ratio)))",
-  "fhash": "f6870d0106961633",
-  "fields": [
-   "eps_yoy",
-   "short_margin_ratio"
-  ],
-  "depth": 3,
-  "created_at": "2026-08-12T14:41:11",
-  "round": 46,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0709",
-  "sub_train": {
-   "mean_ic": 0.063,
-   "icir": 0.78
-  },
-  "validation": {
-   "mean_ic": 0.061,
-   "icir": 0.71,
-   "decay_pct": 10.0
-  },
-  "coverage": 0.62,
-  "turnover_m": 0.35,
-  "test_metrics_sealed": {
-   "mean_ic": 0.062,
-   "icir": 0.62,
-   "decay_vs_subtrain_pct": 20.0,
-   "n_months": 77
-  }
- },
- "F-025": {
-  "name_zh": "半導體毛利拐點股",
-  "desc_zh": "毛利率半年內回升但營收還沒跟上，代表景氣循環早期反轉訊號。",
-  "aspect": "基本面",
-  "category": "semiconductor_margin_inflection",
-  "formula": "mul(cs_rank(delta(gross_margin,6)), cs_rank(neg(rev_mom)))",
-  "fhash": "067b04a77e46168c",
-  "fields": [
-   "gross_margin",
-   "rev_mom"
-  ],
-  "depth": 3,
-  "created_at": "2026-08-18T21:21:48",
-  "round": 54,
-  "industry_scope": "生技",
-  "industry_metrics": {
-   "train_icir": 0.61,
-   "valid_icir": 0.38,
-   "decay_pct": 37
-  },
-  "source_attempt": "A-0828",
-  "sub_train": {
-   "mean_ic": 0.045,
-   "icir": 0.85
-  },
-  "validation": {
-   "mean_ic": 0.019,
-   "icir": 0.41,
-   "decay_pct": 52.0
-  },
-  "coverage": 0.79,
-  "turnover_m": 0.71,
-  "test_metrics_sealed": {
-   "mean_ic": 0.039,
-   "icir": 0.43,
-   "decay_vs_subtrain_pct": 29.0,
-   "n_months": 77
-  }
- },
- "F-026": {
-  "name_zh": "金控效率重估",
-  "desc_zh": "净值便宜又本业效率改善的金控股，市场还没注意到获利品质提升。",
-  "aspect": "基本面",
-  "category": "financial_operating_efficiency_repricing",
-  "formula": "mul(cs_rank(bp), cs_rank(delta(op_margin,12)))",
-  "fhash": "52f83116d89438b1",
-  "fields": [
-   "bp",
-   "op_margin"
-  ],
-  "depth": 3,
-  "created_at": "2026-08-27T21:49:57",
-  "round": 64,
-  "industry_scope": null,
-  "industry_metrics": null,
-  "source_attempt": "A-0978",
-  "sub_train": {
-   "mean_ic": 0.064,
-   "icir": 0.91
-  },
-  "validation": {
-   "mean_ic": 0.041,
-   "icir": 0.51,
-   "decay_pct": 44.0
-  },
-  "coverage": 0.67,
-  "turnover_m": 0.18,
-  "test_metrics_sealed": {
-   "mean_ic": 0.052,
-   "icir": 0.59,
-   "decay_vs_subtrain_pct": 35.0,
-   "n_months": 77
-  }
- },
- "R-001": {
-  "name_zh": "毛利股價比",
-  "desc_zh": "毛利 / 股價，價值面的獲利含量",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "gp_to_px",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.8299685397094838,
-  "icir_test": 0.6986376821245017,
-  "decay_pct": 15.823594666727026,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-002": {
-  "name_zh": "自由現金流殖利率",
-  "desc_zh": "(營運現金流 − 資本支出) / 市值",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "fcf_yield",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.7057205925073236,
-  "icir_test": 0.591186144614222,
-  "decay_pct": 16.229432598271952,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-003": {
-  "name_zh": "每股盈餘股價比",
-  "desc_zh": "EPS / 股價，盈餘殖利率",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "eps_to_px",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.6821057556283224,
-  "icir_test": 0.6045470324890608,
-  "decay_pct": 11.37048360892634,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-004": {
-  "name_zh": "低波動（半年）",
-  "desc_zh": "−126 日報酬標準差",
-  "aspect": "技術面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "neg_vol_126",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.6721296108582117,
-  "icir_test": 0.3608933315704175,
-  "decay_pct": 46.3059913236661,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-005": {
-  "name_zh": "低波動（季）",
-  "desc_zh": "−63 日報酬標準差",
-  "aspect": "技術面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "neg_vol_63",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.6604708949189627,
-  "icir_test": 0.3737727699261076,
-  "decay_pct": 43.408139132010035,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-006": {
-  "name_zh": "低波動（月）",
-  "desc_zh": "−21 日報酬標準差",
-  "aspect": "技術面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "neg_vol_21",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.6598954121702516,
-  "icir_test": 0.3852242965841778,
-  "decay_pct": 41.62343161058517,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-007": {
-  "name_zh": "淨利股價比",
-  "desc_zh": "稅後淨利 / 股價",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "ni_to_px",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.6502218944899092,
-  "icir_test": 0.47256082903765,
-  "decay_pct": 27.323144138607024,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-008": {
-  "name_zh": "淨利12期成長",
-  "desc_zh": "淨利的 12 個月成長率",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "g_ni_12",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.6260175632743524,
-  "icir_test": 0.5464446371703385,
-  "decay_pct": 12.710973425060445,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-009": {
-  "name_zh": "Piotroski 品質分",
-  "desc_zh": "ROA/現金流/應計/趨勢等訊號的加總",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "quality_score",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.6205332389780077,
-  "icir_test": 0.5017392854194141,
-  "decay_pct": 19.143850175414013,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-010": {
-  "name_zh": "營益股價比",
-  "desc_zh": "營業利益 / 股價",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "op_to_px",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.6115672281661775,
-  "icir_test": 0.3989382217625262,
-  "decay_pct": 34.76788758633007,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-011": {
-  "name_zh": "ROE 年變化",
-  "desc_zh": "ROE 的 12 個月變化",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "d_roe",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.5765687712009125,
-  "icir_test": 0.314305790436954,
-  "decay_pct": 45.486851502154934,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-012": {
-  "name_zh": "應收資產比",
-  "desc_zh": "應收帳款 / 總資產",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "recv_to_ta",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.5611809204429329,
-  "icir_test": 0.4897042073653424,
-  "decay_pct": 12.736839488622454,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-013": {
-  "name_zh": "EPS12期成長",
-  "desc_zh": "EPS的 12 個月成長率",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "g_eps_12",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.5477434579362277,
-  "icir_test": 0.6223306434269636,
-  "decay_pct": -13.617175049751108,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-014": {
-  "name_zh": "營運現金流殖利率",
-  "desc_zh": "營運現金流 / 市值",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "cfo_yield",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.5298746991222054,
-  "icir_test": 0.6637925195198864,
-  "decay_pct": -25.27348835857426,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-015": {
-  "name_zh": "淨利率",
-  "desc_zh": "稅後淨利 / 營收",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "ni_to_rev",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.5224053537899057,
-  "icir_test": 0.3877194776129307,
-  "decay_pct": 25.781871338007246,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-016": {
-  "name_zh": "股東權益報酬率",
-  "desc_zh": "稅後淨利 / 股東權益",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "roe",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.4835419160087977,
-  "icir_test": 0.3456643324762404,
-  "decay_pct": 28.514091326479484,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-017": {
-  "name_zh": "營益率",
-  "desc_zh": "營業利益 / 營收",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "op_margin",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.4596369922253636,
-  "icir_test": 0.5275858434859908,
-  "decay_pct": -14.783155492261034,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-018": {
-  "name_zh": "毛利率年變化",
-  "desc_zh": "毛利率的 12 個月變化",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "d_gross_margin",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.4548870019923259,
-  "icir_test": 0.2577103571382015,
-  "decay_pct": 43.346291274651726,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-019": {
-  "name_zh": "保留盈餘比",
-  "desc_zh": "保留盈餘 / 總資產",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "retain_to_ta",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.3747919928657298,
-  "icir_test": 0.3333621242589381,
-  "decay_pct": 11.054096510976974,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-020": {
-  "name_zh": "距年高點",
-  "desc_zh": "股價 / 252 日高點 − 1，越接近新高越大",
-  "aspect": "技術面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "dist_high",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.3630914778057999,
-  "icir_test": 0.3110078457197662,
-  "decay_pct": 14.344493129054037,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-021": {
-  "name_zh": "存貨資產比",
-  "desc_zh": "存貨 / 總資產",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "inv_to_ta",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.341884454738433,
-  "icir_test": 0.2824512945090555,
-  "decay_pct": 17.3839902357796,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-022": {
-  "name_zh": "淨值股價比",
-  "desc_zh": "股東權益 / 市值",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "bp",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.3416761874212122,
-  "icir_test": 0.4706576687865043,
-  "decay_pct": -37.74962555593202,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-023": {
-  "name_zh": "低負債比",
-  "desc_zh": "−負債 / 總資產",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "neg_debt_ratio",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": -0.3392429618332926,
-  "icir_test": -0.2008478748347937,
-  "decay_pct": 40.79527140389361,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-024": {
-  "name_zh": "淨利3期成長",
-  "desc_zh": "淨利的 3 個月成長率",
-  "aspect": "基本面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "g_ni_3",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.3356936963302614,
-  "icir_test": 0.2421947025196456,
-  "decay_pct": 27.852472308157328,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- },
- "R-025": {
-  "name_zh": "風險調整動能",
-  "desc_zh": "動能 / 波動度",
-  "aspect": "技術面",
-  "category": "dfs_reference",
-  "formula": null,
-  "fhash": null,
-  "fields": [],
-  "depth": null,
-  "reference": true,
-  "dfs_name": "mom_vol_adj",
-  "source": "tw_alpha_strategy/src/mine_dfs.py",
-  "industry_scope": null,
-  "industry_metrics": null,
-  "icir_train": 0.3334705056468013,
-  "icir_test": 0.2331325362224298,
-  "decay_pct": 30.08900869051534,
-  "created_at": "2026-09-01T02:32:53",
-  "test_metrics_sealed": null
- }
 }

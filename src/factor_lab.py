@@ -11,9 +11,8 @@
   data/monthly_base.parquet      fwd_ret_1m 標籤與產業別
 
 ⛔ 前瞻紀律（三道）
-  1. **切分**：headline 一律看 test 期。agent 的因子是用 sub_train+validation
-     選出來的，在那兩期跑回測是 in-sample，會虛高。前置專案的 DFS 因子也是
-     用 ≤2019-12 篩的——兩邊的 test 期起點相同，比較才公平。
+  1. **切分**：因子選取期的回測是 in-sample；歷史 DFS 池曾參考 test，
+     不能因使用相同 test 起點就宣稱全新 holdout。跨專案比較另見 compare_upstream。
   2. **walk-forward + embargo**：模型只用 `ym <= months[i-1-EMBARGO]` 訓練，
      預測 `months[i : i+RETRAIN_EVERY]`。embargo 隔開訓練尾與測試頭。
   3. **標準化只用當期截面**：產業內 z-score 是逐月橫斷面運算，不跨期。
@@ -56,7 +55,7 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import backtest as bt
-from memory import REFERENCE_PREFIX, Memory
+from memory import REFERENCE_PREFIX, Memory, approved_groups
 
 ROOT = Path(__file__).resolve().parents[1]
 CFG = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
@@ -84,22 +83,27 @@ def load_panel(which: str = "all", factors: list[str] | None = None
     factors: 明確指定要哪些 factor_id（給定時 which 被忽略）
     """
     mem = Memory()
-    lib = mem.library()
+    lib, fv = mem.snapshot()
     if factors:
         keep = [f for f in factors if f in lib]
         missing = [f for f in factors if f not in lib]
         if missing:
             raise SystemExit(f"因子庫裡沒有：{missing}")
     elif which == "own":
-        keep = sorted(mem.own_library())
+        keep = sorted(k for k, v in lib.items() if not v.get("reference") and not k.startswith(REFERENCE_PREFIX))
     elif which == "reference":
-        keep = sorted(mem.reference_library())
+        keep = sorted(k for k, v in lib.items() if v.get("reference") or k.startswith(REFERENCE_PREFIX))
     else:
         keep = sorted(lib)
+    short_only = [f for f in keep if lib[f].get("trading_use") == "short_only"]
+    if short_only and factors:
+        raise SystemExit(f"僅做空因子不能加入多頭組合：{short_only}")
+    keep = [f for f in keep if f not in short_only]
+    if short_only:
+        print(f"（多頭組合排除僅做空因子：{short_only}）")
     if not keep:
         raise SystemExit(f"沒有符合的因子（which={which}）")
 
-    fv = pd.read_parquet(mem.values_path)
     fv = fv[fv["factor_id"].isin(keep)]
     wide = fv.pivot_table(index=["ym", "stock_id"], columns="factor_id",
                           values="value", aggfunc="first")
@@ -113,15 +117,22 @@ def load_panel(which: str = "all", factors: list[str] | None = None
     wide["stock_id"] = wide["stock_id"].astype(str)
 
     df = mb.merge(wide, on=["stock_id", "ym"], how="left")
-    df = df.dropna(subset=["fwd_ret_1m"]).reset_index(drop=True)
+    for fid in keep:
+        groups = approved_groups(lib[fid])
+        if groups is not None and fid in df:
+            df.loc[~df["group"].isin(groups), fid] = np.nan
+    df = df.reset_index(drop=True)  # prediction universe never depends on future labels
 
     # 覆蓋率太低的因子拿掉——在組合裡它只是噪音來源
+    folds = segments(sorted(df.ym.unique()))
+    selection_end = min(SPANS["sub_train"][1], folds[0][0]) if folds else SPANS["sub_train"][1]
+    historical = df.ym.between(SPANS["sub_train"][0], selection_end)
     feats, dropped = [], []
     for f in keep:
-        if f in df.columns and df[f].notna().mean() >= MIN_COVERAGE:
+        if f in df.columns and df.loc[historical, f].notna().mean() >= MIN_COVERAGE:
             feats.append(f)
         else:
-            cov = df[f].notna().mean() if f in df.columns else 0.0
+            cov = df.loc[historical, f].notna().mean() if f in df.columns else 0.0
             dropped.append((f, cov))
     names = {f: lib[f].get("name_zh", f) for f in keep}
     if dropped:
@@ -192,7 +203,7 @@ def walk_forward(proc: pd.DataFrame, feats: list[str], kind: str) -> pd.Series:
     months = sorted(proc["ym"].unique())
     pred = pd.Series(np.nan, index=proc.index, dtype=float)
     for cut, test_months in segments(months):
-        tr = proc[proc["ym"] <= cut]
+        tr = proc[(proc["ym"] <= cut) & proc["y"].notna()]
         te = proc[proc["ym"].isin(test_months)]
         if len(tr) >= 1000 and len(te):
             if kind == "equal":

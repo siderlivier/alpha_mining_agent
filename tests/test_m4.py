@@ -56,6 +56,60 @@ def test_audit_aggregates_no_individual_leak(mem):
         assert leak not in txt, f"審計輸出洩漏個體因子 {leak}"
 
 
+def test_audit_feedback_unchanged_when_sealed_test_changes(mem):
+    from audit import audit_text
+    import consolidate
+    _admit_fake(mem, 1, "rev", "cs_rank(rev_yoy)", .5, .2)
+    _admit_fake(mem, 2, "rev", "cs_rank(rev_mom)", .6, .3)
+    before=audit_text(mem)
+    prompts=[]
+    def capture(prompt):
+        prompts.append(prompt)
+        return "{}"
+    consolidate.run(mem=mem,mock_fn=capture)
+    lib=mem.library()
+    for meta in lib.values():meta["test_metrics_sealed"]={"icir":-9999}
+    mem._save_library(lib)
+    assert audit_text(mem)==before
+    assert "validation" in before and "test" not in before
+    consolidate.run(mem=mem,mock_fn=capture)
+    assert prompts[0]==prompts[1]
+
+
+def test_scoped_metric_pair_does_not_mix_market_train():
+    from memory import admission_metrics
+    m={"industry_scope":"電子","sub_train":{"icir":.2},
+       "validation":{"icir":.1},"industry_metrics":{"train_icir":.8,"valid_icir":.6},
+       "test_metrics_sealed":{"icir":.4,"decay_vs_subtrain_pct":-100}}
+    tr,va,te=admission_metrics(m)
+    assert tr["icir"]==.8 and va["decay_pct"]==pytest.approx(25) and te["decay_vs_subtrain_pct"]==50
+    m.pop("industry_metrics")
+    assert admission_metrics(m)[2]["decay_vs_subtrain_pct"] is None
+
+
+def test_report_industry_pass_tokens_and_empty(mem):
+    from report import _collect,build_html,build_md,build_text
+    assert "0%" in build_html(_collect(mem))
+    for verdict in ["passed","passed_industry","rejected_stage1"]:
+        mem.write_attempt({"category":"x","hypothesis":"h","prediction":"p",
+                           "formula":"cs_rank(roe)","verdict":verdict})
+    (mem.root/"budget.json").write_text(json.dumps({"tokens_used":12345,"est_tokens_used":2}),encoding="utf-8")
+    d=_collect(mem)
+    assert d["by_cat"]["x"]==[3,2]
+    for renderer in [build_text,build_html,build_md]:
+        text=renderer(d)
+        assert "67%" in text and "12,345" in text
+
+
+def test_legacy_test_audit_learning_excluded_without_deleting_history(mem):
+    text="## 全域規則\n1. useful\n2. [audit] secret test numbers\n   continuation\n3. [audit:validation] allowed\n"
+    mem.write_learnings(text)
+    clean=mem.prompt_learnings()
+    assert "secret" not in clean and "continuation" not in clean
+    assert "useful" in clean and "allowed" in clean
+    assert mem.read_learnings()==text
+
+
 # ---- report ---------------------------------------------------------------
 
 def test_report_contains_sealed_for_human(mem):

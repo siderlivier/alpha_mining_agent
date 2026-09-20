@@ -17,7 +17,12 @@ M2：記憶層（規格書第 7 章）。
 from __future__ import annotations
 
 import json
+import os
 import re
+import threading
+import shutil
+import uuid
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 
@@ -63,6 +68,34 @@ ATTEMPT_REQUIRED = ("category", "hypothesis", "prediction", "formula", "verdict"
 # 它們與 agent 自己挖的 F-xxx 同住 library.json，靠這個前綴與 reference 旗標區分。
 REFERENCE_PREFIX = "R-"
 
+
+def approved_groups(meta):
+    """None means legacy unrestricted; [] deliberately means no approved groups."""
+    scope = meta.get("approved_groups", meta.get("industry_scope"))
+    if scope is None:
+        return None
+    return [scope] if isinstance(scope, str) else list(scope)
+
+
+def scope_label(meta):
+    groups = approved_groups(meta)
+    return "、".join(groups) if groups is not None else ""
+
+
+def admission_metrics(meta):
+    """Historical train/valid/test on the SAME admission scope, not expanded scope."""
+    if meta.get("industry_scope"):
+        ind = meta.get("industry_metrics") or {}
+        tr, va = {"icir": ind.get("train_icir")}, {"icir": ind.get("valid_icir")}
+    else:
+        tr, va = dict(meta.get("sub_train") or {}), dict(meta.get("validation") or {})
+    te = dict(meta.get("test_metrics_sealed") or {})
+    base = tr.get("icir")
+    for target, key in [(va,"decay_pct"),(te,"decay_vs_subtrain_pct")]:
+        value=target.get("icir")
+        target[key]=(1-value/base)*100 if base is not None and base>0 and value is not None else None
+    return tr, va, te
+
 QUEUE_SECTION = "待驗證假設佇列"
 QUEUE_MAX_ITEMS = 50
 
@@ -98,6 +131,90 @@ class Memory:
         self.lib_path = self.root / "library.json"
         self.values_path = self.root / "factor_values.parquet"
         self.learnings_path = self.root / "learnings.md"
+        self._local = threading.local()
+
+    @contextmanager
+    def locked(self):
+        """Fail fast across processes; interrupted commits remain blocked for recovery."""
+        if getattr(self._local, "depth", 0):
+            yield
+            return
+        self.root.mkdir(parents=True, exist_ok=True)
+        lock = self.root / ".library.lock"
+        try:
+            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        except FileExistsError as exc:
+            raise RuntimeError("因子庫正在使用或前次工作中斷；請先檢查工作狀態及回復紀錄") from exc
+        os.write(fd, str(os.getpid()).encode())
+        os.close(fd)
+        self._local.depth = 1
+        try:
+            if (self.root / ".scope_pending.json").exists():
+                raise RuntimeError("前次產業更新未完成，請先執行 --recover")
+            self._recover_commit()
+            yield
+        finally:
+            self._local.depth = 0
+            lock.unlink(missing_ok=True)
+
+    def _recover_commit(self):
+        marker = self.root / ".memory_pending.json"
+        if not marker.exists():
+            return
+        record = json.loads(marker.read_text(encoding="utf-8"))
+        name = record["transaction"]
+        if not re.fullmatch(r"[0-9a-f]{32}", name):
+            raise ValueError("invalid transaction identifier")
+        folder = self.root / "transactions" / name
+        for key, target in (("library", self.lib_path), ("values", self.values_path)):
+            if record["existed"][key]:
+                shutil.copy2(folder / (key + ".before"), folder / (key + ".restore"))
+                os.replace(folder / (key + ".restore"), target)
+            else:
+                target.unlink(missing_ok=True)
+        marker.unlink()
+
+    def commit_snapshot(self, lib, values):
+        """Locked two-file commit with durable backups and rollback journal.
+
+        Readers use locked()/snapshot(), and recover an interrupted write before
+        reading. A crashed process lock must first be cleared with --recover.
+        Transaction backups also retain replaced reference generations.
+        """
+        with self.locked():
+            if values.duplicated(["factor_id", "ym", "stock_id"]).any():
+                raise ValueError("duplicate factor values")
+            if not set(values.factor_id).issubset(lib):
+                raise ValueError("values reference absent metadata")
+            name = uuid.uuid4().hex
+            folder = self.root / "transactions" / name
+            folder.mkdir(parents=True)
+            (folder / "library.new").write_text(json.dumps(lib, ensure_ascii=False, indent=1, allow_nan=False), encoding="utf-8")
+            values.to_parquet(folder / "values.new", index=False)
+            existed = {}
+            for key, target in (("library", self.lib_path), ("values", self.values_path)):
+                existed[key] = target.exists()
+                if existed[key]:
+                    shutil.copy2(target, folder / (key + ".before"))
+            marker = self.root / ".memory_pending.json"
+            temporary = marker.with_suffix(".tmp")
+            temporary.write_text(json.dumps({"transaction": name, "existed": existed}), encoding="utf-8")
+            os.replace(temporary, marker)
+            try:
+                os.replace(folder / "values.new", self.values_path)
+                os.replace(folder / "library.new", self.lib_path)
+                marker.unlink()
+            except BaseException:
+                self._recover_commit()
+                raise
+            return name
+
+    def snapshot(self):
+        with self.locked():
+            lib = self.library()
+            values = pd.read_parquet(self.values_path) if self.values_path.exists() else pd.DataFrame(
+                columns=["factor_id", "ym", "stock_id", "value"])
+            return lib, values
 
     # ---- 初始化 -----------------------------------------------------------
     def ensure(self):
@@ -151,9 +268,10 @@ class Memory:
     # ---- 因子庫 -----------------------------------------------------------
     def library(self) -> dict:
         """全部因子，含前置專案匯入的參考因子（R-xxx）。"""
-        if not self.lib_path.exists():
-            return {}
-        return json.loads(self.lib_path.read_text(encoding="utf-8"))
+        with self.locked():
+            if not self.lib_path.exists():
+                return {}
+            return json.loads(self.lib_path.read_text(encoding="utf-8"))
 
     def own_library(self) -> dict:
         """
@@ -170,8 +288,9 @@ class Memory:
                 if v.get("reference") or k.startswith(REFERENCE_PREFIX)}
 
     def _save_library(self, lib: dict):
-        self.lib_path.write_text(json.dumps(lib, ensure_ascii=False, indent=1),
-                                 encoding="utf-8")
+        with self.locked():
+            self.lib_path.write_text(json.dumps(lib, ensure_ascii=False, indent=1),
+                                     encoding="utf-8")
 
     def next_factor_id(self) -> str:
         nums = [int(m.group(1)) for k in self.library()
@@ -181,7 +300,13 @@ class Memory:
     def admit(self, cand: dict, diag: dict, parsed, fac: pd.DataFrame,
               test_metrics_sealed: dict | None = None,
               round_id: int | None = None,
-              industry_scope: str | None = None) -> str:
+              industry_scope: str | None = None, group_map: dict | None = None) -> str:
+        with self.locked():
+            return self._admit(cand, diag, parsed, fac, test_metrics_sealed,
+                               round_id, industry_scope, group_map)
+
+    def _admit(self, cand, diag, parsed, fac, test_metrics_sealed,
+               round_id, industry_scope, group_map):
         """
         入庫一個 passed / passed_industry 因子。
         cand 必含 name_zh / desc_zh（使用者要求：中文名稱與簡單解釋）。
@@ -192,6 +317,16 @@ class Memory:
                 raise ValueError(f"入庫需要 {k}（中文名稱與解釋）")
         if diag.get("verdict") not in ("passed", "passed_industry"):
             raise ValueError(f"只有 passed 候選可入庫（{cand['id']}: {diag.get('verdict')}）")
+        if diag.get("verdict")=="passed_industry" and not industry_scope:
+            raise ValueError("產業通過入庫必須指定 industry_scope")
+        scope = ([industry_scope] if isinstance(industry_scope,str) else industry_scope)
+        scope = scope if scope is not None else diag.get("groups_seen")
+        if scope is not None:
+            if group_map is None or any(s not in group_map for s in fac.columns):
+                raise ValueError("限定產業入庫需要完整 group_map，不能信任未驗證的因子值")
+            fac=fac.loc[:,[s for s in fac.columns if group_map[s] in scope]]
+            if not len(fac.columns):
+                raise ValueError("核准產業內沒有因子欄位")
 
         lib = self.library()
         if any(m.get("fhash") == parsed.fhash for m in lib.values()):
@@ -204,12 +339,23 @@ class Memory:
             "aspect": derive_aspect(parsed.fields),
             "category": cand.get("category", ""),
             "formula": cand["formula"],
+            "direction": cand.get("direction", "pos"),
+            "value_orientation": diag.get("value_orientation", 1),
+            "trading_use": diag.get("trading_use", "long_only"),
             "fhash": parsed.fhash,
             "fields": sorted(parsed.fields),
             "depth": parsed.depth,
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "round": round_id,
             "industry_scope": industry_scope,      # None = 全池
+            **({"groups_at_admission": diag["groups_seen"],
+                "groups_seen": diag["groups_seen"],
+                "approved_groups": ([industry_scope] if isinstance(industry_scope, str)
+                                    else industry_scope or diag["groups_seen"]),
+                "excluded_at_admission": sorted(set(diag["groups_seen"]) - set(
+                    [industry_scope] if isinstance(industry_scope, str)
+                    else industry_scope or diag["groups_seen"]))}
+               if "groups_seen" in diag else {}),
             "industry_metrics": diag.get("industry_metrics"),
             "source_attempt": cand.get("attempt_id"),
             "sub_train": diag.get("sub_train"),
@@ -219,7 +365,6 @@ class Memory:
             # ⛔ 密封欄位：僅供人類查閱，任何 prompt 組裝不得引用
             "test_metrics_sealed": test_metrics_sealed,
         }
-        self._save_library(lib)
 
         # 因子值入庫（long 格式，Stage 2 去相關的資料源）
         long = (fac.stack().rename("value").reset_index())
@@ -229,7 +374,7 @@ class Memory:
             old = pd.read_parquet(self.values_path)
             if len(old):
                 long = pd.concat([old, long], ignore_index=True)
-        long.to_parquet(self.values_path, index=False)
+        self.commit_snapshot(lib, long)
         return fid
 
     def library_summary(self) -> str:
@@ -244,8 +389,11 @@ class Memory:
         lines = []
         if own:
             for fid, m in own.items():
-                scope = m.get("industry_scope")
+                scope = scope_label(m)
                 tag = f"/{scope}限定" if scope else ""
+                tag += f"/用途:{m.get('trading_use', 'legacy')}"
+                if m.get("value_orientation", 1) == -1:
+                    tag += "/原公式負向，儲存值取負"
                 lines.append(
                     f"- {fid}【{m['name_zh']}】({m['aspect']}/{m['category']}{tag}) "
                     f"`{m['formula']}` — {m['desc_zh']}")
@@ -263,6 +411,23 @@ class Memory:
         return "\n".join(lines)
 
     # ---- 經驗檔 -----------------------------------------------------------
+    def prompt_learnings(self) -> str:
+        """Exclude legacy test-derived audit entries without editing stored history.
+
+        New validation-derived entries use [audit:validation]. Untagged historical
+        influence cannot be mechanically undone and is not a fresh holdout.
+        """
+        kept, blocked = [], False
+        for line in self.read_learnings().splitlines():
+            if "[audit]" in line:
+                blocked = True
+                continue
+            if not line.strip() or re.match(r"^\s*(?:#{1,6} |[-*] |\d+[.)] )", line):
+                blocked = False
+            if not blocked:
+                kept.append(line)
+        return "\n".join(kept)
+
     def read_learnings(self) -> str:
         return (self.learnings_path.read_text(encoding="utf-8")
                 if self.learnings_path.exists() else LEARNINGS_SKELETON)

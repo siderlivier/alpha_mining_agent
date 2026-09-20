@@ -741,6 +741,11 @@ def cscv_pbo(R: pd.DataFrame, S: int = 12):
     return float((logits <= 0).mean()), logits
 
 
+# R10：單因子方向的鎖定點。因子當初就是用 sub_train + validation 選出來的，
+# 方向也必須在同一個窗內決定——之後的任何期間都不得回頭改變它。
+ORIENT_CUTOFF = fl.SPANS["validation"][1]
+
+
 def _active_returns(d: pd.DataFrame, col: str, span: str, orient: bool):
     """
     單一策略的樣本外「主動報酬」= 產業內前 top_q 等權 − 全池等權基準。
@@ -753,8 +758,13 @@ def _active_returns(d: pd.DataFrame, col: str, span: str, orient: bool):
     if len(sub) < 100:
         return None
     sub = sub.rename(columns={col: "score"})
-    if orient:      # 單因子策略：方向由該期 IC 正負決定，否則負向因子全被判無效
-        ic = _mean_ic(sub)
+    if orient:
+        # 單因子策略要決定方向，否則負向因子全被判無效。
+        # ⛔ R10：方向**只能用選取窗（≤ validation 末端）**決定，不能用全期。
+        #    用全期 IC 定向再切 test，等於讓 test 期的表現回頭定義策略本身：
+        #    一個在 train 為負、在 test 強正的因子會被事後翻向，然後在 test
+        #    上量出漂亮的 Sharpe——那個 Sharpe 是自己造出來的。
+        ic = _mean_ic(sub[sub["ym"] <= ORIENT_CUTOFF])
         if pd.isna(ic):
             return None
         if ic < 0:
@@ -782,6 +792,33 @@ def _mean_ic(sub: pd.DataFrame) -> float:
         if per:
             ics.append(np.mean(per))
     return float(np.mean(ics)) if ics else np.nan
+
+
+def _print_trial_universe_scope(n_factors: int, n_models: int) -> None:
+    """
+    R11：DSR／PBO 涵蓋的是**哪一個候選宇宙**，必須跟著結果一起講。
+
+    這不是公式寫錯的問題，是**統計結論的適用範圍**問題。對「存活下來的因子」
+    算 DSR，證明的是「在這 N 條序列裡挑到最好的那條，不是純運氣」；
+    它**不等於**「整個挖礦流程已經去偏」。
+    """
+    import json as _json
+    try:
+        att = len(list((ROOT / "memory" / "attempts").glob("*.json")))
+    except Exception:
+        att = None
+    print("\n⚠️ 這個 DSR／PBO 涵蓋的候選宇宙（R11）")
+    print(f"   納入：{n_factors} 個**已入庫**因子各自的單因子策略 + {n_models} 個合成模型")
+    print("   未納入：")
+    if att:
+        print(f"     · {att} 筆 attempts 裡被漏斗刷掉的候選"
+              f"（入庫率僅約 {26 / att * 100:.0f}%，搜尋量遠大於試驗池）")
+    print("     · 參考因子池的選取與去重過程")
+    print("     · 產業範圍核准、模型與超參數的選擇")
+    print("   → 可以說的是「在這個試驗池內，最佳策略不是多重測試的產物」；")
+    print("     **不能**說「整個挖礦流程已經去偏」。後者需要獨立 holdout 或巢狀評估。")
+    print("   ⚠️ 也不能草率把試驗數改成 attempts 總數——那些候選高度相關，"
+          "\n      獨立性假設不成立，只會把門檻灌高成另一種假象。")
 
 
 def cmd_dsr(which: str, kind: str, span: str, factors, blocks: int = 12):
@@ -827,6 +864,7 @@ def cmd_dsr(which: str, kind: str, span: str, factors, blocks: int = 12):
           f"（年化 {sr0 * np.sqrt(ANN):.2f}）")
     print(f"**Deflated Sharpe：{dsr:.3f}**")
     print("判讀：> 0.95 表示扣掉「試了 N 個策略」的多重測試後，選股超額仍然顯著。")
+    _print_trial_universe_scope(len(feats), len(models))
 
     try:
         pbo, _ = cscv_pbo(R, S=blocks)

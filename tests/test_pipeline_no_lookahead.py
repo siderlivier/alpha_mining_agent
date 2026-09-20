@@ -21,6 +21,22 @@ import numpy as np
 import pandas as pd
 import pytest
 
+
+def test_profit_growth_uses_absolute_calendar_base():
+    from build_base import profit_growth
+    frame = pd.DataFrame({
+        "stock_id": ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E"],
+        "ym": ["2012-01", "2013-01"] * 4 + ["2012-02", "2013-01"],
+        "eps": [-2., -1., -1., -2., 0., 2., 2., -1., 1., 2.]})
+    result = profit_growth(frame, "eps")
+    assert result.iloc[1] == 50
+    assert result.iloc[3] == -100
+    assert pd.isna(result.iloc[5])
+    assert result.iloc[7] == -150
+    assert pd.isna(result.iloc[9])  # 11 個月以前不能替代去年同月
+    shuffled = frame.sample(frac=1, random_state=1)
+    pd.testing.assert_series_equal(result.sort_index(), profit_growth(shuffled, "eps").sort_index())
+
 ROOT = Path(__file__).resolve().parents[1]
 
 # 汙染起點 = sub_train 的最後一個月（從 config 讀，避免寫死而與切分脫節）。

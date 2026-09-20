@@ -19,6 +19,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+import os
 import re
 import shutil
 import subprocess
@@ -85,8 +87,7 @@ def load_budget() -> dict:
         try:
             old = json.loads(BUDGET_PATH.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
-            log("⚠️ budget.json 損毀，本週用量從 0 起算（total_rounds 一併歸零）")
-            old = {}
+            raise RuntimeError("budget.json 損毀；停止呼叫，請先修復用量紀錄，不能歸零重算")
     b = _blank_budget(old.get("total_rounds", 0),
                       old.get("last_consolidate_round", 0))
     if old.get("week_of") == week_start():
@@ -101,8 +102,9 @@ def load_budget() -> dict:
 
 def save_budget(b: dict):
     BUDGET_PATH.parent.mkdir(parents=True, exist_ok=True)
-    BUDGET_PATH.write_text(json.dumps(b, ensure_ascii=False, indent=1),
-                           encoding="utf-8")
+    temporary = BUDGET_PATH.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(b, ensure_ascii=False, indent=1, allow_nan=False), encoding="utf-8")
+    os.replace(temporary, BUDGET_PATH)
 
 
 def commit_usage(b: dict, meter: "Meter") -> dict:
@@ -114,6 +116,7 @@ def commit_usage(b: dict, meter: "Meter") -> dict:
         bd[k] = bd.get(k, 0) + v
     b["llm_calls"] = b.get("llm_calls", 0) + meter.calls
     b["estimated_calls"] = b.get("estimated_calls", 0) + meter.estimated_calls
+    b["unknown_cost_calls"] = b.get("unknown_cost_calls", 0) + meter.unknown_cost_calls
     return b
 
 
@@ -125,6 +128,8 @@ def budget_stop_reason(b: dict) -> str | None:
     if tcap and b.get("tokens_used", 0) >= tcap:
         return f"週 token 預算已用完（{b.get('tokens_used', 0):,}/{tcap:,}）"
     ccap = BUD.get("weekly_cost_budget_usd") or 0
+    if ccap and b.get("unknown_cost_calls", 0):
+        return "有呼叫未回報成本，無法確認美元預算餘額；請先核對用量"
     if ccap and b.get("cost_usd", 0.0) >= ccap:
         return f"週成本預算已用完（${b.get('cost_usd', 0.0):.2f}/${ccap:.2f}）"
     return None
@@ -150,6 +155,8 @@ def budget_report(b: dict) -> str:
            if b.get("estimated_calls") else ""),
         f"  全期累計輪次 {b.get('total_rounds', 0)}",
     ]
+    if b.get("unknown_cost_calls", 0):
+        lines.append(f"  尚有 {b['unknown_cost_calls']} 通未回報成本；上列金額僅為已知部分，不代表免費")
     stop = budget_stop_reason(b)
     lines.append(f"  ⛔ {stop}" if stop else "  ✅ 額度內")
     return "\n".join(lines)
@@ -169,6 +176,7 @@ class LLMResult:
     measured: bool = False       # True = CLI 回報的真實 usage；False = 字數估算
     elapsed: float = 0.0         # 牆鐘秒數，用來判斷離 timeout 還有多少餘裕
     timed_out: bool = False
+    cost_known: bool = False
 
 
 # claude -p --output-format json 的 usage 欄位 → 我們的 breakdown 鍵名
@@ -216,33 +224,58 @@ def _parse_envelope(stdout: str, prompt: str) -> LLMResult:
         env = json.loads(stdout)
     except json.JSONDecodeError:
         env = None
-    if not isinstance(env, dict) or "result" not in env:
-        # CLI 版本太舊或格式改變——不要因此讓整輪掛掉，退回舊行為就好
+    if not isinstance(env, dict):
         return LLMResult(text=stdout, tokens=estimate_tokens(prompt, stdout))
-    text = str(env.get("result") or "")
-    usage = env.get("usage") or {}
-    bd = {v: int(usage.get(k) or 0) for k, v in _USAGE_KEYS.items()}
-    total = sum(bd.values())
-    cost = float(env.get("total_cost_usd") or 0.0)
-    if total <= 0:
-        return LLMResult(text=text, tokens=estimate_tokens(prompt, text),
-                         cost_usd=cost, breakdown=bd)
-    return LLMResult(text=text, tokens=total, cost_usd=cost,
-                     breakdown=bd, measured=True)
+    text = str(env.get("result") or env.get("error") or stdout)
+    usage = env.get("usage")
+    usage = usage if isinstance(usage, dict) else {}
+    bd = {}
+    valid_usage = bool(usage) and any(k in usage for k in _USAGE_KEYS)
+    for key, dest in _USAGE_KEYS.items():
+        value = usage.get(key, 0)
+        try:
+            number = float(value)
+            if isinstance(value, bool) or not math.isfinite(number) or number < 0 or not number.is_integer():
+                raise ValueError("invalid usage")
+            bd[dest] = int(number)
+        except (ValueError, TypeError, OverflowError):
+            bd[dest] = 0
+            valid_usage = False
+    try:
+        cost = float(env["total_cost_usd"])
+        cost_known = not isinstance(env["total_cost_usd"], bool) and math.isfinite(cost) and cost >= 0
+    except (KeyError, TypeError, ValueError, OverflowError):
+        cost, cost_known = 0., False
+    if not cost_known:
+        cost = 0.
+    return LLMResult(text=text, tokens=sum(bd.values()) if valid_usage else max(sum(bd.values()), estimate_tokens(prompt, text)),
+                     cost_usd=cost, breakdown=bd, measured=valid_usage, cost_known=cost_known)
 
 
 def call_llm(prompt: str, mock_fn=None, meter: "Meter | None" = None,
              timeout: float | None = None) -> LLMResult:
     """
-    呼叫 CLI。meter 傳進來的話，用量會在「成功或逾時」兩種情況下都被記入
-    ——逾時代表請求已經送出、token 已經計費，只是拿不到 usage 回報。
+    呼叫 CLI；成功、錯誤及逾時均先記錄回報用量。缺失用量估算，
+    未回報成本保持未知，不能當作零成本。
     """
     if timeout is None:
         timeout = float(CFG["llm"].get("timeout_sec", 1200))
     if mock_fn:
         out = mock_fn(prompt)
-        res = LLMResult(text=out, tokens=estimate_tokens(prompt, out))
+        res = LLMResult(text=out, tokens=estimate_tokens(prompt, out), cost_known=True)
         return meter.add(res) if meter is not None else res
+    # Check monetary/token limits before each real call, including JSON retries.
+    tcap = BUD.get("weekly_token_budget") or 0
+    ccap = BUD.get("weekly_cost_budget_usd") or 0
+    if tcap or ccap:
+        b = load_budget()
+        tokens = b.get("tokens_used", 0) + (meter.tokens if meter else 0)
+        cost = b.get("cost_usd", 0) + (meter.cost if meter else 0)
+        unknown = b.get("unknown_cost_calls", 0) + (meter.unknown_cost_calls if meter else 0)
+        if tcap and tokens >= tcap:
+            raise RuntimeError("token 預算已達上限，停止下一通呼叫")
+        if ccap and (unknown or cost >= ccap):
+            raise RuntimeError("成本預算已達上限或存在未知成本，停止下一通呼叫")
     cmd = CFG["llm"]["command"].split()
     fmt = str(CFG["llm"].get("output_format", "json")).lower()
     if fmt == "json" and "--output-format" not in cmd:
@@ -263,38 +296,41 @@ def call_llm(prompt: str, mock_fn=None, meter: "Meter | None" = None,
                            text=True, encoding="utf-8", timeout=timeout)
     except subprocess.TimeoutExpired as e:
         el = time.monotonic() - t0
-        # 逾時 ≠ 沒花錢：請求早就送到伺服器了，只是我們沒等到回應。
-        # 拿不到真實 usage，用估算值記帳，總比記 0 誠實。
-        if meter is not None:
-            meter.add(LLMResult(text="", tokens=estimate_tokens(prompt, ""),
-                                elapsed=el, timed_out=True))
-        # 搶救：subprocess 會把「被砍掉之前已寫出的 stdout」放進例外。
-        # claude -p --output-format json 是結尾才一次吐出信封，所以通常是空的，
-        # 但萬一 CLI 有先寫東西，留著總比丟掉好。
+        # Preserve any reported usage even when the process times out.
         partial = e.stdout or b""
         if isinstance(partial, bytes):
             partial = partial.decode("utf-8", errors="replace")
+        res = _parse_envelope(partial, prompt)
+        res.elapsed, res.timed_out = el, True
+        if meter is not None:
+            meter.add(res)
         saved = dump_raw("timeout", partial) if partial.strip() else None
         raise RuntimeError(
             f"LLM 呼叫逾時（{timeout:.0f}s，prompt {len(prompt):,} 字元）。"
-            f"這通的 token 已經花掉了（以估算值計入預算）。"
+            f"這通可能已產生費用；已記錄回報用量，缺失部分標為估算／未知成本。"
             + (f"逾時前收到的片段已存於 {saved}。" if saved
                else "逾時前沒有收到任何輸出（CLI 是結尾才一次回傳）。")
             + "請調高 config.yaml 的 llm.timeout_sec / "
               "llm.consolidate_timeout_sec，或縮短 prompt。") from e
     el = time.monotonic() - t0
-    if r.returncode != 0:
-        msg = (r.stderr or "").strip() or _envelope_error(r.stdout)
-        raise RuntimeError(f"LLM 呼叫失敗: {msg[:500]}")
-    if fmt == "json":
-        res = _parse_envelope(r.stdout, prompt)
-    else:
-        res = LLMResult(text=r.stdout, tokens=estimate_tokens(prompt, r.stdout))
+    # Parse and account before raising, including nonzero exits and error envelopes.
+    res = _parse_envelope(r.stdout, prompt) if fmt == "json" else LLMResult(
+        text=r.stdout, tokens=estimate_tokens(prompt, r.stdout))
     res.elapsed = el
+    if meter is not None:
+        meter.add(res)
+    try:
+        envelope = json.loads(r.stdout) if fmt == "json" else None
+    except json.JSONDecodeError:
+        envelope = None
+    envelope_failed = isinstance(envelope, dict) and envelope.get("is_error") is True
+    if r.returncode != 0 or envelope_failed:
+        msg = (r.stderr or "").strip() or _envelope_error(r.stdout)
+        raise RuntimeError(f"LLM 呼叫失敗（用量已記錄）: {msg[:500]}")
     if el > timeout * 0.8:
         log(f"  ⚠️ 本通耗時 {el:.0f}s，已達 timeout（{timeout:.0f}s）的 "
             f"{el / timeout:.0%}——建議調高上限或縮短 prompt")
-    return meter.add(res) if meter is not None else res
+    return res
 
 
 class Meter:
@@ -310,6 +346,7 @@ class Meter:
         self.cost = 0.0
         self.calls = 0
         self.estimated_calls = 0
+        self.unknown_cost_calls = 0
         self.timeouts = 0
         self.elapsed = 0.0
         self.breakdown = dict(EMPTY_BREAKDOWN)
@@ -321,6 +358,8 @@ class Meter:
         self.elapsed += r.elapsed
         if r.timed_out:
             self.timeouts += 1
+        if not r.cost_known:
+            self.unknown_cost_calls += 1
         if not r.measured:
             self.estimated_calls += 1
         for k, v in (r.breakdown or {}).items():
@@ -331,6 +370,7 @@ class Meter:
         b = self.breakdown
         tail = f"，{self.estimated_calls} 通為估算" if self.estimated_calls else ""
         tail += f"，{self.timeouts} 通逾時" if self.timeouts else ""
+        tail += f"，{self.unknown_cost_calls} 通成本未知" if self.unknown_cost_calls else ""
         return (f"{self.tokens:,} tokens（in {b['input']:,} / out {b['output']:,}"
                 f" / cache 建立 {b['cache_creation']:,}、讀取 {b['cache_read']:,}）"
                 f"，${self.cost:.4f}，{self.calls} 通呼叫、耗時 {self.elapsed:.0f}s{tail}")
@@ -338,19 +378,16 @@ class Meter:
 
 def parse_json_array(text: str) -> list:
     """從 LLM 輸出中抽取第一個 JSON 陣列（容忍圍欄與前後雜訊）。"""
-    text = re.sub(r"```(?:json)?", "", text)
     start = text.find("[")
     if start < 0:
         raise ValueError("輸出中找不到 JSON 陣列")
-    depth = 0
-    for i, ch in enumerate(text[start:], start):
-        if ch == "[":
-            depth += 1
-        elif ch == "]":
-            depth -= 1
-            if depth == 0:
-                return json.loads(text[start:i + 1])
-    raise ValueError("JSON 陣列未閉合")
+    # The JSON decoder understands quoted brackets, escapes and nested arrays.
+    # Do not strip fence-like text inside JSON strings or salvage nested pieces
+    # of a malformed outer array.
+    value, end = json.JSONDecoder().raw_decode(text, start)
+    if not isinstance(value, list):
+        raise ValueError("輸出不是 JSON 陣列")
+    return value
 
 
 def llm_json(prompt: str, meter: Meter, mock_fn=None, label="LLM") -> list:
@@ -368,8 +405,9 @@ def llm_json(prompt: str, meter: Meter, mock_fn=None, label="LLM") -> list:
         log(f"  {label}: prompt {len(prompt):,} 字元，timeout {to:.0f}s，呼叫中"
             + (f"（第 {attempt + 1} 次）" if attempt else "") + "...")
         r = call_llm(prompt, mock_fn, meter=meter)
+        cost_label = f"${r.cost_usd:.4f}" if r.cost_known else "成本未回報"
         log(f"  {label}: 回應 {len(r.text):,} 字元，耗時 {r.elapsed:.0f}s，"
-            f"{r.tokens:,} tokens / ${r.cost_usd:.4f}")
+            f"{r.tokens:,} tokens / {cost_label}")
         try:
             return parse_json_array(r.text)
         except (ValueError, json.JSONDecodeError) as e:
@@ -403,7 +441,7 @@ def build_generate_prompt(mem: Memory) -> str:
         max_fields=CFG["dsl"]["max_fields"],
         windows=CFG["dsl"]["window_whitelist"],
         fields_card=fields_card(),
-        learnings=mem.read_learnings(),
+        learnings=mem.prompt_learnings(),
         library=mem.library_summary(),
     )
 
@@ -461,6 +499,8 @@ def resolve_section(sec: str, existing: set) -> str | None:
 
 def run_round(ctx: ec.Context, mem: Memory, round_id: int,
               meter: Meter, mock_fn=None) -> dict:
+    if mock_fn and mem.root.resolve() == (ROOT / CFG["paths"]["memory_dir"]).resolve():
+        raise ValueError("mock cannot write production memory")
     # 1) Generate
     gen_prompt = build_generate_prompt(mem)
     raw_cands = llm_json(gen_prompt, meter, mock_fn, label="Generate")
@@ -690,6 +730,8 @@ def make_mock():
 # ---------------------------------------------------------------------------
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--rounds", type=int, default=1)
     ap.add_argument("--dry-run", action="store_true")
@@ -702,7 +744,16 @@ def main():
         print(budget_report(load_budget()))
         return
 
-    mem = Memory()
+    if a.mock:
+        import tempfile
+        global BUDGET_PATH, LOG_PATH
+        mock_root = Path(tempfile.mkdtemp(prefix="alpha-mining-mock-"))
+        BUDGET_PATH = mock_root / "budget.json"
+        LOG_PATH = mock_root / "mining.log"
+        print(f"mock sandbox: {mock_root}")
+        mem = Memory(mock_root)
+    else:
+        mem = Memory()
     mem.ensure()
 
     if a.dry_run:
@@ -711,7 +762,7 @@ def main():
 
     mock_fn = make_mock() if a.mock else None
     log(f"===== mining_loop 啟動（rounds={a.rounds}, mock={a.mock}）=====")
-    ctx = ec.Context()
+    ctx = ec.Context(memory_root=mem.root)
 
     for _ in range(a.rounds):
         b = load_budget()

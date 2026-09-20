@@ -1,5 +1,13 @@
 # 台股 Alpha 因子挖掘 Agent — 架構設計規格書
 
+> **2026-09-18 挖礦判斷增補（本段優先於下文舊版定義）：**
+> 門檻與排序使用未取整數值。direction 為原公式方向，neg 固定乘 -1 後評估與儲存，
+> Stage 1 仍驗證原假設方向；不依 test 決定方向。允許純空頭腿因子入庫，
+> 以 trading_use 區分 long_only／short_only／long_short；純空頭使用空頭持倉換手，
+> 不加入現有多頭組合。腿的有效性仍是相對股票池均值的正超額，未包含借券可行性。
+> EPS／營業利益成長改採精確去年同月差額除前值絕對值；前值零或缺月不計。
+> 細節、測試與資料遷移狀態見 REVIEW_程式碼與數值正確性評估報告_2026-09-14.md 第 9 節。
+
 **版本**：v1.0（2026-07-16）
 **狀態**：設計定稿，待實作
 **前置專案**：`tw_alpha_strategy`（FinMind 台股多因子策略，PIT 對齊 panel、IC/ICIR 評估、回測框架）
@@ -596,7 +604,199 @@ alpha_mining_agent/
 
 ## 附錄 E：v1.3 實作期修訂
 
+> 資料擴張與版本管理的新提案見附錄 F；附錄 E 所稱「新增產業零改動」只適用候選評估，不代表既有因子 scope 已能安全自動擴張。
+
 1. **籌碼面資料接入**：panel v2 新增 11 個籌碼/估值欄位，衍生 8 個白名單欄位（chips 群組，面向自動標「籌碼面」）：`frgn_net_21 / trust_net_21 / frgn_ratio / frgn_ratio_d63 / margin_d21 / short_margin_ratio / lend_vol_21 / div_yield`。正規化一律除以流通股數或成交量（rank 評估下純量無關，但跨股可比性必要）。
 2. **build_base 分三階段**（`--stage prices/chips/final`）：降低單次記憶體與執行時間，各階段可獨立重跑。
 3. **產業專屬入庫通道（Stage 4b）**（使用者要求，為未來擴產業鋪路）：整體 Stage 4 未達標時，逐產業檢查專屬門檻——train ICIR ≥ 0.60（比全池 0.45 嚴，理由：單產業樣本少 + 跨產業多重比較）、validation ICIR ≥ 0.35、衰減 ≤50%、產業內多頭腿 > 0、產業內覆蓋 ≥ 0.6、最少月數限制。通過 → verdict `passed_industry`，以 `industry_scope` 標籤入庫；其 Stage 2 去相關與密封 test 指標皆只在該產業範圍內計算；`library_summary` 與報表顯示「XX限定」。新增產業時通道自動生效，零改動。
 
+
+## 附錄 F：資料擴張、自動產業範圍與參考因子換版設計（2026-09-18 提案）
+
+**狀態：設計方案，尚未實作。** 本節中的命令、欄位、工作流程及 Web UI 均為擬議介面，不是目前已有的功能。這次已執行的資料重建另見評估報告第 10 節。
+
+### F.1 使用者的一次執行流程
+
+目標是資料擴張後執行一次工作，即可取得完整檢查結果；預先啟用自動套用時，合格項目自動更新，異常項目保留舊版本並說明原因。一般執行不需要逐檔手動挑產業。
+
+擬議流程：
+
+```text
+更新上游資料與股票產業分類
+  → 建立不可變資料版本及差異清單
+  → 資料品質檢查
+  → 暫存重建月頻資料及受影響因子
+  → 依固定期間／規則評估新增產業
+  → 建立變更計畫與檢查報告
+  → check-only：結束，不啟用
+     auto-apply：檢查全部通過後，備份並提交同一版本
+  → 輸出成功／部分待處理／失敗原因與可回復版本
+```
+
+擬議命令（尚不存在）：
+
+```powershell
+python src/crosssec_oos.py --refresh --check-only
+python src/crosssec_oos.py --refresh --auto-apply
+python src/seed_reference.py --build-release --check-only
+python src/seed_reference.py --build-release --auto-apply
+```
+
+參考池換版為獨立子工作：資料更新可以自動觸發其檢查，但只有政策明確啟用時才自動切換。不能每次擴資料都暗中改變 Stage 2 的參考標準。
+
+### F.2 兩種「產業分類」分開處理
+
+**股票分類：股票 → 產業。** 目前上游 config.py 已有 INDUSTRY_GROUPS、GROUP_ALIAS、STOCK_GROUP_OVERRIDE，應重用分類邏輯，不在本專案再維護一套矛盾規則。優先順序固定：有理由與生效日期的個股覆寫 → 明確類別對照 → 核准的關鍵字規則 → unknown。同時命中互斥群組時標記 conflict，不依不透明的 first-match 悄悄決定。unknown／conflict 列入異常清單，不送去搜尋哪個產業能產生最好績效。
+
+分類版本須包含規則雜湊、資料來源、生效日期及股票的歷史歸屬。分類更名、拆組、合組及錯誤修正不等於獲得全新未見產業：使用穩定 group_id 與 lineage，防止把舊排除產業改名後當新產業加入。過往股票改分類也不應以最新分類直接覆寫整段歷史而不記錄。
+
+**因子適用範圍：因子 → 核准產業集合。** 使用固定的 train／validation 標準判斷，test 不參與核准。這是資格評估，不是以 LLM 根據公司敘述猜適用產業。
+
+### F.3 核心資料契約
+
+因子 metadata 建議新增或明確化下列欄位：
+
+| 欄位 | 用途 |
+|---|---|
+| groups_at_admission | 入庫時可見的產業 ID，建立後不可覆寫 |
+| groups_seen | 已完成資格判定的產業集合；通過及拒絕都記錄 |
+| excluded_at_admission | 入庫時已排除的產業，普通自動更新永不加回 |
+| approved_groups | 實際獲准使用的產業集合，統一為 list |
+| scope_mode | global／restricted；global 的自動擴張政策須明確，不把 None 當無限制的新產業授權 |
+| scope_history | 每次新增產業、原因、run_id、規則版本與期間 |
+| evaluation_history | 每次通過／拒絕／樣本不足的未取整指標與理由 |
+| value_orientation / trading_use | 沿用既有定向與交易用途契約 |
+| values_version / metrics_version | 區分現行因子值與歷史入庫績效所屬版本 |
+
+現有字串 industry_scope 遷移為 list 時，Stage 2、admit、memory、factor_lab、audit、report 與 crosssec 都必須一起支援；不能只把 JSON 改成陣列。global 舊因子需凍結其原入庫可用產業，後來的新產業仍走資格判定。2026-09-18 的值重建是計算快取更新，不是新產業資格核准。
+
+既有 26 個因子的原始 4 產業可根據入庫資料版本及歷史紀錄回填；不能對日後新因子一律硬填 4 產業。來源不明者先標 needs_provenance，不臆測其未見範圍。
+
+### F.4 只擴張新產業的規則
+
+```text
+candidate_groups =
+    current_groups
+    - groups_seen
+    - excluded_at_admission
+    - historical_aliases_or_descendants_of_excluded_groups
+
+new_approved_groups = old_approved_groups ∪ passed(candidate_groups)
+```
+
+- 舊範圍保留；新產業未通過，不擴張。
+- 舊排除產業即使這次分數漂亮，仍不加入。
+- 新產業沒有足夠樣本：記為 insufficient_data，保留等待條件，未完成有效判定前不當作永久拒絕。
+- 已完成判定而失敗的新產業加入 groups_seen，不能每次重跑直到偶然通過。未來確需重新評估時，由明確的新評估版本／預定週期處理並記錄多次嘗試。
+- 舊核准產業若重測衰退，列出警示與診斷，不在「只擴張」工作中偷偷刪除；停用應是獨立政策。
+- 新增股票但產業不變：更新同產業的計算值與覆蓋率，不重新打開被排除產業。
+- 重建所有產業的研究值，與把所有產業加入可用 scope，是不同操作；建議研究原值與正式使用遮罩分離。
+
+同一段時間的新產業可能共受市場因子影響，不保證與原產業統計獨立；一旦反覆看結果並挑選，就不能再稱完全未使用的樣本外。
+
+### F.5 判斷標準：沿用設定並補足用途一致性
+
+以 config.yaml 為唯一門檻來源，沿用 industry_ic_series／industry_qualify，不複製一套公式。每個 plan 凍結門檻與期間，執行期間設定若變動即失效重算。
+
+目前產業通道設定：
+
+| 項目 | 現有值 |
+|---|---:|
+| sub-train ICIR | ≥ 0.60 |
+| validation ICIR | ≥ 0.35 |
+| validation 衰減 | ≤ 50% |
+| 覆蓋率 | ≥ 60% |
+| train 有效月份 | ≥ 36 |
+| validation 有效月份 | ≥ 12 |
+| 逐月產業 IC 最少股票 | 8 |
+| 空頭用途換手上限 | 40%（目前引用 Stage 4） |
+
+方向先按 metadata 定向，所有 gate 使用未取整值；可用腿依 trading_use 判定。正式自動擴張前應補齊：多頭／空頭／雙腿各自的換手口徑、用途能否在產業間不同、缺標籤時的可投資集合、有效月份定義。現行產業多頭通道沒有完整換手 gate，不能直接描述為已具備所有條件。
+
+建議產業別保存用途，例如某因子在電子為 long_only、在營建為 short_only；不能只用一個全域 trading_use 讓多頭組合誤用新產業空頭訊號。若第一版不支援產業別用途，就限制新產業必須符合原用途。
+
+既有 R02／R03 等標籤或單位問題未解決前，品質關卡須明確標出阻擋項；不能因通過 ICIR 門檻就跳過資料有效性。此次成長欄位重建不代表那些問題已修复。
+
+### F.6 重用檔案與執行責任
+
+| 現有檔案 | 擬議責任 |
+|---|---|
+| 上游分類程式與 config | 股票分類及規則版本，本專案讀取結果 |
+| build_base.py | 可指定輸出版本／暫存位置，建構月頻資料及品質摘要 |
+| eval_candidates.py | 原精度統計、方向、產業資格；提供純計算函式 |
+| crosssec_oos.py | 擴充為 refresh／check／requalify 驅動；保留原橫斷面報表模式 |
+| seed_reference.py | 參考因子 release 建立、比較與切換 |
+| memory.py | 備份、版本、提交／回復與 metadata schema |
+| report.py | 統一 JSON／人類可讀報告，供 CLI 與 UI 使用 |
+
+先保留 crosssec_oos.py 名稱，避免馬上更名使既有命令失效；若未來改名 factor_scope.py，應保留相容入口並更新檔案對照表。不要把業務邏輯寫在 Web 頁面的按鈕事件中，也不要各功能各開一支重複腳本。
+
+### F.7 參考因子換版
+
+目前 seed_reference.select 使用 ICIR_test 與 test 衰減，dedupe_reference 未限制 pre-test，而且 --clear 會先移除現行參考池。這三件事必須改掉，不能把 clear＋apply 串起來就當安全換版。
+
+擬議流程：
+
+1. 凍結上游資料、生成程式及設定，生成全部合資格研究候選的原始值；不能只拿已經用 test 挑過的 survivors 作為起點。
+2. 以與本專案一致的 sub-train／validation 重新評估。方向只由 train 決定；去重只看 pre-test。test 指標不進候選選取、排名或換版比較決策。
+3. 在 staging 建立新 release：候選來源、公式／生成參數、資料版本、選取期間、原精度判斷、去重原因、因子值與 hash 一起保存。
+4. 輸出新舊差異：增加、移除、公式相同但資料更新、方向／用途變更，以及 Stage 2 將使用的實際數量。
+5. 保留舊 release 不動，驗證後切換 active reference release；原自有 F 因子與歷史 attempts 不重寫。
+6. 回復只切回舊 release，不需重算或刪除歷史檔。
+
+ID 建議使用永久識別碼，不在每次 release 從 R-001 重編。舊因子保存原 ID；新定義配置未使用 ID，附 supersedes／source_formula_hash。只有同一定義的資料重算可保留 ID 並提高 values_version。名稱相同不代表同一公式，公式相同也不代表同一資料版本。
+
+新參考池只影響之後的 Stage 2 判斷；既有自有因子是否與新池重複可另產生報告，不能倒改當年通過紀錄。參考池成功換版也無法抹除已使用 test 的歷史選擇偏誤，舊成果仍需標註版本與限制。
+
+### F.8 可回復提交、重跑與快取失效
+
+每次工作使用 run_id，manifest 記錄輸入／輸出 hash、程式與設定版本、分類版本、執行狀態與檢查結果。流程狀態：
+
+```text
+created → building → validated → planned → committing → committed
+                  ↘ failed / needs_review / rolled_back
+```
+
+- 快取鍵至少包含資料 hash、公式 hash、分類版本、定向、scope 與計算程式版本；不是只看檔案存在與否。
+- 多檔提交以 generation 目錄加單一 current 指標切換；讀取端取得同一 generation，防止 monthly_base 已新、factor_values 還舊。
+- 切換前檢查輸入 hash 未被其他工作改動，且取得互斥鎖；挖礦與換版不能同時寫 memory。
+- 相同輸入與設定重跑為 no-op；失敗不動正式版本，重新執行從可驗證階段恢復。
+- 已完成版本不可覆寫；rollback 也記錄新事件。
+- 資料筆數減少、scope 違規、unknown 分類、來源不足等不能悄悄略過並顯示成功。
+
+### F.9 驗收案例
+
+1. 新產業通過則只加新產業；舊排除產業即使通過也不加入。
+2. 新產業失敗、樣本不足及方向不符分別有明確狀態。
+3. test 期任意污染不改變資格、方向或參考選取。
+4. 分類更名／拆分不繞過舊排除規則；分類未知或衝突可被追查。
+5. scope 外更改研究值不影響正式使用分數；僅做空的產業訊號不進多頭組合。
+6. 相同版本重跑不重複入庫、不重複加 scope、不重複配置 ID。
+7. 提交中斷後可回復，不留下 metadata／parquet 混版。
+8. 舊因子 ID、原始入庫指標與歷史 attempts 保持不變。
+9. 每個被跳過或停用的因子有原因；單一失敗不能偽裝整批成功。
+10. UI 與 CLI 執行相同 plan，得到相同結果。
+
+### F.10 Web UI 建議
+
+可以建立本機 Web UI，但先把上述共用工作流程與版本契約做好，再把 UI 當成操作層。第一版以單使用者、localhost 為預設，不急著部署雲端或加入多人權限。
+
+建議五個頁面：
+
+- **資料狀態**：來源時間、資料版本、股票／產業數、快取是否過期、阻擋項。
+- **更新與檢查**：按一次執行、工作進度、階段性紀錄；不得因重新整理頁面重複啟動。
+- **因子產業範圍**：原範圍、新增候選、逐條門檻通過／失敗、預計新增範圍及用途。
+- **參考池換版**：新舊 release 差異、現行版本、切換及回復。
+- **執行歷史**：run_id、設定快照、報告下載與備份位置。
+
+一般使用者只需選「檢查」或「依已設定規則自動套用」；專家設定集中管理。auto-apply 預先啟用後，不必每個產業反覆確認；遇到未配置的分類、輸入變更或品質阻擋時才停止該項。頁面明確區分「值已重算」「資格已核准」「正式版本已切換」，避免一個綠色成功燈掩蓋不同狀態。
+
+長工作交給獨立工作程序，UI 查詢 job_id；提供取消與恢復，禁止在提交一半時直接取消。按鈕不能接受任意 shell 命令或檔案路徑；先呼叫受控服務函式／固定 CLI 參數。人類 test 報告與挖礦 prompt 資料出口分開，UI 不把 test 結果送回自動搜尋。
+
+實作順序：共用計算與版本契約 → CLI 一鍵工作及回歸測試 → 本機 UI。此設計不需要先購買或部署外部服務。
+
+### F.11 第一版實作狀態（2026-09-18）
+
+已實作 `factor_scope.py` 共用核心與 `scope_ui.py`／`scope_ui.html` 本機介面，使用 Python 標準庫 HTTP 服務。包括分類一致性驗證、固定用途的新產業資格、舊排除保護、版本雜湊、備份／日誌與中斷回復。沿用現有正式 library／values 路徑，由互斥鎖與中斷標記防止讀取混版，尚非完整的 generation 指標架構。
+
+本版輸入為已重建的 monthly_base；不提供資料下載、歷史產業轉換、自動推測未知分類、參考池 release 換版及工作取消。參考因子維持原版本。CLI 與 HTTP 測試已通過，瀏覽器工具工作階段錯誤導致畫面驗收未完成。實際操作及限制見 `SCOPE_資料擴張操作說明.md`。

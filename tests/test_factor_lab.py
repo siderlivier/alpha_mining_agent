@@ -30,6 +30,25 @@ N_MONTHS = 96                  # 2012-01 ~ 2019-12
 STOCKS = [f"S{i:03d}" for i in range(40)]
 GROUPS = {s: ["半導體", "電子", "生技", "金融"][i % 4] for i, s in enumerate(STOCKS)}
 FEATS = ["F-001", "F-002", "F-003"]
+
+
+def test_load_panel_excludes_short_only(tmp_path, monkeypatch):
+    from memory import Memory
+    mem = Memory(tmp_path / "memory")
+    mem.ensure()
+    mem._save_library({"F-001": {"name_zh": "long", "trading_use": "long_only"},
+                       "F-002": {"name_zh": "short", "trading_use": "short_only"}})
+    pd.DataFrame({"factor_id": ["F-001", "F-002"], "ym": ["2015-01"] * 2,
+                  "stock_id": ["A"] * 2, "value": [1., 2.]}).to_parquet(mem.values_path)
+    (tmp_path / "data").mkdir()
+    pd.DataFrame({"ym": ["2015-01"], "stock_id": ["A"], "group": ["G"],
+                  "fwd_ret_1m": [0.1]}).to_parquet(tmp_path / "data/monthly_base.parquet")
+    monkeypatch.setattr(fl, "Memory", lambda: mem)
+    monkeypatch.setattr(fl, "ROOT", tmp_path)
+    _, feats, _ = fl.load_panel("own")
+    assert feats == ["F-001"]
+    with pytest.raises(SystemExit, match="僅做空"):
+        fl.load_panel(factors=["F-002"])
 CORRUPT_AT = 71                # 汙染這個索引「之後」的月份
 
 
@@ -287,6 +306,46 @@ def test_perf_requires_six_months():
     r = pd.Series([0.01] * 5)
     assert bt.perf(r) == {}
     assert bt.perf(pd.Series([0.01] * 6))["Months"] == 6
+
+
+def test_initial_equity_in_drawdown_and_missing_returns_rejected():
+    assert bt.perf(pd.Series([-.5,0,0,0,0,0]))["MaxDD"]==-.5
+    assert bt.perf(pd.Series([.1]*6))["MaxDD"]==0
+    with pytest.raises(ValueError,match="missing"):
+        bt.perf(pd.Series([.1]*6+[np.nan]))
+
+
+def test_missing_future_return_cannot_replace_selected_stock():
+    d=pd.DataFrame({"stock_id":[str(i) for i in range(20)],"ym":"2020-01",
+                    "group":"G","score":np.arange(20),"fwd_ret_1m":.01})
+    d.loc[19,"fwd_ret_1m"]=np.nan
+    with pytest.raises(bt.MissingReturnError) as caught:bt.portfolio_returns(d)
+    assert set(caught.value.long_holdings)=={"18","19"}
+    assert caught.value.missing==["19"]
+    # Even an unheld missing constituent must not silently change benchmark.
+    d.loc[19,"fwd_ret_1m"]=.01;d.loc[10,"fwd_ret_1m"]=np.nan
+    with pytest.raises(bt.MissingReturnError) as caught:bt.portfolio_returns(d)
+    assert set(caught.value.long_holdings)=={"18","19"}
+
+
+def test_load_panel_freezes_coverage_on_training_and_masks_scope(tmp_path,monkeypatch):
+    from memory import Memory
+    mem=Memory(tmp_path/"memory");mem.ensure()
+    mem._save_library({"F-001":{"industry_scope":"G"},"F-002":{}})
+    (tmp_path/"data").mkdir()
+    base=pd.DataFrame({"stock_id":["A","B"]*2,"ym":["2015-01"]*2+["2020-01"]*2,
+                       "group":["G","H"]*2,"fwd_ret_1m":[.1,.2,np.nan,.3]})
+    base.to_parquet(tmp_path/"data/monthly_base.parquet")
+    vals=pd.DataFrame({"factor_id":["F-001"]*4+["F-002"]*2,
+                       "stock_id":["A","B"]*3,"ym":["2015-01"]*2+["2020-01"]*4,
+                       "value":[1,999,2,999,1,2]})
+    vals.to_parquet(mem.values_path)
+    monkeypatch.setattr(fl,"Memory",lambda:mem);monkeypatch.setattr(fl,"ROOT",tmp_path)
+    d,feats,_=fl.load_panel("own")
+    assert feats==["F-001"] and len(d)==4
+    assert d.loc[d.group.eq("H"),"F-001"].isna().all()
+    vals.loc[vals.ym.eq("2020-01"),"value"]=np.nan;vals.to_parquet(mem.values_path)
+    assert fl.load_panel("own")[1]==feats
 
 
 def test_excess_stats_isolates_beta():

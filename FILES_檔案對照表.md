@@ -1,12 +1,30 @@
 # 檔案對照表
 
-> 本專案每一個檔案的中文名稱與職責。更新日期：2026-09-14
+2026-09-20 挖礦／回測可靠性修正沿用既有檔案，未新增功能腳本。memory：入庫範圍驗證、同範圍歷史指標與 prompt 經驗過濾；audit：預設 validation，test 僅 human；report：同範圍展示、產業通過及 token／空庫修正；factor_lab：因果覆蓋選取、保留未知標籤預測列；backtest：缺價明確報錯與期初回撤。對應測試擴充 test_m4、test_industry_track、test_factor_lab。fetch_macro／hmm_regime／threshold_sweep 暫緩，尚未封存。
+
+`tests/test_compare_upstream.py` 同時可獨立執行保存結果的選股稽核：`python tests/test_compare_upstream.py --audit-run logs/<run>`。它核對來源雜湊、重算覆蓋後的流動性排名、重播訊號持股，輸出 `selection_rank_evidence.csv`，逐筆列出缺報酬持股的流動性百分位、分數排名與新進／續抱狀態。歷史資料不在本機時，對應整合測試會明確 skip，其餘合成案例仍能執行。
+
+2026-09-20 新增跨專案比較：`src/compare_upstream.py` 只讀前置專案的 DFS 產生器、月頻快取與成交價格，將自有／原 25 個 DFS／固定 8 因子／自有加 DFS 套用同一模型階梯、流動性與緩衝規則。`--universe upstream` 沿用前置 ML 篩選順序；`--universe common` 額外提供共同股票池敏感度對照。輸出至 `logs/dfs_comparison_<時間>/`，不替換正式因子庫；相容績效有未來報酬篩選限制，須一起閱讀選股稽核，不能當成已消除前瞻偏差的結果。
+
+`tests/test_compare_upstream.py` 覆蓋產業內流動性、前 20% 續抱、股票池縮小、未成交不補選、缺未來報酬不改選股、跨月持股狀態及預測不讀當期未來標籤等案例。輸出中的 manifest 保存來源雜湊與設定，runner_snapshot.py 保存執行版本；大型 parquet 不進 Git。
+
+> 本專案每一個檔案的中文名稱與職責。更新日期：2026-09-18
 >
 > 其他文件的分工：`SPEC_架構設計規格書.md` 講**為什麼這樣設計**、
 > `GUIDE_使用教學.md` 講**怎麼操作**、`RESULTS.md` 講**數字與出處**、
 > 本檔講**哪個檔案在做什麼**。
 
 **四層架構**（資料單向流動，下層依賴上層）：
+
+2026-09-18：第一批挖礦修正沿用既有檔案，未新增功能腳本。
+eval_candidates 負責原精度裁判、定向與交易用途；admit／memory 保存定向與用途；
+factor_lab 排除僅做空因子；crosssec_oos 重算時套用儲存定向；report 顯示用途；
+build_base 以精確去年同月及前值絕對值計算 EPS／營業利益變化。
+回歸案例擴充於既有 test_funnel、test_pipeline_no_lookahead、test_factor_lab。
+資料遷移與剩餘工作見評估報告第 9 節。
+後續快取重建已完成，最新結果與回復方法見評估報告第 10 節；
+`data/rebuild_history/<run_id>/` 保存本機原檔、暫存與 manifest（不進 Git）。
+產業擴張、自動分類、參考池換版及 Web UI 設計統一放在 SPEC 附錄 F，尚未實作，未新增功能腳本。
 
 ```
 挖掘層  LLM 提假設 → DSL 寫成公式 → 四階段漏斗 → 記憶蒸餾
@@ -58,7 +76,7 @@
 |---|---|---|---|
 | `build_base.py` | 191 | 月頻面板建構 | 前置專案的 `panel.parquet`（日頻 PIT 面板）→ `monthly_base.parquet`（月頻 36 欄快照）。分三階段可獨立重跑：`--stage prices` 價量技術面、`--stage chips` 籌碼面、`--stage final` 財務面＋合併＋算標籤。`fwd_ret_1m` 逐月 winsorize 到 1%/99% 壓制假極端 |
 | `build_regime.py` | 96 | 市場狀態標註表 | 逐年 TAIEX 報酬／波動 → 多空盤整標籤（>+10% 多頭、<−10% 空頭）＋月頻大盤報酬。標籤由數字自動生成（客觀），風格備註是人工知識 |
-| `seed_reference.py` | 419 | 參考因子匯入 | 把前置專案 DFS 挖出的 86 個因子匯入為 `R-xxx`，讓 Stage 2 也對它們去相關（否則 agent 會重新發明輪子）。**四道篩選**：上游 survivors 判準 → `\|ICIR_train\|` 門檻 → 衰減 ≤50% → **參考因子彼此去重**（`dedupe_reference`，預設 ρ>0.95 才砍）。86 → 31 → 25 個。第四道是必要的，因為前三道都是逐因子判斷，看不到「同一條公式掛兩個名字」 |
+| `seed_reference.py` | — | 參考池換版 | 使用全部登錄基礎欄位，train/validation選取、定向及去重；18個新參考。舊DFS版本留在交易備份，不再讀舊候選test指標 |
 | `fetch_macro.py` | 859 | 總經資料抓取 | 景氣對策信號（分數＋燈號）、領先／同時指標、M1B/M2 年增率與黃金交叉、美債殖利率。只走政府開放資料與 FinMind 免費層。**最重要的設計決定：發布落後寫進資料結構本身**——每列都有 `ym`（描述的月份）與 `pub_ym`（已公開的月份），取值一律走 `as_of()`；新增欄位若忘了在 `PUB_LAG_MONTHS` 登記會**直接丟錯**而不是預設 0 |
 
 ---
@@ -187,6 +205,20 @@
 
 ---
 
+## 資料擴張功能（2026-09-18）
+
+| 檔案 | 中文名稱 | 說明 |
+|---|---|---|
+| `src/factor_scope.py` | 產業資格與版本提交核心 | CLI／UI 共用，引用既有產業 IC 判定；管理分類驗證、新產業資格、雜湊、備份與中斷回復。有合成資料可靠性測試 |
+| `src/scope_ui.py` | 本機操作服務 | 固定 CLI 工作、單工作互斥、localhost／CSRF 保護，不接受任意命令 |
+| `src/scope_ui.html` | 產業檢查介面 | 進度、範圍變化、原因明細及歷史；不包含另一套判定公式 |
+| `tests/test_factor_scope.py` | 擴張可靠性測試 | 分類、排除規則、test 隔離、交易用途、提交及回復 |
+| `tests/test_scope_ui.py` | UI HTTP 測試 | 請求保護、路徑限制及重複工作防護 |
+| `SCOPE_資料擴張操作說明.md` | 操作說明 | 更新順序、CLI／UI、設定與限制 |
+| `memory/scope_runs/`、`memory/scope_jobs/` | 執行產物 | 計畫、暫存值、提交前備份及工作日誌；不進版控 |
+
+核心獨立成檔是為 CLI 和 UI 共用提交契約；原 `crosssec_oos.py` 保留相容轉入參數及原探索報告。新檔不重建 IC 計算邏輯。
+
 ## 附錄：常見的「我要改 X，該動哪個檔？」
 
 | 想做的事 | 動這個檔 | 注意 |
@@ -199,3 +231,17 @@
 | 改回測口徑 | `config.yaml` 的 `backtest` | `top_q`／`cost`／`weighting`／`ann` |
 | 換合成模型 | `factor_lab.py` 的 `walk_forward` | 順序建議 equal → ridge → lgbm |
 | 資料源更新 | 前置專案 `tw_alpha_strategy`，再重跑 `build_base.py` | 本專案不自己抓資料 |
+
+## 2026-09-19 修復新增項目
+
+| 檔案 | 職責 |
+|---|---|
+| `tests/test_priority_repairs.py` | 缺月、股數、故障／中斷恢復、參考test隔離及mock保護；合成資料驗證 |
+| `memory/transactions/` | 一般入庫／參考換版交易備份，不進版控；非手動編輯區 |
+| `data/rebuild_history/20260919_234830_priority_repairs/` | 本次正式資料遷移前備份、差異及驗證，不進版控 |
+
+旧 `dfs_snapshot.parquet`／`dfs_candidates.csv` 現為歷史資料，新版 seed_reference 不再使用。正式資料已重建，歷史表格中的958檔及舊值檔筆數不代表現況。
+
+| `logs/performance_20260920_013215/` | 2026-09-20績效重測：REPORT.md、原精度JSON、9組月報酬、特徵清單、成本／回撤複核、输入雜湊及設定快照；人類研究資料，不進挖礦prompt |
+
+2026-09-20：`tests/test_priority_repairs.py`另涵蓋LLM字串括號、錯誤信封／非零退出用量、逾時回報、未知成本、預算損毀與呼叫前上限防護。

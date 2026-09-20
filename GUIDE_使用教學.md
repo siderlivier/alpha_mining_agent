@@ -1,5 +1,7 @@
 # 使用教學與功能解說
 
+> 2026-09-20：目前優先挖礦與回測正確性，總經／HMM 暫緩，尚未刪檔。audit 預設只回饋 validation；舊 [audit] 經驗不再注入 prompt，新驗證經驗標 [audit:validation]。backtest 若遇 MissingReturnError，代表固定股票池存在未知報酬；須處理估值，不能刪股票或補零繞過。long_short 沿用前置只扣多頭成本的相容口徑，不是完整多空淨績效。最新處置與未結案項見 TODO 及評估報告第 14 節。
+
 本文件是 `README.md` 的展開版：解釋**每個功能為什麼存在**、**參數怎麼調**、
 **出事了怎麼辦**。設計理由的完整版在 `SPEC_架構設計規格書.md`。
 
@@ -66,86 +68,26 @@
 
 ### 參考因子（Stage 2 的盲區修補）
 
-Stage 2 原本只跟 agent **自己入庫的**因子去相關。但 agent 的 31 個欄位裡有
-24 個直接來自或等價於前置專案 `mine_dfs.py` 的因子，而那邊已經機械式挖出
-86 個。結果是通過 Stage 2 只證明「跟自己的 26 個不重複」，不保證跟你早就
-知道的 86 個不重複——F-005 `cs_rank(neg(vol_126))` 就是 `neg_vol_126`，
-F-006 幾乎等於 `neg_accruals`。
+2026-09-19 起，正式參考池改為 `registered_base_fields_v1`：候選是 `fields.yaml` 登錄的全部 32 個基礎欄位，不使用曾依 test 選取的上游 DFS survivors 或舊候選 CSV。目前 18 個通過，舊 25 個 DFS 參考因子完整保存在提交前備份。
 
-```bash
-python src/seed_reference.py --list      # 只看逐因子篩選結果（86 → 31 個）
-python src/seed_reference.py --dry-run   # 再加上互相去重的報告（31 → 25 個）
-python src/seed_reference.py --apply
-python src/seed_reference.py --apply --max-decay 40   # 更嚴的衰減門檻
-python src/seed_reference.py --apply --max-ref-corr 1.0   # 關掉互相去重
-python src/seed_reference.py --clear     # 移除所有 R-xxx（快照保留）
+```powershell
+python -B src/seed_reference.py --dry-run
+python -B src/seed_reference.py --list
+python -B src/seed_reference.py --apply
+python -B src/seed_reference.py --clear
 ```
 
-**篩選四道（86 → 31 → 25 個）：**
+`--list`／`--dry-run` 會重算訓練與驗證指標，但不提交。`--apply` 一次替換參考池並備份；不需要先 clear。`--clear` 也走同一備份交易。舊 `--from-upstream`／`--all` 路徑已移除，避免繞回 test 篩選。
 
-| # | 條件 | 值 | 理由 |
-|---|---|---|---|
-| 1 | 沿用前置專案 survivors 判準 | `t_train>2`、測試同向、`\|ICIR_test\|>0.2` | 樣本外就失效的因子本來不會進投資組合 |
-| 2 | 訓練期強度 | `--min-icir`（0.3） | 太弱的訊號拿來擋候選只是拖慢 |
-| 3 | **衰減上限** | `--max-decay`（**50%**） | **與本專案 Stage 4 的 `max_validation_decay_pct` 同標準**——訓練期漂亮、測試期崩掉的因子沒資格當「已知因子」 |
-| 4 | **彼此去重** | `--max-ref-corr`（**0.95**） | 前三道都是逐因子判斷，看不到「同一條公式掛兩個名字」 |
+預設資格：訓練期 |t| > 2、|ICIR| > 0.3；驗證期同向且 |ICIR| > 0.2；衰減 ≤ 50%；有效月份至少 36／12。每個評估區間的最後一月不列入，避免標籤價格跨越區間。方向只由 sub_train 決定，負向欄位儲存前取負，名稱與 metadata 標明反向。ICIR 使用月 IC 均值／標準差，沒有乘年化係數。
 
-衰減門檻淘汰的三個：`d_net_margin`（59%）、`g_gp_3`（56%）、`g_ni_1`（53%）。
-更極端的（`d_ppe_to_ta` train −0.73 → test +0.002、變號、100% 衰減）第一道就擋掉了。
+去重使用 sub_train＋validation 的月內排名池化相關，預設 |ρ| > 0.95 剔除較弱者；不讀 test 值來決定保留。test 期值仍保存在正式值檔，供日後人類評估，但不參與資格或方向判定。可用 `--min-icir`、`--max-decay`、`--max-ref-corr` 指定規則，請勿依 test 結果調參。
 
-**第四道為什麼必要。** 前置專案的 `mine_dfs.py` 有同一條公式掛兩個名字的情況：
+`memory/transactions/<交易ID>/` 保留提交前完整 library／values；新 R-ID 不重用歷史 ID。中斷鎖須先確認工作已結束，再執行 `python -B src/factor_scope.py --recover`。這是故障回復，尚非任意歷史版本的一鍵切換。
 
-```
-net_margin         ≈ ni_to_rev          ρ=1.000   （都是 稅後淨利 ÷ 營收）
-op_to_rev          ≈ op_margin          ρ=1.000   （都是 營業利益 ÷ 營收）
-pretax_to_rev      ≈ ni_to_rev          ρ=0.988
-pretax_to_px       ≈ ni_to_px           ρ=0.984
-d_roa              ≈ d_roe              ρ=0.958
-roa                ≈ roe                ρ=0.952
-```
+mock 挖礦會把因子庫、attempts、經驗、預算及日誌放在系統暫存目錄；mock 整理同樣隔離，不覆寫正式經驗。啟動時印出挖礦 sandbox 路徑。
 
-兩個都收的後果有兩層：參考因子數被灌水（31 其實只有 25 個獨立概念）；
-以及 `factor_lab` 等權合成時，「淨利率」這個概念被賦予兩倍權重。
-實測去重後 `all` 組的 IR 從 1.663 升到 1.741（Ridge）、0.68 升到 0.73（等權）。
-
-去重口徑與 Stage 2 一致：**逐月橫斷面的排名相關**（不是原始值的 Pearson）。
-按 `|ICIR_train|` 由大到小逐一檢視，與已保留者相關度超過門檻就丟掉——
-所以每一對重複裡留下的是訓練期比較強的那個。
-
-**存放：單一因子庫。** `R-xxx` 與自有的 `F-xxx` 同住 `library.json`，靠
-`reference: true` 區分：
-
-- `Memory.own_library()` → 只有 F-xxx。`report.py` / `audit.py` / `seed_memory.py`
-  一律用它，參考因子不會虛灌成果、也不會污染過擬合審計的樣本。
-- `Memory.reference_library()` → 只有 R-xxx。
-- `Memory.library()` → 全部。Stage 2 用這個（兩種都要去相關）。
-- `next_factor_id()` 只認 `F-\d+`，不受影響。
-
-**prompt 列出但不給公式。** 參考因子是用原始財報欄位算的
-（`gp_to_px` = 毛利/股價），本 DSL 連 `gross_profit` 欄位都沒有，給公式只會
-誘使模型拼出無效 DSL。實際注入長這樣（整段 +1,248 字元）：
-
-```
-- F-001【ROE趨勢改善】(基本面/quality) `cs_rank(sub(roe, ts_med(roe,12)))` — …
-
-【已知因子｜前置專案已挖出，提相近變體會死於 Stage 2 相關性檢查】
-（這些不是本 DSL 的公式，無法也不需要直接重現；只需避開同一個訊號來源）
-- R-001【毛利股價比】(基本面) — 毛利 / 股價，價值面的獲利含量
-- R-002【自由現金流殖利率】(基本面) — (營運現金流 − 資本支出) / 市值
-```
-
-無公式、無 ICIR 數字——洩漏紀律與自有因子一致。
-
-**自足快照，只有第一次要跨專案。** 首次匯入會 import 前置專案的
-`mine_dfs.generate()`（不重寫以免語意漂移）算出值，同時存成
-`data/dfs_snapshot.parquet` 與 `data/dfs_candidates.csv`。之後 `--clear`、
-重新匯入、改門檻重灌都直接讀快照。要強制重算用 `--from-upstream`。
-
-Distill 收到的 `stage2_culprit` 會顯示 `R-001 / 毛利股價比`，歸因時看得懂
-是被哪個已知因子擋的。
-
-⚠️ Stage 4 的 `min_coverage: 0.60` 是很多提案陣亡的地方——任何會把大量樣本
-變成 NaN 的公式（`if_else(cond, X, 0)` 之外的稀疏欄位、季頻遮罩等）都很難過關。
+歷史「26 個 own 對 25 個 DFS」績效仍是舊版本研究，不適用於新的 18 個參考因子，也不因流程修正而成為全新 holdout。
 
 ---
 
@@ -1747,3 +1689,10 @@ python -m pytest tests/test_factor_lab.py -q            # 下游（因子合成 
 
 每次重寫前都會備份到 `memory/learnings_history/learnings_<時間戳>.md`，直接
 複製回去即可。`learnings.md` 也可以隨時手動編輯——它是給人看也給人改的。
+
+
+### 2026-09-20 呼叫失敗與預算說明
+
+失敗CLI／錯誤信封／逾時會記錄可得用量；未回報金額顯示未知，不能理解為免費。token或美元上限設0表示未限制；若啟用美元上限且出現未知金額，核對帳單前不啟動下一通。額度在每通呼叫前檢查，已在進行的一通不保證不超支。預算檔損毀時先修復紀錄，不應刪掉它讓預算歸零。
+
+本週已發生但CLI未回報的費用，請以供應商帳單核對；修復程式不會自動追溯補齊先前漏記。

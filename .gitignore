@@ -3,26 +3,55 @@
 *.key
 *.token
 
-# ── 大型資料檔 ──────────────────────────────────────────
-# 這些都能從前置專案的 panel.parquet 重新產生，不進版控。
+# ── 版控判準 ────────────────────────────────────────────
+# 進版控的條件只有兩個：
+#   (1) 重建專案的必要條件 —— 程式、設定、prompts
+#   (2) 理解決策的必要條件 —— 文件、以及 agent 的記憶
+# 其餘一律不進。**可以由 (1)+(2) 重跑出來的東西就是產物，產物不進版控。**
+#
 # ⚠️ memory/ 底下的 JSON 與 markdown **要**進版控——那是 agent 的記憶，
-#    是這個專案的核心資產；只有 factor_values.parquet 因為 37MB 而排除。
-data/*.parquet
+#    是這個專案的核心資產，不是產物。只有 parquet 與中間狀態排除。
+
+# ── 資料層（全部可重建）────────────────────────────────
+# 注意：單個 * 不跨目錄，所以要用 ** 才擋得到子資料夾。
+data/**/*.parquet
+data/*.csv
+data/rebuild_history/
+data/upstream_comparison/
+data/_before_rebuild/
 memory/factor_values.parquet
 *.h5
 *.hdf5
 
 # 重建方式見 README「首次設定」：
-#   data/monthly_base.parquet   ← python src/build_base.py
-#   data/dfs_snapshot.parquet   ← python src/seed_reference.py --apply
-#   memory/factor_values.parquet ← 同上（會一併重建 R-xxx 的值）
+#   data/monthly_base.parquet    ← python src/build_base.py
+#   data/dfs_snapshot.parquet    ← python src/seed_reference.py --apply
+#   memory/factor_values.parquet ← 同上
+# 例外（evaluator 直接讀，且不由本專案程式產生）：
+!data/market_monthly.parquet
+!data/regime_table.json
+!data/stock_names.json
 
-# ── 執行產物 ────────────────────────────────────────────
+# ── 執行產物與中間狀態 ──────────────────────────────────
+logs/
 *.log
 changes.diff
 memory/report.html
 memory/consolidate_raw/
 memory/llm_raw/
+memory/scope_runs/
+memory/scope_jobs/
+memory/transactions/
+memory/.library.lock
+memory/.scope_pending.json
+riskadj.json
+ablate_sharpe.json
+crosssec_oos*.json
+
+# ── 研究封存（做完、有結論、非主線）────────────────────
+# 見 research_archive/README.md
+research_archive/
+RESULTS.md
 
 # ── Python ─────────────────────────────────────────────
 __pycache__/
@@ -42,11 +71,3 @@ Thumbs.db
 # ── 個人備份 ────────────────────────────────────────────
 備用/
 python
-
-# 分析輸出（可由指令重建）
-riskadj.json
-ablate_sharpe.json
-
-# 橫斷面樣本外檢定輸出
-crosssec_oos.json
-crosssec_oos_test.json

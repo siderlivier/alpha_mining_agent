@@ -26,8 +26,8 @@ growth:
   rev_yoy:       {desc: "月營收年增率 %（台股獨有的高頻基本面訊號）", since: 2012}
   rev_yoy_ma3:   {desc: "月營收年增率 3 月移動平均（平滑單月波動）", since: 2012}
   rev_mom:       {desc: "月營收月增率 %（短期營收動能）", since: 2012}
-  eps_yoy:       {desc: "EPS 年增率（季頻）", since: 2012}
-  op_income_yoy: {desc: "營業利益年增率（季頻，本業成長）", since: 2012}
+  eps_yoy:       {desc: "EPS 年變化率：與精確12個月前PIT值之差／前值絕對值×100；虧損收斂為正，前值零或缺值不計", since: 2012}
+  op_income_yoy: {desc: "營業利益年變化率：與精確12個月前PIT值之差／前值絕對值×100；虧損收斂為正，前值零或缺值不計", since: 2012}
 
 value:
   ep: {desc: "盈餘殖利率 E/P（1/PE；前置專案證實台股純價值因子偏弱）", since: 2012}

@@ -28,6 +28,7 @@ funnel:                     # 規格書 6.2
     min_validation_icir: 0.30
     max_validation_decay_pct: 50
     require_long_leg_positive: true
+    allow_short_only: true      # 純空頭腿可入庫，標記用途並排除於多頭組合
     min_coverage: 0.60
     max_monthly_turnover: 0.40
   min_stocks_per_group: 8   # 沿用前置專案 factor_eval 的 MIN_STOCKS
@@ -87,3 +88,18 @@ llm:
   # 舊的硬編碼 600s 只剩幾十秒餘裕，經驗庫一長就會爆掉。
   timeout_sec: 1200             # Generate / Distill
   consolidate_timeout_sec: 1800 # 整理回合要吐一整份 markdown，更慢
+
+# 資料擴張：股票分類由上游提供；此處只定義核准分類及其血緣。
+scope_control:
+  classification_source: ../tw_alpha_strategy/data/raw/universe.parquet
+  groups:
+    半導體: []
+    電子: []
+    生技: []
+    金融: []
+    民生與製造: []
+    營建: []
+  # 僅適用這批已確認在舊 4 產業入庫的因子，不能推廣到未來新因子。
+  legacy_factor_ids: [F-001, F-002, F-003, F-004, F-005, F-006, F-007, F-008, F-009, F-010, F-011, F-012, F-013, F-014, F-015, F-016, F-017, F-018, F-019, F-020, F-021, F-022, F-023, F-024, F-025, F-026]
+  legacy_groups: [半導體, 電子, 生技, 金融]
+  max_monthly_turnover: 0.40

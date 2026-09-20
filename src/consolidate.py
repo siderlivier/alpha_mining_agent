@@ -77,7 +77,6 @@ def escape_raw_controls(s: str) -> str:
 
 
 def parse_json_object(text: str) -> dict:
-    text = re.sub(r"```(?:json)?", "", text)
     start = text.find("{")
     if start < 0:
         raise ValueError("找不到 JSON 物件")
@@ -188,15 +187,21 @@ def run(mem: Memory | None = None, mock_fn=None, meter: Meter | None = None) -> 
     解析失敗拋例外，呼叫端仍然握有「這通已經花了多少」，可以正確記帳。
     run() 本身不寫 budget.json，由呼叫端決定何時落帳。
     """
+    if mock_fn and mem is None:
+        import tempfile
+        mem = Memory(Path(tempfile.mkdtemp(prefix="alpha-consolidate-mock-")))
     mem = mem or Memory()
+    if mock_fn and mem.root.resolve() == Memory().root.resolve():
+        raise ValueError("mock cannot write production memory")
     mem.ensure()
+    emit = print if mock_fn else log
     meter = meter if meter is not None else Meter()
     cap = BUD["learnings_token_cap"]
 
     tpl = (PROMPTS / "consolidate.md").read_text(encoding="utf-8")
     prompt = tpl.format(
         token_cap=cap, char_cap=cap * 2,
-        learnings=mem.read_learnings(),
+        learnings=mem.prompt_learnings(),
         attempts_summary=attempts_summary(mem),
         audit=audit_text(mem),
         limitations=load_limitations(mem),
@@ -205,10 +210,10 @@ def run(mem: Memory | None = None, mock_fn=None, meter: Meter | None = None) -> 
     # meter 直接傳給 call_llm：成功或逾時都會計帳。
     timeout = float(CFG["llm"].get("consolidate_timeout_sec",
                                    CFG["llm"].get("timeout_sec", 1800)))
-    log(f"  整理 prompt {len(prompt):,} 字元，timeout {timeout:.0f}s，開始呼叫...")
+    emit(f"  整理 prompt {len(prompt):,} 字元，timeout {timeout:.0f}s，開始呼叫...")
     r = call_llm(prompt, mock_fn, meter=meter, timeout=timeout)
     out = r.text
-    log(f"  整理回應 {len(out):,} 字元，耗時 {r.elapsed:.0f}s")
+    emit(f"  整理回應 {len(out):,} 字元，耗時 {r.elapsed:.0f}s")
 
     # 原始輸出一律先落盤。這通呼叫的 token 在 call_llm 回來的當下就已經花掉了，
     # 解析失敗時如果什麼都不留，才是真的白花；留著就能手動救回或事後檢查。
@@ -235,10 +240,10 @@ def run(mem: Memory | None = None, mock_fn=None, meter: Meter | None = None) -> 
         (hist / f"learnings_{stamp}.md").write_text(
             mem.read_learnings(), encoding="utf-8")
         mem.write_learnings(new_text)
-        log(f"  整理：learnings.md 已重寫（備份 learnings_{stamp}.md），"
+        emit(f"  整理：learnings.md 已重寫（備份 learnings_{stamp}.md），"
             f"{len(new_text)} 字元")
     else:
-        log("  ⚠️ 整理輸出缺必要小節，保留原 learnings.md 不動")
+        emit("  ⚠️ 整理輸出缺必要小節，保留原 learnings.md 不動")
 
     # ---- 運算子提案 ----
     accepted, rejected = [], []
@@ -275,7 +280,7 @@ def run(mem: Memory | None = None, mock_fn=None, meter: Meter | None = None) -> 
                       encoding="utf-8")
         # 報「實際新增」而非「通過驗證」——舊版在全部重複時仍會印通過數，
         # 讓人以為有新提案待審（8/19 那次就是 3 個全重複卻印「3 通過」）
-        log(f"  運算子提案：新增 {len(fresh)} 個待審"
+        emit(f"  運算子提案：新增 {len(fresh)} 個待審"
             + (f"（{dup} 個與既有/已實作/已否決同名，略過）" if dup else "")
             + (f"、{len(rejected)} 個未通過機械驗證" if rejected else "")
             + f"。目前待審共 {len(existing['pending'])} 個，"
@@ -290,6 +295,8 @@ def run(mem: Memory | None = None, mock_fn=None, meter: Meter | None = None) -> 
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--mock", action="store_true")
     ap.add_argument("--no-budget", action="store_true",

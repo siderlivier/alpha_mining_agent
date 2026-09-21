@@ -15,7 +15,7 @@
 | 入庫率 | 26 / 1,043 = **2.5%** |
 | 多重檢定校正 | 以完整搜尋歷史（1,011 個候選）為試驗池，**24 / 26** 超過純運氣門檻 |
 | 橫斷面樣本外 | 在挖礦時從沒看過的 2 個產業上，**24 / 26** 維持同向且 \|t\| ≥ 2 |
-| 測試 | **226 passed**——由 AI 依規格書撰寫的功能性測試，其中四套針對前瞻偏差 |
+| 測試 | **227 passed**——由 AI 依規格書撰寫的功能性測試，其中四套針對前瞻偏差 |
 
 - 設計理由 → `SPEC_架構設計規格書.md`
 - 操作、參數、疑難排解 → `GUIDE_使用教學.md`
@@ -501,10 +501,16 @@ F-021 值得單獨記一筆：它在 sub_train 幾乎墊底（0.414，沒過門�
 |---|---|---|
 | DSL 語言層 | `test_dsl_no_lookahead.py` | 33 個運算子逐一驗證 |
 | 全管線 | `test_pipeline_no_lookahead.py` | 資料 → 漏斗 → 診斷 |
-| 因子合成 | `test_factor_lab.py` | walk-forward + embargo、橫斷面標準化 |
 | 診斷方向 | `test_ml_diagnose.py` | 單因子方向只能用選取窗決定 |
+| 組合實驗室 | `test_factor_lab.py` | walk-forward + embargo、橫斷面標準化 |
 
 共同手法：**汙染 cut 之後的資料，斷言 cut 之前的輸出位元級相同**（`check_exact=True`，不給容差）。
+
+> ⚠️ 最後一列蓋的是 `factor_lab.py` 的合成模型（ridge／lgbm），而 walk-forward
+> **目前不用於本文的任何結論**——本文的數字全部來自 `crosssec_oos.py` 的逐因子 IC，
+> 那條路徑不經過合成模型也不經過回測引擎（`crosssec_oos.py` 根本沒有 import
+> `factor_lab`）。walk-forward 保護的是合成模型的參數，而這個專案現在不做組合評估。
+> 它留在測試裡是因為程式還在，不是因為結論依賴它。
 
 **光有測試不夠——測試本身也可能是假的。** 這四套都做過變異驗證，故意把程式寫錯、
 確認測試會轉紅：
@@ -569,7 +575,7 @@ python -B src/build_base.py                 # panel → 月頻面板（1,616 檔
 python -B src/build_regime.py               # 市場狀態表
 python -B src/seed_memory.py                # 初始化空記憶（不預載任何理論）
 python -B src/seed_reference.py --apply     # 匯入 18 個基準因子
-python -m pytest tests/ -q                  # 226 passed
+python -m pytest tests/ -q                  # 227 passed（約 1.5 分鐘）
 ```
 
 ### 挖礦
@@ -656,7 +662,7 @@ memory/                         agent 的全部狀態，**進版控**
   └ dsl_limitations.jsonl       52 筆「表達不出來」的紀錄
 data/                           資料層（可重建，不進版控）
 docs/images/                    文件用截圖（產業擴張介面）
-tests/                          226 個測試
+tests/                          227 個測試（AI 依規格書撰寫）
 ```
 
 ⚠️ `memory/attempts/` 只進不出；`library.json` 的 `test_metrics_sealed`

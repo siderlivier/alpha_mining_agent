@@ -1578,8 +1578,9 @@ python src/hmm_regime.py --predict            # walk-forward 樣本外方向準�
 python src/hmm_regime.py --apply              # 用狀態切因子組，比較靜態
 python src/factor_lab.py --compare --save memory/lab_compare.json
 
-# 測試
-python -m pytest tests/ -q               # 217 passed（約 2 分鐘；缺 data/ 時會跳過 5 支）
+# 測試（AI 依規格書撰寫的功能性測試；「全數通過」＝規格被編碼成可執行斷言，
+#       不等於有人逐條人工審閱過 227 個案例）
+python -m pytest tests/ -q               # 227 passed（約 1.5 分鐘；缺 data/ 時會跳過數支）
 python -m pytest tests/test_pipeline_no_lookahead.py -q  # 只跑全管線前瞻檢測
 python -m pytest tests/test_factor_lab.py -q         # 只跑因子合成/回測前瞻檢測
 python -m pytest tests/test_dsl_no_lookahead.py -q   # 只跑前瞻偏差測試

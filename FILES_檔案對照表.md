@@ -1,17 +1,19 @@
 # 檔案對照表
 
-2026-09-20 挖礦／回測可靠性修正沿用既有檔案，未新增功能腳本。memory：入庫範圍驗證、同範圍歷史指標與 prompt 經驗過濾；audit：預設 validation，test 僅 human；report：同範圍展示、產業通過及 token／空庫修正；factor_lab：因果覆蓋選取、保留未知標籤預測列；backtest：缺價明確報錯與期初回撤。對應測試擴充 test_m4、test_industry_track、test_factor_lab。fetch_macro／hmm_regime／threshold_sweep 暫緩，尚未封存。
+2026-09-21：HMM／總經（`hmm_regime.py`、`fetch_macro.py`、`threshold_sweep.py`
+與對應測試、資料、輸出）已整組移到 `research_archive/`，**不進版控**，本表不再列出。
+`backtest.py`／`factor_lab.py`／`ml_diagnose.py` 程式與測試仍在，但現階段不用於任何
+結論——因子評估走 `crosssec_oos.py` 的逐因子 IC，不經過回測引擎。
 
-`tests/test_compare_upstream.py` 同時可獨立執行保存結果的選股稽核：`python tests/test_compare_upstream.py --audit-run logs/<run>`。它核對來源雜湊、重算覆蓋後的流動性排名、重播訊號持股，輸出 `selection_rank_evidence.csv`，逐筆列出缺報酬持股的流動性百分位、分數排名與新進／續抱狀態。歷史資料不在本機時，對應整合測試會明確 skip，其餘合成案例仍能執行。
+`tests/test_compare_upstream.py` 可獨立執行保存結果的選股稽核：
+`python tests/test_compare_upstream.py --audit-run logs/<run>`。它核對來源雜湊、
+重算覆蓋後的流動性排名、重播訊號持股，輸出 `selection_rank_evidence.csv`。
+歷史資料不在本機時，對應整合測試會明確 skip。
 
-2026-09-20 新增跨專案比較：`src/compare_upstream.py` 只讀前置專案的 DFS 產生器、月頻快取與成交價格，將自有／原 25 個 DFS／固定 8 因子／自有加 DFS 套用同一模型階梯、流動性與緩衝規則。`--universe upstream` 沿用前置 ML 篩選順序；`--universe common` 額外提供共同股票池敏感度對照。輸出至 `logs/dfs_comparison_<時間>/`，不替換正式因子庫；相容績效有未來報酬篩選限制，須一起閱讀選股稽核，不能當成已消除前瞻偏差的結果。
-
-`tests/test_compare_upstream.py` 覆蓋產業內流動性、前 20% 續抱、股票池縮小、未成交不補選、缺未來報酬不改選股、跨月持股狀態及預測不讀當期未來標籤等案例。輸出中的 manifest 保存來源雜湊與設定，runner_snapshot.py 保存執行版本；大型 parquet 不進 Git。
-
-> 本專案每一個檔案的中文名稱與職責。更新日期：2026-09-18
+> 本專案每一個檔案的中文名稱與職責。更新日期：2026-09-21
 >
 > 其他文件的分工：`SPEC_架構設計規格書.md` 講**為什麼這樣設計**、
-> `GUIDE_使用教學.md` 講**怎麼操作**、`RESULTS.md` 講**數字與出處**、
+> `GUIDE_使用教學.md` 講**怎麼操作**、`README.md` 講**結論與數字出處**、
 > 本檔講**哪個檔案在做什麼**。
 
 **四層架構**（資料單向流動，下層依賴上層）：
@@ -28,10 +30,9 @@ build_base 以精確去年同月及前值絕對值計算 EPS／營業利益變�
 
 ```
 挖掘層  LLM 提假設 → DSL 寫成公式 → 四階段漏斗 → 記憶蒸餾
-   ↑ 這是本專案的主軸，其餘三層是為了讓它的產出可信、可用
-資料層  前置專案 panel.parquet → 月頻面板 / 參考因子 / 總經
-評估層  因子值 → 合成分數 → 回測 → 過擬合診斷
-應用層  用市場狀態切換因子組（支線，結論不顯著）
+   ↑ 這是本專案的主軸，其餘兩層是為了讓它的產出可信、可用
+資料層  前置專案 panel.parquet → 月頻面板 / 基準因子
+評估層  因子值 → 逐因子 IC / 逐對比較 / 去膨脹 / 橫斷面樣本外 / 產業範圍核准
 ```
 
 ---
@@ -40,12 +41,11 @@ build_base 以精確去年同月及前值絕對值計算 EPS／營業利益變�
 
 | 檔案 | 中文名稱 | 做什麼 | 版控 |
 |---|---|---|---|
-| `config.yaml` | 全域設定（單一事實來源） | 所有門檻集中在此：DSL 複雜度、資料切分、四階段漏斗門檻、預算、回測參數、ML 參數、HMM 參數、LLM 逾時。**改任何 `funnel` 或 `dsl` 區塊前要先讀規格書第 9 章。** 註解裡記錄了調參的理由與踩過的坑（例如逾時從 600s 調到 1200s，因為實測 Generate 平均 454s） | ✅ |
+| `config.yaml` | 全域設定（單一事實來源） | 所有門檻集中在此：DSL 複雜度、資料切分、四階段漏斗門檻、預算、回測參數、ML 參數、LLM 逾時。**改任何 `funnel` 或 `dsl` 區塊前要先讀規格書第 9 章。** 註解裡記錄了調參的理由與踩過的坑（例如逾時從 600s 調到 1200s，因為實測 Generate 平均 454s） | ✅ |
 | `fields.yaml` | 基礎欄位白名單 | 27 個可用欄位分五類（價量 10、品質 6、成長 5、價值 4、籌碼 2）。每個欄位的 `desc` **會注入 Generate prompt**——那不是註解，是 prompt engineering，LLM 的假設品質取決於它對欄位經濟含義的理解 | ✅ |
 | `README.md` | 專案門面 | 對外說明：成果、方法論、但書、架構、安裝使用 | ✅ |
-| `SPEC_架構設計規格書.md` | 架構設計規格書 | 每個設計決定的**理由**與驗收標準，11 章 | ✅ |
-| `GUIDE_使用教學.md` | 使用教學 | 逐項功能解說、參數調校、疑難排解，13 章 | ✅ |
-| `RESULTS.md` | 實測數據總表 | 17 節，所有數字＋產生它的指令。含第 16 節「結論被推翻」的完整紀錄 | ✅ |
+| `SPEC_架構設計規格書.md` | 架構設計規格書 | 每個設計決定的**理由**與驗收標準，13 章 + 附錄 A~F | ✅ |
+| `GUIDE_使用教學.md` | 使用教學 | 逐項功能解說、參數調校、疑難排解，10 章 | ✅ |
 | `TODO.md` | 待辦清單 | 跨兩個專案的待處理事項 | ✅ |
 | `REVIEW_程式碼與數值正確性評估報告_2026-09-14.md` | 程式碼與數值正確性評估報告 | 27 項問題的嚴重程度、證據、數值影響、修正方向及驗收條件；含 test 資訊，僅供人類審閱，不放入挖礦 prompt | ✅ |
 | `FILES_檔案對照表.md` | 檔案對照表 | 就是本檔 | ✅ |
@@ -77,34 +77,38 @@ build_base 以精確去年同月及前值絕對值計算 EPS／營業利益變�
 | `build_base.py` | 191 | 月頻面板建構 | 前置專案的 `panel.parquet`（日頻 PIT 面板）→ `monthly_base.parquet`（月頻 36 欄快照）。分三階段可獨立重跑：`--stage prices` 價量技術面、`--stage chips` 籌碼面、`--stage final` 財務面＋合併＋算標籤。`fwd_ret_1m` 逐月 winsorize 到 1%/99% 壓制假極端 |
 | `build_regime.py` | 96 | 市場狀態標註表 | 逐年 TAIEX 報酬／波動 → 多空盤整標籤（>+10% 多頭、<−10% 空頭）＋月頻大盤報酬。標籤由數字自動生成（客觀），風格備註是人工知識 |
 | `seed_reference.py` | — | 參考池換版 | 使用全部登錄基礎欄位，train/validation選取、定向及去重；18個新參考。舊DFS版本留在交易備份，不再讀舊候選test指標 |
-| `fetch_macro.py` | 859 | 總經資料抓取 | 景氣對策信號（分數＋燈號）、領先／同時指標、M1B/M2 年增率與黃金交叉、美債殖利率。只走政府開放資料與 FinMind 免費層。**最重要的設計決定：發布落後寫進資料結構本身**——每列都有 `ym`（描述的月份）與 `pub_ym`（已公開的月份），取值一律走 `as_of()`；新增欄位若忘了在 `PUB_LAG_MONTHS` 登記會**直接丟錯**而不是預設 0 |
+
 
 ---
 
 ## 四、`src/` 評估層
 
+> 分兩組：上半是**目前結論用的路徑**，下半是回測／合成，程式與測試都還在，
+> 但現階段不用於任何結論。
+
+### 目前結論用的路徑
+
 | 檔案 | 行數 | 中文名稱 | 做什麼 |
 |---|---|---|---|
-| `backtest.py` | 157 | 回測核心 | 由分數建構「逐月在各產業內取前 `top_q` 等權做多」的組合，算月報酬、換手、成本、績效與超額。移植自前置專案並改為讀 `config.yaml`——**移植而非重寫，因為那套邏輯已驗證過，重寫只會製造語意漂移**。算出 `long` / `long_short` / `benchmark` 三條腿，但目前所有 headline 都只用 `long` |
-| `factor_lab.py` | 474 | 因子組合實驗室 | 回答三個問題：自有 vs 參考因子哪組強、哪些因子在組合裡是拖累、最佳組合要幾個因子。`--compare` 合成比較（equal/ridge/lgbm）、`--loo` 留一法、`--greedy` 貪婪前向選擇、`--cost-scan` 成本敏感度。`segments()` 是 walk-forward 唯一的切窗來源（可測試的接縫），`--select-span` 把「在哪裡挑」與「在哪裡報」分開，避免選擇偏誤 |
-| `ml_diagnose.py` | 910 | 過擬合診斷套件 | 存在理由只有一個：**一個漂亮的 IR 有很多種假法，每一種要用不同的方法拆穿**。`--regime` 多空狀態分解、`--breadth` 逐月攤開與集中度、`--liquidity` 流動性歸因與過濾、`--importance` 特徵重要性＋SHAP＋規模中性、`--dsr` Deflated Sharpe＋PBO、`--regime-factors` 逐因子多空月 ICIR 差異、`--timing` 擇時上限與損益兩平準確率 |
-| `audit.py` | 123 | 聚合審計 | 對入庫因子計算 sub-train → test 的 ICIR 衰減，但輸出**只按維度聚合**（category／AST 深度／運算子／欄位面向／窗口參數）。**絕不輸出任何單一因子的 test 數字**——agent 只能學到「哪類設計容易衰減」，學不到「哪個因子在 test 期表現如何」 |
+| `crosssec_oos.py` | 623 | 逐因子評估與橫斷面樣本外 | 本專案所有對外數字的來源。`--span` 橫斷面樣本外（因子是在 4 個產業上挖的，民生與製造、營建是 agent 從沒看過的產業——「往旁邊走」）、`--vs-reference` 自有 vs 基準分布對照、`--pairwise` 逐對 CSV、`--deflate-icir` 多重檢定校正。每個因子**只在自己的 `approved_groups` 內**量 IC。⛔ 只讀資料不寫 `memory/`，也不 import `factor_lab`，完全不經過回測引擎 |
+| `factor_scope.py` | 415 | 產業範圍核准核心 | CLI／UI 共用。分類一致性驗證、只對新產業重測、舊排除產業永不補回、版本雜湊、備份與中斷回復 |
+| `scope_ui.py` + `.html` | 184 + — | 產業擴張本機介面 | 只綁 localhost、CSRF 與白名單動作；四個按鈕各自轉呼叫 `factor_scope.py` 的一個 CLI 模式，介面本身沒有判定邏輯 |
+| `mining_stats.py` | 133 | 漏斗組成與自我進化判讀 | 分段統計各關卡淘汰率，印出「飽和 vs 退步」的判讀與可推翻它的條件 |
+| `audit.py` | 123 | 聚合審計 | 對入庫因子計算 sub-train → test 的 ICIR 衰減，但輸出**只按維度聚合**（category／AST 深度／運算子／欄位面向／窗口參數）。**絕不輸出任何單一因子的 test 數字** |
 | `report.py` | 263 | 人類專用報表 | 因子庫總覽＋挖礦統計，可輸出終端／HTML／markdown。⚠️ **含密封 test 指標，只供人類閱讀決策，嚴禁複製進任何 prompt 或 `learnings.md`** |
 
----
-
-## 五、`src/` 應用層（支線）
+### 回測與合成（保留，但不用於結論）
 
 | 檔案 | 行數 | 中文名稱 | 做什麼 |
 |---|---|---|---|
-| `hmm_regime.py` | 847 | 市場狀態模型 | Gaussian HMM 判斷下月多空態，用途**不是進出場而是切換因子組**。三道前瞻紀律：觀測值時點對齊（`obs_ret[t] = mkt[t−1]`）、**只用自己寫的前向濾波不用 hmmlearn 的 Viterbi／平滑**（那兩者會用到未來觀測）、參數與標籤只在訓練窗擬合。指令：`--fit` 擬合看狀態性質、`--predict` 樣本外方向準確率、`--apply` 切換因子組、`--ablate` 特徵消融、`--riskadj` 風險調整後三張表（原始指標／等 beta 對照／配對自助法 CI） |
-| `threshold_sweep.py` | 58 | 門檻掃描 | 同時報 Sharpe 與 IR，看「換裁判會不會換結論」。存在理由：`--riskadj` 只比較預設門檻 0.5，若結論只在 0.5 成立就是巧合不是結論。⚠️ 這張表能支持的是「結論不依賴門檻」，**不是**「最佳門檻是 0.2」——在 test 期挑最好的門檻就是選擇偏誤 |
-
-| `crosssec_oos.py` | 134 | 橫斷面樣本外檢定 | 因子是在 4 個產業上挖出來的，民生與製造與營建是 agent 從沒看過的產業。拿新資料測它們，得到與「往前走」互相獨立的第二種樣本外——**往旁邊走**。判讀：抓到真機制的因子在新產業應該還有 IC；只是原產業特性代理的會歸零。⛔ 只讀資料不寫 `memory/`，因子庫的歷史指標不該被重算覆蓋 |
+| `backtest.py` | 184 | 回測核心 | 由分數建構「逐月在各產業內取前 `top_q` 等權做多」的組合。⚠️ R05：遇到缺報酬會丟 `MissingReturnError` 而不是靜默跳過；R12：換手是名單對稱差 ÷ 聯集，`long_short` 不得當成完整多空淨績效 |
+| `factor_lab.py` | 484 | 因子組合實驗室 | `--compare`／`--loo`／`--greedy`／`--cost-scan`。`segments()` 是 walk-forward 唯一的切窗來源，`--select-span` 把「在哪裡挑」與「在哪裡報」分開 |
+| `ml_diagnose.py` | 947 | 過擬合診斷套件 | `--regime`／`--breadth`／`--liquidity`／`--importance`／`--dsr`／`--timing`。R10 的方向鎖定（`ORIENT_CUTOFF`）在這裡 |
+| `compare_upstream.py` | 217 | 與前置專案的相容對照 | 只讀前置專案的 DFS 產生器與月頻快取，套用同一模型階梯做對照。輸出到 `logs/`，不替換正式因子庫 |
 
 ---
 
-## 六、`prompts/` — LLM 的三份模板
+## 五、`prompts/` — LLM 的三份模板
 
 | 檔案 | 中文名稱 | 做什麼 |
 |---|---|---|
@@ -114,7 +118,7 @@ build_base 以精確去年同月及前值絕對值計算 EPS／營業利益變�
 
 ---
 
-## 七、`tests/` — 227 個測試
+## 六、`tests/` — 227 個測試
 
 > ⚠️ 這 227 個測試是 **AI 依規格書撰寫的功能性測試**，全數通過。
 > 「全數通過」代表規格有被編碼成可執行的斷言，**不代表有人逐條人工審閱過 227 個案例**。
@@ -151,7 +155,7 @@ build_base 以精確去年同月及前值絕對值計算 EPS／營業利益變�
 
 ---
 
-## 八、`memory/` — agent 的全部狀態
+## 七、`memory/` — agent 的全部狀態
 
 > ⚠️ 除了 `factor_values.parquet`（37MB）之外**全部進版控**——這是 agent 的記憶，是本專案的核心資產。
 
@@ -173,7 +177,7 @@ build_base 以精確去年同月及前值絕對值計算 EPS／營業利益變�
 
 ---
 
-## 九、`data/` — 資料層（全部不進版控，可重建）
+## 八、`data/` — 資料層（全部不進版控，可重建）
 
 | 檔案 | 中文名稱 | 內容 | 怎麼重建 |
 |---|---|---|---|
@@ -184,7 +188,6 @@ build_base 以精確去年同月及前值絕對值計算 EPS／營業利益變�
 | `dfs_candidates.csv` | 參考因子篩選指標表 | 前置專案 DFS 因子的 ICIR／衰減等指標，四道篩選的輸入 | 同上 |
 | `market_monthly.parquet` | 月頻大盤報酬 | 174 列（`ym`／`taiex_ret`） | `python src/build_regime.py` |
 | `regime_table.json` | 市場狀態標註表 | 逐年（2012~2026）的 `taiex_ret`／`taiex_vol`／`regime`／`note` | 同上 |
-| `macro_monthly.parquet` | 總經月頻面板 | 3,992 列（`ym`／`field`／`value`／**`pub_ym`**）。長格式，8 個欄位 | `python src/fetch_macro.py --fetch` |
 | `stock_names.json` | 股票代號對照 | 975 檔的代號 → 名稱，流動性歸因報表用 | 從前置專案抓 |
 
 > ✅ **2026-09-17 已重建**：前置專案補齊逐檔抓取的資料表後重跑 `build_base.py`，
@@ -195,18 +198,13 @@ build_base 以精確去年同月及前值絕對值計算 EPS／營業利益變�
 
 ---
 
-## 十、執行產物與雜項（全部不進版控）
+## 九、執行產物與雜項（全部不進版控）
 
 | 檔案 | 中文名稱 | 說明 |
 |---|---|---|
 | `mining.log` | 挖礦逐輪紀錄 | 每輪的時間、token、成本、逾時紀錄。`config.yaml` 的逾時設定就是讀這份實測數字調的 |
 | `build_base.log` | 面板建構紀錄 | 上次 `build_base.py` 的輸出 |
-| `logs/riskadj.txt` | 風險調整對照輸出 | `hmm_regime.py --riskadj` 的原始輸出存證 |
-| `logs/ablate_sharpe.txt` | 消融實驗輸出 | `hmm_regime.py --ablate` 的原始輸出存證 |
-| `logs/threshold_sweep.txt` | 門檻掃描輸出 | `threshold_sweep.py` 的原始輸出存證 |
 | `logs/mining_stats.txt` | 挖礦統計輸出 | `mining_stats.py` 的原始輸出存證 |
-| `riskadj.json` | 風險調整結果 | `--riskadj --save` 的結構化結果 |
-| `ablate_sharpe.json` | 消融結果 | `--ablate --save` 的結構化結果 |
 | `changes.diff` | 暫存 diff | 一次性的差異檔 |
 | `備用/` | 個人備份 | `learnings.md` 的舊版、`library.json.預去重備份` |
 | `python` | **空檔案（誤建）** | 0 bytes，應該是打指令時手滑產生的。已在 `.gitignore` 排除，**可以直接刪掉** |
